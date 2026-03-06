@@ -162,8 +162,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .strip-names{display:none;}
 
 /* ══ STATE 1 SPLIT — conv 35% left + workflow 65% right ══ */
+/* ══ STATE 1 SPLIT — conv 35% left + workflow 65% right ══ */
 .wf-pane-area.s1-split{display:flex;flex-direction:row;overflow:hidden;}
-.wf-pane-area.s1-split #s1-conv{width:35%;flex-shrink:0;border-right:1px solid var(--border);display:flex !important;opacity:1 !important;}
+.wf-pane-area.s1-split #s1-conv{width:35%;flex:0 0 35%;border-right:1px solid var(--border);display:flex !important;opacity:1 !important;}
 .wf-pane-area.s1-split .s1-wf-pane{flex:1;display:flex !important;opacity:1 !important;}
 .wf-pane-area.s1-split .s1-wf-pane.s1-hidden{display:none !important;}
 
@@ -912,8 +913,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <div class="ib">☰</div>
         </div>
       </div>
-      <!-- WORKFLOW TABS — workflows only, no conversation tab -->
-      <div class="wf-tabs">
+      <!-- WORKFLOW TABS -->
+      <div class="wf-tabs" id="global-wf-tabs">
+        <button class="wft on" id="wft-contact360" onclick="switchWFTab('contact360')">👤 Contact 360</button>
         <button class="wft" id="wft-cobrowse" onclick="switchWFTab('cobrowse')"><span class="wft-dot"></span>🖥 Co-browse</button>
         <button class="wft" id="wft-workflows" onclick="switchWFTab('workflows')">⚙ Workflows</button>
         <button class="wft" id="wft-salesforce" onclick="switchWFTab('salesforce')">☁ Salesforce</button>
@@ -929,7 +931,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
       <!-- ═══ STATE 1: Conversation only ═══ -->
       <div class="state-layer" id="layer1">
-        <!-- just the right panel (no split, full width) -->
         <div class="wf-pane-area">
           <div class="wf-pane on" id="s1-conv">
             <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--s0);">
@@ -1039,10 +1040,98 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
               </div>
             </div>
           </div>
+
+          <div class="wf-pane s1-wf-pane on" id="s1-contact360">
+            <div style="display:flex;flex-direction:column;width:100%;height:100%;overflow-y:auto;background:var(--s0);">
+
+              <!-- Profile card -->
+              <div style="padding:14px 14px 0;">
+                <div style="background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px;">
+                  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:#E07A5F;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;font-family:var(--m);flex-shrink:0;">SJ</div>
+                    <div>
+                      <div style="font-size:13px;font-weight:700;color:var(--t1);">Sarah Johnson</div>
+                      <div style="font-size:10px;color:var(--t3);margin-top:2px;">Member since Jan 2019 · Lending dept.</div>
+                    </div>
+                    <div style="margin-left:auto;display:flex;gap:6px;">
+                      <div style="font-size:9px;font-weight:600;background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);border-radius:5px;padding:3px 8px;">Active</div>
+                      <div style="font-size:9px;font-weight:600;background:var(--as);color:var(--accent);border:1px solid rgba(0,121,107,.2);border-radius:5px;padding:3px 8px;">HELOC ✓</div>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+                    <div style="font-size:10px;"><span style="color:var(--t3);">Email</span><br><span style="color:var(--t1);font-weight:500;">sarahjohnson@yahoo.com</span></div>
+                    <div style="font-size:10px;"><span style="color:var(--t3);">Phone</span><br><span style="color:var(--accent);font-weight:600;">+1 (310) 492-7762</span></div>
+                    <div style="font-size:10px;"><span style="color:var(--t3);">Last seen</span><br><span style="color:var(--t1);font-weight:500;">Yesterday, 4:29 PM</span></div>
+                    <div style="font-size:10px;"><span style="color:var(--t3);">Department</span><br><span style="color:var(--t1);font-weight:500;">Lending</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Interaction summary -->
+              <div style="padding:10px 14px 0;">
+                <div style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Interaction Summary</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+                  <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+                    <div style="font-size:18px;font-weight:700;color:var(--accent);">14</div>
+                    <div style="font-size:9px;color:var(--t3);margin-top:2px;">Total interactions</div>
+                  </div>
+                  <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+                    <div style="font-size:18px;font-weight:700;color:var(--green);">92%</div>
+                    <div style="font-size:9px;color:var(--t3);margin-top:2px;">CSAT score</div>
+                  </div>
+                  <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+                    <div style="font-size:18px;font-weight:700;color:var(--amber);">3</div>
+                    <div style="font-size:9px;color:var(--t3);margin-top:2px;">Open cases</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent interactions -->
+              <div style="padding:10px 14px 0;">
+                <div style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Recent Interactions</div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                  <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:10px;">
+                    <div style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-size:10.5px;font-weight:600;color:var(--t1);">Loan application status</div>
+                      <div style="font-size:9.5px;color:var(--t3);margin-top:1px;">Chat · 5 min ago · AR</div>
+                    </div>
+                    <div style="font-size:9px;color:var(--green);font-weight:600;">Resolved</div>
+                  </div>
+                  <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:10px;">
+                    <div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-size:10.5px;font-weight:600;color:var(--t1);">HELOC document submission</div>
+                      <div style="font-size:9.5px;color:var(--t3);margin-top:1px;">Voice · 2 days ago · TA</div>
+                    </div>
+                    <div style="font-size:9px;color:var(--amber);font-weight:600;">Pending</div>
+                  </div>
+                  <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:10px;">
+                    <div style="width:6px;height:6px;border-radius:50%;background:var(--border2);flex-shrink:0;"></div>
+                    <div style="flex:1;min-width:0;">
+                      <div style="font-size:10.5px;font-weight:600;color:var(--t1);">Account balance inquiry</div>
+                      <div style="font-size:9.5px;color:var(--t3);margin-top:1px;">SMS · 1 week ago · DL</div>
+                    </div>
+                    <div style="font-size:9px;color:var(--t3);font-weight:600;">Closed</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Notes -->
+              <div style="padding:10px 14px 14px;">
+                <div style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Agent Notes</div>
+                <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:10.5px;color:var(--t2);line-height:1.5;">
+                  Member is inquiring about HELOC application progress. Documents submitted Mar 1. Waiting on title search. Follow up by Mar 10. — AR
+                </div>
+              </div>
+
+            </div>
+          </div>
           <div class="wf-pane s1-wf-pane s1-hidden" id="s1-cobrowse"><div class="ph-pane"><div class="ph-icon">🖥</div><div class="ph-title">Start a Co-browse session</div><div class="ph-sub">Share screen with Sarah Johnson to guide her through the application</div><button style="margin-top:8px;background:var(--accent);border:none;color:#fff;border-radius:7px;padding:8px 20px;font-size:11px;font-family:var(--f);cursor:pointer;font-weight:600">+ Start Co-browse</button></div></div>
           <div class="wf-pane s1-wf-pane s1-hidden" id="s1-workflows"><div class="ph-pane"><div class="ph-icon">⚙</div><div class="ph-title">Workflows</div><div class="ph-sub">Manage active workflows for this member</div></div></div>
           <div class="wf-pane s1-wf-pane s1-hidden" id="s1-salesforce"><div class="ph-pane"><div class="ph-icon">☁</div><div class="ph-title">Salesforce</div><div class="ph-sub">View and update CRM records</div></div></div>
           <div class="wf-pane s1-wf-pane s1-hidden" id="s1-sharing"><div class="ph-pane"><div class="ph-icon">📤</div><div class="ph-title">Content Sharing</div><div class="ph-sub">Send documents and resources to Sarah</div></div></div>
+
         </div>
       </div>
 
@@ -1217,6 +1306,72 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 </div>
               </div>
               <!-- Co-browse -->
+              <div class="wf-pane" id="s234-contact360">
+                <div style="display:flex;flex-direction:column;width:100%;height:100%;overflow-y:auto;background:var(--s0);">
+                  <div style="padding:14px 14px 0;">
+                    <div style="background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:14px;">
+                      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+                        <div style="width:40px;height:40px;border-radius:50%;background:#E07A5F;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;font-family:var(--m);flex-shrink:0;">SJ</div>
+                        <div>
+                          <div style="font-size:13px;font-weight:700;color:var(--t1);">Sarah Johnson</div>
+                          <div style="font-size:10px;color:var(--t3);margin-top:2px;">Member since Jan 2019 · Lending dept.</div>
+                        </div>
+                        <div style="margin-left:auto;display:flex;gap:6px;">
+                          <div style="font-size:9px;font-weight:600;background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);border-radius:5px;padding:3px 8px;">Active</div>
+                          <div style="font-size:9px;font-weight:600;background:var(--as);color:var(--accent);border:1px solid rgba(0,121,107,.2);border-radius:5px;padding:3px 8px;">HELOC ✓</div>
+                        </div>
+                      </div>
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+                        <div style="font-size:10px;"><span style="color:var(--t3);">Email</span><br><span style="color:var(--t1);font-weight:500;">sarahjohnson@yahoo.com</span></div>
+                        <div style="font-size:10px;"><span style="color:var(--t3);">Phone</span><br><span style="color:var(--accent);font-weight:600;">+1 (310) 492-7762</span></div>
+                        <div style="font-size:10px;"><span style="color:var(--t3);">Last seen</span><br><span style="color:var(--t1);font-weight:500;">Yesterday, 4:29 PM</span></div>
+                        <div style="font-size:10px;"><span style="color:var(--t3);">Department</span><br><span style="color:var(--t1);font-weight:500;">Lending</span></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="padding:10px 14px 0;">
+                    <div style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Interaction Summary</div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+                      <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+                        <div style="font-size:18px;font-weight:700;color:var(--accent);">14</div>
+                        <div style="font-size:9px;color:var(--t3);margin-top:2px;">Total interactions</div>
+                      </div>
+                      <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+                        <div style="font-size:18px;font-weight:700;color:var(--green);">92%</div>
+                        <div style="font-size:9px;color:var(--t3);margin-top:2px;">CSAT score</div>
+                      </div>
+                      <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;">
+                        <div style="font-size:18px;font-weight:700;color:var(--amber);">3</div>
+                        <div style="font-size:9px;color:var(--t3);margin-top:2px;">Open cases</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="padding:10px 14px 0;">
+                    <div style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Recent Interactions</div>
+                    <div style="display:flex;flex-direction:column;gap:4px;">
+                      <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:10px;">
+                        <div style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></div>
+                        <div style="flex:1;min-width:0;"><div style="font-size:10.5px;font-weight:600;color:var(--t1);">Loan application status</div><div style="font-size:9.5px;color:var(--t3);margin-top:1px;">Chat · 5 min ago · AR</div></div>
+                        <div style="font-size:9px;color:var(--green);font-weight:600;">Resolved</div>
+                      </div>
+                      <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:10px;">
+                        <div style="width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>
+                        <div style="flex:1;min-width:0;"><div style="font-size:10.5px;font-weight:600;color:var(--t1);">HELOC document submission</div><div style="font-size:9.5px;color:var(--t3);margin-top:1px;">Voice · 2 days ago · TA</div></div>
+                        <div style="font-size:9px;color:var(--amber);font-weight:600;">Pending</div>
+                      </div>
+                      <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:10px;">
+                        <div style="width:6px;height:6px;border-radius:50%;background:var(--border2);flex-shrink:0;"></div>
+                        <div style="flex:1;min-width:0;"><div style="font-size:10.5px;font-weight:600;color:var(--t1);">Account balance inquiry</div><div style="font-size:9.5px;color:var(--t3);margin-top:1px;">SMS · 1 week ago · DL</div></div>
+                        <div style="font-size:9px;color:var(--t3);font-weight:600;">Closed</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="padding:10px 14px 14px;">
+                    <div style="font-size:10px;font-weight:700;color:var(--t2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px;">Agent Notes</div>
+                    <div style="background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:10.5px;color:var(--t2);line-height:1.5;">Member is inquiring about HELOC application progress. Documents submitted Mar 1. Waiting on title search. Follow up by Mar 10. — AR</div>
+                  </div>
+                </div>
+              </div>
               <div class="wf-pane" id="s234-cobrowse">
                 <div class="cb-inner">
                   <div class="cb-subhead">
@@ -1409,8 +1564,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   <button class="sc-btn" id="sc-3" onclick="goToState(3)"><span class="sc-num">3</span>Video + Co-browse</button>
   <div class="sc-sep"></div>
   <button class="sc-btn" id="sc-4" onclick="goToState(4)"><span class="sc-num">4</span>Video + Workflows</button>
-  <div class="sc-sep"></div>
-  <button class="sc-btn" id="sc-5" onclick="goToState(5)"><span class="sc-num">5</span>Conversation + Co-browse</button>
 </div>
 
 <!-- TOAST -->
@@ -1481,7 +1634,7 @@ function clearWFTab(){
 }
 
 function setActivePaneInGroup(prefix, key){
-  const panes = ['conv','cobrowse','workflows','salesforce','sharing'];
+  const panes = ['conv','contact360','cobrowse','workflows','salesforce','sharing'];
   panes.forEach(p => {
     const el = document.getElementById(prefix+'-'+p);
     if(el) el.classList.toggle('on', p===key);
@@ -1510,13 +1663,11 @@ function restoreForBrowsing(){
     document.getElementById('inboxStrip').classList.remove('alerting');
     setTimeout(()=>{ document.getElementById('stripBadge').classList.remove('show'); }, 600);
   }
-  const sb = document.getElementById('sidebar');
-  if(sb) sb.classList.add('expanded');
 }
 
 function goToState(n){
   currentState = n;
-  for(let i=1;i<=5;i++) document.getElementById('sc-'+i).classList.toggle('on', i===n);
+  for(let i=1;i<=4;i++) document.getElementById('sc-'+i).classList.toggle('on', i===n);
 
   if(n===1){
     document.getElementById('layer1').classList.add('active');
@@ -1525,10 +1676,20 @@ function goToState(n){
     stopTimer();
     const cbTab = document.getElementById('wft-cobrowse');
     if(cbTab) cbTab.style.display = '';
-    clearWFTab();
-    setActivePaneInGroup('s1','conv'); // show plain conv
+    // Default: Contact 360 open in split view
+    const area1 = document.querySelector('#layer1 .wf-pane-area');
+    if(area1) area1.classList.add('s1-split');
+    document.querySelectorAll('.wft').forEach(b => b.classList.remove('on'));
+    const c360tab = document.getElementById('wft-contact360');
+    if(c360tab) c360tab.classList.add('on');
+    document.getElementById('s1-conv').classList.add('on');
+    document.querySelectorAll('.s1-wf-pane').forEach(p => {
+      const active = p.id === 's1-contact360';
+      p.classList.toggle('s1-hidden', !active);
+      p.classList.toggle('on', active);
+    });
     restoreForBrowsing();
-    toast('💬  Conversation only — inbox & nav restored');
+    toast('💬  Conversation + Contact 360');
   }
   else{
     document.getElementById('layer1').classList.remove('active');
