@@ -161,7 +161,31 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .strip-badge.show{display:flex;animation:badgePop .35s cubic-bezier(.34,1.56,.64,1);}
 .strip-names{display:none;}
 
+
+/* ══ STATE 2 FLIP: conversation LEFT 35%, video RIGHT 65% ══ */
+.split-view.s2-flip{display:flex;flex-direction:row;}
+.split-view.s2-flip .right-panel{order:1;flex:0 0 35%;width:35%;border-right:1px solid var(--border);border-left:none;}
+.split-view.s2-flip .resize-handle{order:2;}
+.split-view.s2-flip .left-col{order:3;flex:1;width:auto;border-right:none;}
+
+/* ══ STATE 2 FLIP: conversation LEFT 35%, video RIGHT 65% ══ */
+.split-view.s2-flip .right-panel{order:1;flex:0 0 35%;width:35%;max-width:35%;border-right:1px solid var(--border);border-left:none;}
+.split-view.s2-flip .resize-handle{order:2;}
+.split-view.s2-flip .left-col{order:3;flex:1;width:auto !important;border-right:none;}
+
 /* ══ STATE 1 SPLIT — conv 35% left + workflow 65% right ══ */
+
+/* ══ STATE 2 FLIP: conversation LEFT 35%, video RIGHT 65% ══ */
+.split-view.s2-flip{display:flex;flex-direction:row;}
+.split-view.s2-flip .right-panel{order:1;flex:0 0 35%;width:35%;border-right:1px solid var(--border);border-left:none;}
+.split-view.s2-flip .resize-handle{order:2;}
+.split-view.s2-flip .left-col{order:3;flex:1;width:auto;border-right:none;}
+
+/* ══ STATE 2 FLIP: conversation LEFT 35%, video RIGHT 65% ══ */
+.split-view.s2-flip .right-panel{order:1;flex:0 0 35%;width:35%;max-width:35%;border-right:1px solid var(--border);border-left:none;}
+.split-view.s2-flip .resize-handle{order:2;}
+.split-view.s2-flip .left-col{order:3;flex:1;width:auto !important;border-right:none;}
+
 /* ══ STATE 1 SPLIT — conv 35% left + workflow 65% right ══ */
 .wf-pane-area.s1-split{display:flex;flex-direction:row;overflow:hidden;}
 .wf-pane-area.s1-split #s1-conv{width:35%;flex:0 0 35%;border-right:1px solid var(--border);display:flex !important;opacity:1 !important;}
@@ -1059,7 +1083,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     </div>
                   </div>
                   <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-                    <div style="font-size:10px;"><span style="color:var(--t3);">Email</span><br><span style="color:var(--t1);font-weight:500;">sarahjohnson@yahoo.com</span></div>
+                    <div style="font-size:10px;"><span style="color:var(--t3);">Email</span><br><span style="color:var(--t1);font-weight:500;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="67140615060f0d080f09140809271e060f08084904080a">[email&#160;protected]</a></span></div>
                     <div style="font-size:10px;"><span style="color:var(--t3);">Phone</span><br><span style="color:var(--accent);font-weight:600;">+1 (310) 492-7762</span></div>
                     <div style="font-size:10px;"><span style="color:var(--t3);">Last seen</span><br><span style="color:var(--t1);font-weight:500;">Yesterday, 4:29 PM</span></div>
                     <div style="font-size:10px;"><span style="color:var(--t3);">Department</span><br><span style="color:var(--t1);font-weight:500;">Lending</span></div>
@@ -1322,7 +1346,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                         </div>
                       </div>
                       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-                        <div style="font-size:10px;"><span style="color:var(--t3);">Email</span><br><span style="color:var(--t1);font-weight:500;">sarahjohnson@yahoo.com</span></div>
+                        <div style="font-size:10px;"><span style="color:var(--t3);">Email</span><br><span style="color:var(--t1);font-weight:500;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="26554754474e4c494e48554948665f474e49490845494b">[email&#160;protected]</a></span></div>
                         <div style="font-size:10px;"><span style="color:var(--t3);">Phone</span><br><span style="color:var(--accent);font-weight:600;">+1 (310) 492-7762</span></div>
                         <div style="font-size:10px;"><span style="color:var(--t3);">Last seen</span><br><span style="color:var(--t1);font-weight:500;">Yesterday, 4:29 PM</span></div>
                         <div style="font-size:10px;"><span style="color:var(--t3);">Department</span><br><span style="color:var(--t1);font-weight:500;">Lending</span></div>
@@ -1569,7 +1593,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 let currentState = 1;
 let inboxOpen = true;
 let callSecs = 0;
@@ -1710,7 +1734,7 @@ function goToState(n){
       document.getElementById('mbSub').textContent = '+1 (123) 456 78 90';
       clearWFTab();
       setActivePaneInGroup('s234','conv');
-      toast('🎥  Video 35% · Conversation 65% — click ⇄ to swap proportions');
+      toast('🎥  Conversation 35% · Video 65%');
     }
     else if(n===3){
       startTimer();
@@ -1725,6 +1749,7 @@ function goToState(n){
     }
     else if(n===4){
       startTimer();
+      document.querySelector('#layer234 .split-view').classList.remove('s2-flip');
       // Restore co-browse tab
       const cbTab = document.getElementById('wft-cobrowse');
       if(cbTab) cbTab.style.display = '';
@@ -1866,6 +1891,7 @@ let slots = { leftTop: 'video', leftBottom: 'conv', right: 'cobrowse' };
    Swapped:  Video LEFT 65%  · Conversation RIGHT 35%
 */
 function applyState2Layout(){
+  const splitView = document.querySelector('#layer234 .split-view');
   const leftCol = document.querySelector('#layer234 .left-col');
   const vb = document.getElementById('videoBlock');
   const cb = document.getElementById('convBlock');
@@ -1874,9 +1900,12 @@ function applyState2Layout(){
   if(vb){ vb.style.display = 'flex'; vb.className = 'video-block vb-full'; }
   if(cb){ cb.className = 'conv-block cb-hidden'; cb.style.display = ''; }
 
-  if(leftCol){
-    leftCol.style.width = state2Swapped ? '65%' : '35%';
-  }
+  // Apply flip: conversation on left 35%, video on right 65%
+  if(splitView) splitView.classList.add('s2-flip');
+
+  // In flipped layout, left-col (video) is visually right at 65% — let flex:1 handle it
+  // right-panel (conversation) is visually left at 35% — set by CSS
+  if(leftCol){ leftCol.style.width = state2Swapped ? '35%' : ''; }
 
   // Update swap icons
   const videoSwapIcon = vb ? vb.querySelector('.swap-icon') : null;
@@ -1884,11 +1913,11 @@ function applyState2Layout(){
 
   if(videoSwapIcon){
     videoSwapIcon.classList.toggle('swapped', state2Swapped);
-    videoSwapIcon.title = state2Swapped ? 'Restore: Video 35%, Conversation 65%' : 'Swap: Video 65%, Conversation 35%';
+    videoSwapIcon.title = state2Swapped ? 'Restore: Conversation 35%, Video 65%' : 'Swap: Conversation 65%, Video 35%';
   }
   if(convSwapIcon){
     convSwapIcon.classList.toggle('swapped', state2Swapped);
-    convSwapIcon.title = state2Swapped ? 'Restore: Video 35%, Conversation 65%' : 'Swap: Video 65%, Conversation 35%';
+    convSwapIcon.title = state2Swapped ? 'Restore: Conversation 35%, Video 65%' : 'Swap: Conversation 65%, Video 35%';
   }
 }
 
@@ -1896,7 +1925,7 @@ function toggleState2Layout(){
   state2Swapped = !state2Swapped;
   applyState2Layout();
   if(state2Swapped){
-    toast('⇄ Video expanded to 65% · Conversation 35%');
+    toast('⇄ Conversation expanded to 65% · Video 35%');
   } else {
     toast('⇄ Restored — Video 35% · Conversation 65%');
   }
