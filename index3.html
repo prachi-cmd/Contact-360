@@ -1912,7 +1912,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 <body>
 
 <!-- MAIN CONTENT (full height minus scenario bar) -->
-<div style="display:flex;flex-direction:column;height:calc(100vh - var(--bottom-bar));overflow:hidden;">
+<div style="display:flex;flex-direction:column;height:100vh;overflow:hidden;">
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="logo">E</div><div class="vd"></div>
@@ -4295,14 +4295,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 </div><!-- /body -->
 </div><!-- /main-content -->
 
-<!-- ══ SCENARIO BAR — fixed at bottom ══ -->
-<div class="scenario-bar">
-  <span class="sc-label">SCENARIO</span>
-  <button class="sc-btn on" id="sc-1" onclick="goToState(1)"><span class="sc-num">1</span>Conversation only</button>
-  <div class="sc-sep"></div>
-  <button class="sc-btn" id="sc-2" onclick="goToState(2)"><span class="sc-num">2</span>Voice Interaction</button>
-</div>
-
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
@@ -4403,36 +4395,13 @@ function restoreForBrowsing(){
 
 function goToState(n){
   currentState = n;
-  for(let i=1;i<=2;i++) document.getElementById('sc-'+i).classList.toggle('on', i===n);
-
-  if(n===1){
-    document.getElementById('layer1').classList.add('active');
-    document.getElementById('layer234').classList.remove('active');
-    document.getElementById('mbName').textContent = 'Sarah Johnson';
-    document.getElementById('mbSub').textContent = '+1 (123) 456 78 90';
-    stopTimer();
-    // hide active call card and stop its timer
-    document.getElementById('activeCallCard').classList.remove('show');
-    if(accCallTimer){ clearInterval(accCallTimer); accCallTimer=null; accCallSecs=0; document.getElementById('accTimer').textContent='00:00:00'; }
-    // reset handoff collapse state
-    c360AutoCollapsed = false; c360ManuallyCollapsed = false;
-    restoreForBrowsing();
-    // hide Contact360 tab and notification on reset
-    const c360tab = document.getElementById('wft-contact360');
-    if(c360tab) c360tab.style.display = 'none';
-    document.getElementById('voiceNotif').classList.remove('show');
-    switchWFTab('conversations');
-    toast('💬  Conversation only — inbox & nav restored');
-  }
-  else if(n===2){
-    // Voice Interaction — show incoming call notification
+  if(n===2){
     document.getElementById('layer1').classList.add('active');
     document.getElementById('layer234').classList.remove('active');
     document.getElementById('mbSub').textContent = '+1 (123) 456 78 90';
     stopTimer();
     restoreForBrowsing();
     switchWFTab('conversations');
-    // show incoming call notification
     document.getElementById('voiceNotif').classList.add('show');
     toast('📞  Incoming voice transfer from Alex (AI)');
   }
@@ -5208,7 +5177,7 @@ function resetSlots(){
 /* ══ KEYBOARD ══ */
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='TEXTAREA') return;
-  if(e.key>='1'&&e.key<='2') goToState(parseInt(e.key));
+  if(e.key==='2') goToState(2);
 });
 ['s1Input','splitInput','rightInput'].forEach(id=>{
   const el=document.getElementById(id); if(!el) return;
@@ -5249,7 +5218,7 @@ function setNavActive(el){
 }
 
 // Init
-goToState(1);
+goToState(2);
 
 /* ══ SET CHANNEL (was undefined — fixes channel switcher buttons) ══ */
 function setChannel(el){
