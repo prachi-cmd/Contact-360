@@ -187,14 +187,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
 /* ── DISCUSSED LINK ──────────────────────────────────── */
 .discussed-link{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:10.5px;color:var(--accent);font-weight:500;
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;color:var(--t2);font-weight:400;
   cursor:pointer;background:none;border:none;
   padding:0;font-family:var(--f);margin-top:4px;
-  text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(0,137,123,.3);
-  transition:opacity .12s;
+  transition:color .12s;letter-spacing:-.01em;
 }
-.discussed-link:hover{opacity:.7;}
+.discussed-link:hover{color:var(--t1);}
 
 /* ── ALERT BADGE ─────────────────────────────────────── */
 .alert-badge{
@@ -252,6 +251,27 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .acct-alert-title{font-size:12px;font-weight:600;color:var(--t1);}
 .acct-alert-sub{font-size:11px;color:var(--t2);margin-top:2px;line-height:1.4;}
 .acct-alert-src{font-size:10px;color:var(--t3);margin-top:3px;}
+
+/* ── OPT-IN STATUS WIDGET ────────────────────────────── */
+.optin-section-title{font-size:11px;font-weight:700;color:var(--t1);padding:10px 16px 6px;display:flex;align-items:center;gap:5px;}
+.optin-info-icon{width:14px;height:14px;border-radius:50%;border:1px solid var(--border2);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--t3);flex-shrink:0;cursor:default;}
+.optin-row{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-top:1px solid var(--border);}
+.optin-lbl{font-size:12px;color:var(--t1);font-weight:400;}
+/* toggle switch — read-only visual */
+.optin-toggle{width:32px;height:18px;border-radius:9px;flex-shrink:0;position:relative;}
+.optin-toggle.on{background:var(--accent);}
+.optin-toggle.off{background:#d1d5db;}
+.optin-toggle::after{content:'';position:absolute;top:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2);transition:left .15s;}
+.optin-toggle.on::after{left:16px;}
+.optin-toggle.off::after{left:2px;}
+/* pagination */
+.optin-pagination{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-top:1px solid var(--border);}
+.optin-count{font-size:10.5px;color:var(--t3);}
+.optin-pages{display:flex;align-items:center;gap:3px;}
+.optin-page-btn{width:22px;height:22px;border-radius:5px;border:1px solid var(--border);background:transparent;font-size:10.5px;color:var(--t2);cursor:pointer;font-family:var(--f);display:flex;align-items:center;justify-content:center;}
+.optin-page-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700;}
+.optin-page-btn:hover:not(.active){background:var(--s1);}
+.optin-page-dots{font-size:10.5px;color:var(--t3);padding:0 2px;}
 
 /* ── REFERENCE WIDGETS (below fold) ─────────────────── */
 .ref-widget .w360-title{color:var(--t3);font-size:10px;}
@@ -1520,16 +1540,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .ov-quiet a{color:var(--accent);font-weight:600;cursor:pointer;text-decoration:none;}
 .ov-quiet a:hover{text-decoration:underline;}
 /* ══ BIDIRECTIONAL LINKS — financial ↔ interaction ══ */
-.discussed-link{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:9.5px;color:var(--accent);font-weight:600;
-  cursor:pointer;background:rgba(0,121,107,.07);
-  border:1px solid rgba(0,121,107,.2);border-radius:5px;
-  padding:2px 8px;margin-top:3px;
-  font-family:var(--f);transition:all .12s;text-decoration:none;
-}
-.discussed-link:hover{background:rgba(0,121,107,.14);border-color:rgba(0,121,107,.4);}
-.discussed-link svg{flex-shrink:0;}
+.discussed-link svg{flex-shrink:0;color:var(--t3);}
 
 /* related records strip on interaction cards */
 .ij-related{
@@ -2632,35 +2643,55 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       <!-- 7. BELOW-FOLD REFERENCE WIDGETS: Text Preferences + Active Integrations -->
                       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
 
-                        <!-- Text Preferences -->
+                        <!-- Opt-in Status -->
                         <div class="w360 ref-widget" style="margin:0;">
                           <div class="w360-head">
-                            <span class="w360-title">Text Preferences</span>
-                            <span style="font-size:10px;color:var(--t3);margin-left:auto;">Opt-ins</span>
+                            <span class="w360-title">Opt-in Status</span>
                           </div>
-                          <div class="ref-row">
-                            <span class="ref-lbl">Essentials</span>
-                            <span class="ref-tag off">Off</span>
+                          <!-- Global opt-out -->
+                          <div class="optin-section-title">
+                            Global opt-out
+                            <span class="optin-info-icon">i</span>
                           </div>
-                          <div class="ref-row">
-                            <span class="ref-lbl">Central team</span>
-                            <span class="ref-tag off">Off</span>
+                          <div class="optin-row">
+                            <span class="optin-lbl">Global opt-out</span>
+                            <div class="optin-toggle off"></div>
                           </div>
-                          <div class="ref-row">
-                            <span class="ref-lbl">Marketing</span>
-                            <span class="ref-tag on">On</span>
+                          <!-- Department opt-in -->
+                          <div class="optin-section-title" style="border-top:1px solid var(--border);">
+                            Department opt-in
+                            <span class="optin-info-icon">i</span>
                           </div>
-                          <div class="ref-row">
-                            <span class="ref-lbl">Insurance</span>
-                            <span class="ref-tag off">Off</span>
+                          <div class="optin-row">
+                            <span class="optin-lbl">Accounts</span>
+                            <div class="optin-toggle on"></div>
                           </div>
-                          <div class="ref-row">
-                            <span class="ref-lbl">Lending</span>
-                            <span class="ref-tag on">On</span>
+                          <div class="optin-row">
+                            <span class="optin-lbl">Collections</span>
+                            <div class="optin-toggle off"></div>
                           </div>
-                          <div class="ref-row" style="border-bottom:none;">
-                            <span class="ref-lbl">Global opt in</span>
-                            <span class="ref-tag on">On</span>
+                          <div class="optin-row">
+                            <span class="optin-lbl">HELOC</span>
+                            <div class="optin-toggle on"></div>
+                          </div>
+                          <div class="optin-row">
+                            <span class="optin-lbl">Insurance</span>
+                            <div class="optin-toggle off"></div>
+                          </div>
+                          <div class="optin-row">
+                            <span class="optin-lbl">Lending</span>
+                            <div class="optin-toggle on"></div>
+                          </div>
+                          <!-- Pagination -->
+                          <div class="optin-pagination">
+                            <span class="optin-count">1–5 of 15</span>
+                            <div class="optin-pages">
+                              <button class="optin-page-btn">‹</button>
+                              <button class="optin-page-btn active">1</button>
+                              <button class="optin-page-btn">2</button>
+                              <span class="optin-page-dots">···</span>
+                              <button class="optin-page-btn">›</button>
+                            </div>
                           </div>
                         </div>
 
@@ -4015,86 +4046,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
     </div><!-- /main-area -->
 
     <!-- CONTACT INFO PANEL (slides in from right of main-area) -->
-    <div class="ci-panel" id="ciPanel">
-      <div class="ci-inner">
-
-        <!-- Header -->
-        <div class="ci-head">
-          <span class="ci-title">Contact info</span>
-          <button class="ci-close" onclick="toggleContactInfo()" title="Close">✕</button>
-        </div>
-
-        <!-- Profile card -->
-        <div class="ci-card">
-          <div class="ci-profile">
-            <div class="ci-ava">SJ</div>
-            <div>
-              <div class="ci-pname">Sarah Johnson</div>
-              <button class="ci-dnc">Verify DNC</button>
-            </div>
-          </div>
-          <div class="ci-divider"></div>
-          <div class="ci-row"><span class="ci-lbl">Email</span><span class="ci-val"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="691a081b0801030601071a0607291008010606470a0604">[email&#160;protected]</a></span></div>
-          <div class="ci-row"><span class="ci-lbl">Phone</span><span class="ci-val teal">+1 (310) 492-7762</span></div>
-          <div class="ci-row"><span class="ci-lbl">Last seen</span><span class="ci-val">Yesterday, 04:29 PM</span></div>
-          <div class="ci-row"><span class="ci-lbl">Department</span><span class="ci-val">Lending</span></div>
-        </div>
-
-        <!-- Opt-in status -->
-        <div class="ci-section">
-          <div class="ci-sec-title">Opt-in status</div>
-
-          <div class="ci-opt-row">
-            <span class="ci-opt-lbl" style="color:var(--t1);font-weight:600;font-size:11px;">Global opt-out <span class="ci-info-ico">i</span></span>
-            <label class="ci-toggle"><input type="checkbox"><span class="ci-toggle-track"></span></label>
-          </div>
-
-          <div class="ci-divider"></div>
-
-          <div style="font-size:10.5px;font-weight:600;color:var(--t1);margin-bottom:6px;display:flex;align-items:center;gap:5px;">Department opt-in <span class="ci-info-ico">i</span></div>
-
-          <div class="ci-opt-row">
-            <span class="ci-opt-lbl">Accounts</span>
-            <label class="ci-toggle"><input type="checkbox" checked><span class="ci-toggle-track"></span></label>
-          </div>
-          <div class="ci-opt-row">
-            <span class="ci-opt-lbl">Collections</span>
-            <label class="ci-toggle"><input type="checkbox"><span class="ci-toggle-track"></span></label>
-          </div>
-          <div class="ci-opt-row">
-            <span class="ci-opt-lbl">HELOC</span>
-            <label class="ci-toggle"><input type="checkbox" checked><span class="ci-toggle-track"></span></label>
-          </div>
-          <div class="ci-opt-row">
-            <span class="ci-opt-lbl">Insurance</span>
-            <label class="ci-toggle"><input type="checkbox"><span class="ci-toggle-track"></span></label>
-          </div>
-          <div class="ci-opt-row">
-            <span class="ci-opt-lbl">Lending</span>
-            <label class="ci-toggle"><input type="checkbox" checked><span class="ci-toggle-track"></span></label>
-          </div>
-
-          <div class="ci-page">
-            <span>1–5 of 15</span>
-            <div class="ci-page-btns">
-              <button class="ci-pg">‹</button>
-              <button class="ci-pg on">1</button>
-              <button class="ci-pg">2</button>
-              <button class="ci-pg" style="font-size:8px;letter-spacing:1px">···</button>
-              <button class="ci-pg">›</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Active Integrations teaser -->
-        <div class="ci-section" style="margin-bottom:10px;">
-          <div class="ci-sec-title" style="margin-bottom:4px;">Active Integrations <span class="ci-info-ico">i</span></div>
-          <div style="font-size:10px;color:var(--t3);padding:6px 0;">No active integrations for this contact.</div>
-        </div>
-
-      </div>
-    </div><!-- /ci-panel -->
-
     <!-- ASK AI PANEL (in-flow, same size as ci-panel) -->
     <div class="ci-panel" id="askAiPanel" style="border-left:1px solid var(--border);">
       <div class="ci-inner">
@@ -4242,16 +4193,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       </button>
 
       <div class="ar-sep"></div>
-
-      <!-- Verified Identity / Contact Info -->
-      <button class="ar-btn" id="ciBtn" onclick="toggleContactInfo()" title="Contact info">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-          <circle cx="18.5" cy="18.5" r="3.5" fill="currentColor" stroke="none"/>
-          <path d="M17.2 18.5l.9.9 1.7-1.7" stroke="white" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
 
       <!-- Label / Tag -->
       <button class="ar-btn" title="Add label">
@@ -4641,7 +4582,7 @@ function toggleAskAiPanel(){
   askAiOpen = !askAiOpen;
   panel.classList.toggle('open', askAiOpen);
   btn.classList.toggle('active', askAiOpen);
-  if(askAiOpen) document.getElementById('ciPanel')?.classList.remove('open');
+  if(askAiOpen) 
   setOvPanelOpen(askAiOpen);
 }
 
@@ -4742,7 +4683,7 @@ function openAuthPanel(type){
     const el = document.getElementById(id);
     if(el) el.classList.remove('open');
   });
-  document.getElementById('ciPanel')?.classList.remove('open');
+  
   document.getElementById('askAiPanel')?.classList.remove('open');
   const map = {otp:'authPanelOtp', voice:'authPanelVoice', device:'authPanelDevice'};
   const panel = document.getElementById(map[type]);
@@ -5192,20 +5133,7 @@ document.addEventListener('keydown',e=>{
 });
 
 /* ══ CONTACT INFO PANEL ══ */
-function toggleContactInfo(){
-  const panel = document.getElementById('ciPanel');
-  const btn   = document.getElementById('ciBtn');
-  const open  = panel.classList.toggle('open');
-  btn.classList.toggle('ci-active', open);
-  btn.title = open ? 'Close contact info' : 'Contact info';
-  if(open){
-    const sb=document.getElementById('sidebar'); if(sb) sb.classList.remove('expanded');
-    document.getElementById('askAiPanel')?.classList.remove('open');
-    if(typeof askAiOpen !== 'undefined'){ askAiOpen = false; document.getElementById('globalAskAiBtn')?.classList.remove('active'); }
-    closeAuthPanel();
-  }
-  setOvPanelOpen(open);
-}
+function toggleContactInfo(){ /* removed — contact info now in C360 overview */ }
 
 /* ══ SIDEBAR TOGGLE ══ */
 function toggleSidebar(){
