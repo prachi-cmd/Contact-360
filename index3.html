@@ -7,22 +7,280 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f0f2f6;--s0:#fff;--s1:#f7f8fb;--s2:#eef0f5;--s3:#e4e7ef;
-  --border:#dde1ea;--border2:#c5cad6;
-  --accent:#00796B;--as:rgba(0,121,107,.07);
-  --teal:#0d9488;--ts:rgba(13,148,136,.08);
-  --red:#dc2626;--rs:rgba(220,38,38,.08);
-  --amber:#d97706;--ws:rgba(217,119,6,.08);
-  --green:#16a34a;--gs:rgba(22,163,74,.08);
-  --t1:#111827;--t2:#4b5563;--t3:#9ca3af;
-  --f:'DM Sans',system-ui,sans-serif;--m:'DM Mono',monospace;
-  --sh1:0 1px 3px rgba(0,0,0,.07),0 1px 2px rgba(0,0,0,.04);
-  --sh2:0 4px 16px rgba(0,0,0,.09);--sh3:0 14px 40px rgba(0,0,0,.12);
+  /* Refined neutral palette — Stripe/Apple Wallet inspired */
+  --bg:#f5f5f7;--s0:#ffffff;--s1:#fafafa;--s2:#f2f2f2;--s3:#e8e8e8;
+  --border:#e5e5e5;--border2:#d4d4d4;
+  /* Single clean accent */
+  --accent:#00897B;--as:rgba(0,137,123,.07);
+  --teal:#009688;--ts:rgba(0,150,136,.08);
+  --red:#d32f2f;--rs:rgba(211,47,47,.07);
+  --amber:#e65100;--ws:rgba(230,81,0,.07);
+  --green:#2e7d32;--gs:rgba(46,125,50,.07);
+  /* Text hierarchy */
+  --t1:#1a1a1a;--t2:#525252;--t3:#a3a3a3;
+  /* Fonts */
+  --f:-apple-system,'SF Pro Text','Inter',system-ui,sans-serif;
+  --m:'SF Mono','Fira Code',monospace;
+  /* Shadows — very subtle */
+  --sh1:0 1px 2px rgba(0,0,0,.04),0 1px 4px rgba(0,0,0,.04);
+  --sh2:0 2px 8px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh3:0 8px 24px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
   --bottom-bar:52px;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
+
+/* ── GLOBAL RESET ────────────────────────────────────── */
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex-direction:column;font-size:12px;}
+body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex-direction:column;font-size:13px;letter-spacing:-.01em;}
+
+/* ── REFINED CARD SYSTEM ─────────────────────────────── */
+/* loan-card: lightweight, airy, minimal */
+.loan-card{
+  background:var(--s0);
+  border:1px solid var(--border);
+  border-radius:12px;
+  cursor:pointer;
+  transition:box-shadow .15s ease, background .12s;
+  border-left:3px solid transparent;
+  box-shadow:var(--sh1);
+}
+.loan-card:hover{
+  background:#fafafa;
+  box-shadow:var(--sh2);
+}
+.loan-card.review{border-left-color:#e65100;}
+.loan-card.fraud{border-left-color:var(--red);}
+.loan-card.closed{opacity:.55;cursor:default;}
+
+/* loan-card-icon: softer */
+.loan-card-icon{
+  width:34px;height:34px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-size:15px;
+}
+
+/* loan-card typography */
+.loan-card-name{font-size:13px;font-weight:600;color:var(--t1);letter-spacing:-.01em;}
+.loan-card-sub{font-size:11.5px;color:var(--t3);margin-top:2px;font-weight:400;}
+
+/* ── STATUS FLAGS — small, quiet ─────────────────────── */
+.loan-flag{
+  display:inline-flex;align-items:center;
+  font-size:10px;font-weight:600;letter-spacing:.03em;
+  padding:2px 6px;border-radius:4px;
+  border:none;
+}
+.loan-flag.review{background:#fff3e0;color:#bf360c;}
+.loan-flag.fraud{background:#ffebee;color:#c62828;}
+.loan-flag.closed{background:#f5f5f5;color:#757575;}
+.card-flag{display:inline-flex;align-items:center;font-size:10px;font-weight:600;letter-spacing:.03em;padding:2px 6px;border-radius:4px;}
+.card-flag.blocked{background:#ffebee;color:#c62828;border:none;}
+.card-flag.active{background:#e8f5e9;color:#2e7d32;border:none;}
+.card-flag.closed{background:#f5f5f5;color:#757575;border:none;}
+
+/* ── PROGRESS BAR — thinner, cleaner ────────────────── */
+.loan-progress-wrap{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.loan-progress-bar{flex:1;height:3px;background:#f0f0f0;border-radius:2px;overflow:hidden;}
+.loan-progress-fill{height:100%;border-radius:2px;}
+.loan-progress-fill.amber{background:#e65100;}
+.loan-progress-fill.teal{background:var(--accent);}
+.loan-progress-fill.gray{background:#d4d4d4;}
+.loan-progress-text{font-size:10.5px;color:var(--t3);white-space:nowrap;font-weight:400;}
+.loan-progress-text b{color:var(--t2);font-weight:600;}
+
+/* ── CHIPS BAR — refined ─────────────────────────────── */
+.c360-chips-bar{
+  display:flex;gap:4px;padding:8px 14px;
+  background:var(--s0);border-bottom:1px solid var(--border);
+  overflow:visible;flex-shrink:0;position:relative;
+}
+.c360-chip{
+  display:inline-flex;align-items:center;
+  padding:5px 12px;border-radius:20px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--t2);font-size:11.5px;font-weight:500;
+  cursor:pointer;transition:all .12s;white-space:nowrap;
+  font-family:var(--f);letter-spacing:-.01em;
+}
+.c360-chip:hover{background:var(--s1);border-color:var(--border2);color:var(--t1);}
+.c360-chip.active{background:var(--t1);border-color:var(--t1);color:#fff;font-weight:600;}
+
+/* ── W360 WIDGET — clean card ────────────────────────── */
+.w360{
+  background:var(--s0);border:1px solid var(--border);
+  border-radius:12px;margin:0 0 10px;overflow:hidden;
+  box-shadow:var(--sh1);
+}
+.w360-head{
+  padding:12px 16px;display:flex;align-items:center;gap:6px;
+  border-bottom:1px solid var(--border);
+}
+.w360-title{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;flex:1;}
+.w360-viewall{
+  font-size:11px;font-weight:500;color:var(--accent);
+  background:none;border:none;cursor:pointer;font-family:var(--f);
+  padding:0;letter-spacing:-.01em;
+}
+.w360-viewall:hover{opacity:.7;}
+
+/* ── W360 CELL ROWS ──────────────────────────────────── */
+.w360-cell-row{display:flex;flex-direction:column;gap:1px;padding:10px 16px;}
+.w360-lbl{font-size:10.5px;color:var(--t3);font-weight:400;}
+.w360-val{font-size:12.5px;color:var(--t1);font-weight:600;letter-spacing:-.01em;}
+.w360-val.accent{color:var(--accent);}
+
+/* ── HANDOFF CARD — minimal strip ────────────────────── */
+.handoff-card{
+  background:var(--s0);border-bottom:1px solid var(--border);
+  padding:12px 16px;flex-shrink:0;
+}
+.handoff-title{font-size:12.5px;font-weight:600;color:var(--t1);letter-spacing:-.01em;}
+.handoff-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500;
+}
+.hb-neutral{background:#f5f5f5;color:var(--t2);}
+.hb-beta{background:#f5f5f5;color:var(--t3);font-size:10px;}
+.hb-auth{background:#ffebee;color:var(--red);}
+.handoff-toggle{font-size:11px;font-weight:500;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--f);display:flex;align-items:center;gap:4px;}
+
+/* ── ACD SECTION — clean rows ────────────────────────── */
+.acd-section{border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.acd-row{display:flex;align-items:center;padding:9px 14px;border-bottom:1px solid var(--border);}
+.acd-row:last-child{border-bottom:none;}
+.acd-lbl{font-size:11.5px;color:var(--t3);width:120px;flex-shrink:0;font-weight:400;}
+.acd-val{font-size:12px;font-weight:600;color:var(--t1);font-family:var(--m);letter-spacing:-.01em;}
+.acd-val.green{color:var(--green);}
+.acd-section-title{font-size:9.5px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;padding:10px 14px 4px;}
+
+/* ── MEMBER STRIP ────────────────────────────────────── */
+.member-strip{
+  display:flex;align-items:center;gap:0;
+  background:var(--s0);border-bottom:1px solid var(--border);
+  flex-shrink:0;overflow-x:auto;
+}
+.member-strip::-webkit-scrollbar{display:none;}
+.ms-cell{display:flex;flex-direction:column;justify-content:center;padding:8px 16px;border-right:1px solid var(--border);flex-shrink:0;}
+.ms-lbl{font-size:9.5px;font-weight:600;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;}
+.ms-val{font-size:11.5px;font-weight:600;color:var(--t1);white-space:nowrap;margin-top:2px;letter-spacing:-.01em;}
+.ms-val.accent{color:var(--accent);}
+.ms-val.amber{color:var(--amber);}
+
+/* ── ACCORDION ────────────────────────────────────────── */
+.acc-row-head{display:flex;align-items:center;gap:12px;padding:14px 16px;}
+.acc-chevron{margin-left:auto;color:var(--border2);flex-shrink:0;transition:transform .2s;}
+.acc-row.open .acc-chevron{transform:rotate(90deg);color:var(--accent);}
+.acc-detail{display:none;background:var(--s0);border-top:1px solid var(--border);}
+.acc-row.open .acc-detail{display:block;}
+
+/* ── MEMBERSHIP TAGS ─────────────────────────────────── */
+.mb-tag{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:4px;font-size:10.5px;font-weight:500;}
+.mb-tag.premier{background:#fff8e1;color:#bf360c;border:1px solid #ffe0b2;}
+.mb-tag.kyc{background:#ffebee;color:#c62828;border:1px solid #ffcdd2;}
+.mb-tag.verified{background:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9;}
+.mb-tag.at-risk{background:#fff3e0;color:#bf360c;border:1px solid #ffe0b2;}
+
+/* ── MEMBER HEADER ───────────────────────────────────── */
+.mb-name{font-weight:700;font-size:14px;letter-spacing:-.02em;}
+.mb-sub{font-size:11px;color:var(--t3);font-weight:400;margin-top:1px;}
+.mb-tags{display:flex;align-items:center;gap:5px;padding:0 16px 10px;flex-wrap:wrap;}
+
+/* ── DISCUSSED LINK ──────────────────────────────────── */
+.discussed-link{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10.5px;color:var(--accent);font-weight:500;
+  cursor:pointer;background:none;border:none;
+  padding:0;font-family:var(--f);margin-top:4px;
+  text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(0,137,123,.3);
+  transition:opacity .12s;
+}
+.discussed-link:hover{opacity:.7;}
+
+/* ── ALERT BADGE ─────────────────────────────────────── */
+.alert-badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:1px 6px;border-radius:4px;font-size:10px;
+  font-weight:600;cursor:pointer;border:none;font-family:var(--f);
+}
+.alert-badge.red{background:#ffebee;color:#c62828;}
+.alert-badge.amber{background:#fff8e1;color:#bf360c;}
+
+/* ── MEMBERSHIP ALERT STRIP ──────────────────────────── */
+.mem-alert-strip{background:var(--s0);border:1px solid #ffe0b2;border-radius:10px;overflow:hidden;}
+.mem-alert-strip-head{display:flex;align-items:center;gap:7px;padding:10px 14px;border-bottom:1px solid #ffe0b2;}
+.mem-alert-strip-title{font-size:11px;font-weight:600;color:#bf360c;flex:1;}
+.mem-alert-strip-source{font-size:10px;color:var(--t3);}
+.mem-alert-row{display:flex;align-items:flex-start;gap:8px;padding:9px 14px;border-bottom:1px solid #fff3e0;}
+.mem-alert-row:last-child{border-bottom:none;}
+.mem-alert-title{font-size:12px;font-weight:600;color:var(--t1);}
+.mem-alert-sub{font-size:11px;color:var(--t2);margin-top:2px;line-height:1.4;}
+.mem-alert-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.mem-alert-dot.red{background:var(--red);}
+.mem-alert-dot.amber{background:var(--amber);}
+
+/* ── NOT-ENROLLED TAG ────────────────────────────────── */
+.not-enrolled-tag{
+  display:inline-flex;padding:1px 5px;border-radius:3px;
+  font-size:9.5px;font-weight:500;
+  background:#f5f5f5;color:var(--t3);border:1px solid var(--border);
+}
+
+/* ── IJ CARD TAGS ────────────────────────────────────── */
+.ij-tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:500;}
+.ij-tag.red{background:#ffebee;color:#c62828;}
+.ij-tag.amber{background:#fff8e1;color:#bf360c;}
+.ij-tag.blue{background:#e3f2fd;color:#1565c0;}
+.ij-tag.green{background:#e8f5e9;color:#2e7d32;}
+.ij-tag.purple{background:#f3e5f5;color:#6a1b9a;}
+.ij-tag.more{background:#f5f5f5;color:var(--t3);}
+
+/* ── AUTH BUTTON ─────────────────────────────────────── */
+.auth-btn.verify-start{
+  background:var(--accent);border:none;color:#fff;
+  border-radius:6px;padding:5px 10px;font-size:10.5px;font-weight:600;font-family:var(--f);cursor:pointer;
+}
+.auth-btn.launch{
+  background:transparent;border:1px solid var(--border2);color:var(--t2);
+  border-radius:6px;padding:5px 10px;font-size:10.5px;font-weight:500;font-family:var(--f);cursor:pointer;
+}
+.auth-btn.launch:hover{border-color:var(--accent);color:var(--accent);}
+
+/* ── ACCT ALERT BLOCK ────────────────────────────────── */
+.acct-alert-block{border-radius:8px;overflow:hidden;border:1px solid #ffe0b2;background:#fff8f4;}
+.acct-alert-block.amber{border-color:#ffe0b2;background:#fff8f4;}
+.acct-alert-block-row{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;}
+.acct-alert-title{font-size:12px;font-weight:600;color:var(--t1);}
+.acct-alert-sub{font-size:11px;color:var(--t2);margin-top:2px;line-height:1.4;}
+.acct-alert-src{font-size:10px;color:var(--t3);margin-top:3px;}
+
+/* ── REFERENCE WIDGETS (below fold) ─────────────────── */
+.ref-widget .w360-title{color:var(--t3);font-size:10px;}
+.ref-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 16px;border-bottom:1px solid var(--border);
+}
+.ref-lbl{font-size:12px;color:var(--t2);font-weight:400;}
+.ref-tag{
+  font-size:10px;font-weight:600;padding:1px 7px;
+  border-radius:4px;letter-spacing:.02em;
+}
+.ref-tag.on{background:#e8f5e9;color:#2e7d32;}
+.ref-tag.off{background:#f5f5f5;color:#9e9e9e;}
+.ref-int-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:0;
+}
+.ref-int-item{
+  padding:10px 16px;border-bottom:1px solid var(--border);
+  border-right:1px solid var(--border);
+}
+.ref-int-item:nth-child(even){border-right:none;}
+.ref-int-item:nth-last-child(-n+2){border-bottom:none;}
+.ref-int-src{font-size:10.5px;color:var(--t3);font-weight:400;}
+.ref-int-val{font-size:12px;color:var(--t1);font-weight:500;margin-top:2px;letter-spacing:-.01em;}
+
+/* ── HANDOFF SUMMARY TEXT ─────────────────────────────── */
+.handoff-summary-text{font-size:12px;color:var(--t2);line-height:1.6;}
 
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
 @keyframes vring{0%,100%{box-shadow:0 0 0 0 rgba(13,148,136,.35)}50%{box-shadow:0 0 0 6px rgba(13,148,136,0)}}
@@ -199,7 +457,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
 /* MEMBER HEADER */
 .member-bar{background:var(--s0);border-bottom:1px solid var(--border);flex-shrink:0;box-shadow:var(--sh1);}
-.mb-top{height:46px;display:flex;align-items:center;padding:0 16px;gap:10px;}
+.mb-top{height:48px;display:flex;align-items:center;padding:0 16px;gap:10px;}
 .mb-ava{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#00796B,#0d9488);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:var(--m);flex-shrink:0;}
 .mb-info{flex:1;}
 .mb-name{font-weight:600;font-size:13px;}
@@ -207,13 +465,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .mb-r{display:flex;align-items:center;gap:6px;}
 .agch{display:flex;align-items:center;gap:5px;background:var(--s2);border:1px solid var(--border);border-radius:6px;padding:0 10px;font-size:10px;font-weight:500;cursor:pointer;color:var(--t2);height:28px;}
 .agav{width:18px;height:18px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#fff;font-family:var(--m);}
-.cmpbtn{background:var(--accent);border:none;color:#fff;border-radius:6px;padding:0 14px;font-size:11px;font-family:var(--f);cursor:pointer;font-weight:600;height:28px;}
-.cmpbtn:hover{background:#005f56;}
+.cmpbtn{background:var(--t1);border:none;color:#fff;border-radius:8px;padding:0 16px;font-size:12px;font-family:var(--f);cursor:pointer;font-weight:600;height:30px;letter-spacing:-.01em;}
+.cmpbtn:hover{background:#333;}
 
 /* ── WORKFLOW TABS (always below member header) ── */
 .wf-tabs{height:38px;display:flex;align-items:stretch;padding:0 14px;gap:2px;border-bottom:1px solid var(--border);background:var(--s0);overflow-x:auto;flex-shrink:0;}
 .wf-tabs::-webkit-scrollbar{display:none;}
-.wft{display:flex;align-items:center;gap:5px;padding:0 13px;font-size:11px;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .12s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--f);}
+.wft{display:flex;align-items:center;gap:5px;padding:0 14px;font-size:12px;font-weight:500;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;transition:all .12s;white-space:nowrap;background:none;border-top:none;border-left:none;border-right:none;font-family:var(--f);letter-spacing:-.01em;}
 .wft:hover{color:var(--t2);}
 .wft.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
 .wft-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 1.5s infinite;display:none;}
@@ -878,7 +1136,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .ij-date-group{margin-bottom:10px;}
 .ij-date-label{font-size:10px;font-weight:600;color:var(--t3);padding:4px 2px 6px;letter-spacing:.02em;}
 
-.ij-card{background:var(--s0);border:1px solid var(--border);border-radius:9px;margin-bottom:6px;overflow:hidden;}
+.ij-card{background:var(--s0);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden;box-shadow:var(--sh1);}
 .ij-card.nested{margin-left:16px;margin-top:4px;border-style:dashed;opacity:.88;}
 
 .ij-card-head{display:flex;align-items:center;gap:7px;padding:8px 10px;border-bottom:1px solid var(--border);}
@@ -907,7 +1165,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .ij-tag.purple{background:#ede9fe;color:#5b21b6;}
 .ij-tag.more{background:var(--s2);color:var(--t2);}
 
-.ij-summary-text{font-size:10.5px;color:var(--t1);line-height:1.6;}
+.ij-summary-text{font-size:11.5px;color:var(--t2);line-height:1.6;font-weight:400;}
 .ij-summary-text .ij-readmore{color:var(--accent);font-weight:600;cursor:pointer;font-size:10px;}
 .ij-gen{display:flex;align-items:center;gap:4px;font-size:9.5px;color:var(--t3);}
 .ij-gen-logo{width:12px;height:12px;border-radius:2px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:6px;font-weight:700;color:#fff;font-family:var(--m);}
@@ -939,7 +1197,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .c360-panel.active{display:flex;}
 
 /* drill-down panel scroll wrapper */
-.c360-drill{flex:1;overflow-y:auto;background:var(--bg);padding:10px 12px 20px;display:flex;flex-direction:column;gap:10px;}
+.c360-drill{flex:1;overflow-y:auto;background:var(--bg);display:flex;flex-direction:column;padding:10px;gap:8px;}
 .c360-drill::-webkit-scrollbar{width:3px;}
 .c360-drill::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
@@ -997,7 +1255,56 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   background:var(--s0);border:1.5px solid var(--accent);color:var(--accent);
 }
 .acct-transfer-btn:hover{background:var(--as);}
-/* ══ OVERVIEW INTERACTION HISTORY WIDGET ══ */
+
+/* ══ ASK AI ══ */
+.ar-btn.ask-ai{color:#7c3aed;}
+.ar-btn.ask-ai:hover{background:rgba(109,40,217,.1);color:#6d28d9;}
+.ar-btn.ask-ai.active{background:linear-gradient(135deg,#7c3aed,#0d9488);color:#fff;}
+.ask-ai-messages{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
+.ask-ai-messages::-webkit-scrollbar{width:3px;}
+.ask-ai-messages::-webkit-scrollbar-thumb{background:var(--border2);}
+.ai-msg{display:flex;flex-direction:column;gap:3px;}
+.ai-msg.user{align-items:flex-end;}
+.ai-msg.assistant{align-items:flex-start;}
+.ai-bubble{
+  max-width:90%;padding:8px 11px;border-radius:10px;
+  font-size:11px;line-height:1.5;color:var(--t1);
+}
+.ai-msg.user .ai-bubble{background:linear-gradient(135deg,#7c3aed,#0d9488);color:#fff;border-bottom-right-radius:3px;}
+.ai-msg.assistant .ai-bubble{background:var(--s1);border:1px solid var(--border);border-bottom-left-radius:3px;}
+.ai-thinking{display:flex;align-items:center;gap:6px;padding:8px 11px;background:var(--s1);border:1px solid var(--border);border-radius:10px;border-bottom-left-radius:3px;max-width:90%;}
+.ai-thinking-dots{display:flex;gap:4px;}
+.ai-thinking-dots span{width:5px;height:5px;border-radius:50%;background:var(--t3);animation:aiDot 1.2s infinite;}
+.ai-thinking-dots span:nth-child(2){animation-delay:.2s;}
+.ai-thinking-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes aiDot{0%,80%,100%{transform:scale(.7);opacity:.5;}40%{transform:scale(1);opacity:1;}}
+.ai-suggestions{display:flex;flex-direction:column;gap:5px;margin-top:4px;}
+.ai-suggestion{
+  padding:7px 11px;background:var(--s0);border:1px solid var(--border);border-radius:8px;
+  font-size:10.5px;color:var(--t2);cursor:pointer;text-align:left;font-family:var(--f);
+  transition:all .12s;
+}
+.ai-suggestion:hover{border-color:rgba(109,40,217,.3);background:rgba(109,40,217,.04);color:#7c3aed;}
+.ask-ai-input-area{
+  padding:10px 14px;border-top:1px solid var(--border);flex-shrink:0;
+  display:flex;gap:8px;align-items:flex-end;background:var(--s0);
+}
+.ask-ai-input{
+  flex:1;resize:none;border:1.5px solid var(--border);border-radius:10px;
+  padding:8px 12px;font-size:11px;font-family:var(--f);color:var(--t1);
+  background:var(--s0);outline:none;max-height:80px;min-height:36px;
+  line-height:1.4;transition:border-color .13s;
+}
+.ask-ai-input:focus{border-color:rgba(109,40,217,.4);}
+.ask-ai-send{
+  width:34px;height:34px;border-radius:8px;border:none;flex-shrink:0;
+  background:linear-gradient(135deg,#7c3aed,#0d9488);color:#fff;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:opacity .12s;
+}
+.ask-ai-send:hover{opacity:.85;}
+.ask-ai-send:disabled{opacity:.4;cursor:default;}
+
 .ov-ij-card{
   padding:9px 12px;border-top:1px solid var(--border);cursor:pointer;
   transition:background .1s;display:flex;flex-direction:column;gap:5px;
@@ -1010,6 +1317,128 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .ov-ij-agent{font-size:10.5px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .ov-ij-time{font-size:9px;color:var(--t3);margin-top:1px;}
 .ov-ij-tags{display:flex;flex-wrap:wrap;gap:3px;padding-left:52px;}
+
+/* overview grid collapses to 2-col when a side panel opens */
+.ov-grid.panel-open{grid-template-columns:1fr 1fr !important;}
+.ov-grid.panel-open .ov-left{grid-column:1/3;}
+.ov-grid.panel-open .ov-ij-col{
+  grid-column:1/3;border-top:1px solid var(--border);
+  overflow-y:auto;max-height:none;
+}
+
+/* ══ QUICK VERIFY WIDGET ══ */
+.qv-not-auth{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--border);position:relative;}
+.qv-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:#fee2e2;border:1.5px solid #fca5a5;color:var(--red);font-size:10px;font-weight:700;cursor:pointer;font-family:var(--f);transition:all .12s;}
+.qv-pill:hover{background:#fecaca;}
+.qv-dropdown{position:fixed;width:220px;background:var(--s0);border:1px solid var(--border);border-radius:10px;box-shadow:var(--sh3);z-index:9999;display:none;flex-direction:column;overflow:hidden;animation:fadein .15s ease;}
+.qv-dropdown.open{display:flex;}
+.qv-dropdown-title{font-size:9px;font-weight:700;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;padding:10px 14px 6px;}
+.qv-dropdown-row{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-top:1px solid var(--border);}
+.qv-dropdown-lbl{font-size:11px;color:var(--t1);}
+.qv-dropdown-status{display:flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:var(--red);}
+.not-enrolled-tag{display:inline-flex;padding:2px 6px;border-radius:4px;font-size:9px;font-weight:600;background:#f3f4f6;color:var(--t3);border:1px solid var(--border);white-space:nowrap;}
+.auth-btn.launch{background:var(--s0);border:1.5px solid var(--border2);color:var(--t2);}
+.auth-btn.launch:hover{border-color:var(--accent);color:var(--accent);}
+.auth-btn.verify-start{background:var(--accent);border:1.5px solid var(--accent);color:#fff;}
+.auth-btn.verify-start:hover{background:#005f56;}
+/* auth side panels */
+.auth-panel{width:0;flex-shrink:0;overflow:hidden;background:var(--s0);border-left:1px solid var(--border);display:flex;flex-direction:column;transition:width .28s cubic-bezier(.4,0,.2,1);}
+.auth-panel.open{width:260px;}
+.auth-panel-inner{width:260px;display:flex;flex-direction:column;height:100%;overflow-y:auto;}
+.auth-panel-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.auth-panel-back{background:none;border:none;cursor:pointer;color:var(--t2);padding:0;display:flex;align-items:center;gap:4px;font-size:11px;font-weight:500;font-family:var(--f);}
+.auth-panel-back:hover{color:var(--t1);}
+.auth-panel-title{font-size:12px;font-weight:700;color:var(--t1);flex:1;}
+.auth-panel-close{background:none;border:none;cursor:pointer;color:var(--t3);font-size:14px;padding:2px 4px;}
+.auth-panel-body{padding:20px 16px;display:flex;flex-direction:column;gap:14px;flex:1;}
+.otp-title{font-size:13px;font-weight:700;color:var(--t1);}
+.otp-sub{font-size:11.5px;color:var(--t3);line-height:1.4;}
+.otp-boxes{display:flex;gap:8px;justify-content:center;margin:8px 0;}
+.otp-box{width:34px;height:40px;border:2px solid var(--border);border-radius:8px;font-size:16px;font-weight:700;text-align:center;font-family:var(--m);color:var(--t1);background:var(--s0);outline:none;transition:border-color .13s;}
+.otp-box:focus{border-color:var(--accent);}
+.otp-verify-btn{width:100%;padding:10px;border-radius:8px;border:none;background:var(--border2);color:#fff;font-size:12px;font-weight:600;cursor:default;font-family:var(--f);}
+.otp-resend{display:flex;justify-content:space-between;align-items:center;font-size:11px;}
+.otp-resend-lbl{color:var(--t3);}
+.otp-resend-btn{color:var(--accent);font-weight:600;background:none;border:none;cursor:pointer;font-size:11px;font-family:var(--f);}
+.ve-section-lbl{font-size:11px;font-weight:600;color:var(--t3);margin-bottom:4px;}
+.ve-option{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer;}
+.ve-option:last-child{border-bottom:none;}
+.ve-radio{width:18px;height:18px;border:2px solid var(--border2);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;}
+.ve-radio.selected{border-color:var(--accent);background:var(--accent);}
+.ve-radio.selected::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff;}
+.ve-option-lbl{font-size:10px;color:var(--t3);}
+.ve-option-val{font-size:12px;font-weight:700;color:var(--t1);margin-top:2px;}
+.ve-proceed{width:100%;padding:11px;border-radius:24px;border:none;background:var(--accent);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--f);margin-top:auto;}
+.idgo-title{font-size:13px;font-weight:700;color:var(--t1);text-align:center;}
+.idgo-sub{font-size:11.5px;color:var(--t2);text-align:center;}
+.idgo-input{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:11.5px;font-family:var(--f);color:var(--t1);background:var(--s0);outline:none;box-sizing:border-box;transition:border-color .13s;}
+.idgo-input:focus{border-color:var(--accent);}
+.idgo-signin-btn{width:100%;padding:11px;border-radius:8px;border:none;background:#1e3a5f;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--f);}
+.idgo-link{font-size:11px;color:#1e3a5f;text-align:center;cursor:pointer;font-weight:500;background:none;border:none;font-family:var(--f);}
+.idgo-link2{font-size:11px;color:var(--t2);text-align:center;}
+
+/* ══ ACCORDION DETAIL ROWS ══ */
+.acc-row{cursor:pointer;border-bottom:1px solid var(--border);transition:background .1s;overflow:visible;flex-shrink:0;}
+.acc-row:hover{background:var(--s1);}
+.acc-row-head{display:flex;align-items:center;gap:10px;padding:11px 14px;}
+.acc-chevron{margin-left:auto;color:var(--border2);flex-shrink:0;transition:transform .2s;}
+.acc-row.open .acc-chevron{transform:rotate(90deg);color:var(--accent);}
+.acc-detail{display:none;background:var(--s0);border-top:1px solid var(--border);}
+.acc-row.open .acc-detail{display:block;}
+.acc-detail-inner{padding:10px 12px;display:flex;flex-direction:column;gap:0;}
+
+/* ══ MEMBER IDENTITY STRIP ══ */
+.member-strip{
+  display:flex;align-items:center;gap:0;
+  background:var(--s0);border-bottom:1px solid var(--border);
+  flex-shrink:0;overflow-x:auto;
+}
+.member-strip::-webkit-scrollbar{display:none;}
+.ms-cell{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:6px 14px;border-right:1px solid var(--border);
+  flex-shrink:0;
+}
+.ms-lbl{font-size:8.5px;font-weight:700;color:var(--t3);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;}
+.ms-val{font-size:10.5px;font-weight:600;color:var(--t1);white-space:nowrap;margin-top:1px;}
+.ms-val.accent{color:var(--accent);}
+.ms-val.amber{color:var(--amber);}
+
+/* ══ ALERT SYSTEM ══ */
+.mb-tags{display:flex;align-items:center;gap:4px;padding:0 16px 8px;flex-wrap:wrap;}
+.mb-tag{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:9.5px;font-weight:600;}
+.mb-tag.premier{background:#fef3c7;color:#92400e;border:1px solid #fde68a;}
+.mb-tag.kyc{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;}
+.mb-tag.verified{background:#dcfce7;color:#166534;border:1px solid #86efac;}
+.mb-tag.at-risk{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa;}
+.mem-alert-strip{background:#fff8f0;border:1px solid #fde68a;border-radius:9px;overflow:hidden;flex-shrink:0;}
+.mem-alert-strip-head{display:flex;align-items:center;gap:7px;padding:8px 12px;background:#fffdf5;border-bottom:1px solid #fde68a;}
+.mem-alert-strip-title{font-size:10px;font-weight:700;color:#92400e;flex:1;}
+.mem-alert-strip-source{font-size:9px;color:#b45309;font-weight:500;}
+.mem-alert-row{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;border-bottom:1px solid rgba(253,230,138,.4);}
+.mem-alert-row:last-child{border-bottom:none;}
+.mem-alert-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.mem-alert-dot.red{background:var(--red);}
+.mem-alert-dot.amber{background:var(--amber);}
+.mem-alert-body{flex:1;}
+.mem-alert-title{font-size:10.5px;font-weight:600;color:var(--t1);}
+.mem-alert-sub{font-size:9.5px;color:var(--t3);margin-top:1px;}
+.alert-badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700;cursor:pointer;border:none;font-family:var(--f);transition:opacity .1s;}
+.alert-badge:hover{opacity:.8;}
+.alert-badge.red{background:#fee2e2;color:var(--red);}
+.alert-badge.amber{background:#fef3c7;color:#92400e;}
+.row-alert-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.row-alert-dot.red{background:var(--red);}
+.row-alert-dot.amber{background:var(--amber);}
+.acct-alert-block{margin:10px 12px 0;border-radius:9px;overflow:hidden;border:1.5px solid #fca5a5;background:#fff8f8;}
+.acct-alert-block.amber{border-color:#fde68a;background:#fff8f0;}
+.acct-alert-block-row{display:flex;align-items:flex-start;gap:8px;padding:8px 12px;border-bottom:1px solid rgba(252,165,165,.3);}
+.acct-alert-block.amber .acct-alert-block-row{border-bottom-color:rgba(253,230,138,.4);}
+.acct-alert-block-row:last-child{border-bottom:none;}
+.acct-alert-icon{font-size:12px;flex-shrink:0;margin-top:1px;}
+.acct-alert-title{font-size:10.5px;font-weight:700;color:var(--t1);}
+.acct-alert-sub{font-size:9.5px;color:var(--t3);margin-top:2px;}
+.acct-alert-src{font-size:9px;color:var(--t3);margin-top:2px;font-style:italic;}
 
 /* ══ FILTER FLYOUT ══ */
 .filter-bar{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--s0);border-bottom:1px solid var(--border);flex-shrink:0;position:relative;}
@@ -1093,11 +1522,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 /* ══ BIDIRECTIONAL LINKS — financial ↔ interaction ══ */
 .discussed-link{
   display:inline-flex;align-items:center;gap:4px;
-  font-size:10px;color:var(--accent);font-weight:600;
-  cursor:pointer;background:none;border:none;font-family:var(--f);
-  padding:0;text-decoration:none;transition:opacity .12s;
+  font-size:9.5px;color:var(--accent);font-weight:600;
+  cursor:pointer;background:rgba(0,121,107,.07);
+  border:1px solid rgba(0,121,107,.2);border-radius:5px;
+  padding:2px 8px;margin-top:3px;
+  font-family:var(--f);transition:all .12s;text-decoration:none;
 }
-.discussed-link:hover{opacity:.7;}
+.discussed-link:hover{background:rgba(0,121,107,.14);border-color:rgba(0,121,107,.4);}
 .discussed-link svg{flex-shrink:0;}
 
 /* related records strip on interaction cards */
@@ -1211,8 +1642,8 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 /* ══ LOAN CARDS ══ */
 .loan-card{
   background:var(--s0);border:1px solid var(--border);border-radius:10px;
-  overflow:hidden;cursor:pointer;transition:background .1s;
-  border-left:3px solid transparent;
+  cursor:pointer;transition:background .1s;
+  border-left:3px solid transparent;flex-shrink:0;
 }
 .loan-card:hover{background:var(--s1);}
 .loan-card.review{border-left-color:#f59e0b;}
@@ -1320,7 +1751,8 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .c360-scroll::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 
 .w360{background:var(--s0);border:1px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0;}
-.w360-head{padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.w360-head{padding:8px 12px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border);}
+.w360-head .w360-title{flex:1;}
 .w360-title{font-size:9px;font-weight:700;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;}
 .w360-viewall{font-size:10px;font-weight:600;color:var(--accent);background:none;border:none;cursor:pointer;font-family:var(--f);display:flex;align-items:center;gap:3px;padding:0;}
 .w360-viewall:hover{color:#005f56;}
@@ -1361,7 +1793,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .acct-status{font-size:9.5px;font-weight:600;color:var(--green);}
 
 /* cards */
-.w360-card-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-top:1px solid var(--border);}
+.w360-card-item{display:flex;align-items:center;gap:10px;padding:12px 12px;border-top:1px solid var(--border);}
 .w360-card-item:first-child{border-top:none;}
 .card-chip{width:32px;height:22px;border-radius:4px;background:linear-gradient(135deg,#e2e8f0,#cbd5e1);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:8px;font-weight:700;color:#64748b;}
 .card-info{flex:1;min-width:0;}
@@ -1378,7 +1810,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .donut-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--t2);}
 
 /* loans */
-.w360-loan-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-top:1px solid var(--border);cursor:pointer;transition:background .1s;}
+.w360-loan-item{display:flex;align-items:center;gap:10px;padding:12px 12px;border-top:1px solid var(--border);cursor:pointer;transition:background .1s;}
 .w360-loan-item:first-child{border-top:none;}
 .w360-loan-item:hover{background:var(--s1);}
 .loan-info{flex:1;min-width:0;}
@@ -1391,15 +1823,15 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .loan-arrow{color:var(--t3);font-size:12px;flex-shrink:0;}
 
 /* transactions */
-.w360-txn-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-top:1px solid var(--border);}
+.w360-txn-item{display:flex;align-items:center;gap:12px;padding:11px 16px;border-top:1px solid var(--border);transition:background .1s;}
 .w360-txn-item:first-child{border-top:none;}
 .txn-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .txn-icon.debit{background:var(--rs);}
 .txn-icon.credit{background:var(--gs);}
 .txn-icon.transfer{background:var(--ts);}
 .txn-info{flex:1;min-width:0;}
-.txn-name{font-size:11px;font-weight:600;color:var(--t1);}
-.txn-sub{font-size:9.5px;color:var(--t3);margin-top:1px;}
+.txn-name{font-size:12px;font-weight:600;color:var(--t1);letter-spacing:-.01em;}
+.txn-sub{font-size:10.5px;color:var(--t3);margin-top:1px;font-weight:400;}
 .txn-amt{font-size:11.5px;font-weight:700;white-space:nowrap;flex-shrink:0;}
 .txn-amt.neg{color:var(--red);}
 .txn-amt.pos{color:var(--green);}
@@ -1675,6 +2107,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <div class="ib">☰</div>
         </div>
       </div>
+      <!-- MEMBERSHIP TAGS — shown after call accepted -->
+      <div class="mb-tags" id="mbTags" style="display:none;">
+        <span class="mb-tag premier">⭐ Premier</span>
+        <span class="mb-tag verified">✓ KYC Verified</span>
+        <span class="mb-tag kyc">⚠ KYC Doc Expiring</span>
+        <span class="mb-tag at-risk">🔔 At Risk</span>
+      </div>
       <!-- WORKFLOW TABS -->
       <div class="wf-tabs">
         <button class="wft" id="wft-contact360" onclick="switchWFTab('contact360')" style="display:none">✦ Contact360</button>
@@ -1925,26 +2364,14 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <!-- Badges shown when EXPANDED -->
                   <div id="handoffBadgesExpanded" style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
                     <span class="handoff-badge hb-neutral">😊 Neutral</span>
-                    <span class="handoff-badge hb-auth">
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                      Not authenticated ▾
-                    </span>
-                    <span class="handoff-dot"></span>
-                    <span class="handoff-badge hb-beta">BETA</span>
                   </div>
 
                   <!-- Badges + stats shown when COLLAPSED -->
                   <div id="handoffBadgesCollapsed" style="display:none;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap;">
                     <span class="handoff-badge hb-neutral">😊 Neutral</span>
-                    <span class="handoff-badge hb-auth">
-                      <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                      Not authenticated
-                    </span>
                     <span class="handoff-dot"></span>
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent);flex-shrink:0"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                     <span style="font-size:10.5px;color:var(--t3);white-space:nowrap;">2 interactions in last 7 days</span>
-                    <span class="handoff-dot"></span>
-                    <span class="handoff-badge hb-beta">BETA</span>
                   </div>
 
                   <!-- Toggle pushed to far right -->
@@ -1977,7 +2404,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                         </button>
                       </div>
                     </div>
-                    <button class="handoff-view">View interaction journey <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
                   </div>
                 </div>
 
@@ -2027,51 +2453,107 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                 <!-- ── OVERVIEW ── -->
                 <div class="c360-panel active" id="c360p-overview">
-                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;height:100%;overflow:hidden;">
+                  <div class="ov-grid" id="ovGrid" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;height:100%;overflow:hidden;">
 
                     <!-- LEFT 2 COLS: scrollable stack -->
-                    <div style="grid-column:1/3;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:10px;border-right:1px solid var(--border);">
+                    <div class="ov-left" style="grid-column:1/3;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:10px;border-right:1px solid var(--border);">
 
-                      <!-- TOP ROW: Member + Auth -->
+                      <!-- TOP ROW: Authentication (member info now in identity strip above chips) -->
+                      <!-- TOP ROW: Member Info + Quick Verify -->
                       <div id="ov-member-auth" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
 
-                        <!-- 1. MEMBER INFO -->
-                        <div class="w360" style="margin:0;">
+                        <!-- Member Info -->
+                        <div class="w360" style="margin:0;height:100%;">
                           <div class="w360-head"><span class="w360-title">Member</span></div>
-                          <div class="w360-cell-row"><span class="w360-lbl">Member since</span><span class="w360-val">Feb 2019 · 6 yrs</span></div>
-                          <div class="w360-cell-row" style="border-top:1px solid var(--border);"><span class="w360-lbl">Member number</span><span class="w360-val accent">#4821-09-0034</span></div>
-                          <div class="w360-cell-row" style="border-top:1px solid var(--border);"><span class="w360-lbl">Date of birth</span><span class="w360-val">March 14, 1985</span></div>
+                          <div class="w360-cell-row"><span class="w360-lbl">Member No.</span><span class="w360-val accent">#4821-09-0034</span></div>
+                          <div class="w360-cell-row" style="border-top:1px solid var(--border);"><span class="w360-lbl">Date of birth</span><span class="w360-val">Mar 14, 1985</span></div>
                           <div class="w360-cell-row" style="border-top:1px solid var(--border);"><span class="w360-lbl">Phone on file</span><span class="w360-val">+1 (310) 492-7762</span></div>
+                          <div class="w360-cell-row" style="border-top:1px solid var(--border);"><span class="w360-lbl">Member since</span><span class="w360-val">Feb 2019 · 6 yrs</span></div>
                           <div class="w360-cell-row" style="border-top:1px solid var(--border);"><span class="w360-lbl">Address</span><span class="w360-val" style="font-size:10.5px;">4812 Maple Ave, Portland OR</span></div>
+                          <div class="w360-cell-row" style="border-top:1px solid var(--border);"><span class="w360-lbl">Email</span><span class="w360-val" style="font-size:10.5px;">emily.o@email.com</span></div>
                         </div>
 
-                        <!-- 2. AUTHENTICATION -->
-                        <div class="w360" style="margin:0;">
-                          <div class="w360-head"><span class="w360-title">Authentication</span></div>
-                          <div class="w360-auth-item">
-                            <div class="auth-icon phone"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg></div>
-                            <div class="auth-label"><div class="auth-name">Phone Number</div><div class="auth-sub">OTP to registered number</div></div>
-                            <button class="auth-btn start">Send OTP</button>
+                        <!-- Quick Verify -->
+                        <div id="ov-quick-verify" style="display:flex;flex-direction:column;">
+                          <div class="w360" style="margin:0;flex:1;display:flex;flex-direction:column;">
+                            <div class="w360-head"><span class="w360-title">Quick Verify</span></div>
+
+                            <!-- Not authenticated + params -->
+                            <div style="padding:10px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px;">
+                              <div style="display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;background:#fee2e2;border:1.5px solid #fca5a5;color:var(--red);font-size:10px;font-weight:700;width:fit-content;">
+                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                                Not authenticated
+                              </div>
+                              <div style="display:flex;flex-direction:column;gap:4px;margin-top:1px;">
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                  <span style="font-size:10px;color:var(--t3);">OTP</span>
+                                  <span style="display:flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--red);"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Failed</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                  <span style="font-size:10px;color:var(--t3);">SSN Last Four</span>
+                                  <span style="display:flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--red);"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Failed</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;align-items:center;">
+                                  <span style="font-size:10px;color:var(--t3);">Member Number</span>
+                                  <span style="display:flex;align-items:center;gap:3px;font-size:9.5px;font-weight:600;color:var(--red);"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Failed</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="w360-auth-item">
+                              <div class="auth-icon phone" style="width:22px;height:22px;border-radius:6px;flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg></div>
+                              <div class="auth-label"><div class="auth-name">Phone Number</div></div>
+                              <button class="auth-btn verify-start" style="padding:3px 8px;font-size:9px;" onclick="openAuthPanel('otp')">Start Verification</button>
+                            </div>
+
+                            <!-- Voice -->
+                            <div class="w360-auth-item" style="border-top:1px solid var(--border);">
+                              <div class="auth-icon voice" style="width:22px;height:22px;border-radius:6px;flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
+                              <div class="auth-label"><div class="auth-name">Voice Biometric <span class="not-enrolled-tag">Not enrolled</span></div></div>
+                              <button class="auth-btn launch" style="padding:3px 8px;font-size:9px;" onclick="openAuthPanel('voice')">Launch Portal</button>
+                            </div>
+
+                            <!-- Device -->
+                            <div class="w360-auth-item" style="border-top:1px solid var(--border);">
+                              <div class="auth-icon device" style="width:22px;height:22px;border-radius:6px;flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+                              <div class="auth-label"><div class="auth-name">Device Biometric <span class="not-enrolled-tag">Not enrolled</span></div></div>
+                              <button class="auth-btn launch" style="padding:3px 8px;font-size:9px;" onclick="openAuthPanel('device')">Launch Portal</button>
+                            </div>
+
                           </div>
-                          <div class="w360-auth-item" style="border-top:1px solid var(--border);">
-                            <div class="auth-icon voice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
-                            <div class="auth-label"><div class="auth-name">Voice Biometric</div><div class="auth-sub">Match voice pattern</div></div>
-                            <button class="auth-btn start">Start</button>
-                          </div>
-                          <div class="w360-auth-item" style="border-top:1px solid var(--border);">
-                            <div class="auth-icon device"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
-                            <div class="auth-label"><div class="auth-name">Device Biometric</div><div class="auth-sub">Push to member's device</div></div>
-                            <button class="auth-btn start">Send Push</button>
+                        </div><!-- /ov-quick-verify -->
+
+                      </div><!-- /top row: member + quick verify -->
+
+                      <!-- MEMBERSHIP ALERTS STRIP — external system -->
+                      <div class="mem-alert-strip">
+                        <div class="mem-alert-strip-head">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                          <span class="mem-alert-strip-title">2 Membership Alerts</span>
+                          <span class="mem-alert-strip-source">External System</span>
+                        </div>
+                        <div class="mem-alert-row">
+                          <div class="mem-alert-dot red"></div>
+                          <div class="mem-alert-body">
+                            <div class="mem-alert-title">Enhanced Due Diligence — flagged</div>
+                            <div class="mem-alert-sub">Member flagged for EDD review. Investigation pending since Feb 12, 2026.</div>
                           </div>
                         </div>
-
-                      </div><!-- /member+auth -->
+                        <div class="mem-alert-row">
+                          <div class="mem-alert-dot amber"></div>
+                          <div class="mem-alert-body">
+                            <div class="mem-alert-title">KYC Document expiring in 18 days</div>
+                            <div class="mem-alert-sub">Government ID expires Apr 19, 2026. Renewal required to maintain account access.</div>
+                          </div>
+                        </div>
+                      </div>
 
                       <!-- 3. ACCOUNTS + TRANSFER -->
                       <div class="w360" id="ov-accounts" style="margin:0;">
-                        <div class="w360-head"><span class="w360-title">Accounts</span><button class="w360-viewall" onclick="switchC360Panel('accounts')">View all →</button></div>
+                        <div class="w360-head"><span class="w360-title">Accounts</span><button class="alert-badge amber" onclick="switchC360Panel('accounts')" title="1 account alert">⚠ 1 alert</button><button class="w360-viewall" onclick="switchC360Panel('accounts')">View all →</button></div>
                         <div class="w360-accounts">
-                          <div class="w360-acct" style="cursor:pointer;" onclick="switchC360Panel('acct-checking')"><span class="acct-name">Checking ···4821</span><span class="acct-bal">$4,218.50</span><span class="acct-status">Available</span></div>
+                          <div class="w360-acct" style="cursor:pointer;" onclick="switchC360Panel('acct-checking')"><span class="acct-name">Checking ···4821</span><span class="acct-bal">$4,218.50</span><span class="acct-status">Available</span><span class="row-alert-dot amber" title="1 alert" style="margin-left:auto;"></span></div>
                           <div class="w360-acct" style="cursor:pointer;" onclick="switchC360Panel('acct-savings')"><span class="acct-name">Savings ···9034</span><span class="acct-bal">$12,800.00</span><span class="acct-status">Available</span></div>
                         </div>
                         <div style="padding:10px 12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:7px;background:var(--s1);">
@@ -2092,7 +2574,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                         <!-- 4. CARDS — blocked only -->
                         <div class="w360" style="margin:0;">
-                          <div class="w360-head"><span class="w360-title">Cards</span><button class="w360-viewall" onclick="switchC360Panel('cards')">View all →</button></div>
+                          <div class="w360-head"><span class="w360-title">Cards</span><button class="alert-badge red" onclick="switchC360Panel('cards')">🔴 1 alert</button><button class="w360-viewall" onclick="switchC360Panel('cards')">View all →</button></div>
                           <div class="w360-card-item" style="cursor:pointer;" onclick="switchC360Panel('card-detail')">
                             <div class="card-chip">VISA</div>
                             <div class="card-info">
@@ -2110,7 +2592,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                         <!-- 5. LOANS — flagged only -->
                         <div class="w360" style="margin:0;">
-                          <div class="w360-head"><span class="w360-title">Loans</span><button class="w360-viewall" onclick="switchC360Panel('loans')">View all →</button></div>
+                          <div class="w360-head"><span class="w360-title">Loans</span><button class="alert-badge red" onclick="switchC360Panel('loans')">🔴 2 alerts</button><button class="w360-viewall" onclick="switchC360Panel('loans')">View all →</button></div>
                           <div class="w360-loan-item" style="cursor:pointer;" onclick="switchC360Panel('loan-home')">
                             <div class="donut-wrap"><svg width="38" height="38" viewBox="0 0 38 38"><circle cx="19" cy="19" r="14" fill="none" stroke="var(--s2)" stroke-width="5"/><circle cx="19" cy="19" r="14" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="27.6 60.9" stroke-linecap="round"/></svg><span class="donut-pct">35%</span></div>
                             <div class="loan-info">
@@ -2147,90 +2629,129 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                         <div class="w360-txn-item"><div class="txn-icon debit"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div><div class="txn-info"><div class="txn-name">Shell Gas Station</div><div class="txn-sub">Visa Debit ···4821 · Mar 14, 2026 · 06:47 PM</div></div><span class="txn-amt neg">-$52.10</span></div>
                       </div>
 
-                    </div><!-- /left 2 cols -->
+                      <!-- 7. BELOW-FOLD REFERENCE WIDGETS: Text Preferences + Active Integrations -->
+                      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
 
-                    <!-- RIGHT COL: Interaction History last 7 days — full height -->
-                    <div style="grid-column:3;overflow-y:auto;padding:10px;background:var(--bg);">
-                      <div class="w360" style="margin:0;display:flex;flex-direction:column;min-height:100%;">
+                        <!-- Text Preferences -->
+                        <div class="w360 ref-widget" style="margin:0;">
+                          <div class="w360-head">
+                            <span class="w360-title">Text Preferences</span>
+                            <span style="font-size:10px;color:var(--t3);margin-left:auto;">Opt-ins</span>
+                          </div>
+                          <div class="ref-row">
+                            <span class="ref-lbl">Essentials</span>
+                            <span class="ref-tag off">Off</span>
+                          </div>
+                          <div class="ref-row">
+                            <span class="ref-lbl">Central team</span>
+                            <span class="ref-tag off">Off</span>
+                          </div>
+                          <div class="ref-row">
+                            <span class="ref-lbl">Marketing</span>
+                            <span class="ref-tag on">On</span>
+                          </div>
+                          <div class="ref-row">
+                            <span class="ref-lbl">Insurance</span>
+                            <span class="ref-tag off">Off</span>
+                          </div>
+                          <div class="ref-row">
+                            <span class="ref-lbl">Lending</span>
+                            <span class="ref-tag on">On</span>
+                          </div>
+                          <div class="ref-row" style="border-bottom:none;">
+                            <span class="ref-lbl">Global opt in</span>
+                            <span class="ref-tag on">On</span>
+                          </div>
+                        </div>
+
+                        <!-- Active Integrations -->
+                        <div class="w360 ref-widget" style="margin:0;">
+                          <div class="w360-head">
+                            <span class="w360-title">Active Integrations</span>
+                            <span style="font-size:10px;color:var(--t3);margin-left:auto;">External</span>
+                          </div>
+                          <div class="ref-int-grid">
+                            <div class="ref-int-item">
+                              <div class="ref-int-src">Temenos</div>
+                              <div class="ref-int-val">Person #6327233</div>
+                            </div>
+                            <div class="ref-int-item">
+                              <div class="ref-int-src">Temenos</div>
+                              <div class="ref-int-val">Person #6327233</div>
+                            </div>
+                            <div class="ref-int-item">
+                              <div class="ref-int-src">Temenos</div>
+                              <div class="ref-int-val">Person #6327233</div>
+                            </div>
+                            <div class="ref-int-item">
+                              <div class="ref-int-src">Temenos</div>
+                              <div class="ref-int-val">Person #6327233</div>
+                            </div>
+                            <div class="ref-int-item">
+                              <div class="ref-int-src">Temenos</div>
+                              <div class="ref-int-val">Person #6327233</div>
+                            </div>
+                            <div class="ref-int-item">
+                              <div class="ref-int-src">Temenos</div>
+                              <div class="ref-int-val">Person #6327233</div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div><!-- /below-fold -->
+
+                    </div><!-- /left col (col 1+2) -->
+
+                    <!-- COL 3: Interaction History — full height, hides when panel open -->
+                    <div class="ov-ij-col" style="grid-column:3;overflow-y:auto;border-left:1px solid var(--border);background:var(--s0);">
+                      <div style="display:flex;flex-direction:column;min-height:100%;">
                         <div class="w360-head" style="flex-shrink:0;">
                           <span class="w360-title">Interaction History</span>
                           <span style="font-size:9px;color:var(--t3);margin-left:3px;">· Last 7 days</span>
                           <button class="w360-viewall" onclick="switchC360Panel('interaction-history')" style="margin-left:auto;">View all →</button>
                         </div>
-                        <!-- 1 day ago -->
                         <div class="ov-ij-card" onclick="goToInteraction('ij-emma-1day')">
                           <div class="ov-ij-head">
                             <div class="ij-ch-icon video" style="font-size:10px;width:20px;height:20px;border-radius:5px;flex-shrink:0;">🎥</div>
                             <div class="ij-agent-ava" style="background:#E07A5F;width:20px;height:20px;font-size:8px;flex-shrink:0;">EB</div>
-                            <div class="ov-ij-meta">
-                              <div class="ov-ij-agent">Emma Blue</div>
-                              <div class="ov-ij-time">1 day ago · Video · Inbound</div>
-                            </div>
+                            <div class="ov-ij-meta"><div class="ov-ij-agent">Emma Blue</div><div class="ov-ij-time">1 day ago · Video · Inbound</div></div>
                           </div>
-                          <div class="ov-ij-tags">
-                            <span class="ij-tag red" style="font-size:9px;padding:1px 6px;">Car loan</span>
-                            <span class="ij-tag amber" style="font-size:9px;padding:1px 6px;">Documents</span>
-                          </div>
+                          <div class="ov-ij-tags"><span class="ij-tag red" style="font-size:9px;padding:1px 6px;">Car loan</span><span class="ij-tag amber" style="font-size:9px;padding:1px 6px;">Documents</span></div>
                         </div>
-                        <!-- 2 days ago — Diana -->
                         <div class="ov-ij-card" onclick="goToInteraction('ij-diana-2days')">
                           <div class="ov-ij-head">
                             <div class="ij-ch-icon chat" style="font-size:10px;width:20px;height:20px;border-radius:5px;flex-shrink:0;">💬</div>
                             <div class="ij-agent-ava" style="background:#6C8EBF;width:20px;height:20px;font-size:8px;flex-shrink:0;">DH</div>
-                            <div class="ov-ij-meta">
-                              <div class="ov-ij-agent">Diana Hernandez</div>
-                              <div class="ov-ij-time">2 days ago · Chat · Outbound</div>
-                            </div>
+                            <div class="ov-ij-meta"><div class="ov-ij-agent">Diana Hernandez</div><div class="ov-ij-time">2 days ago · Chat · Outbound</div></div>
                           </div>
-                          <div class="ov-ij-tags">
-                            <span class="ij-tag blue" style="font-size:9px;padding:1px 6px;">Transfer Money</span>
-                            <span class="ij-tag green" style="font-size:9px;padding:1px 6px;">Secure Link</span>
-                          </div>
+                          <div class="ov-ij-tags"><span class="ij-tag blue" style="font-size:9px;padding:1px 6px;">Transfer Money</span><span class="ij-tag green" style="font-size:9px;padding:1px 6px;">Secure Link</span></div>
                         </div>
-                        <!-- 2 days ago — Ted -->
                         <div class="ov-ij-card" onclick="goToInteraction('ij-ted-2days')">
                           <div class="ov-ij-head">
                             <div class="ij-ch-icon chat" style="font-size:10px;width:20px;height:20px;border-radius:5px;flex-shrink:0;">💬</div>
                             <div class="ij-agent-ava" style="background:#9B6FCA;width:20px;height:20px;font-size:8px;flex-shrink:0;">TD</div>
-                            <div class="ov-ij-meta">
-                              <div class="ov-ij-agent">Ted</div>
-                              <div class="ov-ij-time">2 days ago · Chat · Inbound</div>
-                            </div>
+                            <div class="ov-ij-meta"><div class="ov-ij-agent">Ted</div><div class="ov-ij-time">2 days ago · Chat · Inbound</div></div>
                           </div>
-                          <div class="ov-ij-tags">
-                            <span class="ij-tag red" style="font-size:9px;padding:1px 6px;">Blocked Card</span>
-                            <span class="ij-tag purple" style="font-size:9px;padding:1px 6px;">Customer Review</span>
-                          </div>
+                          <div class="ov-ij-tags"><span class="ij-tag red" style="font-size:9px;padding:1px 6px;">Blocked Card</span><span class="ij-tag purple" style="font-size:9px;padding:1px 6px;">Customer Review</span></div>
                         </div>
-                        <!-- 5 days ago -->
                         <div class="ov-ij-card" style="opacity:.65;cursor:default;">
                           <div class="ov-ij-head">
                             <div class="ij-ch-icon voice" style="font-size:10px;width:20px;height:20px;border-radius:5px;flex-shrink:0;">📞</div>
                             <div class="ij-agent-ava" style="background:#4AADA8;width:20px;height:20px;font-size:8px;flex-shrink:0;">CY</div>
-                            <div class="ov-ij-meta">
-                              <div class="ov-ij-agent">Cody (AI Voice)</div>
-                              <div class="ov-ij-time">5 days ago · Voice</div>
-                            </div>
+                            <div class="ov-ij-meta"><div class="ov-ij-agent">Cody (AI Voice)</div><div class="ov-ij-time">5 days ago · Voice</div></div>
                           </div>
                           <div class="ov-ij-tags"><span style="font-size:9px;color:var(--t3);">No summary available</span></div>
                         </div>
-                        <!-- 7 days ago -->
                         <div class="ov-ij-card" style="border-bottom:none;" onclick="switchC360Panel('interaction-history')">
                           <div class="ov-ij-head">
                             <div class="ij-ch-icon video" style="font-size:10px;width:20px;height:20px;border-radius:5px;flex-shrink:0;">🎥</div>
                             <div class="ij-agent-ava" style="background:#9B6FCA;width:20px;height:20px;font-size:8px;flex-shrink:0;">TD</div>
-                            <div class="ov-ij-meta">
-                              <div class="ov-ij-agent">Ted</div>
-                              <div class="ov-ij-time">7 days ago · Video · Outbound</div>
-                            </div>
+                            <div class="ov-ij-meta"><div class="ov-ij-agent">Ted</div><div class="ov-ij-time">7 days ago · Video · Outbound</div></div>
                           </div>
-                          <div class="ov-ij-tags">
-                            <span class="ij-tag amber" style="font-size:9px;padding:1px 6px;">Account Closure</span>
-                            <span class="ij-tag blue" style="font-size:9px;padding:1px 6px;">Transfer Money</span>
-                          </div>
+                          <div class="ov-ij-tags"><span class="ij-tag amber" style="font-size:9px;padding:1px 6px;">Account Closure</span><span class="ij-tag blue" style="font-size:9px;padding:1px 6px;">Transfer Money</span></div>
                         </div>
                       </div>
-                    </div><!-- /right col -->
+                    </div><!-- /col 3 IJ -->
 
                   </div>
                 </div><!-- /overview -->
@@ -2275,7 +2796,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                         <div class="w360-auth-item" style="border-top:1px solid var(--border);">
                           <div class="auth-icon voice"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div>
                           <div class="auth-label"><div class="auth-name">Voice Biometric</div><div class="auth-sub">Enrolled · Last used Nov 2025</div></div>
-                          <button class="auth-btn start">Start</button>
+                          <button class="auth-btn start">Start Verification</button>
                         </div>
                         <div class="w360-auth-item" style="border-top:1px solid var(--border);">
                           <div class="auth-icon device"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
@@ -2290,7 +2811,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <!-- ── ACCOUNTS DRILL-DOWN ── -->
                 <div class="c360-panel" id="c360p-accounts">
                   <div style="font-size:9.5px;color:var(--t3);padding:6px 12px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;">
-                    Last synced: <b style="color:var(--t2);font-weight:500;">Today 10:31 AM</b> · Symitar Core
+                    Last synced: <b style="color:var(--t2);font-weight:500;">Today 10:31 AM</b> 
                   </div>
                   <div class="c360-drill">
                     <!-- Transfer Between Accounts -->
@@ -2324,60 +2845,103 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     </div>
 
                     <!-- Checking ···4821 -->
-                    <div class="acct-detail-card" onclick="switchC360Panel('acct-checking')">
-                      <div class="acct-detail-icon checking">💳</div>
-                      <div class="acct-detail-body">
-                        <div class="acct-detail-name">Checking ··· 4821</div>
-                        <div class="acct-detail-sub">Primary · APY 0.01% · Opened Feb 2019</div>
-                        <div class="acct-detail-courtesy">Courtesy Pay: ON</div>
+                    <div class="acc-row loan-card" style="border-left-color:var(--amber);" id="acc-checking" onclick="toggleAccordion('acc-checking')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon" style="background:rgba(217,119,6,.08);flex-shrink:0;">💳</div>
+                        <div class="loan-card-body">
+                          <div class="loan-card-title"><span class="loan-card-name">Checking ··· 4821</span><span class="loan-flag review">⚠ ALERT</span></div>
+                          <div class="loan-card-sub">Primary Share Draft · APY 0.01%</div>
+                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:100%"></div></div><span class="loan-progress-text"><b>$4,218.50</b> available</span></div>
+                        </div>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                       </div>
-                      <div class="acct-detail-right">
-                        <div class="acct-detail-bal">$4,218.50</div>
-                        <div class="acct-detail-avail">Available</div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acct-alert-block amber" style="margin:10px 14px 0;">
+                          <div class="acct-alert-block-row"><div class="acct-alert-icon">⚠️</div><div><div class="acct-alert-title">Overdraft Risk</div><div class="acct-alert-sub">Balance is within $218 of limit. 3 pending debits totalling $190.</div><div class="acct-alert-src">Updated today 10:31 AM</div></div></div>
+                        </div>
+                        <div class="acd-section" style="margin:10px 14px 0;">
+                          <div class="acd-section-title">LINKED CARD</div>
+                          <div class="acd-row" style="cursor:pointer;" onclick="switchC360Panel('card-detail')"><span class="acd-lbl">Visa Debit ···4821</span><span class="acd-val" style="display:flex;align-items:center;gap:6px;"><span style="background:#fee2e2;color:var(--red);font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;">BLOCKED</span><span style="color:var(--t3);">→</span></span></div>
+                        </div>
+                        <div class="acd-section" style="margin:8px 14px 0;">
+                          <div class="acd-row"><span class="acd-lbl">APY</span><span class="acd-val">0.01%</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Routing</span><span class="acd-val">122105278</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Overdraft</span><span class="acd-val">$500 limit</span></div>
+                        </div>
+                        <div class="acd-section" style="margin:8px 14px 10px;">
+                          <div class="acd-section-title">PAY IDS &amp; ROUTING</div>
+                          <div class="acd-row"><span class="acd-lbl">Zelle</span><span class="acd-val" style="font-size:11px;">emily.o@email.com</span></div>
+                          <div class="acd-row"><span class="acd-lbl">ACH Routing</span><span class="acd-val">122105278</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Account</span><span class="acd-val">···4821</span></div>
+                        </div>
                       </div>
-                      <span style="color:var(--border2);font-size:14px;">›</span>
                     </div>
 
                     <!-- Savings ···9034 -->
-                    <div class="acct-detail-card" onclick="switchC360Panel('acct-savings')">
-                      <div class="acct-detail-icon savings">💰</div>
-                      <div class="acct-detail-body">
-                        <div class="acct-detail-name">Savings ··· 9034</div>
-                        <div class="acct-detail-sub">Regular Savings · APY 2.25% · Opened Oct 2019</div>
+                    <div class="acc-row loan-card" style="border-left-color:var(--teal);" id="acc-savings" onclick="toggleAccordion('acc-savings')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon" style="background:rgba(13,148,136,.08);flex-shrink:0;">💰</div>
+                        <div class="loan-card-body">
+                          <div class="loan-card-title"><span class="loan-card-name">Savings ··· 9034</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
+                          <div class="loan-card-sub">Regular Savings · APY 2.25%</div>
+                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:100%"></div></div><span class="loan-progress-text"><b>$12,800.00</b> available</span></div>
+                        </div>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                       </div>
-                      <div class="acct-detail-right">
-                        <div class="acct-detail-bal">$12,800.00</div>
-                        <div class="acct-detail-avail">Available</div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 10px;">
+                          <div class="acd-row"><span class="acd-lbl">APY</span><span class="acd-val">2.25%</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Opened</span><span class="acd-val">Oct 2019</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Routing</span><span class="acd-val">122105278</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Withdrawal limit</span><span class="acd-val">6 / month</span></div>
+                          <div class="acd-row"><span class="acd-lbl">ACH Routing</span><span class="acd-val">122105278</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Account</span><span class="acd-val">···9034</span></div>
+                        </div>
                       </div>
-                      <span style="color:var(--border2);font-size:14px;">›</span>
                     </div>
 
                     <!-- Money Market ···2210 -->
-                    <div class="acct-detail-card" onclick="switchC360Panel('acct-mm')">
-                      <div class="acct-detail-icon mm">📈</div>
-                      <div class="acct-detail-body">
-                        <div class="acct-detail-name">Money Market ··· 2210</div>
-                        <div class="acct-detail-sub">Money Market · APY 3.80% · Opened Jan 2022</div>
+                    <div class="acc-row loan-card" style="border-left-color:var(--accent);" id="acc-mm" onclick="toggleAccordion('acc-mm')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon" style="background:rgba(0,121,107,.08);flex-shrink:0;">📈</div>
+                        <div class="loan-card-body">
+                          <div class="loan-card-title"><span class="loan-card-name">Money Market ··· 2210</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
+                          <div class="loan-card-sub">Money Market · APY 3.80%</div>
+                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:100%"></div></div><span class="loan-progress-text"><b>$31,450.00</b> available</span></div>
+                        </div>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                       </div>
-                      <div class="acct-detail-right">
-                        <div class="acct-detail-bal">$31,450.00</div>
-                        <div class="acct-detail-avail">Available</div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 10px;">
+                          <div class="acd-row"><span class="acd-lbl">APY</span><span class="acd-val">3.80%</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Opened</span><span class="acd-val">Jan 2022</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Min balance</span><span class="acd-val">$2,500</span></div>
+                          <div class="acd-row"><span class="acd-lbl">ACH Routing</span><span class="acd-val">122105278</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Account</span><span class="acd-val">···2210</span></div>
+                        </div>
                       </div>
-                      <span style="color:var(--border2);font-size:14px;">›</span>
                     </div>
 
                     <!-- CD ···8801 -->
-                    <div class="acct-detail-card" onclick="switchC360Panel('acct-cd')">
-                      <div class="acct-detail-icon cd">🔒</div>
-                      <div class="acct-detail-body">
-                        <div class="acct-detail-name">CD ··· 8801</div>
-                        <div class="acct-detail-sub">Certificate of Deposit · APY 4.50% · Opened Jun 2024</div>
-                        <div class="acct-detail-locked">Locked till Jun 2026</div>
+                    <div class="acc-row loan-card" style="border-left-color:var(--border2);opacity:.8;" id="acc-cd" onclick="toggleAccordion('acc-cd')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon" style="background:var(--s2);flex-shrink:0;">🔒</div>
+                        <div class="loan-card-body">
+                          <div class="loan-card-title"><span class="loan-card-name">CD ··· 8801</span><span class="card-flag closed">LOCKED</span></div>
+                          <div class="loan-card-sub">Certificate of Deposit · APY 4.50%</div>
+                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill gray" style="width:100%"></div></div><span class="loan-progress-text" style="color:var(--amber);">Locked till Jun 2026 · <b>$10,000.00</b></span></div>
+                        </div>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                       </div>
-                      <div class="acct-detail-right">
-                        <div class="acct-detail-bal">$10,000.00</div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 10px;">
+                          <div class="acd-row"><span class="acd-lbl">APY</span><span class="acd-val">4.50%</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Term</span><span class="acd-val">24 months</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Maturity</span><span class="acd-val">Jun 2026</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Early withdrawal</span><span class="acd-val" style="color:var(--amber);">Penalty applies</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Account</span><span class="acd-val">···8801</span></div>
+                        </div>
                       </div>
-                      <span style="color:var(--border2);font-size:14px;">›</span>
                     </div>
                   </div>
                 </div>
@@ -2399,6 +2963,25 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       <div class="acd-header-right">
                         <div class="acd-bal">$4,218.50</div>
                         <div class="acd-avail">Available: $4,218.50</div>
+                      </div>
+                    </div>
+                    <!-- ACCOUNT ALERT -->
+                    <div class="acct-alert-block amber">
+                      <div class="acct-alert-block-row">
+                        <div class="acct-alert-icon">⚠️</div>
+                        <div>
+                          <div class="acct-alert-title">Overdraft Risk</div>
+                          <div class="acct-alert-sub">Balance is within $218 of overdraft limit. 3 pending debits totalling $190 detected.</div>
+                          <div class="acct-alert-src">Updated today 10:31 AM</div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- LINKED CARD -->
+                    <div class="acd-section" style="margin-top:10px;">
+                      <div class="acd-section-title">LINKED CARD</div>
+                      <div class="acd-row" style="cursor:pointer;" onclick="switchC360Panel('card-detail')">
+                        <span class="acd-lbl">Visa Debit ···4821</span>
+                        <span class="acd-val" style="display:flex;align-items:center;gap:6px;"><span style="background:#fee2e2;color:var(--red);font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;">BLOCKED</span><span style="color:var(--t3);font-size:10px;">→</span></span>
                       </div>
                     </div>
                     <div class="acd-section">
@@ -2521,61 +3104,80 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                 <!-- ── CARDS DRILL-DOWN (list) ── -->
                 <div class="c360-panel" id="c360p-cards">
-                  <div style="font-size:9.5px;color:var(--t3);padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;">Symitar Core · Live status</div>
+                  <div style="font-size:9.5px;color:var(--t3);padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;"></div>
                   <div class="c360-drill">
 
                     <!-- Visa Debit 4821 — BLOCKED -->
-                    <div class="card-list-row blocked-row" onclick="openCardDetail()">
-                      <div class="card-list-icon blocked-ico">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                      </div>
-                      <div class="card-list-body">
-                        <div class="card-list-title">
-                          <span class="card-list-name">Visa Debit ··· 4821</span>
-                          <span class="card-flag blocked">BLOCKED</span>
+                    <div class="acc-row loan-card fraud" id="acc-card-visa" onclick="toggleAccordion('acc-card-visa')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon" style="background:rgba(220,38,38,.08);flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+                        <div class="loan-card-body">
+                          <div class="loan-card-title"><span class="loan-card-name">Visa Debit ··· 4821</span><span class="card-flag blocked">BLOCKED</span></div>
+                          <div class="loan-card-sub">Debit · Exp 09/27 · Holder: Emily Olivers</div>
+                          <div class="loan-card-alert"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>3 consecutive PIN failures · Auto-blocked 2 days ago</div>
                         </div>
-                        <div class="card-list-sub">Debit · Exp 09/27 · Holder: Emily Olivers</div>
-                        <div class="card-list-alert">3 consecutive PIN failures · Auto-blocked 2 days ago</div>
-                        <div class="card-list-discussed">
-                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                      </div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
+                          <div class="acd-section" style="margin:0;">
+                            <div class="acd-row"><span class="acd-lbl">Block reason</span><span class="acd-val" style="color:var(--red);">3 consecutive PIN failures</span></div>
+                            <div class="acd-row"><span class="acd-lbl">Blocked on</span><span class="acd-val">Mar 28, 2026</span></div>
+                            <div class="acd-row"><span class="acd-lbl">Card number</span><span class="acd-val">···· ···· ···· 4821</span></div>
+                            <div class="acd-row"><span class="acd-lbl">CVV</span><span class="acd-val">···</span></div>
+                          </div>
+                          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(220,38,38,.04);border:1px solid rgba(220,38,38,.15);border-radius:8px;">
+                            <div><div style="font-size:11px;font-weight:600;color:var(--t1);">Unblock card</div><div style="font-size:10px;color:var(--t3);margin-top:2px;">Removes block placed Mar 28, 2026.</div></div>
+                            <button style="padding:5px 12px;background:var(--green);border:none;color:#fff;border-radius:6px;font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--f);">Unblock</button>
+                          </div>
                           <button class="discussed-link" onclick="goToInteraction('ij-ted-2days')">
-                            Discussed in interaction · Ted · 2 days ago
-                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                            Discussed in interaction · Ted · 2 days ago →
                           </button>
                         </div>
                       </div>
-                      <span class="card-list-arrow">›</span>
                     </div>
 
                     <!-- Mastercard Credit 7788 — ACTIVE -->
-                    <div class="card-list-row" onclick="">
-                      <div class="card-list-icon active-ico">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                      </div>
-                      <div class="card-list-body">
-                        <div class="card-list-title">
-                          <span class="card-list-name">Mastercard Credit ··· 7788</span>
-                          <span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span>
+                    <div class="acc-row loan-card" style="border-left-color:var(--teal);" id="acc-card-mc" onclick="toggleAccordion('acc-card-mc')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon" style="background:rgba(13,148,136,.08);flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+                        <div class="loan-card-body">
+                          <div class="loan-card-title"><span class="loan-card-name">Mastercard Credit ··· 7788</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
+                          <div class="loan-card-sub">Credit · Exp 01/29 · Limit $5,000</div>
+                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:23%"></div></div><span class="loan-progress-text">23% used · <b>$3,850</b> available</span></div>
                         </div>
-                        <div class="card-list-sub">Credit · Exp 01/29 · Limit $5,000</div>
-                        <div class="card-list-sub">$1,150 outstanding · $3,850 available · 23% utilised</div>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                       </div>
-                      <span class="card-list-arrow">›</span>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 10px;">
+                          <div class="acd-row"><span class="acd-lbl">Type</span><span class="acd-val">Credit</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Limit</span><span class="acd-val">$5,000</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Outstanding</span><span class="acd-val">$1,150</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Available</span><span class="acd-val" style="color:var(--green);">$3,850</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Expires</span><span class="acd-val">01/29</span></div>
+                        </div>
+                      </div>
                     </div>
 
                     <!-- RuPay ATM 9012 — ACTIVE -->
-                    <div class="card-list-row" onclick="">
-                      <div class="card-list-icon active-ico">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                      </div>
-                      <div class="card-list-body">
-                        <div class="card-list-title">
-                          <span class="card-list-name">RuPay ATM ··· 9012</span>
-                          <span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span>
+                    <div class="acc-row loan-card" style="border-left-color:var(--accent);" id="acc-card-rupay" onclick="toggleAccordion('acc-card-rupay')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon" style="background:rgba(0,121,107,.08);flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+                        <div class="loan-card-body">
+                          <div class="loan-card-title"><span class="loan-card-name">RuPay ATM ··· 9012</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
+                          <div class="loan-card-sub">ATM · Exp 11/26 · Holder: Ravi Kumar (joint)</div>
                         </div>
-                        <div class="card-list-sub">ATM · Exp 11/26 · Holder: Ravi Kumar (joint)</div>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                       </div>
-                      <span class="card-list-arrow">›</span>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 10px;">
+                          <div class="acd-row"><span class="acd-lbl">Type</span><span class="acd-val">ATM / Debit</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Joint holder</span><span class="acd-val">Ravi Kumar</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Expires</span><span class="acd-val">11/26</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Daily ATM limit</span><span class="acd-val">$500</span></div>
+                        </div>
+                      </div>
                     </div>
 
                   </div>
@@ -2657,89 +3259,100 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                 <!-- ── LOANS DRILL-DOWN ── -->
                 <div class="c360-panel" id="c360p-loans">
-                  <div style="font-size:9.5px;color:var(--t3);padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;">Symitar Core · Live status</div>
+                  <div style="font-size:9.5px;color:var(--t3);padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;"></div>
                   <div class="c360-drill">
 
                     <!-- Home Loan 1124 — UNDER REVIEW -->
-                    <div class="loan-card review" onclick="switchC360Panel('loan-home')">
-                      <div class="loan-card-inner">
-                        <div class="loan-card-icon home">🏠</div>
+                    <div class="acc-row loan-card review" id="acc-loan-home" onclick="toggleAccordion('acc-loan-home')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon home" style="flex-shrink:0;">🏠</div>
                         <div class="loan-card-body">
-                          <div class="loan-card-title">
-                            <span class="loan-card-name">Home Loan ··· 1124</span>
-                            <span class="loan-flag review">UNDER REVIEW</span>
-                          </div>
-                          <div class="loan-card-sub">15-Yr Fixed · APR 6.29% · App #LN-2025-0082</div>
-                          <div class="loan-progress-wrap">
-                            <div class="loan-progress-bar"><div class="loan-progress-fill amber" style="width:35%"></div></div>
-                            <span class="loan-progress-text">35% paid · <b>$287,000</b> remaining</span>
-                          </div>
-                          <div class="loan-card-discussed">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                            Discussed in interaction · Emma Blue · 1 day ago
-                          </div>
+                          <div class="loan-card-title"><span class="loan-card-name">Home Loan ··· 1124</span><span class="loan-flag review">UNDER REVIEW</span></div>
+                          <div class="loan-card-sub">15-Yr Fixed · APR 6.29%</div>
+                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill amber" style="width:35%"></div></div><span class="loan-progress-text">35% paid · <b>$287,000</b> remaining</span></div>
                         </div>
-                        <span class="loan-card-arrow">›</span>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                      </div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 0;">
+                          <div class="acd-row"><span class="acd-lbl">Original amount</span><span class="acd-val">$440,000</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Remaining</span><span class="acd-val amber">$287,000</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Next payment</span><span class="acd-val">$1,842 · Aug 1, 2025</span></div>
+                          <div class="acd-row"><span class="acd-lbl">APR</span><span class="acd-val">6.29%</span></div>
+                        </div>
+                        <div style="padding:0 14px 10px;margin-top:8px;">
+                          <button class="discussed-link" onclick="goToInteraction('ij-emma-1day')">
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                            Discussed in interaction · Emma Blue · 1 day ago →
+                          </button>
+                        </div>
                       </div>
                     </div>
 
                     <!-- Auto Loan 3091 — ACTIVE -->
-                    <div class="loan-card" onclick="switchC360Panel('loan-auto')">
-                      <div class="loan-card-inner">
-                        <div class="loan-card-icon auto">🚗</div>
+                    <div class="acc-row loan-card" id="acc-loan-auto" onclick="toggleAccordion('acc-loan-auto')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon auto" style="flex-shrink:0;">🚗</div>
                         <div class="loan-card-body">
-                          <div class="loan-card-title">
-                            <span class="loan-card-name">Auto Loan ··· 3091</span>
-                            <span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span>
-                          </div>
+                          <div class="loan-card-title"><span class="loan-card-name">Auto Loan ··· 3091</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
                           <div class="loan-card-sub">72-Month New Auto · APR 5.20%</div>
-                          <div class="loan-progress-wrap">
-                            <div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:58%"></div></div>
-                            <span class="loan-progress-text">58% paid · <b>$12,900</b> remaining</span>
-                          </div>
+                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:58%"></div></div><span class="loan-progress-text">58% paid · <b>$12,900</b> remaining</span></div>
                         </div>
-                        <span class="loan-card-arrow">›</span>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                      </div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 10px;">
+                          <div class="acd-row"><span class="acd-lbl">Original amount</span><span class="acd-val">$30,000</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Remaining</span><span class="acd-val" style="color:var(--teal);">$12,900</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Next payment</span><span class="acd-val">$467 · Aug 1, 2025</span></div>
+                          <div class="acd-row"><span class="acd-lbl">APR</span><span class="acd-val">5.20%</span></div>
+                        </div>
                       </div>
                     </div>
 
-                    <!-- Personal Loan 5574 — ACTIVE + FRAUD FLAG -->
-                    <div class="loan-card fraud" onclick="switchC360Panel('loan-personal')">
-                      <div class="loan-card-inner">
-                        <div class="loan-card-icon personal">💵</div>
+                    <!-- Personal Loan 5574 — FRAUD FLAG -->
+                    <div class="acc-row loan-card fraud" id="acc-loan-personal" onclick="toggleAccordion('acc-loan-personal')">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon personal" style="flex-shrink:0;">💵</div>
                         <div class="loan-card-body">
-                          <div class="loan-card-title">
-                            <span class="loan-card-name">Personal Loan ··· 5574</span>
-                            <span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span>
-                            <span class="loan-flag fraud">FRAUD FLAG</span>
-                          </div>
+                          <div class="loan-card-title"><span class="loan-card-name">Personal Loan ··· 5574</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span><span class="loan-flag fraud">FRAUD FLAG</span></div>
                           <div class="loan-card-sub">36-Month Personal · APR 9.50%</div>
-                          <div class="loan-card-alert">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                            Fraud reported on linked account · Aug 12
-                          </div>
-                          <div class="loan-card-discussed">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                            Discussed in interaction · Emma Blue · Aug 12
-                          </div>
+                          <div class="loan-card-alert"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Fraud reported · Aug 12</div>
                         </div>
-                        <span class="loan-card-arrow">›</span>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                      </div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 0;">
+                          <div class="acd-row"><span class="acd-lbl">Original amount</span><span class="acd-val">$15,000</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Remaining</span><span class="acd-val" style="color:var(--red);">$4,200</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Next payment</span><span class="acd-val">$478 · Aug 1, 2025</span></div>
+                          <div class="acd-row"><span class="acd-lbl">APR</span><span class="acd-val">9.50%</span></div>
+                        </div>
+                        <div style="padding:0 14px 10px;margin-top:8px;">
+                          <button class="discussed-link" onclick="goToInteraction('ij-john-aug12')">
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                            Discussed in interaction · John Doe · Aug 12 →
+                          </button>
+                        </div>
                       </div>
                     </div>
 
                     <!-- Home Loan 0881 — CLOSED -->
-                    <div class="loan-card closed">
-                      <div class="loan-card-inner">
-                        <div class="loan-card-icon closed-ico">🏠</div>
+                    <div class="acc-row loan-card closed" id="acc-loan-closed" onclick="toggleAccordion('acc-loan-closed')" style="opacity:.65;">
+                      <div class="acc-row-head" style="padding:12px 14px;">
+                        <div class="loan-card-icon closed-ico" style="flex-shrink:0;">🏠</div>
                         <div class="loan-card-body">
-                          <div class="loan-card-title">
-                            <span class="loan-card-name" style="color:var(--t3);">Home Loan ··· 0881</span>
-                            <span class="card-flag closed">CLOSED</span>
-                          </div>
-                          <div class="loan-card-sub">15-Yr Fixed · Paid off Mar 2022 · Original $180,000 · 100% paid</div>
-                          <div class="loan-progress-wrap">
-                            <div class="loan-progress-bar"><div class="loan-progress-fill gray" style="width:100%"></div></div>
-                            <span class="loan-progress-text" style="color:var(--t3)">100% paid</span>
-                          </div>
+                          <div class="loan-card-title"><span class="loan-card-name" style="color:var(--t3);">Home Loan ··· 0881</span><span class="card-flag closed">CLOSED</span></div>
+                          <div class="loan-card-sub">15-Yr Fixed · Paid off Mar 2022 · Original $180,000</div>
+                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill gray" style="width:100%"></div></div><span class="loan-progress-text" style="color:var(--t3)">100% paid</span></div>
+                        </div>
+                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                      </div>
+                      <div class="acc-detail" onclick="event.stopPropagation()">
+                        <div class="acd-section" style="margin:10px 14px 10px;">
+                          <div class="acd-row"><span class="acd-lbl">Original amount</span><span class="acd-val">$180,000</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Paid off</span><span class="acd-val">Mar 2022</span></div>
+                          <div class="acd-row"><span class="acd-lbl">Term</span><span class="acd-val">15-Yr Fixed</span></div>
                         </div>
                       </div>
                     </div>
@@ -3136,7 +3749,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
           <div class="wf-pane s1-wf-pane s1-hidden" id="s1-cobrowse"><div class="ph-pane"><div class="ph-icon">🖥</div><div class="ph-title">Start a Co-browse session</div><div class="ph-sub">Share screen with Sarah Johnson to guide her through the application</div><button style="margin-top:8px;background:var(--accent);border:none;color:#fff;border-radius:7px;padding:8px 20px;font-size:11px;font-family:var(--f);cursor:pointer;font-weight:600">+ Start Co-browse</button></div></div>
           <div class="wf-pane s1-wf-pane s1-hidden" id="s1-workflows"><div class="ph-pane"><div class="ph-icon">⚙</div><div class="ph-title">Workflows</div><div class="ph-sub">Manage active workflows for this member</div></div></div>
-          <div class="wf-pane s1-wf-pane s1-hidden" id="s1-salesforce"><div class="ph-pane"><div class="ph-icon">☁</div><div class="ph-title">Salesforce</div><div class="ph-sub">View and update CRM records</div></div></div>
+          <div class="wf-pane s1-wf-pane s1-hidden" id="s1-salesforce"><div class="ph-pane"><div class="ph-icon">☁</div><div class="ph-title">Salesforce</div><div class="ph-sub">View and update records</div></div></div>
           <div class="wf-pane s1-wf-pane s1-hidden" id="s1-sharing"><div class="ph-pane"><div class="ph-icon">📤</div><div class="ph-title">Content Sharing</div><div class="ph-sub">Send documents and resources to Sarah</div></div></div>
         </div>
       </div>
@@ -3379,7 +3992,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 </div>
               </div>
               <div class="wf-pane" id="s234-workflows"><div class="ph-pane"><div class="ph-icon">⚙</div><div class="ph-title">Workflows</div><div class="ph-sub">Manage active workflows</div></div></div>
-              <div class="wf-pane" id="s234-salesforce"><div class="ph-pane"><div class="ph-icon">☁</div><div class="ph-title">Salesforce</div><div class="ph-sub">View and update CRM records</div></div></div>
+              <div class="wf-pane" id="s234-salesforce"><div class="ph-pane"><div class="ph-icon">☁</div><div class="ph-title">Salesforce</div><div class="ph-sub">View and update records</div></div></div>
               <div class="wf-pane" id="s234-sharing"><div class="ph-pane"><div class="ph-icon">📤</div><div class="ph-title">Content Sharing</div><div class="ph-sub">Send documents and resources</div></div></div>
               <!-- VIDEO SWAPPED TO RIGHT -->
               <div class="wf-pane" id="s234-video-swap" style="background:var(--bg);">
@@ -3482,8 +4095,153 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       </div>
     </div><!-- /ci-panel -->
 
+    <!-- ASK AI PANEL (in-flow, same size as ci-panel) -->
+    <div class="ci-panel" id="askAiPanel" style="border-left:1px solid var(--border);">
+      <div class="ci-inner">
+        <div class="ci-head" style="background:linear-gradient(135deg,rgba(109,40,217,.07),rgba(0,121,107,.05));">
+          <span class="ci-title" style="display:flex;align-items:center;gap:6px;">
+            <span style="width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#7c3aed,#0d9488);display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;">✦</span>
+            Ask AI
+          </span>
+          <button class="ci-close" onclick="toggleAskAiPanel()">✕</button>
+        </div>
+        <div style="padding:6px 12px;background:rgba(109,40,217,.05);border-bottom:1px solid var(--border);font-size:9px;color:#7c3aed;font-weight:600;display:flex;align-items:center;gap:4px;flex-shrink:0;">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Emily Olivers 
+        </div>
+        <div class="ask-ai-messages" id="askAiMessages" style="flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;">
+          <div id="askAiWelcome" class="ai-msg assistant">
+            <div class="ai-bubble">Hi! I have full context on Emily Olivers — accounts, cards, loans, transactions, and interaction history. What would you like to know?</div>
+            <div class="ai-suggestions">
+              <button class="ai-suggestion" onclick="askAiSend('Summarize Emily\'s current financial situation and any issues I should be aware of')">Summarize Emily's situation</button>
+              <button class="ai-suggestion" onclick="askAiSend('Why is Emily\'s Visa Debit card blocked and what happened in the interaction with Ted?')">Why is the Visa card blocked?</button>
+              <button class="ai-suggestion" onclick="askAiSend('What is the status of Emily\'s home loan and why is it under review?')">Home loan — why under review?</button>
+              <button class="ai-suggestion" onclick="askAiSend('Show me a pattern analysis of Emily\'s recent interactions and any recurring issues')">Interaction pattern analysis</button>
+            </div>
+          </div>
+        </div>
+        <div class="ask-ai-input-area">
+          <textarea class="ask-ai-input" id="askAiInput" placeholder="Ask about Emily Olivers…" rows="1"
+            onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();askAiSend();}"></textarea>
+          <button class="ask-ai-send" id="askAiSendBtn" onclick="askAiSend()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </div>
+    </div><!-- /ask-ai-panel -->
+
     <!-- RIGHT ACTION RAIL -->
+    <!-- ── AUTH PANEL: OTP Verification ── -->
+    <div class="auth-panel" id="authPanelOtp">
+      <div class="auth-panel-inner">
+        <div class="auth-panel-head">
+          <button class="auth-panel-back" onclick="closeAuthPanel()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="auth-panel-title">Verify contact</span>
+          <button class="auth-panel-close" onclick="closeAuthPanel()">✕</button>
+        </div>
+        <div class="auth-panel-body">
+          <div>
+            <div class="otp-title">Enter verification code</div>
+            <div class="otp-sub" style="margin-top:6px;">Enter 6 digit verification code provided by the contact</div>
+          </div>
+          <div style="background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:16px;">
+            <div class="otp-boxes">
+              <input class="otp-box" maxlength="1" type="text" oninput="otpInput(this)">
+              <input class="otp-box" maxlength="1" type="text" oninput="otpInput(this)">
+              <input class="otp-box" maxlength="1" type="text" oninput="otpInput(this)">
+              <input class="otp-box" maxlength="1" type="text" oninput="otpInput(this)">
+              <input class="otp-box" maxlength="1" type="text" oninput="otpInput(this)">
+              <input class="otp-box" maxlength="1" type="text" oninput="otpInput(this)">
+            </div>
+            <button class="otp-verify-btn" id="otpVerifyBtn">Verify</button>
+          </div>
+          <div class="otp-resend">
+            <span class="otp-resend-lbl">Didn't receive?</span>
+            <button class="otp-resend-btn">Resend code</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AUTH PANEL: Voice Biometric ── -->
+    <div class="auth-panel" id="authPanelVoice">
+      <div class="auth-panel-inner">
+        <div class="auth-panel-head">
+          <button class="auth-panel-back" onclick="closeAuthPanel()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="auth-panel-title">Voice biometric</span>
+          <button class="auth-panel-close" onclick="closeAuthPanel()">✕</button>
+        </div>
+        <div class="auth-panel-body">
+          <div>
+            <div class="otp-title">Select enrollment key</div>
+            <div class="otp-sub" style="margin-top:6px;">This identifier is required to securely enroll members for voice biometrics. This will be prefilled during enrollment.</div>
+          </div>
+          <div>
+            <div class="ve-section-lbl">Primary references:</div>
+            <div class="ve-option" onclick="selectVeOption(this)">
+              <div class="ve-radio selected"><span></span></div>
+              <div><div class="ve-option-lbl">Member number</div><div class="ve-option-val">19729482864</div></div>
+            </div>
+            <div class="ve-option" onclick="selectVeOption(this)">
+              <div class="ve-radio"></div>
+              <div><div class="ve-option-lbl">Member number</div><div class="ve-option-val">56789</div></div>
+            </div>
+            <div class="ve-option" onclick="selectVeOption(this)">
+              <div class="ve-radio"></div>
+              <div><div class="ve-option-lbl">Member number</div><div class="ve-option-val">fnienifc</div></div>
+            </div>
+            <div class="ve-option" onclick="selectVeOption(this)">
+              <div class="ve-radio"></div>
+              <div><div class="ve-option-lbl">Member number</div><div class="ve-option-val">cdksnvkd</div></div>
+            </div>
+          </div>
+          <button class="ve-proceed">Proceed</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AUTH PANEL: Device Biometric (IDgo) ── -->
+    <div class="auth-panel" id="authPanelDevice">
+      <div class="auth-panel-inner">
+        <div class="auth-panel-head">
+          <button class="auth-panel-back" onclick="closeAuthPanel()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="auth-panel-title">Device biometric</span>
+          <button class="auth-panel-close" onclick="closeAuthPanel()">✕</button>
+        </div>
+        <div class="auth-panel-body" style="justify-content:center;">
+          <div style="height:40px;"></div>
+          <div class="idgo-title">IDgo Agent - Eltropy</div>
+          <div class="idgo-sub">Sign in to your account</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+            <input class="idgo-input" type="email" placeholder="Email address">
+            <div style="position:relative;">
+              <input class="idgo-input" type="password" placeholder="Password">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);pointer-events:none;"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </div>
+            <button class="idgo-signin-btn">Sign In</button>
+          </div>
+          <button class="idgo-link">Forgot your password?</button>
+          <div class="idgo-link2">Sign-in with your Enterprise account</div>
+        </div>
+      </div>
+    </div>
+
     <div class="action-rail">
+
+      <!-- ✦ Ask AI — above contact info -->
+      <button class="ar-btn ask-ai" id="globalAskAiBtn" onclick="toggleAskAiDrawer()" title="Ask AI">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
+      </button>
+
+      <div class="ar-sep"></div>
 
       <!-- Verified Identity / Contact Info -->
       <button class="ar-btn" id="ciBtn" onclick="toggleContactInfo()" title="Contact info">
@@ -3832,7 +4590,7 @@ function addOvWidget(id, label, btn){
   btn.textContent = '✕ Remove';
   btn.classList.add('added');
   // Insert into the left-column scroll div
-  const leftCol = document.querySelector('#c360p-overview [style*="grid-column:1/3"], #c360p-overview [style*="grid-column: 1/3"]');
+  const leftCol = document.querySelector('#c360p-overview [style*="overflow-y:auto"]');
   const txnWidget = document.getElementById('ov-transactions');
   const widget = document.createElement('div');
   widget.className = 'w360 ov-added-widget';
@@ -3844,6 +4602,217 @@ function addOvWidget(id, label, btn){
   else if(leftCol) leftCol.appendChild(widget);
 }
 
+
+/* ══ ASK AI — AGENTIC DRAWER ══ */
+const EMILY_CONTEXT = `
+You are an Agentic AI assistant inside Eltropy's Contact360 platform, helping a contact center agent at a credit union.
+You have full context about the current member: Emily Olivers.
+
+MEMBER PROFILE:
+- Name: Emily Olivers | Member since: Feb 2019 (6 years) | Member #4821-09-0034
+- DOB: March 14, 1985 | Phone: +1 (310) 928-7361 | Address: 4812 Maple Ave, Portland OR
+- Email: emily.o@email.com | Branch: Portland Main | Segment: Premier | Status: Active
+
+ACCOUNTS (from Symitar):
+- Checking ···4821: $4,218.50 available | APY 0.01% | Courtesy Pay ON | Overdraft $500 limit | Zelle: emily.o@email.com
+- Savings ···9034: $12,800.00 | APY 2.25% | Opened Oct 2019
+- Money Market ···2210: $31,450.00 | APY 3.80% | Min balance $2,500
+- CD ···8801: $10,000.00 | APY 4.50% | Locked till Jun 2026
+
+CARDS (from Symitar):
+- Visa Debit ···4821: BLOCKED — 3 consecutive PIN failures, auto-blocked 2 days ago (Mar 28, 2026). This was discussed in an interaction with agent Ted 2 days ago.
+- Mastercard ···7788: ACTIVE | $1,150 of $5,000 used (23%)
+- RuPay ATM ···9012: ACTIVE | Joint account with Ravi Kumar
+
+LOANS (from Symitar):
+- Home Loan ···1124: UNDER REVIEW | 15-yr fixed | Original $410k | Remaining $287k (35% paid) | Next payment Apr 15. Discussed with Emma Blue 1 day ago.
+- Auto Loan ···3091: ACTIVE | 72-month | Remaining $12.9k (58% paid) | APR 5.2%
+- Personal Loan ···5574: FRAUD FLAG | 36-month | Remaining $4.2k (72% paid) | Fraud reported, under investigation. Discussed with John Doe Aug 12, 2025.
+- Home Loan ···0881: CLOSED/PAID OFF | Mar 2022
+
+RECENT TRANSACTIONS:
+- Mar 28, 2026 11:24 AM: Whole Foods Market -$84.32 (Checking ···4821) — debit
+- Mar 16, 2026 02:10 PM: Transfer to Savings -$500.00 (Checking ···4821) — transfer
+- Mar 15, 2026 08:00 AM: Direct Deposit +$3,200.00 (Checking ···4821) — credit
+- Mar 14, 2026 06:47 PM: Shell Gas Station -$52.10 (Visa Debit ···4821) — debit (note: card was blocked after this)
+- Mar 1, 2026 08:00 AM: Payroll Deposit +$3,200.00 (Checking ···4821) — credit
+- Feb 27, 2026 03:52 PM: Amazon Purchase -$129.99 (Mastercard ···7788) — debit
+- Feb 22, 2026 12:01 AM: Netflix -$15.99 (Visa Debit ···4821) — debit
+
+INTERACTION HISTORY (last 7 days from Eltropy):
+1. 1 day ago — Emma Blue — Video — Inbound — Tags: Car loan, Documents sharing, Member Number
+   Summary: Member inquired about auto loan for BMW, provided income. Agent initially denied due to income eligibility but later approved, requesting document uploads. Follow-up pending.
+   
+2. 2 days ago — Diana Hernandez — Chat — Outbound — Tags: Transfer Money, Secure Link, Verification Code
+   Summary: Emily contacted regarding negative balance and concerns about her daughter's debit card. Agent verified identity, facilitated transfer between accounts, addressed card compromise concerns.
+
+3. 2 days ago — Ted — Chat — Inbound — Tags: Blocked/Hold/Locked Card, Account Access Query, Customer Review
+   Summary: Member reached out about transaction hold. Agent initially couldn't locate account by phone. Card block discussed. Card was blocked after 3 PIN failures.
+
+4. 5 days ago — Cody AI Voice — Voice — Inbound — No summary available
+
+5. 7 days ago — Ted — Video — Outbound — Tags: Account Closure Query, Transfer Money
+   
+6. Aug 12, 2025 — John Doe — Video — Dept: Loans — Tags: Car loan, Customer review, Balance query
+   Summary: Personal loan fraud flag first reported. Investigation initiated.
+
+CURRENT CALL CONTEXT:
+- Emily is currently on an active voice call transferred from Alex (AI agent) in the Lending queue.
+- Alex's handoff notes: "Member calling about car loan application status. Mentioned issues with blocked card. Frustrated — 3rd contact in a week. Neutral sentiment."
+
+Be concise, specific, and actionable. Reference actual data. Answer as if you have real-time access to Symitar and Eltropy systems. Keep responses under 150 words unless more detail is clearly needed. Use plain text — no markdown headers or bullet points unless the agent explicitly asks for a list.`;
+
+let askAiContext = '';
+let askAiMessages = [];
+let askAiOpen = false;
+
+function toggleAskAiPanel(){
+  const panel = document.getElementById('askAiPanel');
+  const btn = document.getElementById('globalAskAiBtn');
+  askAiOpen = !askAiOpen;
+  panel.classList.toggle('open', askAiOpen);
+  btn.classList.toggle('active', askAiOpen);
+  if(askAiOpen) document.getElementById('ciPanel')?.classList.remove('open');
+  setOvPanelOpen(askAiOpen);
+}
+
+function toggleAskAiDrawer(){ toggleAskAiPanel(); }
+function openAskAiWithContext(ctx, prompt){ if(!askAiOpen) toggleAskAiPanel(); setTimeout(()=> askAiSend(prompt), 300); }
+
+async function askAiSend(overrideText){
+  const input = document.getElementById('askAiInput');
+  const text = overrideText || input.value.trim();
+  if(!text) return;
+  if(!overrideText) input.value = '';
+
+  // Hide welcome state
+  const welcome = document.getElementById('askAiWelcome');
+  if(welcome) welcome.style.display = 'none';
+
+  // Add user bubble
+  askAiMessages.push({role:'user', content:text});
+  renderAiMsg('user', text);
+
+  // Add thinking indicator
+  const thinkId = 'think_' + Date.now();
+  const msgsEl = document.getElementById('askAiMessages');
+  const think = document.createElement('div');
+  think.id = thinkId;
+  think.className = 'ai-msg assistant';
+  think.innerHTML = `<div class="ai-thinking"><div class="ai-thinking-dots"><span></span><span></span><span></span></div><span style="font-size:10.5px;color:var(--t3);">Fetching data…</span></div>`;
+  msgsEl.appendChild(think);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+  document.getElementById('askAiSendBtn').disabled = true;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system: EMILY_CONTEXT,
+        messages: askAiMessages
+      })
+    });
+    const data = await resp.json();
+    const reply = data.content?.[0]?.text || 'Sorry, I could not retrieve that information.';
+    askAiMessages.push({role:'assistant', content:reply});
+    think.remove();
+    renderAiMsg('assistant', reply);
+  } catch(e){
+    think.remove();
+    renderAiMsg('assistant', 'Connection error. Please try again.');
+  }
+  document.getElementById('askAiSendBtn').disabled = false;
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+
+function renderAiMsg(role, text){
+  const msgsEl = document.getElementById('askAiMessages');
+  const div = document.createElement('div');
+  div.className = `ai-msg ${role}`;
+  div.innerHTML = `<div class="ai-bubble">${text.replace(/\n/g,'<br>')}</div>`;
+  msgsEl.appendChild(div);
+  msgsEl.scrollTop = msgsEl.scrollHeight;
+}
+
+/* ══ ACCORDION ROWS ══ */
+function toggleAccordion(id){
+  const row = document.getElementById(id);
+  if(!row) return;
+  const isOpen = row.classList.contains('open');
+  // close siblings in same parent
+  row.parentElement.querySelectorAll('.acc-row.open').forEach(r => r.classList.remove('open'));
+  if(!isOpen) row.classList.add('open');
+}
+
+/* ══ OVERVIEW GRID — collapse 3-col to 2-col when any panel opens ══ */
+function setOvPanelOpen(isOpen){
+  const grid = document.getElementById('ovGrid');
+  if(grid) grid.classList.toggle('panel-open', isOpen);
+}
+
+/* ══ QUICK VERIFY ══ */
+function toggleQvDropdown(){
+  const d = document.getElementById('qvDropdown');
+  const pill = document.getElementById('qvPill');
+  if(!d || !pill) return;
+  if(d.parentElement !== document.body) document.body.appendChild(d);
+  const isOpen = d.classList.contains('open');
+  if(!isOpen){
+    const r = pill.getBoundingClientRect();
+    d.style.top = (r.bottom + 4) + 'px';
+    d.style.left = r.left + 'px';
+  }
+  d.classList.toggle('open');
+}
+
+function openAuthPanel(type){
+  ['authPanelOtp','authPanelVoice','authPanelDevice'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('open');
+  });
+  document.getElementById('ciPanel')?.classList.remove('open');
+  document.getElementById('askAiPanel')?.classList.remove('open');
+  const map = {otp:'authPanelOtp', voice:'authPanelVoice', device:'authPanelDevice'};
+  const panel = document.getElementById(map[type]);
+  if(panel) panel.classList.add('open');
+  setOvPanelOpen(true);
+}
+
+function closeAuthPanel(){
+  ['authPanelOtp','authPanelVoice','authPanelDevice'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('open');
+  });
+  setOvPanelOpen(false);
+}
+
+function otpInput(el){
+  if(el.value.length === 1){
+    const next = el.nextElementSibling;
+    if(next && next.classList.contains('otp-box')) next.focus();
+  }
+  // check if all filled
+  const boxes = document.querySelectorAll('.otp-box');
+  const allFilled = [...boxes].every(b => b.value.length === 1);
+  const btn = document.getElementById('otpVerifyBtn');
+  if(btn){ btn.style.background = allFilled ? 'var(--accent)' : ''; btn.style.cursor = allFilled ? 'pointer' : 'default'; }
+}
+
+function selectVeOption(row){
+  document.querySelectorAll('.ve-option .ve-radio').forEach(r => r.classList.remove('selected'));
+  row.querySelector('.ve-radio').classList.add('selected');
+}
+
+// close qv dropdown on outside click
+document.addEventListener('click', e => {
+  if(!e.target.closest('#qvDropdown') && !e.target.closest('#qvPill')){
+    const d = document.getElementById('qvDropdown');
+    if(d) d.classList.remove('open');
+  }
+});
 
 /* ══ BIDIRECTIONAL NAVIGATION — financial record ↔ interaction ══ */
 function goToInteraction(cardId){
@@ -3912,8 +4881,8 @@ function initC360ScrollCollapse(){
   targets.forEach(el => {
     el.addEventListener('scroll', onC360Scroll, {passive:true});
   });
-  // Also attach to the overview's left column (plain div with overflow-y:auto)
-  const ovLeft = document.querySelector('#c360p-overview [style*="grid-column:1/3"]');
+  // Also attach to the overview's scrollable left column
+  const ovLeft = document.querySelector('#c360p-overview [style*="overflow-y:auto"]');
   if(ovLeft) ovLeft.addEventListener('scroll', onC360Scroll, {passive:true});
 }
 
@@ -3965,6 +4934,9 @@ function acceptCall(){
   // 2b. Update member header to the caller's identity
   document.getElementById('mbName').textContent = 'Emily Olivers';
   document.getElementById('mbSub').textContent = '+1 (310) 928 7361';
+  // Show membership tags
+  const mbTags = document.getElementById('mbTags');
+  if(mbTags) mbTags.style.display = 'flex';
 
   // 3. Show active call card in inbox and start its timer
   document.getElementById('activeCallCard').classList.add('show');
@@ -4257,7 +5229,13 @@ function toggleContactInfo(){
   const open  = panel.classList.toggle('open');
   btn.classList.toggle('ci-active', open);
   btn.title = open ? 'Close contact info' : 'Contact info';
-  if(open){ const sb=document.getElementById('sidebar'); if(sb) sb.classList.remove('expanded'); }
+  if(open){
+    const sb=document.getElementById('sidebar'); if(sb) sb.classList.remove('expanded');
+    document.getElementById('askAiPanel')?.classList.remove('open');
+    if(typeof askAiOpen !== 'undefined'){ askAiOpen = false; document.getElementById('globalAskAiBtn')?.classList.remove('active'); }
+    closeAuthPanel();
+  }
+  setOvPanelOpen(open);
 }
 
 /* ══ SIDEBAR TOGGLE ══ */
