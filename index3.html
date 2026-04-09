@@ -252,6 +252,420 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .acct-alert-sub{font-size:11px;color:var(--t2);margin-top:2px;line-height:1.4;}
 .acct-alert-src{font-size:10px;color:var(--t3);margin-top:3px;}
 
+/* ══ ACCOUNT DETAIL (screenshot style) ══ */
+.acct-tile{background:var(--s0);border-bottom:1px solid var(--border);border-left:3px solid transparent;flex-shrink:0;}
+.acct-tile.active{border-left-color:var(--accent);}
+.acct-tile.blocked-acct{border-left-color:var(--red);}
+.acct-tile.locked-acct{border-left-color:var(--border2);}
+.acct-tile-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;transition:background .1s;}
+.acct-tile-head:hover{background:#fafafa;}
+.acct-tile-chevron{color:var(--border2);flex-shrink:0;transition:transform .2s;}
+.acct-tile.open .acct-tile-chevron{transform:rotate(90deg);color:var(--accent);}
+.acct-tile-icon{width:36px;height:36px;border-radius:9px;background:rgba(0,137,123,.07);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.acct-tile-info{flex:1;min-width:0;}
+.acct-tile-name{font-size:13px;font-weight:700;color:var(--t1);letter-spacing:-.01em;}
+.acct-tile-meta{font-size:11px;color:var(--t3);margin-top:2px;}
+.acct-tile-right{text-align:right;flex-shrink:0;}
+.acct-tile-bal-lbl{font-size:10px;color:var(--t3);}
+.acct-tile-bal{font-size:14px;font-weight:700;color:var(--t1);letter-spacing:-.02em;margin-top:2px;}
+.acct-tile-badge{display:inline-flex;padding:3px 8px;border-radius:5px;font-size:10px;font-weight:600;margin-bottom:4px;}
+.acct-tile-badge.active{background:#e8f5e9;color:#2e7d32;}
+.acct-tile-badge.blocked-b{background:#ffebee;color:#c62828;}
+.acct-tile-badge.locked-b{background:#f5f5f5;color:#757575;}
+.acct-tile-badge.alert-b{background:#fff8e1;color:#bf360c;}
+.acct-tile-detail{display:none;border-top:1px solid var(--border);}
+.acct-tile.open .acct-tile-detail{display:block;}
+.acct-detail-section{padding:16px;border-bottom:1px solid var(--border);}
+.acct-detail-section:last-child{border-bottom:none;}
+.acct-detail-section-title{font-size:12px;font-weight:700;color:var(--t1);letter-spacing:-.01em;margin-bottom:12px;}
+.acct-key-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.acct-key-cell{padding:10px 0;border-bottom:1px solid var(--border);}
+.acct-key-cell:nth-last-child(-n+2){border-bottom:none;}
+.acct-key-cell-lbl{font-size:10.5px;color:var(--t3);font-weight:400;}
+.acct-key-cell-val{font-size:12.5px;font-weight:700;color:var(--t1);margin-top:3px;letter-spacing:-.01em;}
+.acct-holder-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;}
+.acct-holder-row:last-child{margin-bottom:0;}
+.acct-holder-icon{width:28px;height:28px;border-radius:50%;background:var(--s2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.acct-holder-name{font-size:12px;font-weight:600;color:var(--t1);flex:1;letter-spacing:-.01em;}
+.acct-holder-role{font-size:10px;font-weight:600;padding:2px 7px;border-radius:4px;background:var(--s2);color:var(--t2);}
+.acct-txn-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+.acct-txn-row:last-child{border-bottom:none;}
+.acct-txn-name{font-size:12px;font-weight:500;color:var(--t1);letter-spacing:-.01em;}
+.acct-txn-date{font-size:10.5px;color:var(--t3);margin-top:2px;}
+.acct-txn-right{text-align:right;}
+.acct-txn-amt{font-size:12px;font-weight:700;letter-spacing:-.01em;}
+.acct-txn-amt.debit{color:var(--red);}
+.acct-txn-amt.credit{color:var(--green);}
+.acct-txn-type{font-size:10px;color:var(--t3);margin-top:2px;}
+.acct-viewall-link{font-size:11.5px;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:4px;margin-top:10px;cursor:pointer;background:none;border:none;font-family:var(--f);padding:0;}
+.acct-viewall-link:hover{opacity:.7;}
+.acct-linked-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:background .1s;}
+.acct-linked-card:hover{background:#fafafa;}
+.acct-linked-card-icon{width:28px;height:28px;border-radius:6px;background:rgba(0,137,123,.07);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.acct-linked-card-name{font-size:12px;font-weight:600;color:var(--t1);flex:1;letter-spacing:-.01em;}
+.acct-linked-card-num{font-size:10.5px;color:var(--t3);margin-top:1px;}
+.acct-quick-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.acct-qa-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;border:1px solid var(--border);background:var(--s0);color:var(--t2);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--f);letter-spacing:-.01em;transition:all .12s;}
+.acct-qa-btn:hover{border-color:var(--border2);color:var(--t1);background:var(--s1);}
+.acct-qa-btn.destructive{border-color:#fca5a5;color:var(--red);}
+.acct-qa-btn.destructive:hover{background:#ffebee;}
+
+/* ══ CARD CONTROL SIDE PANEL ══ */
+.cc-panel{width:0;flex-shrink:0;overflow:hidden;background:var(--s0);border-left:1px solid var(--border);display:flex;flex-direction:column;transition:width .28s cubic-bezier(.4,0,.2,1);}
+.cc-panel.open{width:340px;}
+.cc-panel-inner{width:340px;display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.cc-panel-head{display:flex;align-items:flex-start;gap:8px;padding:14px 16px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.cc-panel-title{font-size:13px;font-weight:700;color:var(--t1);letter-spacing:-.01em;}
+.cc-panel-sub{font-size:11px;color:var(--t3);margin-top:2px;}
+.cc-panel-close{background:none;border:none;cursor:pointer;color:var(--t3);font-size:18px;margin-left:auto;padding:0;line-height:1;align-self:flex-start;}
+.cc-panel-body{flex:1;overflow-y:auto;}
+.cc-panel-count{font-size:11px;color:var(--red);font-weight:600;}
+.chips-action-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;height:26px;border:1px solid var(--border);background:var(--s0);color:var(--t2);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--f);letter-spacing:-.01em;transition:all .12s;white-space:nowrap;flex-shrink:0;}
+.chips-action-btn:hover{border-color:var(--border2);color:var(--t1);}
+.chips-action-btn.primary{background:var(--t1);border-color:var(--t1);color:#fff;}
+.chips-action-btn.primary:hover{background:#333;}
+.cc-delivery-select{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:7px;font-size:12px;font-family:var(--f);color:var(--t1);background:var(--s0);outline:none;cursor:pointer;margin-top:8px;}
+.cc-btn-disabled{width:100%;padding:10px 14px;background:var(--s2);border:1px solid var(--border);color:var(--t3);border-radius:8px;font-size:12.5px;font-weight:500;cursor:not-allowed;font-family:var(--f);letter-spacing:-.01em;margin-top:8px;text-align:center;display:block;}
+
+/* ══ EMBEDDED CARD CONTROL CENTER ══ */
+.ecc-wrap{display:flex;flex-direction:column;height:100%;overflow:hidden;}
+.ecc-sel-bar{display:flex;gap:7px;padding:10px 14px;background:var(--s0);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;}
+.ecc-sel-bar::-webkit-scrollbar{display:none;}
+.ecc-pill{display:flex;flex-direction:column;gap:3px;padding:8px 12px;border-radius:10px;border:1.5px solid var(--border);background:var(--s0);cursor:pointer;flex-shrink:0;transition:all .12s;font-family:var(--f);min-width:110px;}
+.ecc-pill:hover{background:#fafafa;border-color:var(--border2);}
+.ecc-pill.sel{border-color:var(--t1);background:var(--t1);}
+.ecc-pill-top{display:flex;align-items:center;gap:6px;}
+.ecc-pill-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.ecc-pill-dot.active{background:var(--green);}
+.ecc-pill-dot.warm{background:var(--amber);}
+.ecc-pill-dot.blocked{background:var(--red);}
+.ecc-pill-name{font-size:11.5px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ecc-pill.sel .ecc-pill-name{color:#fff;}
+.ecc-pill-num{font-size:10px;color:var(--t3);font-family:var(--m);padding-left:12px;}
+.ecc-pill.sel .ecc-pill-num{color:rgba(255,255,255,.5);}
+.ecc-pill-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;width:fit-content;margin-left:12px;}
+.epb-active{background:#e8f5e9;color:#2e7d32;}
+.epb-warm{background:#fff8e1;color:#bf360c;}
+.epb-blocked{background:#ffebee;color:#c62828;}
+.ecc-pill.sel .ecc-pill-badge{background:rgba(255,255,255,.15);color:#fff;}
+.ecc-body{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--bg);}
+.ecc-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;}
+.ecc-empty-title{font-size:13px;font-weight:600;color:var(--t2);margin-top:12px;letter-spacing:-.01em;}
+.ecc-empty-sub{font-size:11.5px;color:var(--t3);margin-top:5px;line-height:1.5;}
+.ecc-ctx{background:var(--s0);border-radius:12px;border:1px solid var(--border);box-shadow:var(--sh1);overflow:hidden;}
+.ecc-ctx-head{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--border);}
+.ecc-ctx-name{font-size:15px;font-weight:700;color:var(--t1);letter-spacing:-.02em;}
+.ecc-ctx-num{font-size:11.5px;color:var(--t3);margin-top:3px;font-family:var(--m);}
+.ecc-ctx-type{font-size:11px;color:var(--t2);margin-top:2px;}
+.ecc-ctx-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;}
+.ecc-ctx-stats{display:grid;grid-template-columns:1fr 1fr;}
+.ecc-ctx-stat{padding:10px 16px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+.ecc-ctx-stat:nth-child(even){border-right:none;}
+.ecc-ctx-stat:nth-last-child(-n+2){border-bottom:none;}
+.ecc-ctx-stat-lbl{font-size:10px;color:var(--t3);}
+.ecc-ctx-stat-val{font-size:12.5px;font-weight:700;color:var(--t1);margin-top:3px;letter-spacing:-.01em;}
+.ecc-ctx-stat-val.red{color:var(--red);}
+.ecc-ctx-stat-val.amber{color:var(--amber);}
+.ecc-ctx-stat-val.green{color:var(--green);}
+.ecc-ctx-issue{padding:12px 16px;}
+.ecc-ctx-issue-text{font-size:11.5px;color:var(--t2);line-height:1.6;padding:10px 12px;background:var(--s1);border-radius:8px;border:1px solid var(--border);}
+.ecc-actions-panel{background:var(--s0);border-radius:12px;border:1px solid var(--border);box-shadow:var(--sh1);overflow:hidden;}
+.ecc-actions-head{padding:10px 16px;border-bottom:1px solid var(--border);}
+.ecc-actions-title{font-size:9.5px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;}
+.ecc-actions-sub{font-size:11px;color:var(--t3);margin-top:1px;}
+.ecc-action-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:7px;padding:12px;}
+.ecc-act{display:flex;flex-direction:column;gap:7px;padding:11px 12px;border-radius:9px;border:1.5px solid var(--border);background:var(--s0);cursor:pointer;transition:all .13s;font-family:var(--f);text-align:left;}
+.ecc-act:hover{border-color:var(--border2);background:#fafafa;box-shadow:var(--sh1);transform:translateY(-1px);}
+.ecc-act:active{transform:translateY(0);}
+.ecc-act.primary{background:var(--t1);border-color:var(--t1);}
+.ecc-act.primary:hover{background:#2a2a2a;}
+.ecc-act.danger-act{border-color:#fca5a5;}
+.ecc-act.danger-act:hover{background:#fff5f5;border-color:var(--red);}
+.ecc-act-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;}
+.ecc-act-label{font-size:11.5px;font-weight:600;color:var(--t1);letter-spacing:-.01em;}
+.ecc-act.primary .ecc-act-label{color:#fff;}
+.ecc-act.primary .ecc-act-icon{background:rgba(255,255,255,.12);}
+.ecc-act-sub{font-size:10px;color:var(--t3);line-height:1.4;}
+.ecc-act.primary .ecc-act-sub{color:rgba(255,255,255,.5);}
+.ecc-disabled-note{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);padding:9px 14px;border-top:1px solid var(--border);}
+.ecc-wf{background:var(--s0);border-radius:12px;border:1px solid var(--border);box-shadow:var(--sh1);overflow:hidden;animation:fadein .18s ease;}
+.ecc-wf-head{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);}
+.ecc-wf-title{font-size:12.5px;font-weight:700;color:var(--t1);flex:1;letter-spacing:-.01em;}
+.ecc-wf-close{background:none;border:none;cursor:pointer;color:var(--t3);font-size:16px;line-height:1;padding:0;}
+.ecc-wf-body{padding:16px;}
+.ecc-sec-lbl{font-size:9.5px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px;}
+.ecc-pin-row{display:flex;align-items:center;gap:7px;margin:10px 0 14px;}
+.ecc-pin-dot{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.epd-fail{background:#ffebee;color:var(--red);}
+.epd-empty{background:var(--s2);color:var(--t3);}
+.ecc-pin-lbl{font-size:11px;color:var(--t3);margin-left:4px;}
+.ecc-rec{display:flex;gap:10px;border-radius:9px;padding:12px 14px;margin-bottom:14px;}
+.ecc-rec.ok-r{background:#f0fdf4;border:1px solid #bbf7d0;}
+.ecc-rec.warn-r{background:#fff8e1;border:1px solid #fde68a;}
+.ecc-rec.danger-r{background:#fff0f0;border:1px solid #fca5a5;}
+.ecc-rec-icon{font-size:14px;flex-shrink:0;margin-top:1px;}
+.ecc-rec-lbl{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin-bottom:2px;}
+.ecc-rec.ok-r .ecc-rec-lbl{color:#2e7d32;}
+.ecc-rec.warn-r .ecc-rec-lbl{color:#92400e;}
+.ecc-rec.danger-r .ecc-rec-lbl{color:var(--red);}
+.ecc-rec-text{font-size:12.5px;font-weight:700;color:var(--t1);letter-spacing:-.01em;}
+.ecc-rec-sub{font-size:11px;color:var(--t2);margin-top:3px;line-height:1.5;}
+.ecc-txn{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:7px;}
+.ecc-txn:last-child{margin-bottom:0;}
+.ecc-txn.flagged-t{background:#fff9f9;border-color:#fecaca;}
+.ecc-txn-name{font-size:12px;font-weight:500;color:var(--t1);letter-spacing:-.01em;}
+.ecc-txn-date{font-size:10.5px;color:var(--t3);margin-top:2px;}
+.ecc-txn-right{text-align:right;}
+.ecc-txn-amt{font-size:12.5px;font-weight:700;letter-spacing:-.02em;}
+.ecc-txn-amt.neg{color:var(--red);}
+.ecc-txn-amt.pos{color:var(--green);}
+.ecc-txn-flag{font-size:9px;font-weight:700;color:var(--amber);margin-top:3px;}
+.ecc-wf-btns{display:flex;gap:8px;margin-top:14px;}
+.ecc-wf-btn{flex:1;padding:10px 14px;border-radius:8px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--f);letter-spacing:-.01em;border:none;transition:background .12s;}
+.ecc-wf-btn.dark{background:var(--t1);color:#fff;}
+.ecc-wf-btn.dark:hover{background:#2a2a2a;}
+.ecc-wf-btn.red-b{background:var(--red);color:#fff;}
+.ecc-wf-btn.red-b:hover{background:#b91c1c;}
+.ecc-wf-btn.ghost{background:transparent;border:1.5px solid var(--border);color:var(--t2);}
+.ecc-wf-btn.ghost:hover{border-color:var(--border2);color:var(--t1);}
+.ecc-fraud-q{font-size:12.5px;font-weight:600;color:var(--t1);margin:14px 0 10px;}
+.ecc-fraud-btns{display:flex;gap:8px;}
+.ecc-fraud-yes{padding:8px 18px;border-radius:7px;border:none;background:var(--red);color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--f);}
+.ecc-fraud-no{padding:8px 18px;border-radius:7px;border:1.5px solid var(--border);background:transparent;color:var(--t2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--f);}
+.ecc-fraud-no:hover{background:#fafafa;}
+.ecc-sel-input{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:var(--f);color:var(--t1);background:var(--s0);outline:none;cursor:pointer;margin-bottom:12px;}
+.ecc-sel-input:focus{border-color:var(--accent);}
+.ecc-success{background:var(--s0);border-radius:12px;border:1px solid #bbf7d0;box-shadow:var(--sh1);overflow:hidden;animation:fadein .2s ease;}
+.ecc-success.fraud-s{border-color:#fca5a5;}
+.ecc-suc-head{text-align:center;padding:22px 16px 18px;border-bottom:1px solid var(--border);}
+.ecc-suc-head.ok-h{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-bottom-color:#bbf7d0;}
+.ecc-suc-head.fraud-h{background:linear-gradient(135deg,#fff0f0,#ffebee);border-bottom-color:#fecaca;}
+.ecc-suc-ring{width:48px;height:48px;border-radius:50%;border:2px solid #86efac;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;box-shadow:0 4px 12px rgba(46,125,50,.15);}
+.ecc-suc-ring.fraud-r{border-color:#fca5a5;box-shadow:0 4px 12px rgba(211,47,47,.15);}
+.ecc-suc-title{font-size:14px;font-weight:700;color:#166534;letter-spacing:-.02em;}
+.ecc-suc-title.fraud-t{color:#c62828;}
+.ecc-suc-sub{font-size:11.5px;color:#16a34a;margin-top:4px;}
+.ecc-suc-sub.fraud-t{color:#dc2626;}
+.ecc-suc-rows{padding:0 16px;}
+.ecc-sr{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);}
+.ecc-sr:last-child{border-bottom:none;}
+.ecc-sr-lbl{font-size:11.5px;color:var(--t3);}
+.ecc-sr-val{font-size:12px;font-weight:600;color:var(--t1);letter-spacing:-.01em;}
+.ecc-sr-val.green{color:var(--green);}
+.ecc-sr-val.red{color:var(--red);}
+.ecc-suc-next{padding:12px 16px;border-top:1px solid var(--border);}
+.ecc-sn-lbl{font-size:9.5px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:9px;}
+.ecc-sn-btns{display:flex;gap:7px;flex-wrap:wrap;}
+.ecc-sn-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:6px;border:1.5px solid var(--border);background:transparent;color:var(--t2);font-size:11px;font-weight:500;cursor:pointer;font-family:var(--f);transition:all .12s;}
+.ecc-sn-btn:hover{border-color:var(--border2);color:var(--t1);background:var(--s1);}
+.ecc-coll{background:var(--s0);border-radius:12px;border:1px solid var(--border);box-shadow:var(--sh1);overflow:hidden;}
+.ecc-coll-head{display:flex;align-items:center;padding:11px 16px;cursor:pointer;user-select:none;transition:background .1s;}
+.ecc-coll-head:hover{background:#fafafa;}
+.ecc-coll-title{font-size:12px;font-weight:600;color:var(--t1);flex:1;display:flex;align-items:center;gap:7px;}
+.ecc-coll-chev{color:var(--t3);transition:transform .2s;}
+.ecc-coll-chev.open{transform:rotate(90deg);color:var(--accent);}
+.ecc-coll-body{border-top:1px solid var(--border);padding:12px 16px;display:none;}
+.ecc-coll-body.open{display:block;}
+.ecc-info-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);}
+.ecc-info-row:last-child{border-bottom:none;}
+.ecc-info-lbl{font-size:11.5px;color:var(--t3);}
+.ecc-info-val{font-size:12px;font-weight:600;color:var(--t1);}
+.ecc-audit{font-size:10px;color:var(--t3);text-align:center;padding:6px;}
+
+/* ══ CARD CONTROL CENTER ══ */
+.ccc-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--s0);}
+.ccc-title{font-size:12px;font-weight:700;color:var(--t1);letter-spacing:-.01em;}
+.ccc-count{font-size:11px;color:var(--t3);}
+.cc-tile{background:var(--s0);border-bottom:1px solid var(--border);border-left:3px solid transparent;flex-shrink:0;}
+.cc-tile.state-blocked{border-left-color:var(--red);}
+.cc-tile.state-restricted{border-left-color:var(--amber);}
+.cc-tile.state-active{border-left-color:var(--accent);}
+.cc-tile-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;transition:background .1s;}
+.cc-tile-head:hover{background:#fafafa;}
+.cc-tile-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cc-tile-icon.blocked{background:#ffebee;}
+.cc-tile-icon.restricted{background:#fff8e1;}
+.cc-tile-icon.active{background:rgba(0,137,123,.07);}
+.cc-tile-body{flex:1;min-width:0;}
+.cc-tile-name{font-size:13px;font-weight:700;color:var(--t1);letter-spacing:-.01em;}
+.cc-tile-meta{font-size:11px;color:var(--t3);margin-top:2px;}
+.cc-tile-reason{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2);margin-top:4px;font-weight:500;}
+.cc-tile-reason.alert{color:var(--red);}
+.cc-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:.02em;flex-shrink:0;}
+.cc-status.blocked{background:#ffebee;color:#c62828;}
+.cc-status.active{background:#e8f5e9;color:#2e7d32;}
+.cc-status.restricted{background:#fff8e1;color:#bf360c;}
+.cc-alert-dot{width:7px;height:7px;border-radius:50%;background:var(--red);flex-shrink:0;box-shadow:0 0 0 2px rgba(211,47,47,.2);}
+.cc-detail{display:none;border-top:1px solid var(--border);}
+.cc-tile.open .cc-detail{display:block;}
+.cc-tile.open .cc-chevron{transform:rotate(90deg);color:var(--accent);}
+.cc-chevron{color:var(--border2);flex-shrink:0;transition:transform .2s;}
+.cc-section{border-bottom:1px solid var(--border);padding:14px 16px;}
+.cc-section:last-child{border-bottom:none;}
+.cc-section-label{font-size:9.5px;font-weight:700;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.cc-status-block{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:#fff9f9;border:1px solid #fecaca;border-radius:9px;}
+.cc-status-block.active-block{background:#f0fdf4;border-color:#bbf7d0;}
+.cc-status-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.cc-status-name{font-size:13px;font-weight:700;color:var(--t1);letter-spacing:-.01em;}
+.cc-status-reason{font-size:11.5px;color:var(--t2);margin-top:3px;line-height:1.5;}
+.cc-ctx-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);}
+.cc-ctx-row:last-child{border-bottom:none;}
+.cc-ctx-lbl{font-size:11.5px;color:var(--t3);flex-shrink:0;width:130px;}
+.cc-ctx-val{font-size:12px;font-weight:600;color:var(--t1);text-align:right;}
+.cc-ctx-val.red{color:var(--red);}
+.cc-ctx-val.green{color:var(--green);}
+.cc-warn-code{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;background:#fff8e1;border:1px solid #fde68a;color:#92400e;border-radius:5px;padding:3px 8px;}
+.cc-txn{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.cc-txn:last-child{border-bottom:none;}
+.cc-txn-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cc-txn-icon.declined{background:#ffebee;}
+.cc-txn-icon.ok{background:#f0fdf4;}
+.cc-txn-body{flex:1;min-width:0;}
+.cc-txn-name{font-size:12px;font-weight:500;color:var(--t1);letter-spacing:-.01em;}
+.cc-txn-sub{font-size:10.5px;color:var(--t3);margin-top:1px;}
+.cc-txn-amt{font-size:12px;font-weight:600;white-space:nowrap;}
+.cc-txn-amt.declined{color:var(--red);}
+.cc-txn-status{font-size:9px;font-weight:700;color:var(--red);letter-spacing:.03em;}
+.cc-rec-block{display:flex;align-items:flex-start;gap:10px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:9px;padding:12px 14px;}
+.cc-rec-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.cc-rec-label{font-size:9px;font-weight:700;color:#2e7d32;letter-spacing:.07em;text-transform:uppercase;}
+.cc-rec-text{font-size:12.5px;font-weight:700;color:var(--t1);margin-top:2px;letter-spacing:-.01em;}
+.cc-rec-sub{font-size:11px;color:var(--t2);margin-top:3px;line-height:1.5;}
+.cc-actions{display:flex;flex-direction:column;gap:8px;}
+.cc-action-primary{width:100%;padding:11px 14px;background:var(--t1);border:none;color:#fff;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--f);letter-spacing:-.01em;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .12s;}
+.cc-action-primary:hover{background:#333;}
+.cc-action-row{display:flex;gap:8px;flex-wrap:wrap;}
+.cc-action-sec{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:7px;border:1px solid var(--border);background:transparent;color:var(--t2);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--f);letter-spacing:-.01em;transition:all .12s;}
+.cc-action-sec:hover{border-color:var(--border2);color:var(--t1);background:var(--s1);}
+.cc-action-sec.disabled{opacity:.32;cursor:not-allowed;pointer-events:none;}
+.cc-action-warn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:7px;border:1px solid #fca5a5;background:#ffebee;color:var(--red);font-size:12px;font-weight:500;cursor:pointer;font-family:var(--f);letter-spacing:-.01em;transition:all .12s;}
+.cc-action-warn:hover{background:#fee2e2;border-color:#f87171;}
+.cc-permanent-block{display:flex;align-items:flex-start;gap:10px;background:#fff0f0;border:1.5px solid #fca5a5;border-radius:9px;padding:12px 14px;}
+.cc-permanent-block-text{font-size:11.5px;color:var(--red);font-weight:700;letter-spacing:-.01em;}
+.cc-permanent-block-sub{font-size:11px;color:var(--t2);margin-top:3px;line-height:1.5;}
+.cc-disabled-note{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);padding-top:8px;border-top:1px solid var(--border);margin-top:2px;}
+.cc-action-primary.danger{background:#c62828;}
+.cc-action-primary.danger:hover{background:#b91c1c;}
+.cc-status-block.fraud{background:#fff0f0;border-color:#fca5a5;}
+.cc-status-block.user-req{background:#eff6ff;border-color:#bfdbfe;}
+.cc-status-block.lost{background:#fff0f0;border-color:#fca5a5;}
+.cc-status-block.expired{background:#f9fafb;border-color:var(--border2);}
+.cc-status-block.system{background:#fff8e1;border-color:#fde68a;}
+.cc-status-block.acct-restrict{background:#fff8e1;border-color:#fde68a;}
+.cc-tile.state-warning{border-left-color:var(--amber);}
+
+/* ══ SERVICE WORKSPACE ══ */
+  display:flex;align-items:flex-start;gap:10px;
+  background:#fffbf0;border:1px solid #fde68a;
+  border-radius:10px;padding:12px 14px;
+}
+.sw-intent-badge{
+  font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:#92400e;background:#fef3c7;border:1px solid #fde68a;
+  border-radius:4px;padding:2px 6px;white-space:nowrap;flex-shrink:0;margin-top:1px;
+}
+.sw-intent-text{font-size:12.5px;color:var(--t1);line-height:1.5;font-weight:500;letter-spacing:-.01em;}
+
+/* primary entity */
+.sw-entity{
+  border:1px solid var(--border);border-radius:10px;
+  background:var(--s0);overflow:hidden;box-shadow:var(--sh1);
+}
+.sw-entity-head{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;cursor:pointer;transition:background .1s;
+}
+.sw-entity-head:hover{background:#fafafa;}
+.sw-entity-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0;
+}
+.sw-entity-icon.card-blocked{background:#ffebee;}
+.sw-entity-icon.account{background:rgba(0,137,123,.08);}
+.sw-entity-body{flex:1;min-width:0;}
+.sw-entity-title{font-size:13px;font-weight:700;color:var(--t1);letter-spacing:-.01em;}
+.sw-entity-sub{font-size:11px;color:var(--t3);margin-top:2px;}
+.sw-entity-badge{flex-shrink:0;}
+
+/* linked entities */
+.sw-linked{border-top:1px solid var(--border);}
+.sw-linked-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  cursor:pointer;transition:background .1s;
+}
+.sw-linked-row:last-child{border-bottom:none;}
+.sw-linked-row:hover{background:#fafafa;}
+.sw-linked-icon{
+  width:28px;height:28px;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;flex-shrink:0;
+}
+.sw-linked-body{flex:1;min-width:0;}
+.sw-linked-title{font-size:12px;font-weight:600;color:var(--t1);letter-spacing:-.01em;}
+.sw-linked-sub{font-size:10.5px;color:var(--t3);margin-top:1px;}
+
+/* declined transaction highlight */
+.sw-txn-declined .sw-linked-title{color:var(--red);}
+.sw-txn-declined .sw-linked-icon{background:#ffebee;}
+
+/* expanded details */
+.sw-entity-detail{
+  display:none;border-top:1px solid var(--border);
+  background:var(--s0);
+}
+.sw-entity.expanded .sw-entity-detail{display:block;}
+.sw-entity.expanded .sw-entity-chevron{transform:rotate(90deg);}
+.sw-entity-chevron{color:var(--border2);flex-shrink:0;transition:transform .2s;}
+
+/* recommended actions */
+.sw-actions{
+  border:1px solid var(--border);border-radius:10px;
+  background:var(--s0);overflow:hidden;box-shadow:var(--sh1);
+}
+.sw-actions-head{
+  padding:10px 14px;border-bottom:1px solid var(--border);
+  font-size:10px;font-weight:700;color:var(--t3);
+  letter-spacing:.07em;text-transform:uppercase;
+}
+.sw-actions-primary{padding:12px 14px;border-bottom:1px solid var(--border);}
+.sw-action-primary-btn{
+  width:100%;padding:10px 14px;
+  background:var(--t1);border:none;color:#fff;
+  border-radius:8px;font-size:13px;font-weight:600;
+  cursor:pointer;font-family:var(--f);letter-spacing:-.01em;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background .12s;
+}
+.sw-action-primary-btn:hover{background:#333;}
+.sw-action-primary-sub{font-size:10.5px;color:var(--t3);margin-top:7px;line-height:1.4;}
+.sw-actions-secondary{display:flex;flex-wrap:wrap;gap:7px;padding:12px 14px;}
+.sw-action-sec-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:6px;
+  border:1px solid var(--border);background:transparent;
+  color:var(--t2);font-size:11.5px;font-weight:500;
+  cursor:pointer;font-family:var(--f);letter-spacing:-.01em;
+  transition:all .12s;
+}
+.sw-action-sec-btn:hover{border-color:var(--border2);color:var(--t1);background:var(--s1);}
+.sw-action-sec-btn.destructive{color:var(--red);border-color:#fca5a5;}
+.sw-action-sec-btn.destructive:hover{background:#ffebee;}
+
+/* view-all footer */
+.sw-viewall-row{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 14px;border-top:1px solid var(--border);
+}
+.sw-viewall-link{
+  font-size:11px;color:var(--t3);cursor:pointer;
+  background:none;border:none;font-family:var(--f);
+  padding:0;transition:color .12s;
+}
+.sw-viewall-link:hover{color:var(--t1);}
+.sw-viewall-sep{width:1px;height:12px;background:var(--border);flex-shrink:0;}
+
 /* ── OPT-IN STATUS WIDGET ────────────────────────────── */
 .optin-section-title{font-size:11px;font-weight:700;color:var(--t1);padding:10px 16px 6px;display:flex;align-items:center;gap:5px;}
 .optin-info-icon{width:14px;height:14px;border-radius:50%;border:1px solid var(--border2);display:inline-flex;align-items:center;justify-content:center;font-size:8px;color:var(--t3);flex-shrink:0;cursor:default;}
@@ -2428,8 +2842,16 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <button class="c360-chip"        id="chip-cards"               onclick="switchC360Panel('cards')">Cards (4)</button>
                 <button class="c360-chip"        id="chip-loans"               onclick="switchC360Panel('loans')">Loans (2)</button>
                 <button class="c360-chip"        id="chip-transactions"        onclick="switchC360Panel('transactions')">Transactions</button>
-                <!-- Customize — right-aligned -->
-                <div style="margin-left:auto;flex-shrink:0;" class="ov-customize-wrap">
+                <!-- Customize + Quick Actions — right-aligned -->
+                <div style="margin-left:auto;flex-shrink:0;display:flex;align-items:center;gap:6px;" class="ov-customize-wrap">
+                  <button class="chips-action-btn" onclick="openTransferPanel()" title="Transfer between accounts">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                    Transfer
+                  </button>
+                  <button class="chips-action-btn primary" onclick="openCardControlPanel()" title="Card Control Center">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                    Card Control
+                  </button>
                   <button class="ov-customize-btn" onclick="toggleCustomizer()" title="Customize overview">
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
                   </button>
@@ -2560,85 +2982,149 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                         </div>
                       </div>
 
-                      <!-- 3. ACCOUNTS + TRANSFER -->
-                      <div class="w360" id="ov-accounts" style="margin:0;">
-                        <div class="w360-head"><span class="w360-title">Accounts</span><button class="alert-badge amber" onclick="switchC360Panel('accounts')" title="1 account alert">⚠ 1 alert</button><button class="w360-viewall" onclick="switchC360Panel('accounts')">View all →</button></div>
-                        <div class="w360-accounts">
-                          <div class="w360-acct" style="cursor:pointer;" onclick="switchC360Panel('acct-checking')"><span class="acct-name">Checking ···4821</span><span class="acct-bal">$4,218.50</span><span class="acct-status">Available</span><span class="row-alert-dot amber" title="1 alert" style="margin-left:auto;"></span></div>
-                          <div class="w360-acct" style="cursor:pointer;" onclick="switchC360Panel('acct-savings')"><span class="acct-name">Savings ···9034</span><span class="acct-bal">$12,800.00</span><span class="acct-status">Available</span></div>
-                        </div>
-                        <div style="padding:10px 12px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:7px;background:var(--s1);">
-                          <div style="font-size:9px;font-weight:700;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;">Transfer Between Accounts</div>
-                          <div class="ov-transfer-row">
-                            <select class="ov-transfer-sel"><option>Checking ···4821 ($4,218.50)</option><option>Savings ···9034</option><option>Money Market ···2210</option></select>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2" style="flex-shrink:0"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/></svg>
-                            <select class="ov-transfer-sel"><option>Savings ···9034</option><option>Checking ···4821</option><option>Money Market ···2210</option><option>External account</option></select>
-                            <input class="ov-transfer-inp" type="text" placeholder="$0.00">
-                            <button class="ov-transfer-btn">Transfer</button>
-                          </div>
-                          <div class="ov-transfer-note">Transfers process immediately. Both accounts will reflect updated balances.</div>
-                        </div>
-                      </div>
+                      <!-- ══ SERVICE WORKSPACE ══ -->
+                      <div style="display:flex;flex-direction:column;gap:10px;">
 
-                      <!-- CARDS + LOANS side by side -->
-                      <div id="ov-cards-loans" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                        <!-- Customer Intent -->
+                        <div class="sw-intent">
+                          <span class="sw-intent-badge">✦ AI detected</span>
+                          <span class="sw-intent-text">Customer is facing card decline issues during online purchases</span>
+                        </div>
 
-                        <!-- 4. CARDS — blocked only -->
-                        <div class="w360" style="margin:0;">
-                          <div class="w360-head"><span class="w360-title">Cards</span><button class="alert-badge red" onclick="switchC360Panel('cards')">🔴 1 alert</button><button class="w360-viewall" onclick="switchC360Panel('cards')">View all →</button></div>
-                          <div class="w360-card-item" style="cursor:pointer;" onclick="switchC360Panel('card-detail')">
-                            <div class="card-chip">VISA</div>
-                            <div class="card-info">
-                              <div class="card-name">Visa Debit ···4821</div>
-                              <div class="card-sub">3 PIN failures · 2 days ago</div>
-                              <button class="discussed-link" onclick="event.stopPropagation();goToInteraction('ij-ted-2days')">
-                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                                Discussed · Ted · 2 days ago →
-                              </button>
+                        <!-- Relevant Entities -->
+                        <div style="display:flex;flex-direction:column;gap:0;" class="sw-entity" id="sw-card-entity">
+
+                          <!-- Primary Entity: Visa Debit — BLOCKED -->
+                          <div class="sw-entity-head" onclick="toggleSWEntity('sw-card-entity')">
+                            <div class="sw-entity-icon card-blocked">💳</div>
+                            <div class="sw-entity-body">
+                              <div class="sw-entity-title">Visa Debit ···4821</div>
+                              <div class="sw-entity-sub">3 consecutive PIN failures · Auto-blocked Mar 28, 2026</div>
                             </div>
                             <span class="card-flag blocked">BLOCKED</span>
+                            <svg class="sw-entity-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                           </div>
-                          <div class="ov-quiet">+ <a onclick="switchC360Panel('cards')">2 active cards</a></div>
+
+                          <!-- Expanded detail -->
+                          <div class="sw-entity-detail">
+                            <div class="acd-section" style="margin:10px 14px 0;">
+                              <div class="acd-row"><span class="acd-lbl">Block reason</span><span class="acd-val" style="color:var(--red);font-family:var(--f);">PIN failures (3×)</span></div>
+                              <div class="acd-row"><span class="acd-lbl">Card type</span><span class="acd-val" style="font-family:var(--f);">Debit · Exp 09/27</span></div>
+                              <div class="acd-row"><span class="acd-lbl">Holder</span><span class="acd-val" style="font-family:var(--f);">Emily Olivers</span></div>
+                            </div>
+                            <div style="padding:0 14px 12px;margin-top:8px;">
+                              <button class="discussed-link" onclick="goToInteraction('ij-ted-2days')">
+                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                                Discussed with Ted · 2 days ago
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-- Linked: Checking Account -->
+                          <div class="sw-linked">
+                            <div class="sw-linked-row" onclick="switchC360Panel('accounts')">
+                              <div class="sw-linked-icon" style="background:rgba(0,137,123,.08);">🏦</div>
+                              <div class="sw-linked-body">
+                                <div class="sw-linked-title">Checking ···4821</div>
+                                <div class="sw-linked-sub">$4,218.50 available · Active · Linked account</div>
+                              </div>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--border2)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                            </div>
+
+                            <!-- Linked: Declined Transactions -->
+                            <div class="sw-linked-row sw-txn-declined">
+                              <div class="sw-linked-icon" style="background:#ffebee;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                              </div>
+                              <div class="sw-linked-body">
+                                <div class="sw-linked-title">Amazon.com — DECLINED</div>
+                                <div class="sw-linked-sub">Visa Debit ···4821 · Mar 29, 2026 · $129.99</div>
+                              </div>
+                              <span style="font-size:11.5px;font-weight:600;color:var(--red);">-$129.99</span>
+                            </div>
+                            <div class="sw-linked-row sw-txn-declined">
+                              <div class="sw-linked-icon" style="background:#ffebee;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                              </div>
+                              <div class="sw-linked-body">
+                                <div class="sw-linked-title">Netflix — DECLINED</div>
+                                <div class="sw-linked-sub">Visa Debit ···4821 · Mar 29, 2026 · $15.99</div>
+                              </div>
+                              <span style="font-size:11.5px;font-weight:600;color:var(--red);">-$15.99</span>
+                            </div>
+                            <div class="sw-linked-row">
+                              <div class="sw-linked-icon" style="background:rgba(46,125,50,.08);">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                              </div>
+                              <div class="sw-linked-body">
+                                <div class="sw-linked-title">Whole Foods Market</div>
+                                <div class="sw-linked-sub">Checking ···4821 · Mar 28, 2026</div>
+                              </div>
+                              <span style="font-size:11.5px;font-weight:600;color:var(--green);">-$84.32</span>
+                            </div>
+                          </div>
+
+                          <!-- View all footer -->
+                          <div class="sw-viewall-row">
+                            <button class="sw-viewall-link" onclick="switchC360Panel('cards')">View all cards</button>
+                            <div class="sw-viewall-sep"></div>
+                            <button class="sw-viewall-link" onclick="switchC360Panel('accounts')">View all accounts</button>
+                            <div class="sw-viewall-sep"></div>
+                            <button class="sw-viewall-link" onclick="switchC360Panel('transactions')">View all transactions</button>
+                          </div>
+
+                        </div><!-- /sw-entity -->
+
+                        <!-- Recommended Actions -->
+                        <div class="sw-actions">
+                          <div class="sw-actions-head">Recommended actions</div>
+                          <div class="sw-actions-primary">
+                            <button class="sw-action-primary-btn" onclick="toggleAccordion('acc-card-visa');switchC360Panel('cards');">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                              Unblock Card
+                            </button>
+                            <div class="sw-action-primary-sub">Removes the block placed Mar 28, 2026 due to 3 PIN failures. Member will need to set a new PIN after unblocking.</div>
+                          </div>
+                          <div class="sw-actions-secondary">
+                            <button class="sw-action-sec-btn">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                              Reset PIN
+                            </button>
+                            <button class="sw-action-sec-btn" onclick="switchC360Panel('transactions')">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
+                              View Transactions
+                            </button>
+                            <button class="sw-action-sec-btn" onclick="switchC360Panel('cards')">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                              Replace Card
+                            </button>
+                            <button class="sw-action-sec-btn destructive">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
+                              Escalate
+                            </button>
+                          </div>
                         </div>
 
-                        <!-- 5. LOANS — flagged only -->
+                        <!-- Loans (kept separate — different intent) -->
                         <div class="w360" style="margin:0;">
-                          <div class="w360-head"><span class="w360-title">Loans</span><button class="alert-badge red" onclick="switchC360Panel('loans')">🔴 2 alerts</button><button class="w360-viewall" onclick="switchC360Panel('loans')">View all →</button></div>
-                          <div class="w360-loan-item" style="cursor:pointer;" onclick="switchC360Panel('loan-home')">
+                          <div class="w360-head"><span class="w360-title">Loans</span><button class="alert-badge red" onclick="switchC360Panel('loans')">2 alerts</button><button class="w360-viewall" onclick="switchC360Panel('loans')">View all →</button></div>
+                          <div class="w360-loan-item" style="cursor:pointer;" onclick="switchC360Panel('loans')">
                             <div class="donut-wrap"><svg width="38" height="38" viewBox="0 0 38 38"><circle cx="19" cy="19" r="14" fill="none" stroke="var(--s2)" stroke-width="5"/><circle cx="19" cy="19" r="14" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="27.6 60.9" stroke-linecap="round"/></svg><span class="donut-pct">35%</span></div>
                             <div class="loan-info">
                               <div class="loan-name"><span class="loan-flag review">REVIEW</span>Home ···1124</div>
                               <div class="loan-sub">$287k left</div>
-                              <button class="discussed-link" onclick="event.stopPropagation();goToInteraction('ij-emma-1day')">
-                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                                Discussed · Emma Blue · 1d →
-                              </button>
                             </div>
                           </div>
-                          <div class="w360-loan-item" style="cursor:pointer;" onclick="switchC360Panel('loan-personal')">
+                          <div class="w360-loan-item" style="cursor:pointer;border-bottom:none;" onclick="switchC360Panel('loans')">
                             <div class="donut-wrap"><svg width="38" height="38" viewBox="0 0 38 38"><circle cx="19" cy="19" r="14" fill="none" stroke="var(--s2)" stroke-width="5"/><circle cx="19" cy="19" r="14" fill="none" stroke="var(--red)" stroke-width="5" stroke-dasharray="63.3 25.2" stroke-linecap="round"/></svg><span class="donut-pct" style="color:var(--red)">72%</span></div>
                             <div class="loan-info">
                               <div class="loan-name"><span class="loan-flag fraud">FRAUD</span>Personal ···5574</div>
                               <div class="loan-sub">$4.2k left</div>
-                              <button class="discussed-link" onclick="event.stopPropagation();goToInteraction('ij-john-aug12')">
-                                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                                Discussed · John Doe · Aug 12 →
-                              </button>
                             </div>
                           </div>
-                          <div class="ov-quiet">+ <a onclick="switchC360Panel('loans')">2 other loans</a></div>
                         </div>
 
-                      </div><!-- /cards+loans -->
-
-                      <!-- 6. TRANSACTIONS -->
-                      <div class="w360" id="ov-transactions" style="margin:0;">
-                        <div class="w360-head"><span class="w360-title">Transactions</span><button class="w360-viewall" onclick="switchC360Panel('transactions')">View all →</button></div>
-                        <div class="w360-txn-item"><div class="txn-icon debit"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div><div class="txn-info"><div class="txn-name">Whole Foods Market</div><div class="txn-sub">Checking ···4821 · Mar 28, 2026 · 11:24 AM</div></div><span class="txn-amt neg">-$84.32</span></div>
-                        <div class="w360-txn-item"><div class="txn-icon transfer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div><div class="txn-info"><div class="txn-name">Transfer to Savings</div><div class="txn-sub">Checking ···4821 · Mar 16, 2026 · 02:10 PM</div></div><span class="txn-amt neg">-$500.00</span></div>
-                        <div class="w360-txn-item"><div class="txn-icon credit"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div><div class="txn-info"><div class="txn-name">Direct Deposit</div><div class="txn-sub">Checking ···4821 · Mar 15, 2026 · 08:00 AM</div></div><span class="txn-amt pos">+$3,200.00</span></div>
-                        <div class="w360-txn-item"><div class="txn-icon debit"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div><div class="txn-info"><div class="txn-name">Shell Gas Station</div><div class="txn-sub">Visa Debit ···4821 · Mar 14, 2026 · 06:47 PM</div></div><span class="txn-amt neg">-$52.10</span></div>
-                      </div>
+                      </div><!-- /service workspace -->
 
                       <!-- 7. BELOW-FOLD REFERENCE WIDGETS: Text Preferences + Active Integrations -->
                       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -2839,141 +3325,251 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   </div>
                 </div>
 
-                <!-- ── ACCOUNTS DRILL-DOWN ── -->
+                <!-- ── ACCOUNTS ── -->
                 <div class="c360-panel" id="c360p-accounts">
-                  <div style="font-size:9.5px;color:var(--t3);padding:6px 12px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;">
-                    Last synced: <b style="color:var(--t2);font-weight:500;">Today 10:31 AM</b> 
+                  <div style="font-size:9.5px;color:var(--t3);padding:6px 16px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;">
+                    Last synced: <b style="color:var(--t2);font-weight:500;">Today 10:31 AM</b>
                   </div>
                   <div class="c360-drill">
-                    <!-- Transfer Between Accounts -->
-                    <div class="transfer-bar">
-                      <div class="transfer-bar-title">Transfer Between Accounts</div>
-                      <div class="transfer-bar-row">
-                        <div class="transfer-bar-field">
-                          <span class="transfer-bar-lbl">From</span>
-                          <select class="transfer-bar-sel" id="tbFrom">
-                            <option>Checking ··· 4821</option>
-                            <option>Savings ··· 9034</option>
-                            <option>Money Market ··· 2210</option>
-                          </select>
-                        </div>
-                        <div class="transfer-bar-field">
-                          <span class="transfer-bar-lbl">To</span>
-                          <select class="transfer-bar-sel">
-                            <option>Savings ··· 9034</option>
-                            <option>Checking ··· 4821</option>
-                            <option>Money Market ··· 2210</option>
-                            <option>External account</option>
-                          </select>
-                        </div>
-                        <div class="transfer-bar-field amt">
-                          <span class="transfer-bar-lbl">Amount ($)</span>
-                          <input class="transfer-bar-inp" type="text" placeholder="0.00">
-                        </div>
-                        <button class="transfer-bar-btn">Transfer</button>
-                      </div>
-                      <div class="transfer-bar-note">Transfers process immediately. Both accounts will reflect updated balances.</div>
-                    </div>
 
-                    <!-- Checking ···4821 -->
-                    <div class="acc-row loan-card" style="border-left-color:var(--amber);" id="acc-checking" onclick="toggleAccordion('acc-checking')">
-                      <div class="acc-row-head" style="padding:12px 14px;">
-                        <div class="loan-card-icon" style="background:rgba(217,119,6,.08);flex-shrink:0;">💳</div>
-                        <div class="loan-card-body">
-                          <div class="loan-card-title"><span class="loan-card-name">Checking ··· 4821</span><span class="loan-flag review">⚠ ALERT</span></div>
-                          <div class="loan-card-sub">Primary Share Draft · APY 0.01%</div>
-                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:100%"></div></div><span class="loan-progress-text"><b>$4,218.50</b> available</span></div>
+                    <!-- ── Everyday Checking ···4821 ── -->
+                    <div class="acct-tile active" id="at-checking" onclick="toggleAcctTile('at-checking')">
+                      <div class="acct-tile-head">
+                        <svg class="acct-tile-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        <div class="acct-tile-icon">$</div>
+                        <div class="acct-tile-info">
+                          <div class="acct-tile-name">Everyday Checking</div>
+                          <div class="acct-tile-meta">Checking · ****-****-****-4821</div>
                         </div>
-                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                      </div>
-                      <div class="acc-detail" onclick="event.stopPropagation()">
-                        <div class="acct-alert-block amber" style="margin:10px 14px 0;">
-                          <div class="acct-alert-block-row"><div class="acct-alert-icon">⚠️</div><div><div class="acct-alert-title">Overdraft Risk</div><div class="acct-alert-sub">Balance is within $218 of limit. 3 pending debits totalling $190.</div><div class="acct-alert-src">Updated today 10:31 AM</div></div></div>
-                        </div>
-                        <div class="acd-section" style="margin:10px 14px 0;">
-                          <div class="acd-section-title">LINKED CARD</div>
-                          <div class="acd-row" style="cursor:pointer;" onclick="switchC360Panel('card-detail')"><span class="acd-lbl">Visa Debit ···4821</span><span class="acd-val" style="display:flex;align-items:center;gap:6px;"><span style="background:#fee2e2;color:var(--red);font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;">BLOCKED</span><span style="color:var(--t3);">→</span></span></div>
-                        </div>
-                        <div class="acd-section" style="margin:8px 14px 0;">
-                          <div class="acd-row"><span class="acd-lbl">APY</span><span class="acd-val">0.01%</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Routing</span><span class="acd-val">122105278</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Overdraft</span><span class="acd-val">$500 limit</span></div>
-                        </div>
-                        <div class="acd-section" style="margin:8px 14px 10px;">
-                          <div class="acd-section-title">PAY IDS &amp; ROUTING</div>
-                          <div class="acd-row"><span class="acd-lbl">Zelle</span><span class="acd-val" style="font-size:11px;">emily.o@email.com</span></div>
-                          <div class="acd-row"><span class="acd-lbl">ACH Routing</span><span class="acd-val">122105278</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Account</span><span class="acd-val">···4821</span></div>
+                        <div class="acct-tile-right">
+                          <div><span class="acct-tile-badge active">Active</span></div>
+                          <div class="acct-tile-bal-lbl">Balance</div>
+                          <div class="acct-tile-bal">$4,218.50</div>
                         </div>
                       </div>
-                    </div>
+                      <div class="acct-tile-detail" onclick="event.stopPropagation()">
 
-                    <!-- Savings ···9034 -->
-                    <div class="acc-row loan-card" style="border-left-color:var(--teal);" id="acc-savings" onclick="toggleAccordion('acc-savings')">
-                      <div class="acc-row-head" style="padding:12px 14px;">
-                        <div class="loan-card-icon" style="background:rgba(13,148,136,.08);flex-shrink:0;">💰</div>
-                        <div class="loan-card-body">
-                          <div class="loan-card-title"><span class="loan-card-name">Savings ··· 9034</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
-                          <div class="loan-card-sub">Regular Savings · APY 2.25%</div>
-                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:100%"></div></div><span class="loan-progress-text"><b>$12,800.00</b> available</span></div>
+                        <!-- Key Information -->
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Key Information</div>
+                          <div class="acct-key-grid">
+                            <div class="acct-key-cell" style="padding-right:16px;">
+                              <div class="acct-key-cell-lbl">Balance</div>
+                              <div class="acct-key-cell-val">$4,218.50</div>
+                            </div>
+                            <div class="acct-key-cell" style="padding-left:16px;">
+                              <div class="acct-key-cell-lbl">Available Balance</div>
+                              <div class="acct-key-cell-val">$4,718.50</div>
+                            </div>
+                            <div class="acct-key-cell" style="padding-right:16px;">
+                              <div class="acct-key-cell-lbl">Overdraft Limit</div>
+                              <div class="acct-key-cell-val">$500.00</div>
+                            </div>
+                            <div class="acct-key-cell" style="padding-left:16px;">
+                              <div class="acct-key-cell-lbl">Overdraft Used</div>
+                              <div class="acct-key-cell-val">$0.00</div>
+                            </div>
+                            <div class="acct-key-cell" style="padding-right:16px;">
+                              <div class="acct-key-cell-lbl">Account Number</div>
+                              <div class="acct-key-cell-val">****-****-****-4821</div>
+                            </div>
+                            <div class="acct-key-cell" style="padding-left:16px;">
+                              <div class="acct-key-cell-lbl">Status</div>
+                              <div class="acct-key-cell-val" style="color:var(--green);">Active</div>
+                            </div>
+                          </div>
                         </div>
-                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                      </div>
-                      <div class="acc-detail" onclick="event.stopPropagation()">
-                        <div class="acd-section" style="margin:10px 14px 10px;">
-                          <div class="acd-row"><span class="acd-lbl">APY</span><span class="acd-val">2.25%</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Opened</span><span class="acd-val">Oct 2019</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Routing</span><span class="acd-val">122105278</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Withdrawal limit</span><span class="acd-val">6 / month</span></div>
-                          <div class="acd-row"><span class="acd-lbl">ACH Routing</span><span class="acd-val">122105278</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Account</span><span class="acd-val">···9034</span></div>
-                        </div>
-                      </div>
-                    </div>
 
-                    <!-- Money Market ···2210 -->
-                    <div class="acc-row loan-card" style="border-left-color:var(--accent);" id="acc-mm" onclick="toggleAccordion('acc-mm')">
-                      <div class="acc-row-head" style="padding:12px 14px;">
-                        <div class="loan-card-icon" style="background:rgba(0,121,107,.08);flex-shrink:0;">📈</div>
-                        <div class="loan-card-body">
-                          <div class="loan-card-title"><span class="loan-card-name">Money Market ··· 2210</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
-                          <div class="loan-card-sub">Money Market · APY 3.80%</div>
-                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:100%"></div></div><span class="loan-progress-text"><b>$31,450.00</b> available</span></div>
+                        <!-- Account Holders -->
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Account Holders</div>
+                          <div class="acct-holder-row">
+                            <div class="acct-holder-icon">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            </div>
+                            <span class="acct-holder-name">Emily Olivers</span>
+                            <span class="acct-holder-role">Primary</span>
+                          </div>
                         </div>
-                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                      </div>
-                      <div class="acc-detail" onclick="event.stopPropagation()">
-                        <div class="acd-section" style="margin:10px 14px 10px;">
-                          <div class="acd-row"><span class="acd-lbl">APY</span><span class="acd-val">3.80%</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Opened</span><span class="acd-val">Jan 2022</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Min balance</span><span class="acd-val">$2,500</span></div>
-                          <div class="acd-row"><span class="acd-lbl">ACH Routing</span><span class="acd-val">122105278</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Account</span><span class="acd-val">···2210</span></div>
-                        </div>
-                      </div>
-                    </div>
 
-                    <!-- CD ···8801 -->
-                    <div class="acc-row loan-card" style="border-left-color:var(--border2);opacity:.8;" id="acc-cd" onclick="toggleAccordion('acc-cd')">
-                      <div class="acc-row-head" style="padding:12px 14px;">
-                        <div class="loan-card-icon" style="background:var(--s2);flex-shrink:0;">🔒</div>
-                        <div class="loan-card-body">
-                          <div class="loan-card-title"><span class="loan-card-name">CD ··· 8801</span><span class="card-flag closed">LOCKED</span></div>
-                          <div class="loan-card-sub">Certificate of Deposit · APY 4.50%</div>
-                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill gray" style="width:100%"></div></div><span class="loan-progress-text" style="color:var(--amber);">Locked till Jun 2026 · <b>$10,000.00</b></span></div>
+                        <!-- Recent Transactions -->
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Recent Transactions</div>
+                          <div class="acct-txn-row">
+                            <div><div class="acct-txn-name">Amazon.com Purchase</div><div class="acct-txn-date">March 31, 2026</div></div>
+                            <div class="acct-txn-right"><div class="acct-txn-amt debit">-$127.45</div><div class="acct-txn-type">Debit</div></div>
+                          </div>
+                          <div class="acct-txn-row">
+                            <div><div class="acct-txn-name">Salary Deposit — TechCorp Inc</div><div class="acct-txn-date">March 30, 2026</div></div>
+                            <div class="acct-txn-right"><div class="acct-txn-amt credit">+$3,200.00</div><div class="acct-txn-type">Credit</div></div>
+                          </div>
+                          <div class="acct-txn-row">
+                            <div><div class="acct-txn-name">Whole Foods Market</div><div class="acct-txn-date">March 29, 2026</div></div>
+                            <div class="acct-txn-right"><div class="acct-txn-amt debit">-$84.32</div><div class="acct-txn-type">Debit</div></div>
+                          </div>
+                          <div class="acct-txn-row">
+                            <div><div class="acct-txn-name">Shell Gas Station</div><div class="acct-txn-date">March 28, 2026</div></div>
+                            <div class="acct-txn-right"><div class="acct-txn-amt debit">-$52.18</div><div class="acct-txn-type">Debit</div></div>
+                          </div>
+                          <div class="acct-txn-row">
+                            <div><div class="acct-txn-name">Netflix Subscription</div><div class="acct-txn-date">March 27, 2026</div></div>
+                            <div class="acct-txn-right"><div class="acct-txn-amt debit">-$15.99</div><div class="acct-txn-type">Debit</div></div>
+                          </div>
+                          <button class="acct-viewall-link" onclick="switchC360Panel('transactions')">
+                            View all transactions
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                          </button>
                         </div>
-                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+
+                        <!-- Linked Cards -->
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Linked Cards</div>
+                          <div class="acct-linked-card" onclick="openCardControlPanel('cc-visa')">
+                            <div class="acct-linked-card-icon">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            </div>
+                            <div>
+                              <div class="acct-linked-card-name">Visa Debit Card</div>
+                              <div class="acct-linked-card-num">**** **** **** 4821</div>
+                            </div>
+                            <span class="acct-tile-badge blocked-b">Blocked</span>
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--border2)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                          </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Quick Actions</div>
+                          <div class="acct-quick-actions">
+                            <button class="acct-qa-btn">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                              View Full Details
+                            </button>
+                            <button class="acct-qa-btn" onclick="openTransferPanel()">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                              Initiate Transfer
+                            </button>
+                            <button class="acct-qa-btn destructive">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                              Block Account
+                            </button>
+                          </div>
+                        </div>
+
                       </div>
-                      <div class="acc-detail" onclick="event.stopPropagation()">
-                        <div class="acd-section" style="margin:10px 14px 10px;">
-                          <div class="acd-row"><span class="acd-lbl">APY</span><span class="acd-val">4.50%</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Term</span><span class="acd-val">24 months</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Maturity</span><span class="acd-val">Jun 2026</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Early withdrawal</span><span class="acd-val" style="color:var(--amber);">Penalty applies</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Account</span><span class="acd-val">···8801</span></div>
+                    </div><!-- /Checking -->
+
+                    <!-- ── High-Yield Savings ···9034 ── -->
+                    <div class="acct-tile active" id="at-savings" onclick="toggleAcctTile('at-savings')">
+                      <div class="acct-tile-head">
+                        <svg class="acct-tile-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        <div class="acct-tile-icon" style="background:rgba(13,148,136,.07);">$</div>
+                        <div class="acct-tile-info">
+                          <div class="acct-tile-name">High-Yield Savings</div>
+                          <div class="acct-tile-meta">Savings · ****-****-****-9034</div>
+                        </div>
+                        <div class="acct-tile-right">
+                          <div><span class="acct-tile-badge active">Active</span></div>
+                          <div class="acct-tile-bal-lbl">Balance</div>
+                          <div class="acct-tile-bal">$12,800.00</div>
                         </div>
                       </div>
-                    </div>
+                      <div class="acct-tile-detail" onclick="event.stopPropagation()">
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Key Information</div>
+                          <div class="acct-key-grid">
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">Balance</div><div class="acct-key-cell-val">$12,800.00</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">Available Balance</div><div class="acct-key-cell-val">$12,800.00</div></div>
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">APY</div><div class="acct-key-cell-val">2.25%</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">Withdrawal limit</div><div class="acct-key-cell-val">6 / month</div></div>
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">Account Number</div><div class="acct-key-cell-val">****-****-****-9034</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">Status</div><div class="acct-key-cell-val" style="color:var(--green);">Active</div></div>
+                          </div>
+                        </div>
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Account Holders</div>
+                          <div class="acct-holder-row"><div class="acct-holder-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="acct-holder-name">Emily Olivers</span><span class="acct-holder-role">Primary</span></div>
+                        </div>
+                        <div class="acct-detail-section">
+                          <div class="acct-quick-actions">
+                            <button class="acct-qa-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>View Full Details</button>
+                            <button class="acct-qa-btn" onclick="openTransferPanel()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/></svg>Initiate Transfer</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div><!-- /Savings -->
+
+                    <!-- ── Money Market ···2210 ── -->
+                    <div class="acct-tile active" id="at-mm" onclick="toggleAcctTile('at-mm')">
+                      <div class="acct-tile-head">
+                        <svg class="acct-tile-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        <div class="acct-tile-icon" style="background:rgba(0,121,107,.07);">$</div>
+                        <div class="acct-tile-info">
+                          <div class="acct-tile-name">Money Market</div>
+                          <div class="acct-tile-meta">Money Market · ****-****-****-2210</div>
+                        </div>
+                        <div class="acct-tile-right">
+                          <div><span class="acct-tile-badge active">Active</span></div>
+                          <div class="acct-tile-bal-lbl">Balance</div>
+                          <div class="acct-tile-bal">$31,450.00</div>
+                        </div>
+                      </div>
+                      <div class="acct-tile-detail" onclick="event.stopPropagation()">
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Key Information</div>
+                          <div class="acct-key-grid">
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">Balance</div><div class="acct-key-cell-val">$31,450.00</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">Available Balance</div><div class="acct-key-cell-val">$31,450.00</div></div>
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">APY</div><div class="acct-key-cell-val">3.80%</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">Min Balance</div><div class="acct-key-cell-val">$2,500</div></div>
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">Account Number</div><div class="acct-key-cell-val">****-****-****-2210</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">Status</div><div class="acct-key-cell-val" style="color:var(--green);">Active</div></div>
+                          </div>
+                        </div>
+                        <div class="acct-detail-section">
+                          <div class="acct-quick-actions">
+                            <button class="acct-qa-btn">View Full Details</button>
+                            <button class="acct-qa-btn" onclick="openTransferPanel()">Initiate Transfer</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div><!-- /MM -->
+
+                    <!-- ── CD ···8801 — LOCKED ── -->
+                    <div class="acct-tile locked-acct" id="at-cd" onclick="toggleAcctTile('at-cd')" style="opacity:.8;">
+                      <div class="acct-tile-head">
+                        <svg class="acct-tile-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        <div class="acct-tile-icon" style="background:var(--s2);">🔒</div>
+                        <div class="acct-tile-info">
+                          <div class="acct-tile-name">Certificate of Deposit</div>
+                          <div class="acct-tile-meta">CD · ****-****-****-8801</div>
+                        </div>
+                        <div class="acct-tile-right">
+                          <div><span class="acct-tile-badge locked-b">Locked</span></div>
+                          <div class="acct-tile-bal-lbl">Balance</div>
+                          <div class="acct-tile-bal">$10,000.00</div>
+                        </div>
+                      </div>
+                      <div class="acct-tile-detail" onclick="event.stopPropagation()">
+                        <div class="acct-detail-section">
+                          <div class="acct-detail-section-title">Key Information</div>
+                          <div class="acct-key-grid">
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">Balance</div><div class="acct-key-cell-val">$10,000.00</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">APY</div><div class="acct-key-cell-val">4.50%</div></div>
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">Term</div><div class="acct-key-cell-val">24 months</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">Maturity</div><div class="acct-key-cell-val" style="color:var(--amber);">Jun 2026</div></div>
+                            <div class="acct-key-cell" style="padding-right:16px;"><div class="acct-key-cell-lbl">Early Withdrawal</div><div class="acct-key-cell-val" style="color:var(--amber);">Penalty applies</div></div>
+                            <div class="acct-key-cell" style="padding-left:16px;"><div class="acct-key-cell-lbl">Status</div><div class="acct-key-cell-val">Locked</div></div>
+                          </div>
+                        </div>
+                        <div class="acct-detail-section">
+                          <div class="acct-quick-actions">
+                            <button class="acct-qa-btn">View Full Details</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div><!-- /CD -->
+
                   </div>
                 </div>
 
@@ -3133,87 +3729,50 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   </div>
                 </div>
 
-                <!-- ── CARDS DRILL-DOWN (list) ── -->
+                <!-- ── CARDS TAB: EMBEDDED CARD CONTROL CENTER ── -->
                 <div class="c360-panel" id="c360p-cards">
-                  <div style="font-size:9.5px;color:var(--t3);padding:6px 14px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;"></div>
-                  <div class="c360-drill">
+                  <div class="ecc-wrap">
 
-                    <!-- Visa Debit 4821 — BLOCKED -->
-                    <div class="acc-row loan-card fraud" id="acc-card-visa" onclick="toggleAccordion('acc-card-visa')">
-                      <div class="acc-row-head" style="padding:12px 14px;">
-                        <div class="loan-card-icon" style="background:rgba(220,38,38,.08);flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-                        <div class="loan-card-body">
-                          <div class="loan-card-title"><span class="loan-card-name">Visa Debit ··· 4821</span><span class="card-flag blocked">BLOCKED</span></div>
-                          <div class="loan-card-sub">Debit · Exp 09/27 · Holder: Emily Olivers</div>
-                          <div class="loan-card-alert"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>3 consecutive PIN failures · Auto-blocked 2 days ago</div>
-                        </div>
-                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    <!-- Card Selector Bar -->
+                    <div class="ecc-sel-bar" id="eccSelBar">
+                      <div class="ecc-pill" id="ecc-pill-1" onclick="eccSelect(1)">
+                        <div class="ecc-pill-top"><div class="ecc-pill-dot warm"></div><div class="ecc-pill-name">Visa Debit</div></div>
+                        <div class="ecc-pill-num">•••• 4821</div>
+                        <div class="ecc-pill-badge epb-warm">⚠ Blocked</div>
                       </div>
-                      <div class="acc-detail" onclick="event.stopPropagation()">
-                        <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px;">
-                          <div class="acd-section" style="margin:0;">
-                            <div class="acd-row"><span class="acd-lbl">Block reason</span><span class="acd-val" style="color:var(--red);">3 consecutive PIN failures</span></div>
-                            <div class="acd-row"><span class="acd-lbl">Blocked on</span><span class="acd-val">Mar 28, 2026</span></div>
-                            <div class="acd-row"><span class="acd-lbl">Card number</span><span class="acd-val">···· ···· ···· 4821</span></div>
-                            <div class="acd-row"><span class="acd-lbl">CVV</span><span class="acd-val">···</span></div>
-                          </div>
-                          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(220,38,38,.04);border:1px solid rgba(220,38,38,.15);border-radius:8px;">
-                            <div><div style="font-size:11px;font-weight:600;color:var(--t1);">Unblock card</div><div style="font-size:10px;color:var(--t3);margin-top:2px;">Removes block placed Mar 28, 2026.</div></div>
-                            <button style="padding:5px 12px;background:var(--green);border:none;color:#fff;border-radius:6px;font-size:10.5px;font-weight:700;cursor:pointer;font-family:var(--f);">Unblock</button>
-                          </div>
-                          <button class="discussed-link" onclick="goToInteraction('ij-ted-2days')">
-                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                            Discussed in interaction · Ted · 2 days ago →
-                          </button>
-                        </div>
+                      <div class="ecc-pill" id="ecc-pill-2" onclick="eccSelect(2)">
+                        <div class="ecc-pill-top"><div class="ecc-pill-dot active"></div><div class="ecc-pill-name">Mastercard Credit</div></div>
+                        <div class="ecc-pill-num">•••• 7788</div>
+                        <div class="ecc-pill-badge epb-active">Active</div>
+                      </div>
+                      <div class="ecc-pill" id="ecc-pill-3" onclick="eccSelect(3)">
+                        <div class="ecc-pill-top"><div class="ecc-pill-dot blocked"></div><div class="ecc-pill-name">Visa Premier</div></div>
+                        <div class="ecc-pill-num">•••• 3344</div>
+                        <div class="ecc-pill-badge epb-blocked">✕ Fraud</div>
+                      </div>
+                      <div class="ecc-pill" id="ecc-pill-4" onclick="eccSelect(4)">
+                        <div class="ecc-pill-top"><div class="ecc-pill-dot warm"></div><div class="ecc-pill-name">Visa Business</div></div>
+                        <div class="ecc-pill-num">•••• 8810</div>
+                        <div class="ecc-pill-badge epb-warm">User Block</div>
+                      </div>
+                      <div class="ecc-pill" id="ecc-pill-5" onclick="eccSelect(5)">
+                        <div class="ecc-pill-top"><div class="ecc-pill-dot active"></div><div class="ecc-pill-name">RuPay ATM</div></div>
+                        <div class="ecc-pill-num">•••• 9012</div>
+                        <div class="ecc-pill-badge epb-active">Active</div>
                       </div>
                     </div>
 
-                    <!-- Mastercard Credit 7788 — ACTIVE -->
-                    <div class="acc-row loan-card" style="border-left-color:var(--teal);" id="acc-card-mc" onclick="toggleAccordion('acc-card-mc')">
-                      <div class="acc-row-head" style="padding:12px 14px;">
-                        <div class="loan-card-icon" style="background:rgba(13,148,136,.08);flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-                        <div class="loan-card-body">
-                          <div class="loan-card-title"><span class="loan-card-name">Mastercard Credit ··· 7788</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
-                          <div class="loan-card-sub">Credit · Exp 01/29 · Limit $5,000</div>
-                          <div class="loan-progress-wrap"><div class="loan-progress-bar"><div class="loan-progress-fill teal" style="width:23%"></div></div><span class="loan-progress-text">23% used · <b>$3,850</b> available</span></div>
-                        </div>
-                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                      </div>
-                      <div class="acc-detail" onclick="event.stopPropagation()">
-                        <div class="acd-section" style="margin:10px 14px 10px;">
-                          <div class="acd-row"><span class="acd-lbl">Type</span><span class="acd-val">Credit</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Limit</span><span class="acd-val">$5,000</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Outstanding</span><span class="acd-val">$1,150</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Available</span><span class="acd-val" style="color:var(--green);">$3,850</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Expires</span><span class="acd-val">01/29</span></div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- RuPay ATM 9012 — ACTIVE -->
-                    <div class="acc-row loan-card" style="border-left-color:var(--accent);" id="acc-card-rupay" onclick="toggleAccordion('acc-card-rupay')">
-                      <div class="acc-row-head" style="padding:12px 14px;">
-                        <div class="loan-card-icon" style="background:rgba(0,121,107,.08);flex-shrink:0;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
-                        <div class="loan-card-body">
-                          <div class="loan-card-title"><span class="loan-card-name">RuPay ATM ··· 9012</span><span class="loan-flag" style="background:var(--gs);color:var(--green);border:1px solid rgba(22,163,74,.2);">ACTIVE</span></div>
-                          <div class="loan-card-sub">ATM · Exp 11/26 · Holder: Ravi Kumar (joint)</div>
-                        </div>
-                        <svg class="acc-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                      </div>
-                      <div class="acc-detail" onclick="event.stopPropagation()">
-                        <div class="acd-section" style="margin:10px 14px 10px;">
-                          <div class="acd-row"><span class="acd-lbl">Type</span><span class="acd-val">ATM / Debit</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Joint holder</span><span class="acd-val">Ravi Kumar</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Expires</span><span class="acd-val">11/26</span></div>
-                          <div class="acd-row"><span class="acd-lbl">Daily ATM limit</span><span class="acd-val">$500</span></div>
-                        </div>
+                    <!-- Card Detail Body -->
+                    <div class="ecc-body" id="eccBody">
+                      <div class="ecc-empty">
+                        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--border2)" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                        <div class="ecc-empty-title">Select a card above</div>
+                        <div class="ecc-empty-sub">Choose a card to view status,<br>take action, and resolve issues</div>
                       </div>
                     </div>
 
                   </div>
                 </div>
-
                 <!-- ── CARD DETAIL: VISA DEBIT 4821 ── -->
                 <div class="c360-panel" id="c360p-card-detail">
                   <div class="card-detail-header">
@@ -4183,6 +4742,213 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       </div>
     </div>
 
+    <!-- ── CARD CONTROL SIDE PANEL ── -->
+    <div class="cc-panel" id="cardControlPanel">
+      <div class="cc-panel-inner">
+        <div class="cc-panel-head">
+          <div>
+            <div class="cc-panel-title">Card Control Center</div>
+            <div class="cc-panel-sub">Unified card management for all card states</div>
+          </div>
+          <button class="cc-panel-close" onclick="closeCardControlPanel()">✕</button>
+        </div>
+        <!-- Card Control body — reuses the same cc-tile markup from the Cards chip -->
+        <div class="cc-panel-body">
+          <div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:11px;color:var(--t2);">
+            <b style="color:var(--t1);">6 cards</b> on account · <span class="cc-panel-count">4 requiring action</span>
+          </div>
+          <!-- Panel tiles — same structure as Cards chip tiles, open one at a time -->
+
+          <!-- Visa Debit — BLOCKED (PIN Lock) -->
+          <div class="cc-tile state-blocked" id="ccp-visa" onclick="toggleCC('ccp-visa')">
+            <div class="cc-tile-head">
+              <div class="cc-tile-icon blocked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div class="cc-tile-body">
+                <div class="cc-tile-name">Visa Debit ···4821</div>
+                <div class="cc-tile-meta">Debit · Exp 09/27</div>
+                <div class="cc-tile-reason alert">3 consecutive PIN failures · Mar 28</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+                <span class="cc-status blocked">BLOCKED</span>
+                <div class="cc-alert-dot"></div>
+              </div>
+              <svg class="cc-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:8px;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="cc-detail" onclick="event.stopPropagation()">
+              <div class="cc-section">
+                <div class="cc-section-label">Status &amp; Reason</div>
+                <div style="background:#fff9f9;border:1px solid #fecaca;border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+                  <div style="font-size:10.5px;color:var(--t3);margin-bottom:4px;">Card Status</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--red);">Blocked</div>
+                  <div style="font-size:10.5px;color:var(--t3);margin:8px 0 4px;">Reason</div>
+                  <div style="font-size:12.5px;font-weight:600;color:var(--t1);">PIN Exceeded <span style="color:var(--red);font-size:10.5px;">(Security Lock)</span></div>
+                </div>
+              </div>
+              <div class="cc-section">
+                <div class="cc-section-label">Context</div>
+                <div style="background:#fff9f9;border:1px solid #fecaca;border-radius:7px;padding:9px 12px;display:flex;align-items:center;gap:7px;margin-bottom:10px;font-size:11.5px;color:var(--red);font-weight:600;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  3 failed PIN attempts detected
+                </div>
+                <div style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px;">Recent Transactions</div>
+                <div class="cc-txn"><div class="cc-txn-icon declined"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="cc-txn-body"><div class="cc-txn-name">Amazon.com</div><div class="cc-txn-sub">Mar 29 · DECLINED</div></div><div style="text-align:right;"><div class="cc-txn-amt declined">-$129.99</div><div style="font-size:9px;color:var(--red);font-weight:700;">⚠ Flagged</div></div></div>
+                <div class="cc-txn"><div class="cc-txn-icon declined"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="cc-txn-body"><div class="cc-txn-name">Netflix</div><div class="cc-txn-sub">Mar 29 · DECLINED</div></div><div style="text-align:right;"><div class="cc-txn-amt declined">-$15.99</div><div style="font-size:9px;color:var(--red);font-weight:700;">⚠ Flagged</div></div></div>
+              </div>
+              <div class="cc-section">
+                <div class="cc-section-label">System Recommendation</div>
+                <div class="cc-rec-block"><div class="cc-rec-icon">✦</div><div><div class="cc-rec-label">AI + System</div><div class="cc-rec-text">Reset PIN to restore access</div><div class="cc-rec-sub">No fraud signals. Reset PIN and unblock card.</div></div></div>
+              </div>
+              <div class="cc-section">
+                <div class="cc-section-label">Actions</div>
+                <div style="background:#fff8e1;border:1px solid #fde68a;border-radius:7px;padding:9px 12px;font-size:11px;color:#92400e;margin-bottom:10px;">⚠ This card is temporarily blocked due to PIN lock</div>
+                <button class="cc-action-primary" style="width:100%;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Reset PIN &amp; Unblock Card</button>
+                <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+                  <button class="cc-action-sec" onclick="switchC360Panel('transactions')">View Transactions</button>
+                  <button class="cc-action-sec">Replace Card</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visa Credit — FRAUD BLOCK -->
+          <div class="cc-tile state-blocked" id="ccp-fraud" onclick="toggleCC('ccp-fraud')">
+            <div class="cc-tile-head">
+              <div class="cc-tile-icon blocked"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div class="cc-tile-body">
+                <div class="cc-tile-name">Visa Credit ···3344</div>
+                <div class="cc-tile-meta">Credit · Exp 03/28</div>
+                <div class="cc-tile-reason alert">Fraudulent transactions detected · Mar 24</div>
+              </div>
+              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;">
+                <span class="cc-status blocked">FRAUD BLOCK</span>
+                <div class="cc-alert-dot"></div>
+              </div>
+              <svg class="cc-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:8px;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="cc-detail" onclick="event.stopPropagation()">
+              <div class="cc-section">
+                <div class="cc-section-label">Status &amp; Reason</div>
+                <div style="background:#fff9f9;border:1px solid #fecaca;border-radius:8px;padding:10px 12px;">
+                  <div style="font-size:10.5px;color:var(--t3);margin-bottom:4px;">Card Status</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--red);">Blocked</div>
+                  <div style="font-size:10.5px;color:var(--t3);margin:8px 0 4px;">Reason</div>
+                  <div style="font-size:12.5px;font-weight:600;color:var(--t1);">Suspected Fraud <span style="color:var(--red);font-size:10.5px;">(High Risk)</span></div>
+                </div>
+              </div>
+              <div class="cc-section">
+                <div class="cc-section-label">Context</div>
+                <div style="background:#fff9f9;border:1px solid #fecaca;border-radius:7px;padding:9px 12px;display:flex;align-items:center;gap:7px;margin-bottom:10px;font-size:11.5px;color:var(--red);font-weight:600;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  Possible Fraud Detected
+                </div>
+                <div style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:7px;">Recent Transactions</div>
+                <div class="cc-txn"><div class="cc-txn-icon declined"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="cc-txn-body"><div class="cc-txn-name">Fraudulent online purchase — BLOCKED</div><div class="cc-txn-sub">Apr 7, 2026</div></div><div style="text-align:right;"><div class="cc-txn-amt declined">$1,899.99</div><div style="font-size:9px;color:var(--amber);font-weight:700;">⚠ Flagged</div></div></div>
+                <div class="cc-txn"><div class="cc-txn-icon declined"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="cc-txn-body"><div class="cc-txn-name">Unauthorized ATM withdrawal — BLOCKED</div><div class="cc-txn-sub">Apr 7, 2026</div></div><div style="text-align:right;"><div class="cc-txn-amt declined">$800.00</div><div style="font-size:9px;color:var(--amber);font-weight:700;">⚠ Flagged</div></div></div>
+                <div class="cc-txn"><div class="cc-txn-icon declined"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div><div class="cc-txn-body"><div class="cc-txn-name">Unknown merchant — BLOCKED</div><div class="cc-txn-sub">Apr 7, 2026</div></div><div style="text-align:right;"><div class="cc-txn-amt declined">$450.00</div><div style="font-size:9px;color:var(--amber);font-weight:700;">⚠ Flagged</div></div></div>
+              </div>
+              <div class="cc-section">
+                <div class="cc-section-label">System Recommendation</div>
+                <div style="background:#fff9f9;border:1.5px solid #fca5a5;border-radius:8px;padding:12px 14px;">
+                  <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span style="font-size:12.5px;font-weight:700;color:var(--red);">Replace Card Due to Fraud</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--red);line-height:1.6;">Immediately replace card<br>Raise fraud case for investigation</div>
+                </div>
+              </div>
+              <div class="cc-section">
+                <div class="cc-section-label">Actions</div>
+                <div style="background:#fff9f9;border:1px solid #fecaca;border-radius:7px;padding:9px 12px;font-size:11px;color:var(--red);margin-bottom:10px;">⚠ This card is permanently blocked due to fraud</div>
+                <button class="cc-action-primary danger" style="width:100%;">Raise Fraud Case</button>
+                <div style="margin-top:8px;">
+                  <div style="font-size:11px;color:var(--t3);margin-bottom:4px;">Delivery Method</div>
+                  <select class="cc-delivery-select"><option value="">Select delivery method</option><option>Standard (3–5 days)</option><option>Express (1–2 days)</option><option>Branch pickup</option></select>
+                  <button class="cc-action-primary" style="width:100%;margin-top:8px;">Replace Card</button>
+                </div>
+                <div class="cc-btn-disabled" style="margin-top:8px;">Unblock (Disabled — Fraud confirmed)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mastercard Credit — ACTIVE -->
+          <div class="cc-tile state-active" id="ccp-mc" onclick="toggleCC('ccp-mc')">
+            <div class="cc-tile-head">
+              <div class="cc-tile-icon active"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div class="cc-tile-body">
+                <div class="cc-tile-name">Mastercard Credit ···7788</div>
+                <div class="cc-tile-meta">Credit · Exp 01/29 · 23% utilised</div>
+              </div>
+              <span class="cc-status active">ACTIVE</span>
+              <svg class="cc-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:8px;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="cc-detail" onclick="event.stopPropagation()">
+              <div class="cc-section">
+                <div class="cc-section-label">Status &amp; Reason</div>
+                <div class="cc-status-block active-block"><div class="cc-status-icon">✅</div><div><div class="cc-status-name">Active — No Issues</div><div class="cc-status-reason">Card operating normally. Limit $5,000 · $3,850 available.</div></div></div>
+              </div>
+              <div class="cc-section"><div class="cc-action-row"><button class="cc-action-sec" onclick="switchC360Panel('transactions')">View Transactions</button><button class="cc-action-sec">Temporary Block</button></div></div>
+            </div>
+          </div>
+
+          <!-- User Blocked -->
+          <div class="cc-tile state-warning" id="ccp-user" onclick="toggleCC('ccp-user')">
+            <div class="cc-tile-head">
+              <div class="cc-tile-icon" style="background:#fff8e1;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+              <div class="cc-tile-body">
+                <div class="cc-tile-name">Visa Business ···8810</div>
+                <div class="cc-tile-meta">Business · Exp 11/28</div>
+                <div class="cc-tile-reason" style="color:var(--amber);">Blocked by member · Mar 15</div>
+              </div>
+              <span class="cc-status restricted">USER BLOCKED</span>
+              <svg class="cc-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:8px;"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="cc-detail" onclick="event.stopPropagation()">
+              <div class="cc-section"><div class="cc-section-label">Status &amp; Reason</div><div class="cc-status-block user-req"><div class="cc-status-icon">🔐</div><div><div class="cc-status-name">Blocked — Member Request</div><div class="cc-status-reason">No fraud detected. Member temporarily blocked via mobile app.</div></div></div></div>
+              <div class="cc-section"><button class="cc-action-primary" style="width:100%;">Unblock Card</button><div class="cc-action-row" style="margin-top:8px;"><button class="cc-action-sec">Replace Card</button><button class="cc-action-sec" onclick="switchC360Panel('transactions')">View Transactions</button></div></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- /cardControlPanel -->
+
+    <!-- ── TRANSFER SIDE PANEL ── -->
+    <div class="auth-panel" id="transferPanel">
+      <div class="auth-panel-inner">
+        <div class="auth-panel-head">
+          <span class="auth-panel-title">Transfer Funds</span>
+          <button class="auth-panel-close" onclick="closeTransferPanel()">✕</button>
+        </div>
+        <div class="auth-panel-body">
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;">From</div>
+              <select class="cc-delivery-select" style="margin-top:0;">
+                <option>Checking ···4821 — $4,218.50</option>
+                <option>Savings ···9034 — $12,800.00</option>
+                <option>Money Market ···2210 — $31,450.00</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;">To</div>
+              <select class="cc-delivery-select" style="margin-top:0;">
+                <option>Savings ···9034 — $12,800.00</option>
+                <option>Checking ···4821 — $4,218.50</option>
+                <option>Money Market ···2210 — $31,450.00</option>
+                <option>External account</option>
+              </select>
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.07em;text-transform:uppercase;margin-bottom:6px;">Amount</div>
+              <input type="text" placeholder="$0.00" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:7px;font-size:14px;font-family:var(--f);font-weight:600;color:var(--t1);outline:none;box-sizing:border-box;">
+            </div>
+            <div style="font-size:10.5px;color:var(--t3);line-height:1.5;">Transfers process immediately. Both accounts will reflect updated balances within seconds.</div>
+            <button class="cc-action-primary" style="width:100%;margin-top:4px;">Confirm Transfer</button>
+          </div>
+        </div>
+      </div>
+    </div><!-- /transferPanel -->
+
     <div class="action-rail">
 
       <!-- ✦ Ask AI — above contact info -->
@@ -4661,6 +5427,416 @@ function toggleAccordion(id){
 function setOvPanelOpen(isOpen){
   const grid = document.getElementById('ovGrid');
   if(grid) grid.classList.toggle('panel-open', isOpen);
+}
+
+/* ══ ACCOUNT TILE TOGGLE ══ */
+function toggleAcctTile(id){
+  const tile = document.getElementById(id);
+  if(!tile) return;
+  const isOpen = tile.classList.contains('open');
+  tile.parentElement.querySelectorAll('.acct-tile.open').forEach(t => t.classList.remove('open'));
+  if(!isOpen) tile.classList.add('open');
+}
+
+/* ══ CARD CONTROL PANEL ══ */
+function openCardControlPanel(cardId){
+  closeAuthPanel();
+  const p = document.getElementById('cardControlPanel');
+  const tp = document.getElementById('transferPanel');
+  if(tp) tp.classList.remove('open');
+  if(p){ p.classList.add('open'); setOvPanelOpen(true); }
+  // if a specific card was requested, expand it
+  if(cardId){
+    const map = {'cc-visa':'ccp-visa','cc-fraud':'ccp-fraud','cc-mc':'ccp-mc','cc-user-block':'ccp-user'};
+    const panelId = map[cardId] || cardId.replace('cc-','ccp-');
+    setTimeout(()=>{ const el=document.getElementById(panelId); if(el){ el.parentElement.querySelectorAll('.cc-tile.open').forEach(t=>t.classList.remove('open')); el.classList.add('open'); }}, 50);
+  }
+}
+function closeCardControlPanel(){
+  const p = document.getElementById('cardControlPanel');
+  if(p){ p.classList.remove('open'); setOvPanelOpen(false); }
+}
+
+/* ══ TRANSFER PANEL ══ */
+function openTransferPanel(){
+  closeAuthPanel();
+  closeCardControlPanel();
+  const p = document.getElementById('transferPanel');
+  if(p){ p.classList.add('open'); setOvPanelOpen(true); }
+}
+function closeTransferPanel(){
+  const p = document.getElementById('transferPanel');
+  if(p){ p.classList.remove('open'); setOvPanelOpen(false); }
+}
+
+/* ══ EMBEDDED CARD CONTROL CENTER ══ */
+const ECC_CARDS = {
+  1:{id:1,name:'Visa Debit',num:'•••• •••• •••• 4821',type:'Debit · Exp 09/27 · Linked to Checking ···4821',
+     status:'warm',risk:'pin',
+     stats:[['Status','Temp Blocked'],['Reason','PIN Lock'],['Blocked on','Mar 28 · 2:14 PM'],['PIN Failures','3 / 3 max']],
+     issue:'3 consecutive incorrect PIN entries on Mar 28, 2026. Card auto-blocked per security policy. No fraud signals — safe to unblock after PIN reset.',
+     details:[['Card type','Debit'],['Expiry','09/27'],['Daily limit','$2,000'],['Courtesy Pay','ON'],['Account','Checking ···4821']]},
+  2:{id:2,name:'Mastercard Credit',num:'•••• •••• •••• 7788',type:'Credit · Exp 01/29 · Limit $5,000',
+     status:'active',risk:'none',
+     stats:[['Status','Active'],['Available','$3,850'],['Outstanding','$1,150'],['Utilisation','23%']],
+     issue:'Card is operating normally. No blocks, restrictions, or fraud signals. $3,850 available out of $5,000 credit limit.',
+     details:[['Card type','Credit'],['Expiry','01/29'],['Limit','$5,000'],['Outstanding','$1,150'],['Utilisation','23%']]},
+  3:{id:3,name:'Visa Premier',num:'•••• •••• •••• 3344',type:'Credit · Exp 03/28 · Limit $8,000',
+     status:'blocked',risk:'fraud',
+     stats:[['Status','Perm Blocked'],['Reason','Fraud Confirmed'],['Case ref','FRD-2026-0382'],['Disputed','$3,149.99']],
+     issue:'Multiple unauthorized high-value transactions on Apr 7, 2026. Card permanently blocked. Fraud case filed. Replacement required — unblock is permanently disabled.',
+     details:[['Card type','Credit'],['Expiry','03/28'],['Limit','$8,000'],['Blocked on','Apr 7, 2026'],['Case ref','FRD-2026-0382']]},
+  4:{id:4,name:'Visa Business',num:'•••• •••• •••• 8810',type:'Business Debit · Exp 11/28',
+     status:'warm',risk:'none',
+     stats:[['Status','Temp Blocked'],['Reason','User Request'],['Blocked via','Mobile App'],['Blocked on','Mar 15 · 11:42 AM']],
+     issue:'Member voluntarily blocked this card via mobile app on Mar 15. No fraud signals detected. Card can be safely unblocked — confirm with member first.',
+     details:[['Card type','Business Debit'],['Expiry','11/28'],['Daily limit','$5,000'],['Blocked by','Member (app)'],['Blocked on','Mar 15, 2026']]},
+  5:{id:5,name:'RuPay ATM',num:'•••• •••• •••• 9012',type:'ATM · Exp 11/26 · Joint: Ravi Kumar',
+     status:'active',risk:'none',
+     stats:[['Status','Active'],['Daily limit','$500'],['Joint holder','Ravi Kumar'],['Expires','11/26']],
+     issue:'Card is operating normally. Joint holder Ravi Kumar has access. No issues detected.',
+     details:[['Card type','ATM / Debit'],['Expiry','11/26'],['Daily ATM limit','$500'],['Joint holder','Ravi Kumar']]}
+};
+let eccSel = null, eccWfActive = null;
+
+function eccSelect(id){
+  eccSel = id; eccWfActive = null;
+  document.querySelectorAll('.ecc-pill').forEach(el=>el.classList.remove('sel'));
+  const pill = document.getElementById('ecc-pill-'+id);
+  if(pill) pill.classList.add('sel');
+  eccRender();
+}
+
+function eccRender(){
+  const c = ECC_CARDS[eccSel];
+  const body = document.getElementById('eccBody');
+  if(!body) return;
+  body.innerHTML = eccCtxHTML(c) + '<div id="eccWf"></div>' + eccActionsHTML(c) + eccSupportHTML(c) + `<div class="ecc-audit">Actions logged · Agent: Andrew Raynold · ${new Date().toLocaleString()}</div>`;
+}
+
+function eccCtxHTML(c){
+  const sbCls = {active:'sb-active',warm:'sb-warm',blocked:'sb-blocked'}[c.status];
+  const sbTxt = {active:'● Active',warm:'⚠ Temporarily Blocked',blocked:'✕ Permanently Blocked'}[c.status];
+  const rpCls = {fraud:'rp-fraud',pin:'rp-pin',none:'rp-none'}[c.risk]||'rp-none';
+  const rpTxt = {fraud:'🚨 Fraud Risk',pin:'🔒 PIN Lock',none:'✓ No Risk'}[c.risk]||'✓ No Risk';
+  const stats = c.stats.map(([l,v])=>{
+    let vc='';
+    if(l==='Status'&&c.status==='active') vc=' green';
+    if((l==='Reason'||l==='Status')&&c.status==='blocked') vc=' red';
+    if(l==='Blocked on'||l==='Reason'&&c.risk==='pin') vc=' amber';
+    return `<div class="ecc-ctx-stat"><div class="ecc-ctx-stat-lbl">${l}</div><div class="ecc-ctx-stat-val${vc}">${v}</div></div>`;
+  }).join('');
+  return `<div class="ecc-ctx">
+    <div class="ecc-ctx-head">
+      <div><div class="ecc-ctx-name">${c.name}</div><div class="ecc-ctx-num">${c.num}</div><div class="ecc-ctx-type">${c.type}</div></div>
+      <div class="ecc-ctx-right">
+        <span class="status-badge ${sbCls}">${sbTxt}</span>
+        <span class="risk-pill ${rpCls}">${rpTxt}</span>
+      </div>
+    </div>
+    <div class="ecc-ctx-stats">${stats}</div>
+    <div class="ecc-ctx-issue"><div class="ecc-ctx-issue-text">${c.issue}</div></div>
+  </div>`;
+}
+
+function eccActionsHTML(c){
+  let btns='', footer='';
+  if(c.status==='active'){
+    btns=`
+      <button class="ecc-act" onclick="eccWf('block')">
+        <div class="ecc-act-icon" style="background:#fff8e1;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--amber)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="ecc-act-label">Block Card</div><div class="ecc-act-sub">Temporarily restrict</div>
+      </button>
+      <button class="ecc-act" onclick="eccWf('pin-active')">
+        <div class="ecc-act-icon" style="background:#eff6ff;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="ecc-act-label">Reset PIN</div><div class="ecc-act-sub">Send new PIN to member</div>
+      </button>
+      <button class="ecc-act danger-act" onclick="eccWf('fraud-report')">
+        <div class="ecc-act-icon" style="background:#fff0f0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="ecc-act-label">Report Fraud</div><div class="ecc-act-sub">Flag suspicious activity</div>
+      </button>
+      <button class="ecc-act" onclick="eccWf('txns')">
+        <div class="ecc-act-icon" style="background:var(--s2);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></div>
+        <div class="ecc-act-label">View Transactions</div><div class="ecc-act-sub">Recent activity</div>
+      </button>`;
+  } else if(c.status==='warm'&&c.risk==='pin'){
+    btns=`
+      <button class="ecc-act primary" onclick="eccWf('unblock-pin')">
+        <div class="ecc-act-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="ecc-act-label">Reset PIN &amp; Unblock</div><div class="ecc-act-sub">Recommended — safe</div>
+      </button>
+      <button class="ecc-act" onclick="eccWf('replace')">
+        <div class="ecc-act-icon" style="background:var(--s2);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="ecc-act-label">Replace Card</div><div class="ecc-act-sub">Issue a new card</div>
+      </button>
+      <button class="ecc-act" onclick="eccWf('txns')">
+        <div class="ecc-act-icon" style="background:var(--s2);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></div>
+        <div class="ecc-act-label">View Transactions</div><div class="ecc-act-sub">Check recent activity</div>
+      </button>`;
+  } else if(c.status==='warm'&&c.risk==='none'){
+    btns=`
+      <button class="ecc-act primary" onclick="eccWf('unblock-user')">
+        <div class="ecc-act-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="ecc-act-label">Unblock Card</div><div class="ecc-act-sub">Safe — no fraud detected</div>
+      </button>
+      <button class="ecc-act" onclick="eccWf('replace')">
+        <div class="ecc-act-icon" style="background:var(--s2);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="ecc-act-label">Replace Card</div><div class="ecc-act-sub">Issue a new card</div>
+      </button>
+      <button class="ecc-act" onclick="eccWf('txns')">
+        <div class="ecc-act-icon" style="background:var(--s2);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></div>
+        <div class="ecc-act-label">View Transactions</div><div class="ecc-act-sub">Check activity</div>
+      </button>`;
+  } else if(c.status==='blocked'&&c.risk==='fraud'){
+    btns=`
+      <button class="ecc-act danger-act" onclick="eccWf('fraud-case')" style="border-color:var(--red);">
+        <div class="ecc-act-icon" style="background:#fff0f0;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="ecc-act-label">Raise Fraud Case</div><div class="ecc-act-sub">File for investigation</div>
+      </button>
+      <button class="ecc-act" onclick="eccWf('replace')">
+        <div class="ecc-act-icon" style="background:var(--s2);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="ecc-act-label">Replace Card</div><div class="ecc-act-sub">Issue replacement</div>
+      </button>
+      <button class="ecc-act" onclick="eccWf('txns')">
+        <div class="ecc-act-icon" style="background:var(--s2);"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg></div>
+        <div class="ecc-act-label">View Transactions</div><div class="ecc-act-sub">Review flagged</div>
+      </button>`;
+    footer=`<div class="ecc-disabled-note"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Unblock permanently disabled — fraud confirmed on this card</div>`;
+  }
+  return `<div class="ecc-actions-panel">
+    <div class="ecc-actions-head"><div class="ecc-actions-title">Available Actions</div><div class="ecc-actions-sub">Showing only actions relevant to this card's state</div></div>
+    <div class="ecc-action-grid">${btns}</div>
+    ${footer}
+  </div>`;
+}
+
+function eccSupportHTML(c){
+  const rows = c.details.map(([l,v])=>`<div class="ecc-info-row"><span class="ecc-info-lbl">${l}</span><span class="ecc-info-val">${v}</span></div>`).join('');
+  return `<div class="ecc-coll">
+    <div class="ecc-coll-head" onclick="eccToggleColl('ecc-cd-body','ecc-cd-chev')">
+      <div class="ecc-coll-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Card Details</div>
+      <svg id="ecc-cd-chev" class="ecc-coll-chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="ecc-coll-body" id="ecc-cd-body">${rows}</div>
+  </div>`;
+}
+
+function eccWf(action){
+  eccWfActive = action;
+  const c = ECC_CARDS[eccSel];
+  const el = document.getElementById('eccWf');
+  if(!el) return;
+  let html = '';
+
+  if(action==='block'){
+    html=`<div class="ecc-wf"><div class="ecc-wf-head"><div class="ecc-wf-title">Block Card</div><button class="ecc-wf-close" onclick="eccClearWf()">✕</button></div>
+    <div class="ecc-wf-body">
+      <p style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:14px;">You are about to temporarily block <b style="color:var(--t1)">${c.name} ${c.num}</b>. No transactions will be processed until the card is unblocked.</p>
+      <div class="ecc-wf-btns"><button class="ecc-wf-btn dark" onclick="eccExec('do-block')">Confirm Block</button><button class="ecc-wf-btn ghost" onclick="eccClearWf()">Cancel</button></div>
+    </div></div>`;
+  } else if(action==='pin-active'){
+    html=`<div class="ecc-wf"><div class="ecc-wf-head"><div class="ecc-wf-title">Reset PIN</div><button class="ecc-wf-close" onclick="eccClearWf()">✕</button></div>
+    <div class="ecc-wf-body">
+      <p style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:14px;">A PIN reset link will be sent to the member's registered mobile <b style="color:var(--t1)">+1 (310) 492-7762</b>. Member must set new PIN within 24 hours.</p>
+      <div class="ecc-wf-btns"><button class="ecc-wf-btn dark" onclick="eccExec('pin-reset')">Send PIN Reset</button><button class="ecc-wf-btn ghost" onclick="eccClearWf()">Cancel</button></div>
+    </div></div>`;
+  } else if(action==='fraud-report'){
+    html=`<div class="ecc-wf"><div class="ecc-wf-head"><div class="ecc-wf-title">Report Fraud — Verify Transactions</div><button class="ecc-wf-close" onclick="eccClearWf()">✕</button></div>
+    <div class="ecc-wf-body">
+      <p style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.5;">Review recent transactions with the member. Mark any they did not authorise.</p>
+      <div class="ecc-txn flagged-t"><div><div class="ecc-txn-name">Amazon.com Purchase</div><div class="ecc-txn-date">Mar 29 · 10:22 AM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">-$129.99</div><div class="ecc-txn-flag">⚠ Suspicious</div></div></div>
+      <div class="ecc-txn flagged-t"><div><div class="ecc-txn-name">Netflix — Online</div><div class="ecc-txn-date">Mar 29 · 9:01 AM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">-$15.99</div><div class="ecc-txn-flag">⚠ Suspicious</div></div></div>
+      <div class="ecc-txn"><div><div class="ecc-txn-name">Whole Foods Market</div><div class="ecc-txn-date">Mar 28 · 11:24 AM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">-$84.32</div></div></div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+        <div class="ecc-fraud-q">Are any of these transactions fraudulent?</div>
+        <div class="ecc-fraud-btns"><button class="ecc-fraud-yes" onclick="eccExec('fraud-confirmed')">Yes — Flag as Fraud</button><button class="ecc-fraud-no" onclick="eccExec('fraud-denied')">No — All Legitimate</button></div>
+      </div>
+    </div></div>`;
+  } else if(action==='unblock-pin'){
+    html=`<div class="ecc-wf"><div class="ecc-wf-head"><div class="ecc-wf-title">Reset PIN &amp; Unblock</div><button class="ecc-wf-close" onclick="eccClearWf()">✕</button></div>
+    <div class="ecc-wf-body">
+      <div class="ecc-rec ok-r"><div class="ecc-rec-icon">✦</div><div><div class="ecc-rec-lbl">System Recommendation</div><div class="ecc-rec-text">Safe to proceed</div><div class="ecc-rec-sub">No fraud signals. Block is PIN-only. Card will be active after PIN reset confirmed by member.</div></div></div>
+      <div class="ecc-sec-lbl">PIN Failure Log</div>
+      <div class="ecc-pin-row"><div class="ecc-pin-dot epd-fail">✕</div><div class="ecc-pin-dot epd-fail">✕</div><div class="ecc-pin-dot epd-fail">✕</div><div class="ecc-pin-dot epd-empty"></div><div class="ecc-pin-lbl">3 of 3 max — auto-blocked Mar 28, 2:14 PM</div></div>
+      <div class="ecc-wf-btns"><button class="ecc-wf-btn dark" onclick="eccExec('unblock-pin')">Reset PIN &amp; Unblock</button><button class="ecc-wf-btn ghost" onclick="eccClearWf()">Cancel</button></div>
+    </div></div>`;
+  } else if(action==='unblock-user'){
+    html=`<div class="ecc-wf"><div class="ecc-wf-head"><div class="ecc-wf-title">Unblock Card</div><button class="ecc-wf-close" onclick="eccClearWf()">✕</button></div>
+    <div class="ecc-wf-body">
+      <div class="ecc-rec ok-r"><div class="ecc-rec-icon">✦</div><div><div class="ecc-rec-lbl">System Recommendation</div><div class="ecc-rec-text">Safe to unblock</div><div class="ecc-rec-sub">No fraud signals. Member voluntarily blocked via app. Confirm with member before proceeding.</div></div></div>
+      <p style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:14px;">Blocked by member via mobile app on Mar 15, 2026 at 11:42 AM. No suspicious activity detected.</p>
+      <div class="ecc-wf-btns"><button class="ecc-wf-btn dark" onclick="eccExec('unblock-user')">Unblock Card</button><button class="ecc-wf-btn ghost" onclick="eccClearWf()">Cancel</button></div>
+    </div></div>`;
+  } else if(action==='fraud-case'){
+    html=`<div class="ecc-wf"><div class="ecc-wf-head"><div class="ecc-wf-title">Raise Fraud Case</div><button class="ecc-wf-close" onclick="eccClearWf()">✕</button></div>
+    <div class="ecc-wf-body">
+      <div class="ecc-rec danger-r"><div class="ecc-rec-icon">🚨</div><div><div class="ecc-rec-lbl">High Risk — Fraud Confirmed</div><div class="ecc-rec-text">Replace card and raise formal case</div><div class="ecc-rec-sub">3 blocked transactions totalling $3,149.99. Ref: FRD-2026-0382.</div></div></div>
+      <div class="ecc-sec-lbl">Flagged Transactions</div>
+      <div class="ecc-txn flagged-t"><div><div class="ecc-txn-name">Fraudulent online purchase — BLOCKED</div><div class="ecc-txn-date">Apr 7, 2026 · 3:42 PM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">$1,899.99</div><div class="ecc-txn-flag">⚠ Flagged</div></div></div>
+      <div class="ecc-txn flagged-t"><div><div class="ecc-txn-name">Unauthorized ATM withdrawal — BLOCKED</div><div class="ecc-txn-date">Apr 7, 2026 · 3:38 PM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">$800.00</div><div class="ecc-txn-flag">⚠ Flagged</div></div></div>
+      <div class="ecc-txn flagged-t"><div><div class="ecc-txn-name">Unknown merchant — BLOCKED</div><div class="ecc-txn-date">Apr 7, 2026 · 3:31 PM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">$450.00</div><div class="ecc-txn-flag">⚠ Flagged</div></div></div>
+      <div class="ecc-wf-btns"><button class="ecc-wf-btn red-b" onclick="eccExec('fraud-case')">Raise Fraud Case</button><button class="ecc-wf-btn ghost" onclick="eccClearWf()">Cancel</button></div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t3);margin-top:10px;padding-top:10px;border-top:1px solid var(--border);"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>Unblock permanently disabled</div>
+    </div></div>`;
+  } else if(action==='replace'){
+    html=`<div class="ecc-wf"><div class="ecc-wf-head"><div class="ecc-wf-title">Replace Card</div><button class="ecc-wf-close" onclick="eccClearWf()">✕</button></div>
+    <div class="ecc-wf-body">
+      <p style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:12px;">A new <b style="color:var(--t1)">${c.name}</b> will be issued. Current card <b>${c.num}</b> will be permanently deactivated on dispatch.</p>
+      <div class="ecc-sec-lbl">Delivery Method</div>
+      <select class="ecc-sel-input"><option value="">Select delivery method</option><option>Standard mail — 3–5 business days</option><option>Express delivery — 1–2 business days</option><option>Branch pickup — today</option></select>
+      <div class="ecc-wf-btns"><button class="ecc-wf-btn dark" onclick="eccExec('replace')">Request Replacement</button><button class="ecc-wf-btn ghost" onclick="eccClearWf()">Cancel</button></div>
+    </div></div>`;
+  } else if(action==='txns'){
+    const isFraud = c.risk==='fraud';
+    html=`<div class="ecc-wf"><div class="ecc-wf-head"><div class="ecc-wf-title">Recent Transactions</div><button class="ecc-wf-close" onclick="eccClearWf()">✕</button></div>
+    <div class="ecc-wf-body">
+      <div class="ecc-txn${isFraud?' flagged-t':''}"><div><div class="ecc-txn-name">Amazon.com Purchase</div><div class="ecc-txn-date">Apr 7, 2026 · 10:22 AM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">-$129.99</div>${isFraud?'<div class="ecc-txn-flag">⚠ Flagged</div>':''}</div></div>
+      <div class="ecc-txn"><div><div class="ecc-txn-name">Salary Deposit</div><div class="ecc-txn-date">Apr 5, 2026 · 8:00 AM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt pos">+$3,200.00</div></div></div>
+      <div class="ecc-txn${isFraud?' flagged-t':''}"><div><div class="ecc-txn-name">Netflix Subscription</div><div class="ecc-txn-date">Apr 4, 2026 · 9:01 AM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">-$15.99</div>${isFraud?'<div class="ecc-txn-flag">⚠ Flagged</div>':''}</div></div>
+      <div class="ecc-txn"><div><div class="ecc-txn-name">Whole Foods Market</div><div class="ecc-txn-date">Apr 3, 2026 · 11:24 AM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">-$84.32</div></div></div>
+      <div class="ecc-txn"><div><div class="ecc-txn-name">Shell Gas Station</div><div class="ecc-txn-date">Apr 2, 2026 · 6:47 PM</div></div><div class="ecc-txn-right"><div class="ecc-txn-amt neg">-$52.18</div></div></div>
+      <div style="margin-top:12px;"><button class="ecc-wf-btn ghost" onclick="eccClearWf()" style="max-width:120px;padding:8px 14px;font-size:12px;">Close</button></div>
+    </div></div>`;
+  }
+
+  el.innerHTML = html;
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+
+function eccExec(action){
+  const c = ECC_CARDS[eccSel];
+  const wfEl = document.getElementById('eccWf');
+  const now = new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+  function suc(type,icon,title,sub,rows,next){
+    const isOk = type==='ok';
+    const sc = isOk?'':'fraud-s';
+    const sh = isOk?'ok-h':'fraud-h';
+    const rr = isOk?'':'fraud-r';
+    const st = isOk?'':'fraud-t';
+    const detailRows = rows.map(([l,v])=>{
+      let vc=''; if(v==='Active') vc=' green'; if(v==='Permanently Blocked'||v==='Fraud Block') vc=' red';
+      return `<div class="ecc-sr"><span class="ecc-sr-lbl">${l}</span><span class="ecc-sr-val${vc}">${v}</span></div>`;
+    }).join('');
+    const nextBtns = next.map(([lbl,act])=>{
+      const oc = act==='re-render'?'eccRender()':act==='txns'?`eccWf('txns')`:act==='replace'?`eccWf('replace')`:act==='unblock-user'?`eccWf('unblock-user')`:`eccWf('${act}')`;
+      return `<button class="ecc-sn-btn" onclick="${oc}">${lbl}</button>`;
+    }).join('');
+    return `<div class="ecc-success ${sc}">
+      <div class="ecc-suc-head ${sh}">
+        <div class="ecc-suc-ring ${rr}"><span style="font-size:20px;">${icon}</span></div>
+        <div class="ecc-suc-title ${st}">${title}</div>
+        <div class="ecc-suc-sub ${st}">${sub}</div>
+      </div>
+      <div class="ecc-suc-rows">${detailRows}</div>
+      <div class="ecc-suc-next">
+        <div class="ecc-sn-lbl">Next actions</div>
+        <div class="ecc-sn-btns">${nextBtns}</div>
+      </div>
+      <div class="ecc-audit">Logged · Agent: Andrew Raynold · ${new Date().toLocaleString()}</div>
+    </div>`;
+  }
+
+  let html = '';
+
+  if(action==='do-block'){
+    ECC_CARDS[eccSel].status='warm'; ECC_CARDS[eccSel].risk='none';
+    ECC_CARDS[eccSel].stats[0][1]='Temp Blocked';
+    html=suc('ok','🔒','Card Successfully Blocked','Card is now temporarily restricted',
+      [['Card',c.name+' '+c.num],['New status','Temporarily Blocked'],['Blocked at',now]],
+      [['Unblock Card','unblock-user'],['View Transactions','txns'],['Take another action','re-render']]);
+    eccUpdatePill(eccSel,'warm','⚠ Blocked');
+    toast('Card blocked successfully');
+  } else if(action==='pin-reset'){
+    html=suc('ok','✓','PIN Successfully Reset','Reset link sent to member\'s mobile',
+      [['Card',c.name+' '+c.num],['Sent to','+1 (310) 492-7762'],['Reset at',now]],
+      [['View Transactions','txns'],['Take another action','re-render']]);
+    toast('PIN reset sent');
+  } else if(action==='unblock-pin'){
+    ECC_CARDS[eccSel].status='active'; ECC_CARDS[eccSel].risk='none';
+    ECC_CARDS[eccSel].stats[0][1]='Active';
+    html=suc('ok','✓','Card Successfully Unblocked','PIN reset and card restored to active',
+      [['Card',c.name+' '+c.num],['New status','Active'],['PIN reset sent','Yes — registered mobile'],['Unblocked at',now]],
+      [['View Transactions','txns'],['Take another action','re-render']]);
+    eccUpdatePill(eccSel,'active','Active');
+    toast('Card unblocked, PIN reset sent');
+  } else if(action==='unblock-user'){
+    ECC_CARDS[eccSel].status='active'; ECC_CARDS[eccSel].risk='none';
+    html=suc('ok','✓','Card Successfully Unblocked','Card is now active and ready to use',
+      [['Card',c.name+' '+c.num],['New status','Active'],['Unblocked at',now]],
+      [['View Transactions','txns'],['Block Card','block'],['Take another action','re-render']]);
+    eccUpdatePill(eccSel,'active','Active');
+    toast('Card unblocked');
+  } else if(action==='fraud-confirmed'){
+    ECC_CARDS[eccSel].status='blocked'; ECC_CARDS[eccSel].risk='fraud';
+    html=suc('fraud','🚨','Fraud Case Created','Card permanently blocked — case filed',
+      [['Case ref','FRD-2026-'+Math.floor(Math.random()*9000+1000)],['Card',c.name+' '+c.num],['New status','Permanently Blocked'],['Created at',now]],
+      [['Replace Card','replace'],['View Transactions','txns']]);
+    eccUpdatePill(eccSel,'blocked','✕ Fraud');
+    toast('Fraud case created');
+  } else if(action==='fraud-denied'){
+    html=`<div class="ecc-success"><div class="ecc-suc-head ok-h"><div class="ecc-suc-ring"><span style="font-size:20px;">✓</span></div><div class="ecc-suc-title">No Fraud Recorded</div><div class="ecc-suc-sub">Transactions confirmed as legitimate</div></div><div style="padding:12px 16px;"><button class="ecc-wf-btn ghost" onclick="eccClearWf()" style="max-width:120px;padding:8px 14px;font-size:12px;">Close</button></div></div>`;
+    toast('Transactions marked as legitimate');
+  } else if(action==='fraud-case'){
+    html=suc('fraud','🚨','Fraud Case Created','Permanently blocked — case filed for investigation',
+      [['Case ref','FRD-2026-'+Math.floor(Math.random()*9000+1000)],['Card',c.name+' '+c.num],['Disputed','$3,149.99'],['Created at',now]],
+      [['Replace Card','replace'],['View Transactions','txns']]);
+    toast('Fraud case raised');
+  } else if(action==='replace'){
+    html=suc('ok','✓','Replacement Card Requested','New card being processed for dispatch',
+      [['Current card',c.num+' — deactivated'],['New card','Pending · '+c.name],['ETA','3–5 business days'],['Requested at',now]],
+      [['View Transactions','txns'],['Take another action','re-render']]);
+    toast('Replacement card requested');
+  }
+
+  if(wfEl && html){
+    wfEl.innerHTML = html;
+    // refresh actions panel by re-rendering
+    const bodyEl = document.getElementById('eccBody');
+    if(bodyEl){
+      const actEl = bodyEl.querySelector('.ecc-actions-panel');
+      if(actEl) actEl.outerHTML = eccActionsHTML(ECC_CARDS[eccSel]);
+    }
+    wfEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+}
+
+function eccClearWf(){
+  const el = document.getElementById('eccWf');
+  if(el) el.innerHTML=''; eccWfActive=null;
+}
+
+function eccToggleColl(bodyId,chevId){
+  const b=document.getElementById(bodyId); const c=document.getElementById(chevId);
+  if(b){b.classList.toggle('open'); if(c)c.classList.toggle('open');}
+}
+
+function eccUpdatePill(id,status,label){
+  const pill=document.getElementById('ecc-pill-'+id);
+  if(!pill) return;
+  const dot=pill.querySelector('.ecc-pill-dot');
+  const badge=pill.querySelector('.ecc-pill-badge');
+  if(dot){dot.className='ecc-pill-dot '+status;}
+  if(badge){
+    badge.className='ecc-pill-badge '+(status==='active'?'epb-active':status==='blocked'?'epb-blocked':'epb-warm');
+    badge.textContent=label;
+  }
+}
+
+/* ══ CARD CONTROL CENTER ══ */
+function toggleCC(id){
+  const tile = document.getElementById(id);
+  if(!tile) return;
+  const isOpen = tile.classList.contains('open');
+  // close siblings
+  tile.parentElement.querySelectorAll('.cc-tile.open').forEach(t => t.classList.remove('open'));
+  if(!isOpen) tile.classList.add('open');
+}
+
+/* ══ SERVICE WORKSPACE ══ */
+function toggleSWEntity(id){
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('expanded');
 }
 
 /* ══ QUICK VERIFY ══ */
