@@ -8112,7 +8112,16 @@ function acceptCall(){
   const sb = document.getElementById('sidebar');
   if(sb) sb.classList.remove('expanded');
 
-  // 2b. Update member header to the caller's identity
+  // 2b. Collapse inbox to give agent maximum workspace on accept
+  inboxOpen = false;
+  const iw = document.getElementById('inboxWrap');
+  if(iw) iw.classList.add('closed');
+  const arr = document.getElementById('stripArrow');
+  const lbl = document.getElementById('stripLabel');
+  if(arr) arr.textContent = '▶';
+  if(lbl) lbl.textContent = 'Show Inbox';
+
+  // 2c. Update member header to the caller's identity
   document.getElementById('mbName').textContent = 'Emily Olivers';
   document.getElementById('mbSub').textContent = '+1 (310) 928 7361';
   // Show membership tags
