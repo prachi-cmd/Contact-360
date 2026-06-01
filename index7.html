@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -4379,29 +4379,72 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                           <!-- Persistent breadcrumb (overview state) -->
 
-                          <!-- ── Verification History Widget (compact) ── -->
-                          <div class="vh-widget" id="vhWidget">
-                            <div class="vh-compact-hdr">
-                              <div class="vh-compact-left">
-                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-                                <span class="vh-widget-title">Verification History</span>
+                          <!-- ── Member Info + Verification History row ── -->
+                          <div class="ov-member-row">
+
+                            <!-- Member Information -->
+                            <div class="ov-card">
+                              <div class="ov-card-hdr">
+                                <span class="ov-card-title">Member Information</span>
                               </div>
-                              <button class="vh-view-all" onclick="arOpenVerificationHistory()">View full history →</button>
+                              <div class="ov-member-name">Emily Olivers</div>
+                              <div class="ov-info-rows">
+                                <div class="ov-info-row">
+                                  <span class="ov-info-lbl">Phone</span>
+                                  <span class="ov-info-val">+1 (310) 928-7361</span>
+                                </div>
+                                <div class="ov-info-row">
+                                  <span class="ov-info-lbl">Email</span>
+                                  <span class="ov-info-val">emily.olivers@email.com</span>
+                                </div>
+                                <div class="ov-info-row">
+                                  <span class="ov-info-lbl">DOB</span>
+                                  <span class="ov-info-val">Jan 14, 1992</span>
+                                </div>
+                                <div class="ov-info-row">
+                                  <span class="ov-info-lbl">Member Since</span>
+                                  <span class="ov-info-val">2018</span>
+                                </div>
+                                <div class="ov-info-row">
+                                  <span class="ov-info-lbl">Address</span>
+                                  <span class="ov-info-val">San Jose, CA</span>
+                                </div>
+                              </div>
                             </div>
-                            <div class="vh-chips">
-                              <span class="vh-chip vh-chip-ok">✓ Phone Verified</span>
-                              <span class="vh-chip vh-chip-ok">✓ Voice Match</span>
-                              <span class="vh-chip vh-chip-warn">⚠ New Device</span>
+
+                            <!-- Verification History -->
+                            <div class="ov-card" id="vhWidget">
+                              <div class="ov-card-hdr">
+                                <span class="ov-card-title">
+                                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                                  Verification History
+                                </span>
+                              </div>
+                              <div class="vh-timeline">
+                                <div class="vh-tl-event">
+                                  <div class="vh-tl-dot"></div>
+                                  <div class="vh-tl-body">
+                                    <div class="vh-tl-date">Today · 10:42 AM</div>
+                                    <div class="vh-tl-method">Voice Biometric</div>
+                                  </div>
+                                </div>
+                                <div class="vh-tl-event">
+                                  <div class="vh-tl-dot"></div>
+                                  <div class="vh-tl-body">
+                                    <div class="vh-tl-date">Aug 12, 2025</div>
+                                    <div class="vh-tl-method">Phone Verification</div>
+                                  </div>
+                                </div>
+                              </div>
+                              <button class="vh-view-all" onclick="arOpenVerificationHistory()" style="margin-top:10px">View full history →</button>
                             </div>
-                            <div class="vh-last-verified">
-                              Last verified: <strong>Today · Voice · 94% Match</strong>
-                            </div>
-                          </div><!-- /vh-widget -->
+
+                          </div><!-- /ov-member-row -->
 
                           <!-- Product card stack — simplified collapsed only -->
                           <div id="arProductStack" class="ar-card-grid">
 
-                            <!-- CARD 1: Everyday Checking (primary) -->
+                            <!-- ★ PRIORITY: Everyday Checking — full-width, AI-prioritized -->
                             <div class="ar-pc ar-pc-primary" id="ar-pc-checking" onclick="arOpenDetail('checking')" style="cursor:pointer">
                               <div class="ar-pc-ai-bar">
                                 <span class="ar-pc-ai-bar-orb">✦</span>
@@ -4414,7 +4457,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 </div>
                                 <div class="ar-pc-mid">
                                   <div class="ar-pc-name">Everyday Checking</div>
-                                  <div class="ar-pc-desc">Classic Checking</div>
+                                  <div class="ar-pc-desc">Classic Checking · Primary Owner</div>
                                 </div>
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
@@ -4427,7 +4470,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                               </div>
                             </div>
 
-                            <!-- CARD 2: Savings Account -->
+                            <!-- Deposits group — 2-col grid (handled by parent grid) -->
+
+                            <!-- Savings Account -->
                             <div class="ar-pc" id="ar-pc-savings" onclick="arOpenDetail('savings')" style="cursor:pointer">
                               <div class="ar-pc-compact">
                                 <div class="ar-pc-left">
@@ -4436,19 +4481,43 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 </div>
                                 <div class="ar-pc-mid">
                                   <div class="ar-pc-name">Savings Account</div>
-                                  <div class="ar-pc-desc">Regular Savings</div>
+                                  <div class="ar-pc-desc">Regular Savings · Joint Owner</div>
                                 </div>
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
-                                    <span class="ar-alert-chip warn">OD Agreement</span>
+                                    <span class="ar-rel-chip">Joint Owner</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('savings')">View Details</button>
                                 </div>
                               </div>
                             </div>
 
-                            <!-- CARD 3: Auto Loan -->
+                            <!-- High Yield Savings -->
+                            <div class="ar-pc" id="ar-pc-hysavings" onclick="arOpenDetail('hysavings')" style="cursor:pointer">
+                              <div class="ar-pc-compact">
+                                <div class="ar-pc-left">
+                                  <span class="ar-type-badge ar-deposit">Deposit</span>
+                                  <span class="ar-acct-id">•••• 8810</span>
+                                </div>
+                                <div class="ar-pc-mid">
+                                  <div class="ar-pc-name">High Yield Savings</div>
+                                  <div class="ar-pc-desc">Premium Savings · Beneficiary</div>
+                                </div>
+                                <div class="ar-pc-ops">
+                                  <span class="ar-status-badge ar-active">Active</span>
+                                  <div class="ar-ops-chips">
+                                    <span class="ar-rel-chip ar-rel-chip-muted">Beneficiary</span>
+                                  </div>
+                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('hysavings')">View Details</button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Spacer row — visual gap between deposit / loan groups -->
+                            <div class="ar-pc-group-gap" style="grid-column:1/-1"></div>
+
+                            <!-- Auto Loan -->
                             <div class="ar-pc" id="ar-pc-autoloan" onclick="arOpenDetail('autoloan')" style="cursor:pointer">
                               <div class="ar-pc-compact">
                                 <div class="ar-pc-left">
@@ -4457,40 +4526,43 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 </div>
                                 <div class="ar-pc-mid">
                                   <div class="ar-pc-name">Auto Loan</div>
-                                  <div class="ar-pc-desc">Vehicle Financing</div>
+                                  <div class="ar-pc-desc">Vehicle Financing · Primary Borrower</div>
                                 </div>
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
-                                    <span class="ar-alert-chip info">Joint Borrower</span>
+                                    <span class="ar-rel-chip">Primary Borrower</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('autoloan')">View Details</button>
                                 </div>
                               </div>
                             </div>
 
-                            <!-- CARD 4: Visa Credit Card -->
-                            <div class="ar-pc" id="ar-pc-creditcard" onclick="arOpenDetail('creditcard')" style="cursor:pointer">
+                            <!-- Home Mortgage -->
+                            <div class="ar-pc" id="ar-pc-mortgage" onclick="arOpenDetail('mortgage')" style="cursor:pointer">
                               <div class="ar-pc-compact">
                                 <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-card">Card</span>
-                                  <span class="ar-acct-id">•••• 7777</span>
+                                  <span class="ar-type-badge ar-loan">Loan</span>
+                                  <span class="ar-acct-id">•••• 3301</span>
                                 </div>
                                 <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">Visa Credit Card</div>
-                                  <div class="ar-pc-desc">Revolving Credit</div>
+                                  <div class="ar-pc-name">Home Mortgage</div>
+                                  <div class="ar-pc-desc">30-Year Fixed · Co-Borrower</div>
                                 </div>
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
-                                    <span class="ar-alert-chip warn">Declined Txn</span>
+                                    <span class="ar-rel-chip ar-rel-chip-sec">Co-Borrower</span>
                                   </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('creditcard')">View Details</button>
+                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('mortgage')">View Details</button>
                                 </div>
                               </div>
                             </div>
 
-                            <!-- CARD 5: Visa Debit Card -->
+                            <!-- Spacer row — visual gap between loan / card groups -->
+                            <div class="ar-pc-group-gap" style="grid-column:1/-1"></div>
+
+                            <!-- Visa Debit Card -->
                             <div class="ar-pc" id="ar-pc-debitcard" onclick="arOpenDetail('debitcard')" style="cursor:pointer">
                               <div class="ar-pc-compact">
                                 <div class="ar-pc-left">
@@ -4499,12 +4571,36 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 </div>
                                 <div class="ar-pc-mid">
                                   <div class="ar-pc-name">Visa Debit Card</div>
-                                  <div class="ar-pc-desc">Linked · Everyday Checking</div>
+                                  <div class="ar-pc-desc">Linked to Checking · Primary Cardholder</div>
                                 </div>
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips"></div>
+                                  <div class="ar-ops-chips">
+                                    <span class="ar-rel-chip">Primary Cardholder</span>
+                                  </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('debitcard')">View Details</button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Visa Credit Card -->
+                            <div class="ar-pc" id="ar-pc-creditcard" onclick="arOpenDetail('creditcard')" style="cursor:pointer">
+                              <div class="ar-pc-compact">
+                                <div class="ar-pc-left">
+                                  <span class="ar-type-badge ar-card">Card</span>
+                                  <span class="ar-acct-id">•••• 7777</span>
+                                </div>
+                                <div class="ar-pc-mid">
+                                  <div class="ar-pc-name">Visa Credit Card</div>
+                                  <div class="ar-pc-desc">Revolving Credit · Authorized User</div>
+                                </div>
+                                <div class="ar-pc-ops">
+                                  <span class="ar-status-badge ar-active">Active</span>
+                                  <div class="ar-ops-chips">
+                                    <span class="ar-alert-chip warn">Declined Txn</span>
+                                    <span class="ar-rel-chip ar-rel-chip-sec">Auth User</span>
+                                  </div>
+                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('creditcard')">View Details</button>
                                 </div>
                               </div>
                             </div>
@@ -11860,12 +11956,46 @@ function arToggleCard(id, event) {
 .aap-send{width:28px;height:28px;border-radius:50%;margin:3px 4px 3px 0;background:#5b5fcf;color:#fff;border:none;cursor:pointer;display:grid;place-items:center;transition:background .14s;flex-shrink:0;}
 .aap-send:hover{background:#4a4ec0;}
 
-/* Panel thinking state */
-.aap-thinking{display:none;align-items:center;gap:7px;padding:12px 0;font-size:11px;color:#5b5fcf;}
-.aap-thinking.visible{display:flex;}
-.aap-td{width:4px;height:4px;border-radius:50%;background:#5b5fcf;animation:aap-pulse 1.1s ease infinite;}
-.aap-td:nth-child(2){animation-delay:.18s}.aap-td:nth-child(3){animation-delay:.36s}
-@keyframes aap-pulse{0%,100%{opacity:.25;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+
+/* ══ AI ASSISTANT LOADING STATE ════════════════════════ */
+
+/* Remove old thinking state */
+.aap-thinking{display:none;}
+
+/* Loading block */
+.aap-loading-block{
+  padding:12px 0 14px;
+  animation:aap-fadein .15s ease both;
+}
+.aap-loading-header{
+  display:flex;align-items:center;gap:7px;margin-bottom:10px;
+}
+.aap-loading-orb{
+  font-size:11px;color:#5b5fcf;
+  animation:aap-orb-pulse 1.4s ease-in-out infinite;
+}
+@keyframes aap-orb-pulse{
+  0%,100%{opacity:.4;} 50%{opacity:1;}
+}
+.aap-loading-text{
+  font-size:11px;font-weight:500;color:#5b5fcf;letter-spacing:-.01em;
+}
+/* Skeleton lines with shimmer */
+.aap-loading-lines{display:flex;flex-direction:column;gap:7px;}
+.aap-sk-line{
+  height:9px;border-radius:5px;
+  background:linear-gradient(90deg,#ebebf3 25%,#f4f4f8 50%,#ebebf3 75%);
+  background-size:200% 100%;
+  animation:aap-shimmer 1.4s ease-in-out infinite;
+}
+.aap-sk-w75{width:75%;}
+.aap-sk-w55{width:55%;}
+.aap-sk-w65{width:65%;}
+@keyframes aap-shimmer{
+  0%{background-position:200% 0;}
+  100%{background-position:-200% 0;}
+}
+@keyframes aap-fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 
 /* Panel open state — workspace shrinks */
 #c360v2Main{transition:all .35s cubic-bezier(0.16,1,0.3,1);}
@@ -11918,23 +12048,65 @@ function aiAssistClose() {
   }
 }
 
+/* ── Classify query → loading copy ── */
+function aapLoadingText(query) {
+  const q = (query || '').toLowerCase();
+  if (q.includes('verif') || q.includes('authenticat') || q.includes('biometric') || q.includes('otp'))
+    return 'Checking verification history…';
+  if (q.includes('balance') || q.includes('available') || q.includes('payoff') || q.includes('minimum payment'))
+    return 'Looking up account details…';
+  if (q.includes('transaction') || q.includes('payroll') || q.includes('deposit') || q.includes('payment') ||
+      q.includes('transfer') || q.includes('dispute') || q.includes('decline'))
+    return 'Reviewing transaction history…';
+  if (q.includes('transfer') || q.includes('block') || q.includes('replace') || q.includes('make payment') ||
+      q.includes('start') || q.includes('skip'))
+    return 'Checking permissions…';
+  if (q.includes('which') || q.includes('what account') || q.includes('which account'))
+    return 'Finding matching accounts…';
+  if (q.includes('mortgage') || q.includes('loan') || q.includes('auto'))
+    return 'Reviewing loan details…';
+  if (q.includes('card') || q.includes('credit') || q.includes('debit'))
+    return 'Looking up card details…';
+  if (q.includes('member') || q.includes('relationship') || q.includes('beneficiary') || q.includes('owner'))
+    return 'Checking membership details…';
+  return 'Checking member context…';
+}
+
+/* ── Loading state HTML ── */
+function aapLoadingHTML(text) {
+  return `<div class="aap-loading-block" id="aapLoadingBlock">
+    <div class="aap-loading-header">
+      <div class="aap-loading-orb">✦</div>
+      <span class="aap-loading-text">${text}</span>
+    </div>
+    <div class="aap-loading-lines">
+      <div class="aap-sk-line aap-sk-w75"></div>
+      <div class="aap-sk-line aap-sk-w55"></div>
+      <div class="aap-sk-line aap-sk-w65"></div>
+    </div>
+  </div>`;
+}
+
 function aiAssistRender(query) {
   const body = document.getElementById('aapBody');
   if (!body) return;
 
-  // Show thinking
-  const thinkDiv = document.createElement('div');
-  thinkDiv.className = 'aap-thinking visible';
-  thinkDiv.innerHTML = '<div class="aap-td"></div><div class="aap-td"></div><div class="aap-td"></div><span>AI is analyzing…</span>';
-  body.appendChild(thinkDiv);
+  const loadText = aapLoadingText(query);
+  body.insertAdjacentHTML('beforeend', aapLoadingHTML(loadText));
   body.scrollTop = body.scrollHeight;
 
+  // Realistic delay: 900–1600ms based on query complexity
+  const base = 900;
+  const jitter = Math.floor(Math.random() * 500) + (query.length > 30 ? 200 : 0);
+  const delay = base + jitter;
+
   setTimeout(() => {
-    thinkDiv.remove();
+    const loadBlock = document.getElementById('aapLoadingBlock');
+    if (loadBlock) loadBlock.remove();
     const result = aapBuildResponse(query);
     body.insertAdjacentHTML('beforeend', result);
     body.scrollTop = body.scrollHeight;
-  }, 1200);
+  }, delay);
 }
 
 /* ════════════════════════════════════════════
@@ -12224,15 +12396,22 @@ function aapBuildResponse(query){
 function aapBuildLegacyResponse(query) {
   const q = query.toLowerCase();
 
-  // Verification queries — route to dedicated handler
-  if (q.includes('verif') || q.includes('biometric') || q.includes('voice match') ||
-      q.includes('new device') || q.includes('device check') || q.includes('otp') ||
-      (q.includes('was emily') && !q.includes('salary'))) {
-    return aapHandleVerificationQuery(query);
-  }
+  /* ── TIER 1: VERIFICATION — always checked first, never routes to transactions ── */
+  const isVerifQ =
+    q.includes('verif') || q.includes('authenticat') ||
+    q.includes('biometric') || q.includes('voice match') || q.includes('voice verif') ||
+    q.includes('phone verif') || q.includes('device verif') || q.includes('new device') ||
+    q.includes('device recogni') || q.includes('otp') || q.includes('was the caller') ||
+    q.includes('caller auth') || q.includes('auth attempt') || q.includes('auth history') ||
+    q.includes('auth status') || q.includes('was verified') || q.includes('was the device') ||
+    q.includes('phone number verif') || q.includes('failed device') || q.includes('failed phone') ||
+    q.includes('verification status') || q.includes('verification history') ||
+    q.includes('verification event') || q.includes('authentication method') ||
+    (q.includes('was emily') && !q.includes('salary'));
+  if (isVerifQ) return aapHandleVerificationQuery(query);
 
-  // Salary / deposited → deposit account clarification (never auto-select)
-  if (q.includes('salary') || q.includes('deposited') || q.includes('has') && q.includes('deposit')) {
+  /* ── TIER 2: SALARY / PAYROLL DEPOSIT ── */
+  if (q.includes('salary') || q.includes('deposited') || (q.includes('has') && q.includes('deposit'))) {
     return `<div class="aap-txt-block" style="animation:aiws-card-in .3s var(--ease) both">
       <div class="aap-txt-query">"${query}"</div>
       <div class="aap-txt-answer">I found more than one deposit account where salary could be deposited. Which account should I check?</div>
@@ -12241,7 +12420,7 @@ function aapBuildLegacyResponse(query) {
           <span class="aap-co-icon">🏦</span>
           <div style="flex:1;text-align:left">
             <div class="aap-co-name">Everyday Checking ····4821</div>
-            <div style="font-size:9.5px;color:#9896b0;margin-top:1px">Primary salary account · $4,250.34</div>
+            <div style="font-size:9.5px;color:#9896b0;margin-top:1px">Primary salary account · Active</div>
           </div>
           <span class="aap-co-arrow">→</span>
         </button>
@@ -12249,7 +12428,7 @@ function aapBuildLegacyResponse(query) {
           <span class="aap-co-icon">🏦</span>
           <div style="flex:1;text-align:left">
             <div class="aap-co-name">Savings Account ····1039</div>
-            <div style="font-size:9.5px;color:#9896b0;margin-top:1px">Deposit account · $8,920.00</div>
+            <div style="font-size:9.5px;color:#9896b0;margin-top:1px">Joint Owner · Active</div>
           </div>
           <span class="aap-co-arrow">→</span>
         </button>
@@ -12257,26 +12436,92 @@ function aapBuildLegacyResponse(query) {
     </div>`;
   }
 
-  let answer, actions;
-  if (q.includes('ach')) {
-    answer='No pending inbound ACH credit matching Tesla payroll was found on Everyday Checking. The last matching ACH cleared May 15.';
-    actions=[{label:'Open pending ACH review',fn:"arOpenPromptResult('ach')"},{label:'Open Everyday Checking',fn:"arOpenDetail('checking')"}];
-  } else if (q.includes('compar')) {
-    answer='The last 3 Tesla payroll deposits were all $4,250: May 15, May 1, Apr 15. Current cycle has not posted.';
-    actions=[{label:'Open salary comparison',fn:"arOpenPromptResult('compare')"},{label:'Check pending ACH',fn:"arOpenPromptResult('ach')"}];
-  } else if (q.includes('payroll')) {
-    answer='Tesla payroll deposits post consistently to Everyday Checking every 14 days. No current-cycle deposit found for late May.';
-    actions=[{label:'Open payroll deposits',fn:"arOpenPromptResult('payroll')"},{label:'Open Everyday Checking',fn:"arOpenDetail('checking')"}];
-  } else {
-    answer='I can look up balances, payment details, status, membership, transactions, and more for Emily\'s accounts. Try something like "available balance", "payoff balance", or "minimum payment due".';
-    actions=[{label:'View salary deposit status',fn:"aiAssistSend('Has salary deposited?')"},{label:'Open Everyday Checking',fn:"arOpenDetail('checking')"}];
+  /* ── TIER 3: TRANSACTION ROUTING — product-specific ── */
+
+  // Payroll / ACH
+  if (q.includes('payroll deposit') || q.includes('last payroll') || q.includes('show payroll')) {
+    setTimeout(() => arOpenTransactions('checking'), 350);
+    return aapTxnMsg(query, 'Everyday Checking ••••4821', 'Tesla payroll deposits post on the 1st and 15th — May 29, May 15, and May 1 deposits all visible.');
   }
-  const btns = actions.map(a=>`<button class="aap-ws-btn" onclick="${a.fn}">${a.label} →</button>`).join('');
-  return `
-  <div class="aap-txt-block" style="animation:aiws-card-in .3s var(--ease) both">
+
+  // Disputed transactions
+  if (q.includes('disputed') || q.includes('dispute') || q.includes('chargeback')) {
+    setTimeout(() => arOpenTransactions('creditcard'), 350);
+    return aapTxnMsg(query, 'Visa Credit Card ••••7777', '1 disputed transaction found — Amazon Marketplace $129.00 on May 25. Chargeback process initiated.');
+  }
+
+  // Declined transactions
+  if (q.includes('declined') || (q.includes('card') && q.includes('blocked'))) {
+    const pid = arNavProduct === 'debitcard' ? 'debitcard' : 'creditcard';
+    setTimeout(() => arOpenTransactions(pid), 350);
+    return aapTxnMsg(query, pid === 'debitcard' ? 'Visa Debit Card ••••4412' : 'Visa Credit Card ••••7777', 'Declined transaction found — Unknown Merchant, May 19 at 3:14 AM. Geo-mismatch and unusual hour.');
+  }
+
+  // Mortgage / home loan
+  if (q.includes('mortgage') || q.includes('home loan') || q.includes('home mortgage')) {
+    setTimeout(() => arOpenTransactions('mortgage'), 350);
+    return aapTxnMsg(query, 'Home Mortgage ••••3301', 'Emily is Co-Borrower. 4 payments of $1,982.00 — all on time. Outstanding balance $278,450. Next payment Jun 1.');
+  }
+
+  // Auto loan / loan payment
+  if (q.includes('loan payment') || (q.includes('auto') && (q.includes('payment') || q.includes('loan')))) {
+    setTimeout(() => arOpenTransactions('autoloan'), 350);
+    return aapTxnMsg(query, 'Auto Loan ••••7712', '5 payments of $385.00 — all on time. Outstanding balance $14,220. Primary Borrower.');
+  }
+
+  // High Yield Savings / beneficiary
+  if (q.includes('high yield') || q.includes('beneficiary') || q.includes('hysavings')) {
+    setTimeout(() => arOpenTransactions('hysavings'), 350);
+    return aapTxnMsg(query, 'High Yield Savings ••••8810', 'Emily is listed as Beneficiary. Balance $22,480 at 4.75% APY. Interest credits only — no transfer activity.');
+  }
+
+  // Credit card purchases / activity
+  if ((q.includes('credit card') || q.includes('amazon') || q.includes('delta') || q.includes('marriott') || q.includes('southwest')) && !q.includes('debit')) {
+    setTimeout(() => arOpenTransactions('creditcard'), 350);
+    return aapTxnMsg(query, 'Visa Credit Card ••••7777', 'Recent purchases: Delta $512, Marriott $280, Amazon $129 (disputed), Uber $32, Southwest $381. 1 declined: Unknown Merchant 3:14 AM.');
+  }
+
+  // Debit card / checking transactions
+  if (q.includes('debit') || (q.includes('checking') && (q.includes('transaction') || q.includes('activity') || q.includes('recent')))) {
+    const pid = q.includes('debit') ? 'debitcard' : 'checking';
+    setTimeout(() => arOpenTransactions(pid), 350);
+    return aapTxnMsg(query, pid === 'debitcard' ? 'Visa Debit Card ••••4412' : 'Everyday Checking ••••4821', 'Opening transaction history.');
+  }
+
+  // Savings activity
+  if (q.includes('savings') && (q.includes('transaction') || q.includes('transfer') || q.includes('activity'))) {
+    setTimeout(() => arOpenTransactions('savings'), 350);
+    return aapTxnMsg(query, 'Savings Account ••••1039', 'Recurring $500 transfers from checking post-payroll. Balance growing consistently. Joint Owner.');
+  }
+
+  /* ── TIER 4: ACH / PAYROLL CONTEXT ── */
+  if (q.includes('ach')) {
+    const answer = 'No pending inbound ACH matching Tesla payroll found on Everyday Checking. Last confirmed ACH cleared May 29.';
+    return aapTxnMsg(query, 'Everyday Checking ••••4821', answer, [{label:'Open pending ACH',fn:"arOpenPromptResult('ach')"},{label:'Open Everyday Checking',fn:"arOpenDetail('checking')"}]);
+  }
+  if (q.includes('compar')) {
+    const answer = 'Last 3 Tesla payroll deposits: May 29 +$3,420, May 15 +$4,250, May 1 +$4,250. Amounts vary — May 29 is lower than pattern.';
+    return aapTxnMsg(query, 'Everyday Checking ••••4821', answer, [{label:'Open salary comparison',fn:"arOpenPromptResult('compare')"},{label:'Check pending ACH',fn:"arOpenPromptResult('ach')"}]);
+  }
+  if (q.includes('payroll')) {
+    const answer = 'Tesla payroll deposits post to Everyday Checking every 14 days. May 29 deposit posted at $3,420 (lower than prior $4,250 cycles — flagged).';
+    return aapTxnMsg(query, 'Everyday Checking ••••4821', answer, [{label:'Open payroll deposits',fn:"arOpenPromptResult('payroll')"},{label:'Open Everyday Checking',fn:"arOpenDetail('checking')"}]);
+  }
+
+  /* ── TIER 5: FALLBACK ── */
+  const answer = 'I can look up balances, transactions, payment history, verification status, membership details, and more for Emily\'s accounts. What would you like to know?';
+  return aapTxnMsg(query, null, answer, [{label:'View salary deposit status',fn:"aiAssistSend('Has salary deposited?')"},{label:'Show verification history',fn:"aiAssistSend('Show verification history')"}]);
+}
+
+/* ── Shared transaction response builder ── */
+function aapTxnMsg(query, account, answer, actions) {
+  const btns = (actions||[]).map(a=>`<button class="aap-ws-btn" onclick="${a.fn}">${a.label} →</button>`).join('');
+  const acctBadge = account ? `<div style="font-size:9.5px;color:#9896b0;margin-bottom:5px">${account}</div>` : '';
+  return `<div class="aap-txt-block" style="animation:aiws-card-in .3s var(--ease) both">
     <div class="aap-txt-query">"${query}"</div>
+    ${acctBadge}
     <div class="aap-txt-answer">${answer}</div>
-    <div class="aap-txt-actions">${btns}</div>
+    ${btns ? `<div class="aap-txt-actions">${btns}</div>` : ''}
   </div>`;
 }
 
@@ -12726,60 +12971,107 @@ function arOpenFailedVerifications() {
 function aapHandleVerificationQuery(query) {
   const q = query.toLowerCase();
 
-  // "Was Emily verified?" — direct answer
-  if (q.includes('was emily') || q.includes('verified successfully') || q.includes('is emily verified')) {
+  /* ── Direct status: was Emily / caller verified? ── */
+  if (q.includes('was emily') || q.includes('verified successfully') || q.includes('is emily verified') ||
+      q.includes('was the caller') || q.includes('caller auth') || q.includes('was verified') ||
+      q.includes('current verification status') || q.includes('verification status')) {
     return `<div class="aap-txt-block" style="animation:aiws-card-in .3s var(--ease) both">
       <div class="aap-txt-query">"${query}"</div>
-      <div class="aap-txt-answer">Emily Olivers was verified today via Voice Biometric (94% match) and Phone OTP. Device shows a new device warning — secondary verification is recommended.</div>
+      <div class="aap-txt-answer">Emily Olivers was verified today via Voice Biometric (94% match) and Phone OTP. A new device warning is active — secondary verification is recommended.</div>
       <div class="aap-clarify-list">
         <button class="aap-clarify-opt" onclick="arOpenVerificationDetail('voice')">
-          <span class="aap-co-icon">🎙</span><div style="flex:1;text-align:left"><div class="aap-co-name">Voice Biometric</div><div style="font-size:9.5px;color:#9896b0;margin-top:1px">94% match · Passed</div></div><span class="aap-co-arrow">→</span>
+          <span class="aap-co-icon">🎙</span><div style="flex:1;text-align:left"><div class="aap-co-name">Voice Biometric</div><div style="font-size:9.5px;color:#0d7c52;margin-top:1px">✓ 94% match · Passed</div></div><span class="aap-co-arrow">→</span>
+        </button>
+        <button class="aap-clarify-opt" onclick="arOpenVerificationDetail('phone')">
+          <span class="aap-co-icon">📞</span><div style="flex:1;text-align:left"><div class="aap-co-name">Phone Number Verification</div><div style="font-size:9.5px;color:#0d7c52;margin-top:1px">✓ OTP Passed · Today 10:42 AM</div></div><span class="aap-co-arrow">→</span>
         </button>
         <button class="aap-clarify-opt" onclick="arOpenVerificationDetail('device')">
-          <span class="aap-co-icon">📱</span><div style="flex:1;text-align:left"><div class="aap-co-name">Device Verification</div><div style="font-size:9.5px;color:#c97b1c;margin-top:1px">⚠ New device detected</div></div><span class="aap-co-arrow">→</span>
+          <span class="aap-co-icon">📱</span><div style="flex:1;text-align:left"><div class="aap-co-name">Device Verification</div><div style="font-size:9.5px;color:#c97b1c;margin-top:1px">⚠ New device detected · Review recommended</div></div><span class="aap-co-arrow">→</span>
         </button>
       </div>
     </div>`;
   }
 
-  // "Show failed verification" → clarification
-  if (q.includes('fail')) {
-    return aapVerifyClarify(query, 'Which failed verification attempts would you like to review?', [
-      {icon:'📞', label:'Phone Verification', sub:'1 failed attempt — Jul 19', fn:"arOpenVerificationDetail('phone')"},
-      {icon:'🎙', label:'Voice Verification', sub:'No failed attempts', fn:"arOpenVerificationDetail('voice')"},
-      {icon:'📱', label:'Device Verification', sub:'1 warning — new device', fn:"arOpenVerificationDetail('device')"},
-      {icon:'📋', label:'All Failed Attempts', sub:'View full history filtered', fn:'arOpenFailedVerifications()'},
+  /* ── Failed verification ── */
+  if (q.includes('fail') || q.includes('why did') || q.includes('why was')) {
+    if (q.includes('phone')) {
+      setTimeout(() => arOpenVerificationDetail('phone'), 350);
+      return aapVerifMsg(query, 'Phone verification failed once on Jul 19 — OTP not entered within the 5-minute window. A successful fallback via SSN last 4 followed immediately.');
+    }
+    if (q.includes('device')) {
+      setTimeout(() => arOpenVerificationDetail('device'), 350);
+      return aapVerifMsg(query, 'Device verification shows a new unrecognized device today. Previous device was last seen on a prior session. Medium risk — recommend secondary verification.');
+    }
+    return aapVerifyClarify(query, 'Which failed verification would you like to review?', [
+      {icon:'📞', label:'Phone Verification', sub:'1 failed attempt — Jul 19, 2025', fn:"arOpenVerificationDetail('phone')"},
+      {icon:'📱', label:'Device Verification', sub:'⚠ New device today — not a failure, but a warning', fn:"arOpenVerificationDetail('device')"},
+      {icon:'📋', label:'All Failed & Warning Events', sub:'View full history filtered', fn:'arOpenFailedVerifications()'},
     ]);
   }
 
-  // "Check latest / recent verification"
-  if (q.includes('latest') || q.includes('recent') || q.includes('last')) {
+  /* ── Voice biometric ── */
+  if (q.includes('voice biometric') || q.includes('voice verif') || q.includes('voice match') || q.includes('biometric')) {
+    setTimeout(() => arOpenVerificationDetail('voice'), 350);
+    return aapVerifMsg(query, 'Voice biometric matched enrolled profile at 94% (threshold: 85%). Last enrolled Aug 12, 2025. Most recent match: today at 10:42 AM.');
+  }
+
+  /* ── Phone verification ── */
+  if (q.includes('phone verif') || q.includes('phone number verif') || q.includes('was the phone') || q.includes('otp')) {
+    setTimeout(() => arOpenVerificationDetail('phone'), 350);
+    return aapVerifMsg(query, 'Phone Number Verification: OTP sent to +1(310) 928-7361 at 10:41 AM. Code entered successfully at 10:42 AM. Passed.');
+  }
+
+  /* ── Device verification ── */
+  if (q.includes('device verif') || q.includes('device recogni') || q.includes('was this device') || q.includes('was the device') || q.includes('new device') || q.includes('failed device')) {
+    setTimeout(() => arOpenVerificationDetail('device'), 350);
+    return aapVerifMsg(query, 'New device detected today — device fingerprint does not match any previously registered device. IP origin consistent with San Jose, CA. Risk level: Medium.');
+  }
+
+  /* ── Latest / recent / last verification ── */
+  if (q.includes('latest') || q.includes('recent') || q.includes('last') || q.includes('what was the last')) {
     return aapVerifyClarify(query, 'Which verification method should I check?', [
       {icon:'📞', label:'Phone', sub:'Today · 10:42 AM · Passed', fn:"arOpenVerificationDetail('phone')"},
-      {icon:'🎙', label:'Voice Biometric', sub:'Today · 10:42 AM · 94% match', fn:"arOpenVerificationDetail('voice')"},
-      {icon:'📱', label:'Device', sub:'Today · ⚠ New device', fn:"arOpenVerificationDetail('device')"},
+      {icon:'🎙', label:'Voice Biometric', sub:'Today · 10:42 AM · 94% match · Passed', fn:"arOpenVerificationDetail('voice')"},
+      {icon:'📱', label:'Device', sub:'Today · ⚠ New device detected', fn:"arOpenVerificationDetail('device')"},
     ]);
   }
 
-  // "Voice verification" → direct
-  if (q.includes('voice')) {
-    setTimeout(() => arOpenVerificationDetail('voice'), 350);
-    return `<div class="aap-txt-block" style="animation:aiws-card-in .3s var(--ease) both"><div class="aap-txt-query">"${query}"</div><div class="aap-txt-answer">Opening voice biometric verification details.</div></div>`;
+  /* ── Methods used ── */
+  if (q.includes('what verif') || q.includes('which verif') || q.includes('methods used') || q.includes('authentication method')) {
+    return aapVerifMsg(query, 'Methods used today: Phone Number OTP (passed), Voice Biometric (94% match), Device fingerprint (new device warning). All identity signals reviewed — caller considered verified with secondary caution flagged.');
   }
 
-  // "Device verification" → direct
-  if (q.includes('device')) {
-    setTimeout(() => arOpenVerificationDetail('device'), 350);
-    return `<div class="aap-txt-block" style="animation:aiws-card-in .3s var(--ease) both"><div class="aap-txt-query">"${query}"</div><div class="aap-txt-answer">Opening device verification details — new device alert detected.</div></div>`;
+  /* ── All events / history / 30 days ── */
+  if (q.includes('all verif') || q.includes('all auth') || q.includes('show all') || q.includes('30 day') || q.includes('history') || q.includes('events') || q.includes('open verif')) {
+    setTimeout(() => arOpenVerificationHistory(), 350);
+    return aapVerifMsg(query, 'Opening full verification history for Emily Olivers — 8 events across Phone, Voice Biometric, SSN, and Device methods. Most recent: today.');
   }
 
-  // Default: show verification clarification
-  return aapVerifyClarify(query, 'Which verification type would you like to review?', [
-    {icon:'📞', label:'Phone Verification',   sub:'Today · OTP · Passed', fn:"arOpenVerificationDetail('phone')"},
-    {icon:'🎙', label:'Voice Biometric',      sub:'Today · 94% match · Passed', fn:"arOpenVerificationDetail('voice')"},
-    {icon:'📱', label:'Device Verification',  sub:'⚠ New device detected', fn:"arOpenVerificationDetail('device')"},
-    {icon:'📋', label:'All Verification Events', sub:'View full history', fn:'arOpenVerificationHistory()'},
+  /* ── Compare ── */
+  if (q.includes('compar')) {
+    setTimeout(() => arOpenVerificationHistory(), 350);
+    return aapVerifMsg(query, 'Most recent Voice Biometric: 94% match (today). Previous: 91% match (Jun 4, 2025). Both above the 85% threshold. Enrollment stable — no significant variance detected.');
+  }
+
+  /* ── Default: clarification ── */
+  return aapVerifyClarify(query, 'Which verification history would you like to review?', [
+    {icon:'📞', label:'Phone Verification', sub:'Today · OTP · Passed', fn:"arOpenVerificationDetail('phone')"},
+    {icon:'🎙', label:'Voice Biometric', sub:'Today · 94% match · Passed', fn:"arOpenVerificationDetail('voice')"},
+    {icon:'📱', label:'Device Verification', sub:'⚠ New device detected', fn:"arOpenVerificationDetail('device')"},
+    {icon:'📋', label:'All Verification Events', sub:'Full history · 8 events', fn:'arOpenVerificationHistory()'},
   ]);
+}
+
+/* ── Shared verification response builder ── */
+function aapVerifMsg(query, answer) {
+  return `<div class="aap-txt-block" style="animation:aiws-card-in .3s var(--ease) both">
+    <div class="aap-txt-query">"${query}"</div>
+    <div style="font-size:9.5px;color:#9896b0;margin-bottom:5px">Verification History · Emily Olivers</div>
+    <div class="aap-txt-answer">${answer}</div>
+    <div class="aap-txt-actions">
+      <button class="aap-ws-btn" onclick="arOpenVerificationHistory()">View full history →</button>
+    </div>
+  </div>`;
 }
 
 function arOpenSalaryStatus(productId) {
@@ -13361,7 +13653,7 @@ const AR_DETAIL_DATA = {
     membership:[
       {l:'Membership ID', v:'3842',          cls:'mono'},
       {l:'Caller',        v:'Emily Olivers'},
-      {l:'Caller Role',   v:'Primary Owner'},
+      {l:'Caller Role',   v:'Primary Cardholder'},
       {l:'Verification',  v:'Verified',       cls:'ok'},
     ],
     metadata:[
@@ -13369,16 +13661,83 @@ const AR_DETAIL_DATA = {
       {l:'Card Number Masked', v:'•••• 4412',      cls:'mono'},
       {l:'Name on Card',       v:'Emily Olivers'},
       {l:'Card Status',        v:'Active',          cls:'ok'},
-      {l:'Primary Owner',      v:'Emily Olivers'},
-      {l:'Linked Account',     v:'Everyday Checking'},
+      {l:'Relationship',       v:'Primary Cardholder'},
+      {l:'Linked Account',     v:'Everyday Checking, Savings Account'},
     ],
-    balanceTitle:null, // no balance/credit section for debit
+    balanceTitle:null,
     balances:[],
-    activity:[
-      {ico:'🏧',icoCls:'',m:'ATM Withdrawal', d:'May 20', a:'−$120.00', aCls:'db', s:'Posted', statusCls:'posted', category:'ATM Withdrawal'},
-      {ico:'🛒',icoCls:'',m:'POS Purchase',    d:'May 19', a:'−$42.00',  aCls:'db', s:'Posted', statusCls:'posted', category:'Card Purchase'},
+    activity:[],
+    linked:[{icon:'🏦',label:'Everyday Checking',masked:'4821',fn:"arOpenDetail('checking')"},{icon:'🏦',label:'Savings Account',masked:'1039',fn:"arOpenDetail('savings')"},{icon:'👤',label:'Membership #3842',masked:'',fn:"arOpenMembership('mem3842','debitcard','Visa Debit Card')"}],
+  },
+
+  hysavings: {
+    name:'High Yield Savings', desc:'Premium Savings', id:'•••• 8810', status:'Active',
+    type:'Deposit', typeCls:'ar-deposit',
+    ai:[
+      'Emily Olivers is listed as Beneficiary on this account.',
+      'Servicing actions requiring account ownership are restricted.',
+      'Read-only access for balance inquiry and statement review.',
     ],
-    linked:[{icon:'🏦',label:'Everyday Checking',masked:'4821',productId:'checking'},{icon:'👤',label:'Membership #3842',masked:'',productId:'mem3842'}],
+    membership:[
+      {l:'Membership ID', v:'3842',          cls:'mono'},
+      {l:'Caller',        v:'Emily Olivers'},
+      {l:'Caller Role',   v:'Beneficiary'},
+      {l:'Verification',  v:'Verified',       cls:'ok'},
+    ],
+    metadata:[
+      {l:'Account Type',    v:'High Yield Savings'},
+      {l:'Account Number',  v:'•••• 8810',   cls:'mono'},
+      {l:'APY',             v:'4.75%',        cls:'ok'},
+      {l:'Account Status',  v:'Active',       cls:'ok'},
+      {l:'Relationship',    v:'Beneficiary'},
+      {l:'Primary Owner',   v:'On file'},
+      {l:'Opened',          v:'Jun 2021'},
+    ],
+    balanceTitle:'Balance Summary',
+    balances:[
+      {l:'Current Balance',   v:'$22,480.00'},
+      {l:'Available Balance', v:'$22,480.00'},
+      {l:'Interest YTD',      v:'+$532.40',   cls:'ok'},
+    ],
+    activity:[],
+    linked:[{icon:'👤',label:'Membership #3842',masked:'',fn:"arOpenMembership('mem3842','hysavings','High Yield Savings')"}],
+  },
+
+  mortgage: {
+    name:'Home Mortgage', desc:'30-Year Fixed', id:'•••• 3301', status:'Active',
+    type:'Loan', typeCls:'ar-loan',
+    ai:[
+      'Emily Olivers is listed as Co-Borrower on this mortgage.',
+      'Primary borrower authorization required for loan modifications.',
+      'Payments are on schedule — no missed payments detected.',
+    ],
+    membership:[
+      {l:'Membership ID', v:'3842',          cls:'mono'},
+      {l:'Caller',        v:'Emily Olivers'},
+      {l:'Caller Role',   v:'Co-Borrower'},
+      {l:'Verification',  v:'Verified',       cls:'ok'},
+    ],
+    metadata:[
+      {l:'Loan Type',         v:'30-Year Fixed Mortgage'},
+      {l:'Loan Number',       v:'•••• 3301',   cls:'mono'},
+      {l:'Interest Rate',     v:'6.875%'},
+      {l:'Loan Status',       v:'Active',       cls:'ok'},
+      {l:'Relationship',      v:'Co-Borrower'},
+      {l:'Primary Borrower',  v:'On file'},
+      {l:'Originated',        v:'Mar 2022'},
+      {l:'Maturity',          v:'Mar 2052'},
+    ],
+    balanceTitle:'Loan Summary',
+    balances:[
+      {l:'Outstanding Balance', v:'$278,450.00'},
+      {l:'Original Amount',     v:'$295,000.00'},
+      {l:'Monthly Payment',     v:'$1,982.00'},
+      {l:'Next Payment Due',    v:'Jun 1, 2026',  cls:'warn'},
+      {l:'Payments Remaining',  v:'309'},
+      {l:'Loan Standing',       v:'Good Standing', cls:'ok'},
+    ],
+    activity:[],
+    linked:[{icon:'👤',label:'Membership #3842',masked:'',fn:"arOpenMembership('mem3842','mortgage','Home Mortgage')"}],
   },
 };
 
@@ -13972,19 +14331,26 @@ function arOpenDetail(id, fromId, fromName) {
   const ctxChipsHTML = ctx.chips.map(c =>
     `<span class="ctx-chip ${c.cls}">${c.label}</span>`).join('');
 
-  /* ── Activity rows (transaction style) ── */
-  const actRows = data.activity.map(a => {
+  /* ── Activity rows — pull from TXN_DATA, cap at 5, shared source with View All ── */
+  const isLoan = (id === 'autoloan' || id === 'mortgage');
+  const txnSrc  = (typeof TXN_DATA !== 'undefined' && TXN_DATA[id]) ? TXN_DATA[id].rows.slice(0, 5) : (data.activity || []);
+  const actRows = txnSrc.map(a => {
     const sc = TXN_STATUS_CFG[a.statusCls] || TXN_STATUS_CFG['posted'];
     const badge = `<span class="dp-txn-badge" style="border-color:${sc.border};background:${sc.bg};color:${sc.color}">${sc.label}</span>`;
     const signal = a.aiSignal ? `<span class="dp-txn-signal">✦ ${a.aiSignal}</span>` : '';
+    const name = a.name || a.m || '';
+    const time = a.time || a.d || '';
+    const cat  = a.category || '';
+    const amt  = a.amount || a.a || '';
+    const aCls = a.amountCls || a.aCls || '';
     return `<div class="dp-txn-row">
       <div class="dp-txn-main">
-        <div class="dp-txn-name">${a.m}</div>
-        <div class="dp-txn-sub">${a.d}${a.category ? ' · '+a.category : ''}</div>
+        <div class="dp-txn-name">${name}</div>
+        <div class="dp-txn-sub">${time}${cat ? ' · '+cat : ''}</div>
       </div>
       ${signal}
       <div class="dp-txn-right">
-        <span class="dp-txn-amt ${a.aCls||''}">${a.a}</span>
+        <span class="dp-txn-amt ${aCls}">${amt}</span>
         ${badge}
       </div>
     </div>`;
@@ -14113,10 +14479,10 @@ function arOpenDetail(id, fromId, fromName) {
     <!-- 3. Balance Details -->
     ${balanceSection}
 
-    <!-- 4. Recent Transactions -->
+    <!-- 4. Recent Transactions / Payment History -->
     <div class="dp-section">
       <div class="dp-section-head">
-        <div class="dp-section-title">Recent Transactions</div>
+        <div class="dp-section-title">${isLoan ? 'Payment History' : 'Recent Transactions'}</div>
         <button class="dp-section-action" onclick="arOpenTransactions('${id}')">View all →</button>
       </div>
       <div class="dp-txn-list">${actRows}</div>
@@ -14426,51 +14792,90 @@ const TXN_DATA = {
     account:'Everyday Checking ••••4821',
     filters:['All','Posted','Pending','Failed','Reversed','Flagged','Payroll','ACH','Transfers','Deposits','Withdrawals'],
     rows:[
-      {id:'tc1', name:'Tesla Payroll Deposit', time:'Today • 9:15 AM', timeMs:9999999999, linkedAccount:'Everyday Checking ••••4821', category:'Payroll Deposit', amountRaw:4250, amount:'+$4,250.00', amountCls:'cr', status:'Pending', statusCls:'pending', tags:['Pending','Payroll','Deposits','ACH'], aiSignal:'Expected payroll detected — awaiting ACH settlement', merchant:'Tesla, Inc.', processing:'ACH Network · NACHA', settlement:'Expected settlement in 1 business day', reference:'ACH-2026-05-29-001', aiNote:'Matches the recurring Tesla payroll pattern. Prior deposits arrived at 8:42 AM on the 1st and 15th. Awaiting ACH posting confirmation.'},
-      {id:'tc2', name:'ACH Credit — Tesla Payroll', time:'May 15 • 8:42 AM', timeMs:9999999000, linkedAccount:'Everyday Checking ••••4821', category:'ACH Deposit', amountRaw:4250, amount:'+$4,250.00', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Payroll','Deposits','ACH'], aiSignal:'Recurring payroll pattern matched', merchant:'Tesla, Inc.', processing:'ACH Network · NACHA', settlement:'Settled May 15', reference:'ACH-2026-05-15-001', aiNote:'This is the confirmed May 1–15 cycle payroll deposit. Pattern consistent with 14-day payroll cadence.'},
-      {id:'tc3', name:'Transfer to Savings', time:'May 16 • 1:10 PM', timeMs:9999998000, linkedAccount:'Savings Account ••••1039', category:'Transfer', amountRaw:-500, amount:'−$500.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Transfers'], aiSignal:'', merchant:'Internal Transfer', processing:'Internal ACH', settlement:'Settled May 16', reference:'TRF-2026-05-16-001', aiNote:'Routine scheduled transfer to savings. No risk signals.'},
-      {id:'tc4', name:'ACH Credit — Tesla Payroll', time:'May 1 • 8:38 AM', timeMs:9999997000, linkedAccount:'Everyday Checking ••••4821', category:'ACH Deposit', amountRaw:4250, amount:'+$4,250.00', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Payroll','Deposits','ACH'], aiSignal:'Recurring payroll pattern matched', merchant:'Tesla, Inc.', processing:'ACH Network · NACHA', settlement:'Settled May 1', reference:'ACH-2026-05-01-001', aiNote:'May 1 payroll deposit. Consistent with prior cycle timing.'},
+      {id:'tc1', name:'Tesla Payroll Deposit',   time:'May 29 • 9:15 AM',  timeMs:9999999999, category:'Payroll Deposit',  amountRaw:3420,  amount:'+$3,420.00', amountCls:'cr', status:'Posted',  statusCls:'posted',   tags:['Posted','Payroll','Deposits','ACH'], aiSignal:'Recurring payroll pattern matched', merchant:'Tesla, Inc.', processing:'ACH Network · NACHA', settlement:'Settled May 29', reference:'ACH-2026-05-29-001', aiNote:'Matches the recurring Tesla payroll pattern. Consistent with 14-day cadence.'},
+      {id:'tc2', name:'Starbucks',               time:'May 29 • 8:22 AM',  timeMs:9999999000, category:'Card Purchase',    amountRaw:-8.75, amount:'−$8.75',     amountCls:'db', status:'Posted',  statusCls:'posted',   tags:['Posted','Withdrawals'], aiSignal:'', merchant:'Starbucks #4821', processing:'Visa Network', settlement:'Settled May 29', reference:'POS-2026-05-29-001', aiNote:'Routine daily coffee purchase.'},
+      {id:'tc3', name:'Amazon Marketplace',       time:'May 28 • 2:14 PM',  timeMs:9999998000, category:'Card Purchase',    amountRaw:-92.18,amount:'−$92.18',    amountCls:'db', status:'Posted',  statusCls:'posted',   tags:['Posted','Withdrawals'], aiSignal:'', merchant:'Amazon.com', processing:'Visa Network', settlement:'Settled May 28', reference:'POS-2026-05-28-002', aiNote:'Online purchase. No anomalies.'},
+      {id:'tc4', name:'Costco',                   time:'May 27 • 5:45 PM',  timeMs:9999997000, category:'Card Purchase',    amountRaw:-143.52,amount:'−$143.52',  amountCls:'db', status:'Posted',  statusCls:'posted',   tags:['Posted','Withdrawals'], aiSignal:'', merchant:'Costco Wholesale', processing:'Visa Network', settlement:'Settled May 27', reference:'POS-2026-05-27-001', aiNote:'Grocery and household purchase.'},
+      {id:'tc5', name:'Pacific Power',            time:'May 27 • 12:00 AM', timeMs:9999996000, category:'Bill Payment',     amountRaw:-210,  amount:'−$210.00',   amountCls:'db', status:'Pending', statusCls:'pending',  tags:['Pending','Withdrawals'], aiSignal:'Pending utility payment', merchant:'Pacific Power & Light', processing:'ACH Debit', settlement:'Expected May 30', reference:'ACH-2026-05-27-001', aiNote:'Monthly utility ACH debit. Expected to clear within 1 business day.'},
+      {id:'tc6', name:'Transfer to Savings',      time:'May 16 • 1:10 PM',  timeMs:9999995000, category:'Transfer',        amountRaw:-500,  amount:'−$500.00',   amountCls:'db', status:'Posted',  statusCls:'posted',   tags:['Posted','Transfers'], aiSignal:'', merchant:'Internal Transfer', processing:'Internal ACH', settlement:'Settled May 16', reference:'TRF-2026-05-16-001', aiNote:'Routine scheduled transfer to savings.'},
+      {id:'tc7', name:'ACH Credit — Tesla Payroll',time:'May 15 • 8:42 AM', timeMs:9999994000, category:'Payroll Deposit',  amountRaw:4250,  amount:'+$4,250.00', amountCls:'cr', status:'Posted',  statusCls:'posted',   tags:['Posted','Payroll','Deposits','ACH'], aiSignal:'Recurring payroll pattern matched', merchant:'Tesla, Inc.', processing:'ACH Network · NACHA', settlement:'Settled May 15', reference:'ACH-2026-05-15-001', aiNote:'May 15 cycle payroll deposit. Pattern consistent with prior cycles.'},
+      {id:'tc8', name:'ACH Credit — Tesla Payroll',time:'May 1 • 8:38 AM',  timeMs:9999993000, category:'Payroll Deposit',  amountRaw:4250,  amount:'+$4,250.00', amountCls:'cr', status:'Posted',  statusCls:'posted',   tags:['Posted','Payroll','Deposits','ACH'], aiSignal:'Recurring payroll pattern matched', merchant:'Tesla, Inc.', processing:'ACH Network · NACHA', settlement:'Settled May 1', reference:'ACH-2026-05-01-001', aiNote:'May 1 payroll deposit. On-time, consistent cadence.'},
+      {id:'tc9', name:'Shell Gas Station',        time:'Apr 30 • 6:11 PM',  timeMs:9999992000, category:'Card Purchase',    amountRaw:-56.14,amount:'−$56.14',   amountCls:'db', status:'Posted',  statusCls:'posted',   tags:['Posted','Withdrawals'], aiSignal:'', merchant:'Shell #0892', processing:'Visa Network', settlement:'Settled Apr 30', reference:'POS-2026-04-30-001', aiNote:'Gas station purchase.'},
+      {id:'tc10',name:'Uber Eats',                time:'Apr 29 • 8:05 PM',  timeMs:9999991000, category:'Card Purchase',    amountRaw:-31.20,amount:'−$31.20',   amountCls:'db', status:'Posted',  statusCls:'posted',   tags:['Posted','Withdrawals'], aiSignal:'', merchant:'Uber Eats', processing:'Visa Network', settlement:'Settled Apr 29', reference:'POS-2026-04-29-001', aiNote:'Food delivery order.'},
     ]
   },
   savings: {
     title:'Transaction Activity',
     account:'Savings Account ••••1039',
-    filters:['All','Posted','Pending','Failed','Reversed','Flagged','Transfers','Deposits','Withdrawals'],
+    filters:['All','Posted','Pending','Transfers','Deposits','Withdrawals'],
     rows:[
-      {id:'ts1', name:'Transfer from Checking', time:'May 16 • 1:10 PM', timeMs:9999998000, linkedAccount:'Everyday Checking ••••4821', category:'Transfer', amountRaw:500, amount:'+$500.00', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Transfers','Deposits'], aiSignal:'', merchant:'Internal Transfer', processing:'Internal ACH', settlement:'Settled May 16', reference:'TRF-2026-05-16-001', aiNote:'Inbound transfer from Everyday Checking following payroll receipt.'},
-      {id:'ts2', name:'Interest Credit', time:'May 1 • 12:00 AM', timeMs:9999997000, linkedAccount:'Savings Account ••••1039', category:'Interest', amountRaw:6.20, amount:'+$6.20', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Deposits'], aiSignal:'', merchant:'Credit Union', processing:'Internal', settlement:'Settled May 1', reference:'INT-2026-05-01', aiNote:'Monthly interest credit. APY consistent with prior months.'},
-      {id:'ts3', name:'Transfer to Checking', time:'Apr 22 • 10:30 AM', timeMs:9999996000, linkedAccount:'Everyday Checking ••••4821', category:'Transfer', amountRaw:-300, amount:'−$300.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Transfers','Withdrawals'], aiSignal:'', merchant:'Internal Transfer', processing:'Internal ACH', settlement:'Settled Apr 22', reference:'TRF-2026-04-22-001', aiNote:'Outbound transfer to Everyday Checking.'},
+      {id:'ts1', name:'Transfer from Checking',  time:'May 16 • 1:10 PM',  timeMs:9999999000, category:'Transfer',  amountRaw:500,  amount:'+$500.00', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Transfers','Deposits'], aiSignal:'Recurring savings contribution', merchant:'Internal Transfer', processing:'Internal ACH', settlement:'Settled May 16', reference:'TRF-2026-05-16-001', aiNote:'Consistent monthly contribution from checking post-payroll.'},
+      {id:'ts2', name:'Transfer from Checking',  time:'May 1 • 9:05 AM',   timeMs:9999998000, category:'Transfer',  amountRaw:500,  amount:'+$500.00', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Transfers','Deposits'], aiSignal:'Recurring savings contribution', merchant:'Internal Transfer', processing:'Internal ACH', settlement:'Settled May 1', reference:'TRF-2026-05-01-001', aiNote:'Post-payroll contribution. Pattern consistent.'},
+      {id:'ts3', name:'Transfer from Checking',  time:'Apr 16 • 1:10 PM',  timeMs:9999997000, category:'Transfer',  amountRaw:500,  amount:'+$500.00', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Transfers','Deposits'], aiSignal:'Recurring savings contribution', merchant:'Internal Transfer', processing:'Internal ACH', settlement:'Settled Apr 16', reference:'TRF-2026-04-16-001', aiNote:''},
+      {id:'ts4', name:'Transfer from Checking',  time:'Apr 1 • 9:05 AM',   timeMs:9999996000, category:'Transfer',  amountRaw:500,  amount:'+$500.00', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Transfers','Deposits'], aiSignal:'', merchant:'Internal Transfer', processing:'Internal ACH', settlement:'Settled Apr 1', reference:'TRF-2026-04-01-001', aiNote:''},
+      {id:'ts5', name:'Interest Credit',         time:'May 1 • 12:00 AM',  timeMs:9999995000, category:'Interest',  amountRaw:6.20, amount:'+$6.20',   amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Deposits'], aiSignal:'', merchant:'Credit Union', processing:'Internal', settlement:'Settled May 1', reference:'INT-2026-05-01', aiNote:'Monthly interest credit. APY consistent.'},
+      {id:'ts6', name:'Interest Credit',         time:'Apr 1 • 12:00 AM',  timeMs:9999994000, category:'Interest',  amountRaw:6.18, amount:'+$6.18',   amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Deposits'], aiSignal:'', merchant:'Credit Union', processing:'Internal', settlement:'Settled Apr 1', reference:'INT-2026-04-01', aiNote:''},
     ]
   },
   autoloan: {
-    title:'Loan Activity',
+    title:'Payment History',
     account:'Auto Loan ••••7712',
-    filters:['All','Posted','Pending','Failed','Reversed','Flagged','Payments','Fees','Pending Settlement'],
+    filters:['All','Posted','Pending','Failed','Payments','Fees'],
     rows:[
-      {id:'tl1', name:'Auto Loan Payment', time:'Yesterday • 12:01 AM', timeMs:9999999000, linkedAccount:'Everyday Checking ••••4821', category:'Loan Payment', amountRaw:-420, amount:'−$420.00', amountCls:'db', status:'Settlement Pending', statusCls:'settlement', tags:['Pending Settlement','Payments'], aiSignal:'Payment initiated — settlement pending', merchant:'AutoPay System', processing:'ACH Debit', settlement:'Settlement expected in 1 business day', reference:'LPY-2026-05-28-001', aiNote:'AutoPay initiated. Settlement typically completes within 1 business day. No anomalies detected.'},
-      {id:'tl2', name:'Auto Loan Payment', time:'May 10 • 12:01 AM', timeMs:9999998000, linkedAccount:'Everyday Checking ••••4821', category:'Loan Payment', amountRaw:-420, amount:'−$420.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'AutoPay System', processing:'ACH Debit', settlement:'Settled May 10', reference:'LPY-2026-05-10-001', aiNote:'On-time payment. 38 consecutive on-time payments on record.'},
-      {id:'tl3', name:'Auto Loan Payment', time:'Apr 10 • 12:01 AM', timeMs:9999997000, linkedAccount:'Everyday Checking ••••4821', category:'Loan Payment', amountRaw:-420, amount:'−$420.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'AutoPay System', processing:'ACH Debit', settlement:'Settled Apr 10', reference:'LPY-2026-04-10-001', aiNote:'On-time payment.'},
+      {id:'tl1', name:'Auto Loan Payment', time:'May 12 • 12:01 AM',  timeMs:9999999000, category:'Loan Payment', amountRaw:-385, amount:'−$385.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'Payment on schedule', merchant:'AutoPay System', processing:'ACH Debit', settlement:'Settled May 12', reference:'LPY-2026-05-12-001', aiNote:'On-time payment. Consistent with payment schedule.'},
+      {id:'tl2', name:'Auto Loan Payment', time:'Apr 12 • 12:01 AM',  timeMs:9999998000, category:'Loan Payment', amountRaw:-385, amount:'−$385.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'AutoPay System', processing:'ACH Debit', settlement:'Settled Apr 12', reference:'LPY-2026-04-12-001', aiNote:'On-time payment.'},
+      {id:'tl3', name:'Auto Loan Payment', time:'Mar 12 • 12:01 AM',  timeMs:9999997000, category:'Loan Payment', amountRaw:-385, amount:'−$385.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'AutoPay System', processing:'ACH Debit', settlement:'Settled Mar 12', reference:'LPY-2026-03-12-001', aiNote:'On-time payment.'},
+      {id:'tl4', name:'Auto Loan Payment', time:'Feb 12 • 12:01 AM',  timeMs:9999996000, category:'Loan Payment', amountRaw:-385, amount:'−$385.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'AutoPay System', processing:'ACH Debit', settlement:'Settled Feb 12', reference:'LPY-2026-02-12-001', aiNote:'On-time payment.'},
+      {id:'tl5', name:'Auto Loan Payment', time:'Jan 12 • 12:01 AM',  timeMs:9999995000, category:'Loan Payment', amountRaw:-385, amount:'−$385.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'AutoPay System', processing:'ACH Debit', settlement:'Settled Jan 12', reference:'LPY-2026-01-12-001', aiNote:'On-time payment.'},
     ]
   },
   creditcard: {
     title:'Card Activity',
     account:'Visa Credit Card ••••7777',
-    filters:['All','Posted','Pending','Failed','Reversed','Flagged','Purchases','Declined','Holds','Refunds','Payments'],
+    filters:['All','Posted','Pending','Declined','Disputed','Purchases','Payments','Holds','Refunds'],
     rows:[
-      {id:'tcc1', name:'Amazon Purchase', time:'Today • 2:14 PM', timeMs:9999999999, linkedAccount:'Visa Credit Card ••••7777', category:'Purchase', amountRaw:-128, amount:'−$128.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Purchases'], aiSignal:'Higher than usual spend detected', merchant:'Amazon.com', processing:'Visa Network', settlement:'Settled today', reference:'VSA-2026-05-29-001', aiNote:'Transaction amount is 2.1× the median purchase on this card. No fraud indicators, but AI flagged for elevated spend pattern.'},
-      {id:'tcc2', name:'Gas Station Authorization', time:'Today • 8:01 AM', timeMs:9999998999, linkedAccount:'Visa Credit Card ••••7777', category:'Authorization Hold', amountRaw:-75, amount:'−$75.00', amountCls:'db', status:'Pending', statusCls:'pending', tags:['Pending','Holds','Purchases'], aiSignal:'', merchant:'Shell Station', processing:'Visa Authorization', settlement:'Hold expected to clear in 3–5 days', reference:'VSA-AUTH-2026-05-29-001', aiNote:'Standard gas station pre-authorization. Will adjust to actual amount when transaction settles.'},
-      {id:'tcc3', name:'Online Transaction', time:'May 26 • 3:14 AM', timeMs:9999997000, linkedAccount:'Visa Credit Card ••••7777', category:'Card Purchase', amountRaw:-214, amount:'−$214.80', amountCls:'db', status:'Declined', statusCls:'declined', tags:['Declined','Purchases'], aiSignal:'Unusual location — transaction blocked', merchant:'Unknown Merchant', processing:'Visa Network', settlement:'Not settled — declined', reference:'VSA-DCL-2026-05-26-001', aiNote:'Declined due to unusual merchant location and time (3:14 AM). Recommend verifying with cardholder.'},
-      {id:'tcc4', name:'Card Payment', time:'May 20 • 10:11 AM', timeMs:9999996000, linkedAccount:'Everyday Checking ••••4821', category:'Payment', amountRaw:300, amount:'+$300.00', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'Card Payment', processing:'ACH', settlement:'Settled May 20', reference:'CPY-2026-05-20-001', aiNote:'Partial payment received. Remaining balance due Jun 15.'},
+      {id:'tcc1', name:'Delta Airlines',          time:'May 28 • 11:30 AM', timeMs:9999999999, category:'Purchase',        amountRaw:-512,  amount:'−$512.00',  amountCls:'db', status:'Posted',   statusCls:'posted',   tags:['Posted','Purchases'], aiSignal:'', merchant:'Delta Air Lines', processing:'Visa Network', settlement:'Settled May 28', reference:'VSA-2026-05-28-001', aiNote:''},
+      {id:'tcc2', name:'Marriott Hotels',         time:'May 26 • 3:00 PM',  timeMs:9999999000, category:'Purchase',        amountRaw:-280,  amount:'−$280.00',  amountCls:'db', status:'Posted',   statusCls:'posted',   tags:['Posted','Purchases'], aiSignal:'', merchant:'Marriott Bonvoy', processing:'Visa Network', settlement:'Settled May 26', reference:'VSA-2026-05-26-002', aiNote:''},
+      {id:'tcc3', name:'Amazon Marketplace',      time:'May 25 • 2:14 PM',  timeMs:9999998000, category:'Purchase',        amountRaw:-129,  amount:'−$129.00',  amountCls:'db', status:'Disputed', statusCls:'flagged',  tags:['Disputed','Flagged','Purchases'], aiSignal:'Dispute filed — awaiting resolution', merchant:'Amazon.com', processing:'Visa Network', settlement:'Disputed', reference:'VSA-2026-05-25-001', aiNote:'Member filed dispute. Chargeback process initiated. Resolution expected 10–14 business days.'},
+      {id:'tcc4', name:'Uber',                    time:'May 24 • 6:45 PM',  timeMs:9999997000, category:'Purchase',        amountRaw:-32.14,amount:'−$32.14',   amountCls:'db', status:'Posted',   statusCls:'posted',   tags:['Posted','Purchases'], aiSignal:'', merchant:'Uber Technologies', processing:'Visa Network', settlement:'Settled May 24', reference:'VSA-2026-05-24-001', aiNote:''},
+      {id:'tcc5', name:'Southwest Airlines',      time:'May 23 • 9:10 AM',  timeMs:9999996000, category:'Purchase',        amountRaw:-381,  amount:'−$381.00',  amountCls:'db', status:'Posted',   statusCls:'posted',   tags:['Posted','Purchases'], aiSignal:'', merchant:'Southwest Airlines', processing:'Visa Network', settlement:'Settled May 23', reference:'VSA-2026-05-23-001', aiNote:''},
+      {id:'tcc6', name:'Card Payment',            time:'May 20 • 10:11 AM', timeMs:9999995000, category:'Payment',         amountRaw:300,   amount:'+$300.00',  amountCls:'cr', status:'Posted',   statusCls:'posted',   tags:['Posted','Payments'], aiSignal:'', merchant:'Card Payment', processing:'ACH', settlement:'Settled May 20', reference:'CPY-2026-05-20-001', aiNote:'Partial payment received. Remaining balance due Jun 15.'},
+      {id:'tcc7', name:'Unknown Merchant',        time:'May 19 • 3:14 AM',  timeMs:9999994000, category:'Card Purchase',   amountRaw:-214,  amount:'−$214.80',  amountCls:'db', status:'Declined', statusCls:'declined', tags:['Declined','Purchases'], aiSignal:'Unusual time and location — blocked', merchant:'Unknown Merchant', processing:'Visa Network', settlement:'Not settled — declined', reference:'VSA-DCL-2026-05-19-001', aiNote:'Declined at 3:14 AM. Geo-mismatch and unknown merchant. Recommend cardholder verification.'},
+    ]
+  },
+  hysavings: {
+    title:'Transaction Activity',
+    account:'High Yield Savings ••••8810',
+    filters:['All','Posted','Deposits','Withdrawals'],
+    rows:[
+      {id:'ths1', name:'Interest Credit', time:'May 1 • 12:00 AM', timeMs:9999999000, category:'Interest', amountRaw:88.50, amount:'+$88.50', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Deposits'], aiSignal:'', merchant:'Credit Union', processing:'Internal', settlement:'Settled May 1', reference:'INT-2026-05-01-HY', aiNote:'Monthly APY interest credit at 4.75%.'},
+      {id:'ths2', name:'Interest Credit', time:'Apr 1 • 12:00 AM', timeMs:9999998000, category:'Interest', amountRaw:87.20, amount:'+$87.20', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Deposits'], aiSignal:'', merchant:'Credit Union', processing:'Internal', settlement:'Settled Apr 1', reference:'INT-2026-04-01-HY', aiNote:''},
+      {id:'ths3', name:'Interest Credit', time:'Mar 1 • 12:00 AM', timeMs:9999997000, category:'Interest', amountRaw:87.10, amount:'+$87.10', amountCls:'cr', status:'Posted', statusCls:'posted', tags:['Posted','Deposits'], aiSignal:'', merchant:'Credit Union', processing:'Internal', settlement:'Settled Mar 1', reference:'INT-2026-03-01-HY', aiNote:''},
+    ]
+  },
+  mortgage: {
+    title:'Payment History',
+    account:'Home Mortgage ••••3301',
+    filters:['All','Posted','Pending','Payments','Escrow','Fees'],
+    rows:[
+      {id:'tm1', name:'Mortgage Payment', time:'May 1 • 12:00 AM',  timeMs:9999999000, category:'Mortgage Payment', amountRaw:-1982, amount:'−$1,982.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'No missed payments detected', merchant:'Loan Servicer', processing:'ACH Debit', settlement:'Settled May 1', reference:'MTG-2026-05-01-001', aiNote:'On-time payment. Consistent with payment history.'},
+      {id:'tm2', name:'Mortgage Payment', time:'Apr 1 • 12:00 AM',  timeMs:9999998000, category:'Mortgage Payment', amountRaw:-1982, amount:'−$1,982.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'Loan Servicer', processing:'ACH Debit', settlement:'Settled Apr 1', reference:'MTG-2026-04-01-001', aiNote:'On-time payment.'},
+      {id:'tm3', name:'Mortgage Payment', time:'Mar 1 • 12:00 AM',  timeMs:9999997000, category:'Mortgage Payment', amountRaw:-1982, amount:'−$1,982.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'Loan Servicer', processing:'ACH Debit', settlement:'Settled Mar 1', reference:'MTG-2026-03-01-001', aiNote:'On-time payment.'},
+      {id:'tm4', name:'Mortgage Payment', time:'Feb 1 • 12:00 AM',  timeMs:9999996000, category:'Mortgage Payment', amountRaw:-1982, amount:'−$1,982.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Payments'], aiSignal:'', merchant:'Loan Servicer', processing:'ACH Debit', settlement:'Settled Feb 1', reference:'MTG-2026-02-01-001', aiNote:'On-time payment.'},
+      {id:'tm5', name:'Escrow Disbursement', time:'Jan 15 • 12:00 AM', timeMs:9999995000, category:'Escrow', amountRaw:-3240, amount:'−$3,240.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Escrow'], aiSignal:'', merchant:'Escrow Account', processing:'Internal', settlement:'Settled Jan 15', reference:'ESC-2026-01-15-001', aiNote:'Annual property tax escrow disbursement.'},
     ]
   },
   debitcard: {
     title:'Debit Activity',
     account:'Visa Debit Card ••••4412',
-    filters:['All','Posted','Pending','Failed','Reversed','Flagged','Purchases','Declined','Holds'],
+    filters:['All','Posted','Pending','Declined','Purchases','ATM','Holds'],
     rows:[
-      {id:'tdc1', name:'ATM Withdrawal', time:'Today • 11:02 AM', timeMs:9999999000, linkedAccount:'Everyday Checking ••••4821', category:'ATM Withdrawal', amountRaw:-120, amount:'−$120.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Purchases'], aiSignal:'', merchant:'CU ATM Network', processing:'ATM Network', settlement:'Settled same day', reference:'ATM-2026-05-29-001', aiNote:'Withdrawal from in-network ATM. No fee applied.'},
-      {id:'tdc2', name:'POS Purchase', time:'Yesterday • 7:41 PM', timeMs:9999998000, linkedAccount:'Everyday Checking ••••4821', category:'Card Purchase', amountRaw:-42, amount:'−$42.00', amountCls:'db', status:'Posted', statusCls:'posted', tags:['Posted','Purchases'], aiSignal:'', merchant:'Whole Foods Market', processing:'Visa Network', settlement:'Settled same day', reference:'POS-2026-05-28-001', aiNote:'Standard POS purchase. No anomalies.'},
-      {id:'tdc3', name:'Online Transaction', time:'Today • 3:14 AM', timeMs:9999997000, linkedAccount:'Everyday Checking ••••4821', category:'Card Purchase', amountRaw:-214, amount:'−$214.00', amountCls:'db', status:'Declined', statusCls:'declined', tags:['Declined','Purchases'], aiSignal:'Unusual location detected', merchant:'Unknown Merchant', processing:'Visa Network', settlement:'Not settled — declined', reference:'POS-DCL-2026-05-29-001', aiNote:'Declined at 3:14 AM from an unrecognized merchant. Geo-mismatch detected. Recommend verifying with cardholder.'},
+      {id:'tdc1', name:'Starbucks',              time:'May 29 • 8:22 AM',  timeMs:9999999999, category:'Card Purchase', amountRaw:-8.75, amount:'−$8.75',   amountCls:'db', status:'Posted',   statusCls:'posted',  tags:['Posted','Purchases'], aiSignal:'', merchant:'Starbucks #4821', processing:'Visa Network', settlement:'Settled May 29', reference:'POS-2026-05-29-001', aiNote:''},
+      {id:'tdc2', name:'Amazon Marketplace',     time:'May 28 • 2:14 PM',  timeMs:9999998000, category:'Card Purchase', amountRaw:-92.18,amount:'−$92.18',  amountCls:'db', status:'Posted',   statusCls:'posted',  tags:['Posted','Purchases'], aiSignal:'', merchant:'Amazon.com', processing:'Visa Network', settlement:'Settled May 28', reference:'POS-2026-05-28-001', aiNote:''},
+      {id:'tdc3', name:'Costco',                 time:'May 27 • 5:45 PM',  timeMs:9999997000, category:'Card Purchase', amountRaw:-143.52,amount:'−$143.52',amountCls:'db', status:'Posted',   statusCls:'posted',  tags:['Posted','Purchases'], aiSignal:'', merchant:'Costco Wholesale', processing:'Visa Network', settlement:'Settled May 27', reference:'POS-2026-05-27-001', aiNote:''},
+      {id:'tdc4', name:'Uber Eats',              time:'May 26 • 8:05 PM',  timeMs:9999996000, category:'Card Purchase', amountRaw:-31.20,amount:'−$31.20',  amountCls:'db', status:'Posted',   statusCls:'posted',  tags:['Posted','Purchases'], aiSignal:'', merchant:'Uber Eats', processing:'Visa Network', settlement:'Settled May 26', reference:'POS-2026-05-26-001', aiNote:''},
+      {id:'tdc5', name:'Shell Gas Station',      time:'May 25 • 6:11 PM',  timeMs:9999995000, category:'Card Purchase', amountRaw:-56.14,amount:'−$56.14',  amountCls:'db', status:'Posted',   statusCls:'posted',  tags:['Posted','Purchases'], aiSignal:'', merchant:'Shell #0892', processing:'Visa Network', settlement:'Settled May 25', reference:'POS-2026-05-25-001', aiNote:''},
+      {id:'tdc6', name:'Unknown Merchant',       time:'May 19 • 3:14 AM',  timeMs:9999994000, category:'Card Purchase', amountRaw:-214,  amount:'−$214.00', amountCls:'db', status:'Declined', statusCls:'declined',tags:['Declined','Purchases'], aiSignal:'Unusual location detected', merchant:'Unknown Merchant', processing:'Visa Network', settlement:'Not settled — declined', reference:'POS-DCL-2026-05-19-001', aiNote:'Declined at 3:14 AM from unrecognized merchant. Geo-mismatch.'},
     ]
   },
 };
@@ -14496,10 +14901,11 @@ function arOpenTransactions(productId) {
   arNavProduct = productId;
   txnState     = { productId, filter:'All', search:'', sort:'latest', openRow:null };
 
+  const txLabel = (productId === 'autoloan' || productId === 'mortgage') ? 'Payment History' : 'Transactions';
   const bc = arBcHTML([
     {label:'Overview',      fn:'arCloseDetail()'},
     {label:detailData.name, fn:`arOpenDetail('${productId}')`},
-    {label:'Transactions'}
+    {label:txLabel}
   ]);
 
   const html = `
@@ -14546,7 +14952,8 @@ function arOpenTransactions(productId) {
 
   arShowModeA(html);
 
-  setTimeout(() => txnRenderRows(productId), 30);
+  // arShowModeA injects content at ~540ms — render rows only after DOM is ready
+  setTimeout(() => txnRenderRows(productId), 600);
   if (typeof arUpdateContextChips === 'function') arUpdateContextChips();
 }
 
@@ -14669,6 +15076,13 @@ function txnToggleRow(rowId, productId) {
 /* ══ OVERVIEW CARDS — compact 2-col grid, no balance metrics ══ */
 
 /* 2-column grid */
+/* Relationship chips on product cards */
+.ar-rel-chip{font-size:8.5px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(91,95,207,.07);border:1px solid rgba(91,95,207,.18);color:#3d41a0;white-space:nowrap;}
+.ar-rel-chip-sec{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:#6b6987;}
+.ar-rel-chip-muted{background:rgba(0,0,0,.03);border-color:rgba(0,0,0,.08);color:#9896b0;}
+/* Group gap spacer in product grid */
+.ar-pc-group-gap{height:6px;border:none;box-shadow:none;pointer-events:none;}
+
 .ar-card-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -15153,7 +15567,60 @@ function txnToggleRow(rowId, productId) {
 .dp-side-col{margin:0;}
 @media(max-width:560px){.dp-side-row{grid-template-columns:1fr;}}
 
-/* ══ VERIFICATION HISTORY WIDGET (compact) ═══════════════ */
+/* ══ OVERVIEW MEMBER ROW (Member Info + Verification History) ══ */
+.ov-member-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  align-items:stretch;     /* equal height */
+  margin-bottom:12px;
+}
+@media(max-width:520px){.ov-member-row{grid-template-columns:1fr;}}
+
+.ov-card{
+  background:#fff;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:10px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+  padding:12px 14px;
+  display:flex;
+  flex-direction:column;
+}
+.ov-card-hdr{margin-bottom:10px;}
+.ov-card-title{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:700;color:#0c0b18;
+}
+.ov-card-title svg{color:#5b5fcf;flex-shrink:0;}
+
+/* Member info */
+.ov-member-name{
+  font-size:14px;font-weight:700;color:#0c0b18;
+  letter-spacing:-.02em;margin-bottom:10px;
+}
+.ov-info-rows{display:flex;flex-direction:column;gap:0;border-top:1px solid rgba(0,0,0,.05);}
+.ov-info-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05);
+}
+.ov-info-row:last-child{border-bottom:none;}
+.ov-info-lbl{font-size:10px;color:#9896b0;flex-shrink:0;margin-right:8px;}
+.ov-info-val{font-size:11px;font-weight:500;color:#0c0b18;text-align:right;}
+
+/* Verification history timeline */
+.vh-timeline{display:flex;flex-direction:column;gap:0;flex:1;}
+.vh-tl-event{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05);
+}
+.vh-tl-event:last-child{border-bottom:none;}
+.vh-tl-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:#5b5fcf;flex-shrink:0;margin-top:4px;
+}
+.vh-tl-date{font-size:9.5px;color:#9896b0;margin-bottom:2px;}
+.vh-tl-method{font-size:11px;font-weight:600;color:#0c0b18;}
+/* ══ END OVERVIEW MEMBER ROW ══ */
 .vh-widget{
   background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;
   padding:10px 14px;margin-bottom:12px;
