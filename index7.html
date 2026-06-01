@@ -4484,24 +4484,28 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                               <div class="ov-member-name">Emily Olivers</div>
                               <div class="ov-info-rows">
                                 <div class="ov-info-row">
-                                  <span class="ov-info-lbl">Phone</span>
-                                  <span class="ov-info-val">+1 (310) 928-7361</span>
+                                  <span class="ov-info-lbl">Member No.</span>
+                                  <span class="ov-info-val">10048291</span>
                                 </div>
                                 <div class="ov-info-row">
-                                  <span class="ov-info-lbl">Email</span>
-                                  <span class="ov-info-val">emily.olivers@email.com</span>
-                                </div>
-                                <div class="ov-info-row">
-                                  <span class="ov-info-lbl">DOB</span>
-                                  <span class="ov-info-val">Jan 14, 1992</span>
+                                  <span class="ov-info-lbl">Status</span>
+                                  <span class="ov-info-val" style="color:#0d7c52;font-weight:600;">Active Member</span>
                                 </div>
                                 <div class="ov-info-row">
                                   <span class="ov-info-lbl">Member Since</span>
-                                  <span class="ov-info-val">2018</span>
+                                  <span class="ov-info-val">March 12, 2018</span>
+                                </div>
+                                <div class="ov-info-row">
+                                  <span class="ov-info-lbl">Primary Phone</span>
+                                  <span class="ov-info-val">(503) 555-0182</span>
+                                </div>
+                                <div class="ov-info-row">
+                                  <span class="ov-info-lbl">Email</span>
+                                  <span class="ov-info-val">michael.reynolds@email.com</span>
                                 </div>
                                 <div class="ov-info-row">
                                   <span class="ov-info-lbl">Address</span>
-                                  <span class="ov-info-val">San Jose, CA</span>
+                                  <span class="ov-info-val">842 Willow Creek Drive, Bend, 97701</span>
                                 </div>
                               </div>
                             </div>
@@ -4616,7 +4620,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 </div>
                                 <div class="ar-pc-mid">
                                   <div class="ar-pc-name">Savings Account</div>
-                                  <div class="ar-pc-desc">Regular Savings · Joint Owner</div>
+                                  <div class="ar-pc-desc">Emergency Savings · Joint Owner</div>
                                 </div>
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
@@ -4702,7 +4706,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 </div>
                                 <div class="ar-pc-mid">
                                   <div class="ar-pc-name">Visa Debit Card</div>
-                                  <div class="ar-pc-desc">Linked to Checking · Primary Cardholder</div>
+                                  <div class="ar-pc-desc">Visa Debit · Primary Cardholder</div>
                                 </div>
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
@@ -4722,7 +4726,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 </div>
                                 <div class="ar-pc-mid">
                                   <div class="ar-pc-name">Visa Credit Card</div>
-                                  <div class="ar-pc-desc">Revolving Credit · Authorized User</div>
+                                  <div class="ar-pc-desc">Visa Credit · Authorized User</div>
                                 </div>
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
@@ -4730,6 +4734,26 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                     <span class="ar-alert-chip warn">Declined Txn</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('creditcard')">View Details</button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Visa Debit Card ••••7439 — Not Associated -->
+                            <div class="ar-pc" id="ar-pc-debitcard2" onclick="arOpenDetail('debitcard2')" style="cursor:pointer">
+                              <div class="ar-pc-compact">
+                                <div class="ar-pc-left">
+                                  <span class="ar-type-badge ar-card">Card</span>
+                                  <span class="ar-acct-id">•••• 7439</span>
+                                </div>
+                                <div class="ar-pc-mid">
+                                  <div class="ar-pc-name">Visa Debit Card</div>
+                                  <div class="ar-pc-desc">Emergency Savings · Not Associated</div>
+                                </div>
+                                <div class="ar-pc-ops">
+                                  <span class="ar-status-badge ar-active">Active</span>
+                                  <div class="ar-ops-chips">
+                                  </div>
+                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('debitcard2')">View Details</button>
                                 </div>
                               </div>
                             </div>
@@ -13780,6 +13804,10 @@ const AR_DETAIL_DATA = {
       {l:'Caller Role', v:'Primary Owner'},
       {l:'Verification', v:'Verified', cls:'ok'},
     ],
+    owners:[
+      {id:'20200270000003093', name:'Emily Olivers',  role:'Primary Owner'},
+      {id:'20222500000003134', name:'Sarah Reynolds', role:'Joint Owner'},
+    ],
     metadata:[
       {l:'Account ID', v:'•••• 4821', cls:'mono'},
       {l:'Account Nickname', v:'Everyday Checking'},
@@ -13813,6 +13841,10 @@ const AR_DETAIL_DATA = {
       {l:'Caller Role', v:'Primary Owner'},
       {l:'Verification', v:'Verified', cls:'ok'},
     ],
+    owners:[
+      {id:'20222500000003134', name:'Sarah Reynolds', role:'Primary Owner'},
+      {id:'20200270000003093', name:'Emily Olivers',  role:'Joint Owner'},
+    ],
     metadata:[
       {l:'Account ID', v:'•••• 1039', cls:'mono'},
       {l:'Account Nickname', v:'Savings Account'},
@@ -13844,6 +13876,10 @@ const AR_DETAIL_DATA = {
       {l:'Caller Role',    v:'Joint Borrower'},
       {l:'Primary Member', v:'Michael Johnson'},
       {l:'Verification',   v:'Verified',        cls:'ok'},
+    ],
+    owners:[
+      {id:'20200270000003093', name:'Emily Olivers',  role:'Primary Borrower'},
+      {id:'20222500000003134', name:'Sarah Reynolds', role:'Co-Borrower'},
     ],
     metadata:[
       {l:'Loan Account ID', v:'•••• 7712',  cls:'mono'},
@@ -13877,6 +13913,10 @@ const AR_DETAIL_DATA = {
       {l:'Caller Role',   v:'Primary Owner'},
       {l:'Verification',  v:'Verified',       cls:'ok'},
     ],
+    owners:[
+      {id:'20222500000003134', name:'Sarah Reynolds', role:'Primary Cardholder'},
+      {id:'20200270000003093', name:'Emily Olivers',  role:'Authorized User'},
+    ],
     metadata:[
       {l:'Card Brand & Type',   v:'Visa Credit Card'},
       {l:'Card Number Masked',  v:'•••• 7777',      cls:'mono'},
@@ -13909,6 +13949,9 @@ const AR_DETAIL_DATA = {
       {l:'Caller Role',   v:'Primary Cardholder'},
       {l:'Verification',  v:'Verified',       cls:'ok'},
     ],
+    owners:[
+      {id:'20200270000003093', name:'Emily Olivers', role:'Primary Cardholder'},
+    ],
     metadata:[
       {l:'Card Brand & Type',  v:'Visa Debit Card'},
       {l:'Card Number Masked', v:'•••• 4412',      cls:'mono'},
@@ -13921,6 +13964,34 @@ const AR_DETAIL_DATA = {
     balances:[],
     activity:[],
     linked:[{icon:'🏦',label:'Everyday Checking',masked:'4821',fn:"arOpenDetail('checking')"},{icon:'🏦',label:'Savings Account',masked:'1039',fn:"arOpenDetail('savings')"},{icon:'👤',label:'Membership #3842',masked:'',fn:"arOpenMembership('mem3842','debitcard','Visa Debit Card')"}],
+  },
+
+  debitcard2: {
+    name:'Visa Debit Card', desc:'Visa Debit', id:'•••• 7439', status:'Active',
+    type:'Card', typeCls:'ar-card',
+    ai:[
+      'Not associated with the caller — linked to Emergency Savings under a separate membership.',
+      'Read-only review only — caller has no ownership or authorization on this card.',
+    ],
+    membership:[
+      {l:'Relationship',  v:'Not Associated'},
+      {l:'Account Holder',v:'Olivia Bennett'},
+      {l:'Linked Account', v:'Emergency Savings'},
+    ],
+    owners:[
+      {id:'20241490000003876', name:'Olivia Bennett', role:'Primary Cardholder'},
+    ],
+    metadata:[
+      {l:'Card Brand & Type',  v:'Visa Debit Card'},
+      {l:'Card Number Masked', v:'•••• 7439',          cls:'mono'},
+      {l:'Card Status',        v:'Active',              cls:'ok'},
+      {l:'Relationship',       v:'Not Associated'},
+      {l:'Linked Account',     v:'Emergency Savings'},
+    ],
+    balanceTitle:null,
+    balances:[],
+    activity:[],
+    linked:[{icon:'🏦',label:'Emergency Savings',masked:'1039',productId:'savings'}],
   },
 
   hysavings: {
@@ -13936,6 +14007,11 @@ const AR_DETAIL_DATA = {
       {l:'Caller',        v:'Emily Olivers'},
       {l:'Caller Role',   v:'Beneficiary'},
       {l:'Verification',  v:'Verified',       cls:'ok'},
+    ],
+    owners:[
+      {id:'20222500000003134', name:'Sarah Reynolds', role:'Primary Owner'},
+      {id:'20200270000003093', name:'Emily Olivers',  role:'Beneficiary'},
+      {id:'20241490000003876', name:'David Reynolds', role:'Beneficiary'},
     ],
     metadata:[
       {l:'Account Type',    v:'High Yield Savings'},
@@ -13969,6 +14045,10 @@ const AR_DETAIL_DATA = {
       {l:'Caller',        v:'Emily Olivers'},
       {l:'Caller Role',   v:'Co-Borrower'},
       {l:'Verification',  v:'Verified',       cls:'ok'},
+    ],
+    owners:[
+      {id:'20222500000003134', name:'Sarah Reynolds', role:'Primary Borrower'},
+      {id:'20200270000003093', name:'Emily Olivers',  role:'Co-Borrower'},
     ],
     metadata:[
       {l:'Loan Type',         v:'30-Year Fixed Mortgage'},
@@ -14688,11 +14768,31 @@ function arOpenDetail(id, fromId, fromName) {
       <span class="dp-info-val ${b.cls||''}">${b.v}</span>
     </div>`).join('');
 
-  const memRows = (data.membership||[]).map(b =>
-    `<div class="dp-info-row">
-      <span class="dp-info-label">${b.l}</span>
-      <span class="dp-info-val ${b.cls||''}">${b.v}</span>
-    </div>`).join('');
+  // Membership Details: if product has an owners array, render as ownership table;
+  // otherwise fall back to the existing key-value row style
+  const memRows = data.owners && data.owners.length
+    ? `<table class="dp-owners-table">
+        <thead>
+          <tr>
+            <th class="dp-ot-th">Individual ID</th>
+            <th class="dp-ot-th">Name</th>
+            <th class="dp-ot-th">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.owners.map(o => `
+          <tr class="dp-ot-row">
+            <td class="dp-ot-td dp-ot-id">${o.id}</td>
+            <td class="dp-ot-td">${o.name}</td>
+            <td class="dp-ot-td"><span class="dp-ot-role">${o.role}</span></td>
+          </tr>`).join('')}
+        </tbody>
+      </table>`
+    : (data.membership||[]).map(b =>
+        `<div class="dp-info-row">
+          <span class="dp-info-label">${b.l}</span>
+          <span class="dp-info-val ${b.cls||''}">${b.v}</span>
+        </div>`).join('');
 
   /* ── Linked relationship rows ── */
   const linkedRows = (data.linked||[]).map(l => {
@@ -16604,6 +16704,14 @@ function txnToggleRow(rowId, productId) {
 
 /* ── Product information rows ── */
 .dp-info-rows{display:flex;flex-direction:column;}
+/* ── Membership Details — ownership table ── */
+.dp-owners-table{width:100%;border-collapse:collapse;margin-top:2px;}
+.dp-ot-th{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--t3);padding:0 8px 6px 0;border-bottom:1px solid var(--border);text-align:left;}
+.dp-ot-row:not(:last-child) .dp-ot-td{border-bottom:1px solid rgba(0,0,0,.05);}
+.dp-ot-td{font-size:11px;color:var(--t1);padding:7px 8px 7px 0;vertical-align:middle;}
+.dp-ot-id{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--t3);}
+.dp-ot-role{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:rgba(91,95,207,.07);border:1px solid rgba(91,95,207,.18);color:#3d41a0;}
+
 .dp-info-row{
   display:flex;justify-content:space-between;align-items:baseline;
   padding:7px 0;border-bottom:1px solid rgba(0,0,0,.05);
