@@ -1,4 +1,4 @@
-\<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -4279,13 +4279,107 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <!-- FOCAL LAYOUT -->
                 <div id="aiwsFocal" style="display:flex;width:100%;height:100%;overflow:hidden;">
                   <div id="c360v2" style="flex:1;display:flex;flex-direction:row;overflow:hidden;min-width:0;">
+
+                    <!-- ══ PERSISTENT CONVERSATION PANEL — Contact360 shell ══
+                         Lives outside all modes. Stays visible across every page. -->
+                    <div class="c360-conv-panel" id="c360ConvPanel">
+
+                      <!-- Panel mini-header with tab shortcut -->
+                      <div class="c360-cp-topbar">
+                        <span class="c360-cp-topbar-label">💬 Conversations</span>
+                        <button class="c360-cp-expand-btn" onclick="switchWFTab('conversations')" title="Open full conversation">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                        </button>
+                      </div>
+
+                      <!-- Message thread -->
+                      <div class="msgs lg c360-cp-msgs" id="c360ConvMsgs">
+                        <div class="sys"><span>📅 Today, May 29th</span></div>
+                        <div class="mb ag">
+                          <div class="mav lg" style="background:#5b5fcf;border-radius:50%;">AI</div>
+                          <div class="mbody">
+                            <div class="mt lg">Hello! I'm the Eltropy AI assistant. I've connected you with an agent who can help with your salary deposit inquiry. Please hold for a moment.</div>
+                            <div class="mm">4:12 AM</div>
+                          </div>
+                        </div>
+                        <div class="mb mem">
+                          <div class="mav lg" style="background:#E07A5F;border-radius:50%;">EO</div>
+                          <div class="mbody">
+                            <div class="mt lg">Hi, I'm checking on my Tesla payroll deposit — it was supposed to hit yesterday but I don't see it in my account.</div>
+                            <div class="mm">4:12 AM</div>
+                          </div>
+                        </div>
+                        <div class="mb ag">
+                          <div class="mav lg" style="background:#5b5fcf;border-radius:50%;">AI</div>
+                          <div class="mbody">
+                            <div class="mt lg">I can see your Everyday Checking account. I've identified a recurring Tesla payroll deposit pattern, but no current-cycle deposit has posted. Transferring you to a specialist now.</div>
+                            <div class="mm">4:13 AM</div>
+                          </div>
+                        </div>
+                        <div class="sys"><span>Agent joined the conversation</span></div>
+                      </div>
+
+                      <!-- Voice call bar — full controls -->
+                      <div class="c360-cp-callbar">
+                        <div class="c360-cp-wave">
+                          <span></span><span></span><span></span><span></span><span></span>
+                        </div>
+                        <span class="c360-cp-calllabel">Voice · Emily Olivers</span>
+                        <div class="c360-cp-callctrls">
+                          <button class="c360-cp-ctrl" title="Recording"><div class="c360-cp-rec-dot"></div></button>
+                          <button class="c360-cp-ctrl" title="Hold">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                          </button>
+                          <button class="c360-cp-ctrl" title="Mute">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                          </button>
+                          <button class="c360-cp-ctrl" title="Transfer">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                          </button>
+                          <div class="c360-cp-more-wrap" id="c360CpMoreWrap">
+                            <button class="c360-cp-ctrl" title="More" onclick="document.getElementById('c360CpMoreMenu').style.display=document.getElementById('c360CpMoreMenu').style.display==='block'?'none':'block'">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
+                            </button>
+                            <div class="c360-cp-more-menu" id="c360CpMoreMenu" style="display:none">
+                              <button class="c360-cp-more-item">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>Pause
+                              </button>
+                              <button class="c360-cp-more-item">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>Add Participant
+                              </button>
+                            </div>
+                          </div>
+                          <button class="c360-cp-ctrl c360-cp-ctrl-end" title="End call">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M23.71 16.67C20.66 13.78 16.54 12 12 12 7.46 12 3.34 13.78.29 16.67c-.18.18-.29.43-.29.71 0 .28.11.53.29.71l2.48 2.48c.18.18.43.29.71.29.27 0 .52-.11.7-.28.79-.74 1.69-1.36 2.66-1.85.33-.16.56-.5.56-.9v-3.1c1.45-.48 3-.73 4.6-.73 1.6 0 3.15.25 4.6.73v3.1c0 .39.23.73.56.9.97.49 1.87 1.11 2.66 1.85.18.18.43.28.7.28.28 0 .53-.11.71-.29l2.48-2.48c.18-.18.29-.43.29-.71 0-.28-.11-.53-.29-.71z"/></svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Composer -->
+                      <div class="c360-cp-composer">
+                        <textarea class="c360-cp-input" id="c360CpInput" placeholder="Type a message…" rows="2"
+                          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg('c360ConvMsgs','c360CpInput');}"></textarea>
+                        <div class="c360-cp-actions">
+                          <button class="c360-cp-act" title="Transfer">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/></svg>
+                            Transfer
+                          </button>
+                          <button class="c360-cp-send" onclick="sendMsg('c360ConvMsgs','c360CpInput')">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+                          </button>
+                        </div>
+                      </div>
+
+                    </div><!-- /c360-conv-panel (persistent shell) -->
+
                     <!-- Main modes column -->
                     <div id="c360v2Main" style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;min-height:0;transition:all .3s cubic-bezier(0.16,1,0.3,1)">
 
                     <!-- ══ OVERVIEW MODE ══ -->
                     <div id="c360v2Overview" class="c360v2-mode" style="display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;">
 
-                      <!-- ══ INTERACTION HANDOFF SUMMARY ══ -->
+                      <!-- ══ CONTACT360 WORKSPACE ══ -->
+                      <div class="c360-ws-panel" id="c360WsPanel">
                       <div id="ihsRoot" class="ihs-root ihs-expanded">
 
                         <!-- EXPANDED STATE -->
@@ -4446,10 +4540,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                             <!-- ★ PRIORITY: Everyday Checking — full-width, AI-prioritized -->
                             <div class="ar-pc ar-pc-primary" id="ar-pc-checking" onclick="arOpenDetail('checking')" style="cursor:pointer">
+                              <!-- AI context bar -->
                               <div class="ar-pc-ai-bar">
                                 <span class="ar-pc-ai-bar-orb">✦</span>
                                 <span class="ar-pc-ai-bar-text">Most relevant to current request</span>
                               </div>
+
+                              <!-- Main identity row -->
                               <div class="ar-pc-compact">
                                 <div class="ar-pc-left">
                                   <span class="ar-type-badge ar-deposit">Deposit</span>
@@ -4468,6 +4565,44 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('checking')">View Details</button>
                                 </div>
                               </div>
+
+                              <!-- Enriched details: balance + recent activity -->
+                              <div class="ar-pc-enriched">
+
+                                <!-- Balance summary -->
+                                <div class="ar-pc-bal-strip">
+                                  <div class="ar-pc-bal-item">
+                                    <span class="ar-pc-bal-lbl">Available Balance</span>
+                                    <span class="ar-pc-bal-val">$4,782.15</span>
+                                  </div>
+                                  <div class="ar-pc-bal-divider"></div>
+                                  <div class="ar-pc-bal-item">
+                                    <span class="ar-pc-bal-lbl">Actual Balance</span>
+                                    <span class="ar-pc-bal-val">$4,782.15</span>
+                                  </div>
+                                </div>
+
+                                <!-- Recent activity preview -->
+                                <div class="ar-pc-act-strip" onclick="event.stopPropagation();arOpenTransactions('checking')">
+                                  <div class="ar-pc-act-hdr">Recent Activity</div>
+                                  <div class="ar-pc-act-row">
+                                    <span class="ar-pc-act-name">Tesla Payroll Deposit</span>
+                                    <span class="ar-pc-act-amt ar-pc-act-cr">+$3,420.00</span>
+                                    <span class="ar-pc-act-badge ar-pc-act-posted">Posted</span>
+                                  </div>
+                                  <div class="ar-pc-act-row">
+                                    <span class="ar-pc-act-name">Starbucks</span>
+                                    <span class="ar-pc-act-amt">−$8.75</span>
+                                    <span class="ar-pc-act-badge ar-pc-act-posted">Posted</span>
+                                  </div>
+                                  <div class="ar-pc-act-row">
+                                    <span class="ar-pc-act-name">Amazon Marketplace</span>
+                                    <span class="ar-pc-act-amt">−$92.18</span>
+                                    <span class="ar-pc-act-badge ar-pc-act-posted">Posted</span>
+                                  </div>
+                                </div>
+
+                              </div><!-- /ar-pc-enriched -->
                             </div>
 
                             <!-- Deposits group — 2-col grid (handled by parent grid) -->
@@ -4486,7 +4621,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
-                                    <span class="ar-rel-chip">Joint Owner</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('savings')">View Details</button>
                                 </div>
@@ -4507,7 +4641,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
-                                    <span class="ar-rel-chip ar-rel-chip-muted">Beneficiary</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('hysavings')">View Details</button>
                                 </div>
@@ -4531,7 +4664,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
-                                    <span class="ar-rel-chip">Primary Borrower</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('autoloan')">View Details</button>
                                 </div>
@@ -4552,7 +4684,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
-                                    <span class="ar-rel-chip ar-rel-chip-sec">Co-Borrower</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('mortgage')">View Details</button>
                                 </div>
@@ -4576,7 +4707,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                 <div class="ar-pc-ops">
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
-                                    <span class="ar-rel-chip">Primary Cardholder</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('debitcard')">View Details</button>
                                 </div>
@@ -4598,7 +4728,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                   <span class="ar-status-badge ar-active">Active</span>
                                   <div class="ar-ops-chips">
                                     <span class="ar-alert-chip warn">Declined Txn</span>
-                                    <span class="ar-rel-chip ar-rel-chip-sec">Auth User</span>
                                   </div>
                                   <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('creditcard')">View Details</button>
                                 </div>
@@ -4606,6 +4735,61 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                             </div>
 
                           </div><!-- /arProductStack -->
+
+                          <!-- ── Recent Interaction Journey Widget ── -->
+                          <div class="ov-card ov-ij-widget" id="ovIjWidget">
+                            <div class="ov-card-hdr" style="margin-bottom:0">
+                              <span class="ov-card-title">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                                Recent Interaction Journey
+                              </span>
+                              <button class="vh-view-all" onclick="switchWFTab('journey')" style="font-size:10px">View all →</button>
+                            </div>
+
+                            <!-- Interaction rows -->
+                            <div class="ov-ij-rows">
+
+                              <!-- Row 1 -->
+                              <div class="ov-ij-row">
+                                <div class="ov-ij-icon ov-ij-icon-video" title="Video">📹</div>
+                                <div class="ov-ij-body">
+                                  <div class="ov-ij-topic">Car Loan — Document Sharing</div>
+                                  <div class="ov-ij-meta">Emma Blue · Main Contact Centre</div>
+                                </div>
+                                <div class="ov-ij-right">
+                                  <span class="ov-ij-time">1 day ago</span>
+                                  <span class="ov-ij-tag ov-ij-tag-pink">Car Loan</span>
+                                </div>
+                              </div>
+
+                              <!-- Row 2 -->
+                              <div class="ov-ij-row">
+                                <div class="ov-ij-icon ov-ij-icon-chat" title="Chat">💬</div>
+                                <div class="ov-ij-body">
+                                  <div class="ov-ij-topic">Transfer Money — Dispute</div>
+                                  <div class="ov-ij-meta">Diana Hernandez · Collections</div>
+                                </div>
+                                <div class="ov-ij-right">
+                                  <span class="ov-ij-time">2 days ago</span>
+                                  <span class="ov-ij-tag ov-ij-tag-teal">Transfer Money</span>
+                                </div>
+                              </div>
+
+                              <!-- Row 3 -->
+                              <div class="ov-ij-row">
+                                <div class="ov-ij-icon ov-ij-icon-voice" title="Voice">📞</div>
+                                <div class="ov-ij-body">
+                                  <div class="ov-ij-topic">Auto Loan — Skip Payment Request</div>
+                                  <div class="ov-ij-meta">Michael Torres · Loan Department</div>
+                                </div>
+                                <div class="ov-ij-right">
+                                  <span class="ov-ij-time">This week</span>
+                                  <span class="ov-ij-tag ov-ij-tag-amber">Skip Payment</span>
+                                </div>
+                              </div>
+
+                            </div><!-- /ov-ij-rows -->
+                          </div><!-- /ov-ij-widget -->
 
                         </div><!-- /c360ArOverlay -->
 
@@ -4627,6 +4811,8 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                         </div>
 
                       </div><!-- /c2-overview-scroll -->
+
+                      </div><!-- /c360-ws-panel -->
 
                     </div><!-- /overview mode -->
 
@@ -4899,7 +5085,10 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     -->
                     <div id="arDetailPage" style="display:none;flex-direction:column;flex:1;min-height:0;overflow:hidden;background:var(--c360-ws-bg);">
                       <!-- Sticky breadcrumb — sits above the scroll area, never scrolls -->
-                      <div id="arPageBc" class="ar-page-bc" style="display:none"></div>
+                      <div id="arPageBc" class="ar-page-bc" style="display:none">
+                        <div id="aicBcSlot"></div>
+                        <div id="aicContainer" class="aic-container"></div>
+                      </div>
                       <!-- Mode A: scroll content -->
                       <div class="ar-dp-scroll" id="arDpScroll" style="flex:1;min-height:0;overflow-y:auto;padding:var(--ws-pad-top) var(--ws-pad-h) var(--ws-pad-bottom);background:var(--c360-ws-bg);scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.08) transparent;"></div>
                       <!-- Mode B: tabbed product workspace -->
@@ -5609,34 +5798,37 @@ function switchWFTab(tab){
     const dp   = document.getElementById('arDetailPage');
     const bc   = document.getElementById('arPageBc');
     const orch = document.getElementById('c2OrchBar');
+    const cp   = document.getElementById('c360ConvPanel'); // persistent conv panel
 
     // Hide ALL C360 content including detail page and orch bar
     [ov, jv, cv, cbv, shv, dp].forEach(el => { if (el) el.style.display = 'none'; });
     if (bc) bc.style.display = 'none';
 
     if (tab === 'contact360') {
-      // Restore orch bar for Contact360
+      // Restore orch bar and conv panel for Contact360
       if (orch) orch.style.display = '';
+      if (cp)   cp.style.display   = 'flex'; // show embedded conv panel
       // Restore correct C360 mode — detail page if one is open, otherwise overview
       const inDetail = (arNavView === 'detail' || arNavView === 'transactions' || arNavView === 'prompt');
       if (inDetail) {
         if (dp) dp.style.display = 'flex';
-        if (bc && bc.innerHTML.trim()) bc.style.display = 'block';
+        if (bc && bc.innerHTML.trim()) bc.style.display = 'flex';
       } else {
         if (ov) ov.style.display = 'flex';
       }
       return;
     }
 
-    // All other tabs: hide orch bar, show only their own content
+    // All other tabs: hide orch bar AND embedded conv panel (avoids duplication)
     if (orch) orch.style.display = 'none';
+    if (cp)   cp.style.display   = 'none';
 
     if (tab === 'journey') {
       if (jv) { jv.style.display = 'flex'; ijRenderIfNeeded(); setTimeout(arUpdateContextChips, 50); }
       return;
     }
     if (tab === 'conversations') {
-      if (cv) cv.style.display = 'flex';
+      if (cv) cv.style.display = 'flex'; // full conversation UI, no left panel duplicate
       return;
     }
     if (tab === 'cobrowse') {
@@ -12016,6 +12208,10 @@ function aiAssistSend(preset) {
   if (orchInput) orchInput.value = '';
   if (panelInput) panelInput.value = '';
 
+  // Mark any subsequent workspace navigation as AI-triggered (for AIC chip creation)
+  window._aicFromAI = true;
+  setTimeout(() => { window._aicFromAI = false; }, 2500);
+
   // If panel is closed, open it first
   if (!aapOpen) {
     aapOpenPanel();
@@ -12707,14 +12903,12 @@ function c360_renderComparison(type) {
   if (typeof arUpdateContextChips === 'function') arUpdateContextChips();
 }
 
-/* ── COMPONENT 8: Status / Finding Summary ── */
 function c360_renderStatusFinding(opts) {
   arNavView = 'prompt';
   const data = AR_DETAIL_DATA[opts.productId]; if (!data) return;
   const bc = arBcHTML(opts.bc);
   const resultColor = opts.resultCls==='ok'?'color:#0d7c52':opts.resultCls==='warn'?'color:#c97b1c':'color:#0c0b18';
 
-  // Answer Summary: finding result + product row
   const summaryBody = `
     <div class="dp-answer-val c360-sv-val-text" style="${resultColor}">${opts.result}</div>
     <div class="dp-rel-row" onclick="arOpenDetail('${opts.productId}')" style="margin-top:10px">
@@ -12723,10 +12917,8 @@ function c360_renderStatusFinding(opts) {
       <span class="dp-rel-arrow">→</span>
     </div>`;
 
-  // Context
   const contextBody = opts.aiNote ? `<div class="ar-dp-ai-block" style="background:transparent;border:none;border-left:2px solid rgba(91,95,207,.3);padding:4px 12px"><div class="ar-dp-ai-lbl" style="color:#5b5fcf;font-size:8px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px">Context</div><p style="font-size:11.5px;color:#3a3854;line-height:1.6;margin:0">${opts.aiNote}</p></div>` : '';
 
-  // Evidence rows
   const evidenceBody = (opts.evidence||[]).length
     ? dpInfoRows(opts.evidence.map(e => ({l:e.label+(e.sub?'<br><span style="font-size:9.5px;color:#b0afc8;font-weight:400">'+e.sub+'</span>':''), v:e.value, cls:e.valueCls})))
     : '';
@@ -12739,6 +12931,8 @@ function c360_renderStatusFinding(opts) {
     ${dpSection('Related', dpRelRows(opts.links||[]))}`;
   arShowModeA(html);
   if (typeof arUpdateContextChips === 'function') arUpdateContextChips();
+  // AIC chip — c360_renderStatusFinding is only ever called from AI flows
+  if (typeof AIC !== 'undefined') AIC.add(opts.title, () => c360_renderStatusFinding(opts));
 }
 
 /* ── Salary Deposit Status → Component 8 ── */
@@ -12781,6 +12975,7 @@ function railOpenVerify() {
 
 /* ── Verification History full page ── */
 function arOpenVerificationHistory() {
+  ensureContact360Active();
   arNavView = 'detail';
   arNavPrompt = 'verification-history';
   const bc = arBcHTML([{label:'Overview', fn:'arCloseDetail()'}, {label:'Verification History'}]);
@@ -12833,6 +13028,8 @@ function arOpenVerificationHistory() {
       </table>
     </div>
   </div>`);
+  if (window._aicFromAI && typeof AIC !== 'undefined')
+    AIC.add('Verification History', () => arOpenVerificationHistory());
 }
 
 function vhFilter(btn, filter) {
@@ -12953,6 +13150,8 @@ function arOpenVerificationDetail(type) {
     evidence: cfg.evidence,
     links: cfg.links,
   });
+  // AIC chip — verification detail is always AI-triggered
+  if (typeof AIC !== 'undefined') AIC.add(cfg.label, () => arOpenVerificationDetail(type));
 }
 
 /* arOpenFailedVerifications — filtered view */
@@ -13187,92 +13386,143 @@ function saStartFromOrch(actionId) {
 }
 
 const CTX_CHIPS = {
+  /* ── Overview: 3 investigation + 1 action ── */
   overview: [
-    {label:'Has salary deposited?',         fn:"aiAssistSend('Has salary deposited?')"},
-    {label:'Review payroll deposits',        fn:"aiAssistSend('Review payroll deposits')"},
-    {label:'Check pending ACH',              fn:"aiAssistSend('Check pending ACH')"},
-    {label:'Show verification history',      fn:"aiAssistSend('Show verification history')"},
-    {label:'Was Emily verified?',            fn:"aiAssistSend('Was Emily verified successfully?')"},
+    {label:'Has salary deposited?',             fn:"aiAssistSend('Has salary deposited?')"},
+    {label:'Show verification history',          fn:"aiAssistSend('Show verification history')"},
+    {label:'Show recent interactions',           fn:"switchWFTab('journey')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
+
+  /* ── Everyday Checking: 3 investigation + 1 action ── */
   detail_checking: [
-    {label:'Review payroll deposits',        fn:"aiAssistSend('Review payroll deposits')"},
-    {label:'Check pending ACH',              fn:"aiAssistSend('Check pending ACH')"},
-    {label:'Show transaction history',       fn:"aiAssistSend('Show all transactions')"},
-    {label:'↗ Transfer Funds',              fn:"saStartFromOrch('transfer')",      type:'action'},
-    {label:'⊘ Stop Payment',               fn:"saStartFromOrch('stop_payment')",   type:'action'},
+    {label:'Show recent transactions',           fn:"arOpenTransactions('checking')"},
+    {label:'Available balance',                  fn:"aiAssistSend('available balance')"},
+    {label:'Show payroll deposits',              fn:"aiAssistSend('Show payroll deposits')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
+
+  /* ── Savings Account: 3 investigation + 1 action ── */
   detail_savings: [
-    {label:'Show transaction history',       fn:"aiAssistSend('Show all transactions')"},
-    {label:'Review ACH activity',            fn:"aiAssistSend('Check pending ACH')"},
-    {label:'↗ Transfer Funds',              fn:"saStartFromOrch('transfer')",      type:'action'},
-    {label:'⊘ Stop Payment',               fn:"saStartFromOrch('stop_payment')",   type:'action'},
+    {label:'Show transfer history',              fn:"aiAssistSend('Show savings transactions')"},
+    {label:'Show recent transactions',           fn:"arOpenTransactions('savings')"},
+    {label:'Who owns this account?',             fn:"aiAssistSend('Who owns savings account?')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
+
+  /* ── High Yield Savings: 3 investigation + 1 action (will show restriction for Beneficiary) ── */
+  detail_hysavings: [
+    {label:'Show recent transactions',           fn:"arOpenTransactions('hysavings')"},
+    {label:'Available balance',                  fn:"aiAssistSend('available balance')"},
+    {label:'Who is the beneficiary?',            fn:"aiAssistSend('Who owns this savings account?')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
+  ],
+
+  /* ── Auto Loan: 3 investigation + 1 action ── */
   detail_autoloan: [
-    {label:'Check payoff balance',           fn:"aiAssistSend('payoff balance')"},
-    {label:'Review payment history',         fn:"aiAssistSend('Show transaction history')"},
-    {label:'💳 Make Payment',               fn:"saStartFromOrch('make_payment')",  type:'action'},
-    {label:'📄 Payoff Quote',              fn:"saStartFromOrch('payoff_quote')",   type:'action'},
+    {label:'Show payment history',               fn:"arOpenTransactions('autoloan')"},
+    {label:'What is the payoff balance?',        fn:"aiAssistSend('payoff balance')"},
+    {label:'Show loan details',                  fn:"aiAssistSend('Show loan details')"},
+    {label:'⚡ Make Payment',                   fn:"saStartFromOrch('make_payment')",   type:'action'},
   ],
+
+  /* ── Home Mortgage: 3 investigation + 1 action ── */
+  detail_mortgage: [
+    {label:'Show recent payments',               fn:"arOpenTransactions('mortgage')"},
+    {label:'What is the payoff balance?',        fn:"aiAssistSend('payoff balance')"},
+    {label:'Who are the borrowers?',             fn:"aiAssistSend('Who are the borrowers on this mortgage?')"},
+    {label:'⚡ Make Payment',                   fn:"saStartFromOrch('make_payment')",   type:'action'},
+  ],
+
+  /* ── Visa Credit Card: 2 investigation + 2 action ── */
   detail_creditcard: [
-    {label:'Review declined transactions',   fn:"aiAssistSend('declined transactions')"},
-    {label:'Check minimum payment',          fn:"aiAssistSend('minimum payment')"},
-    {label:'🔒 Block Card',                 fn:"saStartFromOrch('block_card')",    type:'action'},
-    {label:'⚖ Start Dispute',              fn:"saStartFromOrch('dispute')",        type:'action'},
+    {label:'Show disputed transactions',         fn:"aiAssistSend('Show disputed transactions')"},
+    {label:'Available credit',                   fn:"aiAssistSend('available credit')"},
+    {label:'⚡ Block Card',                     fn:"saStartFromOrch('block_card')",     type:'action'},
+    {label:'⚡ Replace Card',                   fn:"saStartFromOrch('replace_card')",   type:'action'},
   ],
+
+  /* ── Visa Debit Card: 3 investigation + 1 action ── */
   detail_debitcard: [
-    {label:'Review declined transactions',   fn:"aiAssistSend('declined transactions')"},
-    {label:'Show transaction history',       fn:"aiAssistSend('Show all transactions')"},
-    {label:'🔒 Block Card',                 fn:"saStartFromOrch('block_card')",    type:'action'},
-    {label:'🔄 Replace Card',              fn:"saStartFromOrch('replace_card')",   type:'action'},
+    {label:'Show spending activity',             fn:"aiAssistSend('Show debit card spending activity')"},
+    {label:'Show recent transactions',           fn:"arOpenTransactions('debitcard')"},
+    {label:'What account is linked?',            fn:"aiAssistSend('What account is this debit card linked to?')"},
+    {label:'⚡ Block Card',                     fn:"saStartFromOrch('block_card')",     type:'action'},
   ],
+
   detail_default: [
-    {label:'Has salary deposited?',          fn:"aiAssistSend('Has salary deposited?')"},
-    {label:'Show all transactions',          fn:"aiAssistSend('Show all transactions')"},
-    {label:'Review payroll deposits',        fn:"aiAssistSend('Review payroll deposits')"},
+    {label:'Has salary deposited?',              fn:"aiAssistSend('Has salary deposited?')"},
+    {label:'Show recent transactions',           fn:"aiAssistSend('Show recent transactions')"},
+    {label:'Show verification history',          fn:"aiAssistSend('Show verification history')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
+
+  /* ── Transaction activity page: 3 investigation + 1 action ── */
   transactions: [
-    {label:'Review payroll deposits',        fn:"aiAssistSend('Review payroll deposits')"},
-    {label:'Check pending ACH',              fn:"aiAssistSend('Check pending ACH')"},
-    {label:'Has salary deposited?',          fn:"aiAssistSend('Has salary deposited?')"},
+    {label:'Show posted transactions',           fn:"aiAssistSend('Show posted transactions')"},
+    {label:'Show pending transactions',          fn:"aiAssistSend('Show pending transactions')"},
+    {label:'Show disputed transactions',         fn:"aiAssistSend('Show disputed transactions')"},
+    {label:'⚡ Start Dispute',                  fn:"saStartFromOrch('dispute')",        type:'action'},
   ],
+
+  /* ── Interaction Journey tab: 3 investigation + 1 action ── */
+  journey: [
+    {label:'Show recent interactions',           fn:"aiAssistSend('Show recent interactions')"},
+    {label:'What was the last conversation about?', fn:"aiAssistSend('What was the last conversation about?')"},
+    {label:'Show previous servicing requests',   fn:"aiAssistSend('Show previous servicing requests')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
+  ],
+
+  /* ── Membership details page: 3 investigation + 1 action ── */
+  prompt_membership: [
+    {label:'Show linked products',               fn:"aiAssistSend('Show linked products')"},
+    {label:'What verification methods were used?',fn:"aiAssistSend('What verification methods were used?')"},
+    {label:'Show verification history',          fn:"aiAssistSend('Show verification history')"},
+    {label:'⚡ Start Verification',             fn:"aiAssistSend('Start member verification')", type:'action'},
+  ],
+
+  /* ── AI result pages ── */
   prompt_payroll: [
-    {label:'Check pending ACH',              fn:"aiAssistSend('Check pending ACH')"},
-    {label:'Compare last 3 deposits',        fn:"aiAssistSend('Compare last 3 salary deposits')"},
-    {label:'Show transaction history',       fn:"aiAssistSend('Show transaction history')"},
+    {label:'Show payroll deposits',              fn:"aiAssistSend('Show payroll deposits')"},
+    {label:'Check pending ACH',                  fn:"aiAssistSend('Check pending ACH')"},
+    {label:'Open Everyday Checking',             fn:"arOpenDetail('checking')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
   prompt_ach: [
-    {label:'Review payroll deposits',        fn:"aiAssistSend('Review payroll deposits')"},
-    {label:'Show transaction history',       fn:"aiAssistSend('Show transaction history')"},
-    {label:'Create servicing note',          fn:"aiAssistSend('Create servicing note for Emily')"},
+    {label:'Show payroll deposits',              fn:"aiAssistSend('Show payroll deposits')"},
+    {label:'Review payroll deposits',            fn:"aiAssistSend('Review payroll deposits')"},
+    {label:'Open Everyday Checking',             fn:"arOpenDetail('checking')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
   prompt_compare: [
-    {label:'Review payroll deposits',        fn:"aiAssistSend('Review payroll deposits')"},
-    {label:'Check pending ACH',              fn:"aiAssistSend('Check pending ACH')"},
-    {label:'Show transaction history',       fn:"aiAssistSend('Show transaction history')"},
+    {label:'Check pending ACH',                  fn:"aiAssistSend('Check pending ACH')"},
+    {label:'Show payroll deposits',              fn:"aiAssistSend('Show payroll deposits')"},
+    {label:'Open Everyday Checking',             fn:"arOpenDetail('checking')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
   prompt_salary_status: [
-    {label:'Check pending ACH',              fn:"aiAssistSend('Check pending ACH')"},
-    {label:'Review payroll deposits',        fn:"aiAssistSend('Review payroll deposits')"},
-    {label:'Show transaction history',       fn:"aiAssistSend('Show transaction history')"},
+    {label:'Show payroll deposits',              fn:"aiAssistSend('Show payroll deposits')"},
+    {label:'Check pending ACH',                  fn:"aiAssistSend('Check pending ACH')"},
+    {label:'Open Everyday Checking',             fn:"arOpenDetail('checking')"},
+    {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
+
+  /* ── Verification pages: 3 investigation + 1 action ── */
   prompt_verification: [
-    {label:'Show failed attempts',           fn:"aiAssistSend('Show failed verification attempts')"},
-    {label:'Check voice verification',       fn:"aiAssistSend('Check latest voice verification')"},
-    {label:'Device verification details',    fn:"aiAssistSend('Show device verification history')"},
-    {label:'View full history →',            fn:"arOpenVerificationHistory()"},
+    {label:'Show failed verification attempts',  fn:"aiAssistSend('Show failed verification attempts')"},
+    {label:'Show voice verification history',    fn:"aiAssistSend('Show voice biometric history')"},
+    {label:'Show device verification history',   fn:"aiAssistSend('Show device verification history')"},
+    {label:'⚡ Re-Verify Member',               fn:"aiAssistSend('Start member verification')", type:'action'},
   ],
 };
 
 /* ── Contextual placeholder engine ── */
 function getOrchPlaceholder() {
-  // Alert-aware: check if current product has a restriction
+  // Alert-aware
   if (arNavProduct && AR_ALERTS) {
     const alerts = AR_ALERTS[arNavProduct] || [];
-    const hasRestrict = alerts.some(a => a.sev === 'restrict');
-    const hasDeposit  = (arNavProduct === 'checking') && arNavView === 'detail';
-    if (hasRestrict) return 'Ask about account restrictions, warning flags, or servicing options…';
+    if (alerts.some(a => a.sev === 'restrict')) return 'Ask about account restrictions, warning flags, or servicing options…';
   }
-
   // Prompt result pages
   if (arNavView === 'prompt') {
     const m = {
@@ -13284,72 +13534,75 @@ function getOrchPlaceholder() {
       'verification-voice':   'Ask about voice match score, enrollment, or verification result…',
       'verification-device':  'Ask about device risk, new device alerts, or IP region…',
       'verification-phone':   'Ask about OTP delivery, phone match, or verification status…',
+      'membership':           'Ask about linked products, ownership, or verification history…',
     };
     if (arNavPrompt && m[arNavPrompt]) return m[arNavPrompt];
     return 'Ask a follow-up about this result or related accounts…';
   }
-
-  // Transaction pages
-  if (arNavView === 'transactions') {
-    return 'Ask about transaction status, pending items, or unusual activity…';
-  }
-
-  // Detail pages — product specific
+  // Transactions
+  if (arNavView === 'transactions') return 'Ask about transaction status, pending items, or unusual activity…';
+  // Detail pages
   if (arNavView === 'detail') {
     const m = {
       checking:   'Ask about payroll deposits, pending ACH, or checking activity…',
       savings:    'Ask about savings balance, transfers, or linked accounts…',
+      hysavings:  'Ask about balance, interest, or beneficiary details…',
       autoloan:   'Ask about payoff balance, payment history, or loan status…',
+      mortgage:   'Ask about mortgage payments, payoff balance, or borrower details…',
       creditcard: 'Ask about payment due, available credit, or declined transactions…',
       debitcard:  'Ask about debit activity, card status, or linked checking account…',
     };
     return m[arNavProduct] || 'Ask about this product, balance, or recent activity…';
   }
-
-  // Interaction Journey
-  if (typeof activeWFTab !== 'undefined' && activeWFTab === 'journey') {
-    return 'Ask about previous interactions, transfers, or service history…';
-  }
-
-  // Overview (default)
+  // Interaction Journey tab
+  if (typeof activeWFTab !== 'undefined' && activeWFTab === 'journey') return 'Ask about previous interactions, transfers, or service history…';
+  // Overview
   return 'Ask about Emily\'s accounts, missing salary deposit, or linked products…';
 }
 
 function arUpdateContextChips() {
   let key = 'overview';
-  if (arNavView === 'detail') {
-    const pkMap = {checking:'detail_checking', savings:'detail_savings', autoloan:'detail_autoloan', creditcard:'detail_creditcard', debitcard:'detail_debitcard'};
+
+  // Journey tab override — check before nav state
+  if (typeof activeWFTab !== 'undefined' && activeWFTab === 'journey') {
+    key = 'journey';
+  } else if (arNavView === 'detail') {
+    const pkMap = {
+      checking:'detail_checking', savings:'detail_savings',     hysavings:'detail_hysavings',
+      autoloan:'detail_autoloan', mortgage:'detail_mortgage',
+      creditcard:'detail_creditcard', debitcard:'detail_debitcard',
+    };
     key = pkMap[arNavProduct] || 'detail_default';
-  } else if (arNavView === 'transactions') key = 'transactions';
-  else if (arNavView === 'prompt') {
-    if      (arNavPrompt === 'payroll')                               key = 'prompt_payroll';
-    else if (arNavPrompt === 'ach')                                   key = 'prompt_ach';
-    else if (arNavPrompt === 'compare')                               key = 'prompt_compare';
-    else if (arNavPrompt === 'salary-status')                         key = 'prompt_salary_status';
-    else if (arNavPrompt && arNavPrompt.startsWith('verification'))   key = 'prompt_verification';
+  } else if (arNavView === 'transactions') {
+    key = 'transactions';
+  } else if (arNavView === 'prompt') {
+    if      (arNavPrompt === 'payroll')                              key = 'prompt_payroll';
+    else if (arNavPrompt === 'ach')                                  key = 'prompt_ach';
+    else if (arNavPrompt === 'compare')                              key = 'prompt_compare';
+    else if (arNavPrompt === 'salary-status')                        key = 'prompt_salary_status';
+    else if (arNavPrompt === 'membership')                           key = 'prompt_membership';
+    else if (arNavPrompt && arNavPrompt.startsWith('verification'))  key = 'prompt_verification';
   }
-  const chips = CTX_CHIPS[key] || CTX_CHIPS.overview;
+
+  // Cap at 4 chips max
+  const chips = (CTX_CHIPS[key] || CTX_CHIPS.overview).slice(0, 4);
   const chipHTML = chips.map(c => {
     if (c.type === 'action') {
-      // Extract actionId from fn string to check permission
       const m = c.fn.match(/saStartFromOrch\('([^']+)'\)/);
       const actionId = m ? m[1] : null;
       const restricted = actionId ? !isActionAllowed(arNavProduct, actionId) : false;
-      const cls = restricted
-        ? 'c2-orch-chip c2-orch-chip-action c2-orch-chip-restricted'
-        : 'c2-orch-chip c2-orch-chip-action';
+      const cls = restricted ? 'c2-orch-chip c2-orch-chip-action c2-orch-chip-restricted' : 'c2-orch-chip c2-orch-chip-action';
       const label = restricted ? `🔒 ${c.label}` : c.label;
-      const title = restricted ? 'Permission required — click for details' : '';
-      return `<button class="${cls}" onclick="${c.fn}" title="${title}">${label}</button>`;
+      return `<button class="${cls}" onclick="${c.fn}" title="${restricted?'Permission required — click for details':''}">${label}</button>`;
     }
     return `<button class="c2-orch-chip" onclick="${c.fn}">${c.label}</button>`;
   }).join('');
+
   const orchChips = document.getElementById('c2OrchChips');
   if (orchChips) orchChips.innerHTML = `<span class="c2-orch-lbl">✦</span>${chipHTML}`;
   const panelChips = document.getElementById('aapChips');
   if (panelChips) panelChips.innerHTML = chipHTML;
 
-  // Update both input placeholders with contextual text
   const ph = getOrchPlaceholder();
   const orchInput = document.getElementById('c2OrchInput');
   if (orchInput) orchInput.placeholder = ph;
@@ -13859,9 +14112,65 @@ const AR_DETAIL_DATA = {
 .ar-page-bc{
   flex-shrink:0;
   background:var(--c360-ws-bg);
-  padding:10px var(--ws-pad-h) 8px;
+  padding:8px var(--ws-pad-h) 7px;
   border-bottom:1px solid rgba(0,0,0,.07);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
 }
+#aicBcSlot{flex-shrink:0;}
+
+/* ══ AI INVESTIGATION CHIPS ══════════════════════════════ */
+.aic-container{
+  display:flex;align-items:center;gap:5px;flex-wrap:nowrap;
+  flex-shrink:0;
+}
+.aic-chip{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 8px 3px 6px;
+  border:1px solid rgba(91,95,207,.22);
+  border-radius:20px;
+  background:rgba(91,95,207,.06);
+  cursor:pointer;font-size:10px;
+  font-family:var(--f);
+  color:#3d41a0;
+  transition:all .12s;
+  white-space:nowrap;max-width:130px;
+}
+.aic-chip:hover{background:rgba(91,95,207,.12);border-color:rgba(91,95,207,.35);}
+.aic-orb{font-size:8px;color:#5b5fcf;flex-shrink:0;}
+.aic-label{font-size:10px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.aic-x{
+  background:none;border:none;cursor:pointer;padding:0;
+  font-size:12px;color:#9896b0;line-height:1;margin-left:1px;flex-shrink:0;
+  transition:color .1s;
+}
+.aic-x:hover{color:#3d41a0;}
+/* Overflow +N button */
+.aic-overflow{
+  position:relative;
+  display:inline-flex;align-items:center;
+  padding:3px 9px;border:1px solid rgba(0,0,0,.1);border-radius:20px;
+  background:#f3f4f6;color:#6b6987;
+  font-size:10px;font-weight:600;cursor:pointer;
+  font-family:var(--f);white-space:nowrap;
+  transition:background .12s;
+}
+.aic-overflow:hover{background:#e8eaf0;}
+.aic-overflow-menu{
+  position:absolute;top:calc(100% + 6px);right:0;
+  background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:9px;
+  box-shadow:0 4px 14px rgba(0,0,0,.1);min-width:180px;z-index:50;
+  padding:4px;
+}
+.aic-ov-item{
+  display:flex;align-items:center;gap:6px;
+  padding:7px 10px;border-radius:6px;cursor:pointer;
+  font-size:10.5px;color:#3a3854;transition:background .1s;
+}
+.aic-ov-item:hover{background:rgba(91,95,207,.06);}
+/* ══ END AI INVESTIGATION CHIPS ══ */
 .ar-bc-bar{
   display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:0;padding:0;
 }
@@ -14516,6 +14825,7 @@ function arOpenDetail(id, fromId, fromName) {
 function arOpenMembership(memId, fromId, fromName) {
   const fromData = AR_DETAIL_DATA[fromId];
   arNavView = 'detail';
+  arNavPrompt = 'membership';
 
   const MEMBERSHIPS = {
     mem3842: {
@@ -14593,7 +14903,21 @@ function arOpenMembership(memId, fromId, fromName) {
    Switching pages = hide one mode, show another. No absolute positioning hacks.
 ══════════════════════════════════════════════════════════ */
 
+/* ════════════════════════════════════════════════════════
+   GLOBAL AI NAVIGATION — auto-return to Contact360
+   Called before any workspace result is rendered.
+   If agent is on a different tab, switches to Contact360 first.
+════════════════════════════════════════════════════════ */
+function ensureContact360Active() {
+  const c360Loaded = document.getElementById('c360-loaded');
+  if (!c360Loaded || c360Loaded.style.display === 'none') return;
+  if (typeof activeWFTab !== 'undefined' && activeWFTab !== 'contact360') {
+    switchWFTab('contact360');
+  }
+}
+
 function arShowPage(mode) {
+  ensureContact360Active(); // auto-switch to Contact360 from any tab
   // Hide overview, show detail page
   const ov = document.getElementById('c360v2Overview');
   const dp = document.getElementById('arDetailPage');
@@ -14610,6 +14934,109 @@ function arShowPage(mode) {
     if (w) w.style.display = 'none';
   }
 }
+
+/* ════════════════════════════════════════════════════════════
+   AIInvestigationChips — Optional isolated component
+   Remove this entire block to disable; nothing else breaks.
+════════════════════════════════════════════════════════════ */
+window._aicFromAI = false; // set to true by aiAssistSend before AI navigation
+
+const AIC = {
+  store: [],          // [{id, label, restore}]
+  MAX_VISIBLE: 3,
+
+  /* ── Add a chip (idempotent by label) ── */
+  add(label, restoreFn) {
+    if (!label) return;
+    const exists = this.store.find(c => c.label === label);
+    if (exists) return; // already present — no duplicate
+    this.store.unshift({ id: Date.now(), label, restore: restoreFn });
+    this.render();
+  },
+
+  /* ── Dismiss one chip ── */
+  dismiss(id) {
+    this.store = this.store.filter(c => c.id !== id);
+    this.render();
+  },
+
+  /* ── Activate (restore) a chip ── */
+  activate(id) {
+    const chip = this.store.find(c => c.id === id);
+    if (chip && typeof chip.restore === 'function') chip.restore();
+    // Close overflow menu if open
+    document.querySelectorAll('.aic-overflow-menu').forEach(m => m.style.display = 'none');
+  },
+
+  /* ── Render chips into #aicContainer ── */
+  render() {
+    const container = document.getElementById('aicContainer');
+    if (!container) return;
+    if (this.store.length === 0) { container.innerHTML = ''; return; }
+
+    const visible  = this.store.slice(0, this.MAX_VISIBLE);
+    const overflow = this.store.slice(this.MAX_VISIBLE);
+
+    const chipHTML = visible.map(c => `
+      <div class="aic-chip" onclick="AIC.activate(${c.id})" title="Restore: ${c.label}">
+        <span class="aic-orb">✦</span>
+        <span class="aic-label">${c.label}</span>
+        <button class="aic-x" onclick="event.stopPropagation();AIC.dismiss(${c.id})" title="Remove">×</button>
+      </div>`).join('');
+
+    const ovHTML = overflow.length ? `
+      <div class="aic-overflow" id="aicOverflow" onclick="AIC._toggleOverflow()">
+        +${overflow.length}
+        <div class="aic-overflow-menu" id="aicOverflowMenu" style="display:none">
+          ${overflow.map(c => `
+            <div class="aic-ov-item" onclick="event.stopPropagation();AIC.activate(${c.id})">
+              <span class="aic-orb">✦</span>
+              <span style="flex:1">${c.label}</span>
+              <button class="aic-x" onclick="event.stopPropagation();AIC.dismiss(${c.id})">×</button>
+            </div>`).join('')}
+        </div>
+      </div>` : '';
+
+    container.innerHTML = chipHTML + ovHTML;
+  },
+
+  _toggleOverflow() {
+    const menu = document.getElementById('aicOverflowMenu');
+    if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  },
+};
+
+/* ── Close overflow when clicking outside ── */
+document.addEventListener('click', e => {
+  if (!e.target.closest('#aicOverflow')) {
+    const menu = document.getElementById('aicOverflowMenu');
+    if (menu) menu.style.display = 'none';
+  }
+  if (!e.target.closest('#c360CpMoreWrap')) {
+    const m = document.getElementById('c360CpMoreMenu');
+    if (m) m.style.display = 'none';
+  }
+});
+
+/* ── Restore page without skeleton animation ── */
+function arRestorePage(html) {
+  arShowPage('A');
+  const bcBar  = document.getElementById('arPageBc');
+  const bcSlot = document.getElementById('aicBcSlot');
+  const s      = document.getElementById('arDpScroll');
+  if (!s) return;
+  const bcMatch = html.match(/<div class="ar-bc-bar">([\s\S]*?)<\/div>/);
+  if (bcMatch && bcBar) {
+    if (bcSlot) bcSlot.innerHTML = bcMatch[0];
+    else bcBar.innerHTML = bcMatch[0];
+    bcBar.style.display = 'flex';
+    html = html.replace(bcMatch[0], '');
+  }
+  s.innerHTML = `<div class="ws-enter">${html}</div>`;
+  s.scrollTop = 0;
+  if (typeof AIC !== 'undefined') AIC.render();
+}
+/* ════════════════════════════════ END AIInvestigationChips ════ */
 
 /* ══ CLOSE / BACK TO OVERVIEW ══ */
 function arCloseDetail() {
@@ -14670,14 +15097,18 @@ function arSkeletonHTML() {
 function arShowModeA(html) {
   arShowPage('A');
 
-  // Extract breadcrumb from html and hoist it into the sticky bar above arDpScroll
+  // Extract breadcrumb and hoist into sticky bar — inject into bc slot only (preserves AIC container)
   const bcMatch = html.match(/<div class="ar-bc-bar">([\s\S]*?)<\/div>/);
   const bcBar   = document.getElementById('arPageBc');
+  const bcSlot  = document.getElementById('aicBcSlot');
   if (bcMatch && bcBar) {
-    bcBar.innerHTML = bcMatch[0];   // put breadcrumb in sticky header
-    bcBar.style.display = 'block';
-    html = html.replace(bcMatch[0], ''); // strip it from scroll content
+    if (bcSlot) bcSlot.innerHTML = bcMatch[0]; // inject into slot, not full bar
+    else bcBar.innerHTML = bcMatch[0];
+    bcBar.style.display = 'flex';
+    html = html.replace(bcMatch[0], '');
   }
+  // Notify AIC (if component present) to re-render chips
+  if (typeof AIC !== 'undefined') AIC.render();
 
   const s = document.getElementById('arDpScroll');
   if (!s) return;
@@ -14893,6 +15324,7 @@ const TXN_STATUS_CFG = {
 
 /* ── Main open function ── */
 function arOpenTransactions(productId) {
+  ensureContact360Active();
   const detailData = AR_DETAIL_DATA[productId];
   const txnData    = TXN_DATA[productId];
   if (!detailData || !txnData) return;
@@ -15076,6 +15508,52 @@ function txnToggleRow(rowId, productId) {
 /* ══ OVERVIEW CARDS — compact 2-col grid, no balance metrics ══ */
 
 /* 2-column grid */
+/* AI-prioritized card — enriched section below main row */
+.ar-pc-enriched{
+  border-top:1px solid rgba(0,0,0,.06);
+  padding:10px 14px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+/* Balance strip */
+.ar-pc-bal-strip{
+  display:flex;align-items:center;gap:0;
+}
+.ar-pc-bal-item{
+  display:flex;flex-direction:column;gap:2px;padding:0 18px 0 0;
+}
+.ar-pc-bal-item:first-child{padding-left:0;}
+.ar-pc-bal-lbl{font-size:9px;font-weight:600;color:#b0afc8;letter-spacing:.04em;text-transform:uppercase;}
+.ar-pc-bal-val{font-size:13px;font-weight:700;color:#0c0b18;letter-spacing:-.02em;font-family:'JetBrains Mono',monospace;}
+.ar-pc-bal-divider{width:1px;height:28px;background:rgba(0,0,0,.07);margin:0 16px 0 4px;flex-shrink:0;}
+
+/* Recent activity strip */
+.ar-pc-act-strip{
+  display:flex;flex-direction:column;gap:0;
+  cursor:pointer;
+}
+.ar-pc-act-hdr{
+  font-size:8.5px;font-weight:700;letter-spacing:.07em;
+  text-transform:uppercase;color:#b0afc8;margin-bottom:6px;
+}
+.ar-pc-act-row{
+  display:flex;align-items:center;gap:8px;
+  padding:4px 0;border-top:1px solid rgba(0,0,0,.05);
+}
+.ar-pc-act-row:first-of-type{border-top:none; padding-top:0;}
+.ar-pc-act-name{flex:1;font-size:10.5px;color:#3a3854;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ar-pc-act-amt{font-size:10.5px;font-family:'JetBrains Mono',monospace;font-weight:600;color:#6b6987;flex-shrink:0;}
+.ar-pc-act-cr{color:#0d7c52;}
+.ar-pc-act-badge{
+  font-size:8.5px;font-weight:600;padding:1px 7px;border-radius:20px;
+  border:1px solid;flex-shrink:0;white-space:nowrap;
+}
+.ar-pc-act-posted{background:rgba(13,124,82,.07);border-color:rgba(13,124,82,.18);color:#065f46;}
+.ar-pc-act-pending{background:rgba(201,123,28,.07);border-color:rgba(201,123,28,.18);color:#92400e;}
+.ar-pc-act-strip:hover .ar-pc-act-name{color:#5b5fcf;}
+
 /* Relationship chips on product cards */
 .ar-rel-chip{font-size:8.5px;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(91,95,207,.07);border:1px solid rgba(91,95,207,.18);color:#3d41a0;white-space:nowrap;}
 .ar-rel-chip-sec{background:rgba(0,0,0,.04);border-color:rgba(0,0,0,.1);color:#6b6987;}
@@ -15567,7 +16045,80 @@ function txnToggleRow(rowId, productId) {
 .dp-side-col{margin:0;}
 @media(max-width:560px){.dp-side-row{grid-template-columns:1fr;}}
 
-/* ══ OVERVIEW MEMBER ROW (Member Info + Verification History) ══ */
+/* ══ OVERVIEW — RECENT INTERACTION JOURNEY WIDGET ══════ */
+.ov-ij-widget{margin-top:10px;}
+.ov-ij-rows{margin-top:10px;display:flex;flex-direction:column;}
+
+.ov-ij-row{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;
+  border-top:1px solid rgba(0,0,0,.05);
+  cursor:pointer;transition:background .1s;
+}
+.ov-ij-row:first-child{border-top:none;padding-top:4px;}
+.ov-ij-row:hover .ov-ij-topic{color:#5b5fcf;}
+
+.ov-ij-icon{
+  width:28px;height:28px;border-radius:8px;
+  display:grid;place-items:center;font-size:13px;flex-shrink:0;
+}
+.ov-ij-icon-video {background:rgba(124,58,237,.08);}
+.ov-ij-icon-chat  {background:rgba(0,150,136,.08);}
+.ov-ij-icon-voice {background:rgba(37,99,235,.08);}
+
+.ov-ij-body{flex:1;min-width:0;}
+.ov-ij-topic{font-size:11px;font-weight:600;color:#0c0b18;transition:color .12s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ov-ij-meta{font-size:9.5px;color:#9896b0;margin-top:1px;}
+
+.ov-ij-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+.ov-ij-time{font-size:9px;color:#b0afc8;white-space:nowrap;}
+.ov-ij-tag{font-size:8.5px;font-weight:600;padding:1px 7px;border-radius:20px;border:1px solid;white-space:nowrap;}
+.ov-ij-tag-pink {background:rgba(236,72,153,.07);border-color:rgba(236,72,153,.2);color:#9d174d;}
+.ov-ij-tag-teal {background:rgba(0,150,136,.07);border-color:rgba(0,150,136,.2);color:#065f50;}
+.ov-ij-tag-amber{background:rgba(201,123,28,.07);border-color:rgba(201,123,28,.2);color:#92400e;}
+/* ══ END OVERVIEW INTERACTION JOURNEY ══ */
+
+/* ══ CONTACT360 SPLIT LAYOUT ══════════════════════════ */
+.c360-conv-panel{width:280px;min-width:240px;max-width:340px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid rgba(0,0,0,.08);background:#fff;overflow:hidden;}
+.c360-ws-panel{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;}
+.c360-ws-panel .ihs-root{flex-shrink:0;}
+.c360-ws-panel .c2-overview-scroll{flex:1;min-height:0;}
+/* Panel mini-header with tab shortcut */
+.c360-cp-topbar{display:flex;align-items:center;justify-content:space-between;padding:7px 10px 6px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--s1);}
+.c360-cp-topbar-label{font-size:10px;font-weight:700;color:var(--t2);font-family:var(--m);letter-spacing:.06em;}
+.c360-cp-expand-btn{background:none;border:none;cursor:pointer;padding:3px;border-radius:5px;color:var(--t3);display:grid;place-items:center;transition:all .12s;}
+.c360-cp-expand-btn:hover{background:var(--s2);color:var(--t1);}
+/* Recording dot */
+.c360-cp-rec-dot{width:9px;height:9px;border-radius:50%;background:#ef4444;}
+/* More controls wrapper */
+.c360-cp-more-wrap{position:relative;}
+.c360-cp-more-menu{position:absolute;bottom:calc(100% + 6px);right:0;background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.12);min-width:130px;z-index:50;padding:4px;}
+.c360-cp-more-item{display:flex;align-items:center;gap:7px;width:100%;padding:7px 10px;border:none;background:transparent;color:#0c0b18;font-size:11px;font-family:var(--f);cursor:pointer;border-radius:5px;text-align:left;transition:background .1s;}
+.c360-cp-more-item:hover{background:var(--s2);}
+
+.c360-cp-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--s1);}
+.c360-cp-hdr-title{font-size:10px;font-weight:700;color:var(--t2);font-family:var(--m);letter-spacing:.06em;}
+.c360-cp-hdr-sub{font-size:9px;color:var(--t3);}
+.c360-cp-msgs{flex:1;min-height:0;overflow-y:auto;padding:10px;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.06) transparent;}
+.c360-cp-callbar{flex-shrink:0;display:flex;align-items:center;gap:7px;background:#1c1c2a;padding:7px 10px;}
+.c360-cp-wave{display:flex;align-items:center;gap:2px;height:14px;flex-shrink:0;}
+.c360-cp-wave span{display:block;width:2.5px;border-radius:2px;background:#0d9488;animation:vc2-wave 1.1s ease-in-out infinite;}
+.c360-cp-wave span:nth-child(1){height:6px;}.c360-cp-wave span:nth-child(2){height:10px;animation-delay:.15s;}.c360-cp-wave span:nth-child(3){height:14px;animation-delay:.3s;}.c360-cp-wave span:nth-child(4){height:9px;animation-delay:.45s;}.c360-cp-wave span:nth-child(5){height:5px;animation-delay:.6s;}
+.c360-cp-calllabel{flex:1;font-size:10px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.c360-cp-callctrls{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.c360-cp-ctrl{width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;display:grid;place-items:center;background:rgba(255,255,255,.12);color:#fff;transition:background .12s;}
+.c360-cp-ctrl:hover{background:rgba(255,255,255,.2);}
+.c360-cp-ctrl-end{background:#ef4444;}.c360-cp-ctrl-end:hover{background:#dc2626;}
+.c360-cp-composer{flex-shrink:0;border-top:1px solid var(--border);background:#fff;}
+.c360-cp-input{width:100%;border:none;outline:none;resize:none;padding:9px 12px 4px;font-size:11px;color:var(--t1);font-family:var(--f);line-height:1.5;background:transparent;box-sizing:border-box;}
+.c360-cp-input::placeholder{color:var(--t3);}
+.c360-cp-actions{display:flex;align-items:center;justify-content:space-between;padding:5px 10px 8px;}
+.c360-cp-act{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:#fff;color:var(--t1);font-size:10.5px;font-weight:500;cursor:pointer;font-family:var(--f);transition:background .12s;}
+.c360-cp-act:hover{background:var(--s2);}
+.c360-cp-send{width:30px;height:30px;border-radius:50%;border:none;background:#0d9488;color:#fff;cursor:pointer;display:grid;place-items:center;transition:all .12s;}
+.c360-cp-send:hover{background:#0b7a6e;transform:scale(1.05);}
+/* ══ END SPLIT LAYOUT ══ */
+
 .ov-member-row{
   display:grid;
   grid-template-columns:1fr 1fr;
