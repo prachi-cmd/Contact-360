@@ -13390,7 +13390,7 @@ const CTX_CHIPS = {
   overview: [
     {label:'Has salary deposited?',             fn:"aiAssistSend('Has salary deposited?')"},
     {label:'Show verification history',          fn:"aiAssistSend('Show verification history')"},
-    {label:'Show recent interactions',           fn:"switchWFTab('journey')"},
+    {label:'Was Emily verified?',              fn:"aiAssistSend('Was Emily verified successfully?')"},
     {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
 
@@ -13465,11 +13465,11 @@ const CTX_CHIPS = {
     {label:'⚡ Start Dispute',                  fn:"saStartFromOrch('dispute')",        type:'action'},
   ],
 
-  /* ── Interaction Journey tab: 3 investigation + 1 action ── */
+  /* ── Interaction Journey tab: Contact360-relevant prompts ── */
   journey: [
-    {label:'Show recent interactions',           fn:"aiAssistSend('Show recent interactions')"},
-    {label:'What was the last conversation about?', fn:"aiAssistSend('What was the last conversation about?')"},
-    {label:'Show previous servicing requests',   fn:"aiAssistSend('Show previous servicing requests')"},
+    {label:'Has salary deposited?',              fn:"aiAssistSend('Has salary deposited?')"},
+    {label:'Show verification history',          fn:"aiAssistSend('Show verification history')"},
+    {label:'Available balance',                  fn:"aiAssistSend('available balance')"},
     {label:'⚡ Transfer Funds',                 fn:"saStartFromOrch('transfer')",       type:'action'},
   ],
 
