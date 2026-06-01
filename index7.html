@@ -4474,6 +4474,36 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                           <!-- Persistent breadcrumb (overview state) -->
 
                           <!-- ── Member Info + Verification History row ── -->
+                          <!-- Collapsed snapshot bar — shown when row is collapsed -->
+                          <div class="ov-member-snap" id="ovMemberSnap" style="display:none">
+                            <div class="ov-snap-left">
+                              <span class="ov-snap-title">Member Snapshot</span>
+                              <span class="ov-snap-dot">·</span>
+                              <span class="ov-snap-name">Emily Olivers</span>
+                              <span class="ov-snap-dot">·</span>
+                              <span class="ov-snap-meta">Member #10048291</span>
+                            </div>
+                            <div class="ov-snap-right">
+                              <button class="ov-snap-vh-btn" onclick="arOpenVerificationHistory()">
+                                View Verification History
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
+                              </button>
+                              <button class="ov-snap-expand" onclick="ovMemberToggle()" title="Expand">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-- Expanded member row with collapse control -->
+                          <div class="ov-member-row-wrap" id="ovMemberWrap">
+                            <div class="ov-member-row-hdr">
+                              <span class="ov-member-row-lbl">Member &amp; Verification</span>
+                              <button class="ov-member-row-collapse" onclick="ovMemberToggle()" title="Collapse">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="18 15 12 9 6 15"/></svg>
+                                Collapse
+                              </button>
+                            </div>
+
                           <div class="ov-member-row">
 
                             <!-- Member Information -->
@@ -4538,6 +4568,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                             </div>
 
                           </div><!-- /ov-member-row -->
+                          </div><!-- /ov-member-row-wrap -->
 
                           <!-- Product card stack — simplified collapsed only -->
                           <div id="arProductStack" class="ar-card-grid">
@@ -4548,6 +4579,10 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                               <div class="ar-pc-ai-bar">
                                 <span class="ar-pc-ai-bar-orb">✦</span>
                                 <span class="ar-pc-ai-bar-text">Most relevant to current request</span>
+                                <div class="ai-fb-ctrl" id="aiFbBar">
+                                  <button class="ai-fb-btn" onclick="aiFbUp('aiFbBar',this)" title="Helpful">👍</button>
+                                  <button class="ai-fb-btn" onclick="aiFbDown('aiFbBar')" title="Not helpful">👎</button>
+                                </div>
                               </div>
 
                               <!-- Main identity row -->
@@ -8104,6 +8139,24 @@ function toggleHandoffSummary(){
 }
 
 /* ══ INCOMING VOICE CALL HANDLERS ══ */
+/* ── Member row collapse / expand ── */
+function ovMemberCollapse() {
+  const snap = document.getElementById('ovMemberSnap');
+  const wrap = document.getElementById('ovMemberWrap');
+  if (!snap || !wrap) return;
+  snap.style.display = 'flex';
+  wrap.style.display = 'none';
+}
+
+function ovMemberToggle() {
+  const snap = document.getElementById('ovMemberSnap');
+  const wrap = document.getElementById('ovMemberWrap');
+  if (!snap || !wrap) return;
+  const isCollapsed = snap.style.display !== 'none';
+  snap.style.display = isCollapsed ? 'none' : 'flex';
+  wrap.style.display = isCollapsed ? 'block' : 'none';
+}
+
 function acceptCall(){
   // 1. Dismiss notification
   document.getElementById('voiceNotif').classList.remove('show');
@@ -12316,6 +12369,31 @@ function aapLoadingHTML(text) {
   </div>`;
 }
 
+/* ── Derive a friendly investigation label from query text ── */
+function aicLabelFromQuery(query) {
+  const q = query.toLowerCase();
+  if (q.includes('salary') || q.includes('payroll') || q.includes('deposit')) return 'Salary Deposit';
+  if (q.includes('verif') || q.includes('authenticat') || q.includes('biometric')) return 'Verification History';
+  if (q.includes('voice')) return 'Voice Verification';
+  if (q.includes('device')) return 'Device Verification';
+  if (q.includes('phone') && q.includes('verif')) return 'Phone Verification';
+  if (q.includes('fail') && q.includes('verif')) return 'Failed Verifications';
+  if (q.includes('mortgage') || q.includes('home loan')) return 'Mortgage Review';
+  if (q.includes('auto') || (q.includes('loan') && !q.includes('mortgage'))) return 'Loan Review';
+  if (q.includes('credit card') || (q.includes('credit') && q.includes('card'))) return 'Credit Card Review';
+  if (q.includes('debit') || q.includes('debit card')) return 'Debit Card Review';
+  if (q.includes('disputed') || q.includes('dispute') || q.includes('chargeback')) return 'Dispute Investigation';
+  if (q.includes('declined') || q.includes('blocked')) return 'Declined Transaction';
+  if (q.includes('balance')) return 'Balance Inquiry';
+  if (q.includes('transaction') || q.includes('activity')) return 'Transaction Analysis';
+  if (q.includes('ach') || q.includes('pending')) return 'ACH Review';
+  if (q.includes('member') || q.includes('ownership') || q.includes('beneficiary')) return 'Membership Review';
+  if (q.includes('card')) return 'Card Investigation';
+  // Capitalise first ~30 chars of query as fallback
+  const trimmed = query.trim().replace(/[?!.]+$/, '');
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1, 32) + (trimmed.length > 32 ? '…' : '');
+}
+
 function aiAssistRender(query) {
   const body = document.getElementById('aapBody');
   if (!body) return;
@@ -12324,7 +12402,6 @@ function aiAssistRender(query) {
   body.insertAdjacentHTML('beforeend', aapLoadingHTML(loadText));
   body.scrollTop = body.scrollHeight;
 
-  // Realistic delay: 900–1600ms based on query complexity
   const base = 900;
   const jitter = Math.floor(Math.random() * 500) + (query.length > 30 ? 200 : 0);
   const delay = base + jitter;
@@ -12335,6 +12412,18 @@ function aiAssistRender(query) {
     const result = aapBuildResponse(query);
     body.insertAdjacentHTML('beforeend', result);
     body.scrollTop = body.scrollHeight;
+
+    // Capture every AI query into the investigation history
+    if (typeof AIC !== 'undefined') {
+      const label = aicLabelFromQuery(query);
+      const q = query; // close over for restore
+      AIC.add(label, () => aiAssistSend(q));
+      // If on overview (no breadcrumb bar), ensure bar is shown for the history control
+      const bc = document.getElementById('arPageBc');
+      if (bc && bc.style.display === 'none' && AIC.store.length > 0) {
+        bc.style.display = 'flex';
+      }
+    }
   }, delay);
 }
 
@@ -12775,9 +12864,17 @@ function aapTxnMsg(query, account, answer, actions) {
 /* ── Shared helper: make a dp-section ── */
 function dpSection(title, bodyHTML, actionBtn, extraClass) {
   const cls = extraClass ? ` ${extraClass}` : '';
+  const fbId = 'aiFb_' + Math.random().toString(36).slice(2,8);
+  // Inject feedback controls into AI-generated sections only
+  const fbHtml = extraClass === 'dp-section-ai-context'
+    ? `<div class="ai-fb-ctrl" id="${fbId}">
+        <button class="ai-fb-btn" onclick="aiFbUp('${fbId}',this)" title="Helpful">👍</button>
+        <button class="ai-fb-btn" onclick="aiFbDown('${fbId}')" title="Not helpful">👎</button>
+       </div>`
+    : '';
   const head = actionBtn
-    ? `<div class="dp-section-head"><div class="dp-section-title">${title}</div>${actionBtn}</div>`
-    : `<div class="dp-section-head"><div class="dp-section-title">${title}</div></div>`;
+    ? `<div class="dp-section-head"><div class="dp-section-title">${title}</div>${actionBtn}${fbHtml}</div>`
+    : `<div class="dp-section-head"><div class="dp-section-title">${title}</div>${fbHtml}</div>`;
   return `<div class="dp-section${cls}">${head}${bodyHTML}</div>`;
 }
 function dpInfoRows(arr) {
@@ -14210,56 +14307,84 @@ const AR_DETAIL_DATA = {
 }
 #aicBcSlot{flex-shrink:0;}
 
-/* ══ AI INVESTIGATION CHIPS ══════════════════════════════ */
-.aic-container{
-  display:flex;align-items:center;gap:5px;flex-wrap:nowrap;
-  flex-shrink:0;
-}
-.aic-chip{
-  display:inline-flex;align-items:center;gap:4px;
-  padding:3px 8px 3px 6px;
-  border:1px solid rgba(91,95,207,.22);
-  border-radius:20px;
-  background:rgba(91,95,207,.06);
-  cursor:pointer;font-size:10px;
-  font-family:var(--f);
-  color:#3d41a0;
-  transition:all .12s;
-  white-space:nowrap;max-width:130px;
-}
-.aic-chip:hover{background:rgba(91,95,207,.12);border-color:rgba(91,95,207,.35);}
-.aic-orb{font-size:8px;color:#5b5fcf;flex-shrink:0;}
-.aic-label{font-size:10px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.aic-x{
-  background:none;border:none;cursor:pointer;padding:0;
-  font-size:12px;color:#9896b0;line-height:1;margin-left:1px;flex-shrink:0;
-  transition:color .1s;
-}
-.aic-x:hover{color:#3d41a0;}
-/* Overflow +N button */
-.aic-overflow{
+/* ══ AI INVESTIGATION HISTORY CONTROL ═════════════════ */
+.aic-container{display:flex;align-items:center;flex-shrink:0;}
+
+/* Trigger button */
+.aih-ctrl{
   position:relative;
-  display:inline-flex;align-items:center;
-  padding:3px 9px;border:1px solid rgba(0,0,0,.1);border-radius:20px;
-  background:#f3f4f6;color:#6b6987;
-  font-size:10px;font-weight:600;cursor:pointer;
-  font-family:var(--f);white-space:nowrap;
-  transition:background .12s;
+  display:inline-flex;align-items:center;gap:5px;
+  padding:3px 9px 3px 8px;
+  border:1px solid rgba(91,95,207,.2);border-radius:20px;
+  background:rgba(91,95,207,.05);
+  cursor:pointer;font-size:10px;font-family:var(--f);
+  color:#3d41a0;white-space:nowrap;
+  transition:background .12s;user-select:none;
 }
-.aic-overflow:hover{background:#e8eaf0;}
-.aic-overflow-menu{
+.aih-ctrl:hover{background:rgba(91,95,207,.11);border-color:rgba(91,95,207,.32);}
+.aih-latest{font-weight:600;max-width:140px;overflow:hidden;text-overflow:ellipsis;}
+.aih-more{color:#6b6987;font-weight:400;}
+.aih-arrow{font-size:9px;color:#9896b0;margin-left:1px;}
+
+/* Dropdown */
+.aih-menu{
   position:absolute;top:calc(100% + 6px);right:0;
-  background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:9px;
-  box-shadow:0 4px 14px rgba(0,0,0,.1);min-width:180px;z-index:50;
-  padding:4px;
+  background:#fff;border:1px solid rgba(0,0,0,.1);
+  border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.1);
+  min-width:200px;z-index:60;padding:4px;
 }
-.aic-ov-item{
-  display:flex;align-items:center;gap:6px;
+.aih-menu-hdr{
+  font-size:8.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:#b0afc8;
+  padding:7px 10px 5px;
+}
+.aih-item{
+  display:flex;align-items:center;gap:7px;
   padding:7px 10px;border-radius:6px;cursor:pointer;
-  font-size:10.5px;color:#3a3854;transition:background .1s;
+  transition:background .1s;
 }
-.aic-ov-item:hover{background:rgba(91,95,207,.06);}
-/* ══ END AI INVESTIGATION CHIPS ══ */
+.aih-item:hover{background:rgba(91,95,207,.07);}
+.aih-item-orb{font-size:8px;color:#5b5fcf;flex-shrink:0;}
+.aih-item-lbl{font-size:11px;color:#0c0b18;}
+/* ══ END AI INVESTIGATION HISTORY CONTROL ══ */
+
+/* ════════════════════════════════════════════
+   AI FEEDBACK CONTROLS — Optional component
+════════════════════════════════════════════ */
+.ai-fb-ctrl{display:flex;align-items:center;gap:1px;margin-left:auto;flex-shrink:0;}
+.ai-fb-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:13px;padding:3px 4px;border-radius:5px;line-height:1;
+  opacity:.35;transition:opacity .15s,transform .15s;
+  filter:grayscale(1);
+}
+.ai-fb-btn:hover{opacity:.75;transform:scale(1.18);filter:grayscale(.2);}
+.ai-fb-active{opacity:1!important;filter:none!important;}
+.ai-fb-down-active{opacity:1!important;filter:none!important;}
+.ai-fb-conf{
+  font-size:9.5px;color:#6b6987;font-weight:500;
+  margin-left:8px;transition:opacity .5s;opacity:0;white-space:nowrap;
+}
+
+/* Feedback modal */
+.ai-fb-modal-box{background:#fff;border-radius:14px;padding:24px;width:380px;max-width:90vw;box-shadow:0 12px 40px rgba(0,0,0,.18);}
+.ai-fb-modal-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.ai-fb-modal-title{font-size:13.5px;font-weight:700;color:#0c0b18;line-height:1.3;}
+.ai-fb-modal-close{background:none;border:none;cursor:pointer;font-size:16px;color:#9896b0;padding:0;line-height:1;transition:color .1s;}
+.ai-fb-modal-close:hover{color:#0c0b18;}
+.ai-fb-modal-q{font-size:11.5px;color:#3a3854;margin:0 0 12px;line-height:1.5;}
+.ai-fb-modal-opts{display:flex;flex-direction:column;gap:9px;margin-bottom:14px;}
+.ai-fb-modal-lbl{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#3a3854;cursor:pointer;}
+.ai-fb-modal-lbl input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:#5b5fcf;flex-shrink:0;}
+.ai-fb-modal-ta{width:100%;border:1px solid rgba(0,0,0,.12);border-radius:8px;padding:8px 10px;font-size:11.5px;font-family:var(--f);color:var(--t1);resize:vertical;outline:none;box-sizing:border-box;transition:border-color .15s;}
+.ai-fb-modal-ta:focus{border-color:rgba(91,95,207,.4);}
+.ai-fb-modal-ta::placeholder{color:var(--t3);}
+.ai-fb-modal-btns{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;}
+.ai-fb-modal-cancel{padding:7px 16px;border-radius:7px;border:1px solid var(--border);background:#fff;color:var(--t1);font-size:11.5px;font-family:var(--f);cursor:pointer;transition:background .12s;}
+.ai-fb-modal-cancel:hover{background:var(--s2);}
+.ai-fb-modal-submit{padding:7px 18px;border-radius:7px;border:none;background:#5b5fcf;color:#fff;font-size:11.5px;font-weight:600;font-family:var(--f);cursor:pointer;transition:background .12s;}
+.ai-fb-modal-submit:hover{background:#4a4eb8;}
+/* ════════════════════════════════ END AI FEEDBACK ══════ */
 .ar-bc-bar{
   display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:0;padding:0;
 }
@@ -14889,6 +15014,10 @@ function arOpenDetail(id, fromId, fromName) {
     <div class="dp-section dp-section-ai-context">
       <div class="dp-section-head">
         <div class="dp-section-title">Request Context</div>
+        <div class="ai-fb-ctrl" id="aiFbCtx_${id}">
+          <button class="ai-fb-btn" onclick="aiFbUp('aiFbCtx_${id}',this)" title="Helpful">👍</button>
+          <button class="ai-fb-btn" onclick="aiFbDown('aiFbCtx_${id}')" title="Not helpful">👎</button>
+        </div>
       </div>
       <div class="ctx-findings">${ctxFindingsHTML}</div>
       ${ctxChipsHTML ? `<div class="ctx-chips">${ctxChipsHTML}</div>` : ''}
@@ -15027,6 +15156,7 @@ function ensureContact360Active() {
 
 function arShowPage(mode) {
   ensureContact360Active(); // auto-switch to Contact360 from any tab
+  ovMemberCollapse();       // compact member row once agent moves past overview
   // Hide overview, show detail page
   const ov = document.getElementById('c360v2Overview');
   const dp = document.getElementById('arDetailPage');
@@ -15077,50 +15207,46 @@ const AIC = {
     document.querySelectorAll('.aic-overflow-menu').forEach(m => m.style.display = 'none');
   },
 
-  /* ── Render chips into #aicContainer ── */
+  /* ── Render history control into #aicContainer ── */
   render() {
     const container = document.getElementById('aicContainer');
     if (!container) return;
     if (this.store.length === 0) { container.innerHTML = ''; return; }
 
-    const visible  = this.store.slice(0, this.MAX_VISIBLE);
-    const overflow = this.store.slice(this.MAX_VISIBLE);
+    const latest  = this.store[0];
+    const more    = this.store.length - 1;
+    const moreStr = more > 0 ? ` <span class="aih-more">• ${more} More</span>` : '';
 
-    const chipHTML = visible.map(c => `
-      <div class="aic-chip" onclick="AIC.activate(${c.id})" title="Restore: ${c.label}">
-        <span class="aic-orb">✦</span>
-        <span class="aic-label">${c.label}</span>
-        <button class="aic-x" onclick="event.stopPropagation();AIC.dismiss(${c.id})" title="Remove">×</button>
+    const dropItems = this.store.map(c => `
+      <div class="aih-item" onclick="event.stopPropagation();AIC.activate(${c.id});AIC._closeMenu()">
+        <span class="aih-item-orb">✦</span>
+        <span class="aih-item-lbl">${c.label}</span>
       </div>`).join('');
 
-    const ovHTML = overflow.length ? `
-      <div class="aic-overflow" id="aicOverflow" onclick="AIC._toggleOverflow()">
-        +${overflow.length}
-        <div class="aic-overflow-menu" id="aicOverflowMenu" style="display:none">
-          ${overflow.map(c => `
-            <div class="aic-ov-item" onclick="event.stopPropagation();AIC.activate(${c.id})">
-              <span class="aic-orb">✦</span>
-              <span style="flex:1">${c.label}</span>
-              <button class="aic-x" onclick="event.stopPropagation();AIC.dismiss(${c.id})">×</button>
-            </div>`).join('')}
+    container.innerHTML = `
+      <div class="aih-ctrl" id="aihCtrl" onclick="AIC._toggleMenu()">
+        <span class="aih-latest">${latest.label}</span>${moreStr}
+        <span class="aih-arrow">▾</span>
+        <div class="aih-menu" id="aihMenu" style="display:none">
+          <div class="aih-menu-hdr">Recent Investigations</div>
+          ${dropItems}
         </div>
-      </div>` : '';
-
-    container.innerHTML = chipHTML + ovHTML;
+      </div>`;
   },
 
-  _toggleOverflow() {
-    const menu = document.getElementById('aicOverflowMenu');
-    if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  _toggleMenu() {
+    const m = document.getElementById('aihMenu');
+    if (m) m.style.display = m.style.display === 'none' ? 'block' : 'none';
+  },
+  _closeMenu() {
+    const m = document.getElementById('aihMenu');
+    if (m) m.style.display = 'none';
   },
 };
 
-/* ── Close overflow when clicking outside ── */
+/* ── Close menus when clicking outside ── */
 document.addEventListener('click', e => {
-  if (!e.target.closest('#aicOverflow')) {
-    const menu = document.getElementById('aicOverflowMenu');
-    if (menu) menu.style.display = 'none';
-  }
+  if (!e.target.closest('#aihCtrl')) AIC._closeMenu();
   if (!e.target.closest('#c360CpMoreWrap')) {
     const m = document.getElementById('c360CpMoreMenu');
     if (m) m.style.display = 'none';
@@ -15147,6 +15273,66 @@ function arRestorePage(html) {
 }
 /* ════════════════════════════════ END AIInvestigationChips ════ */
 
+/* ════════════════════════════════════════════════════════
+   AI FEEDBACK — Optional isolated component
+   Remove this entire block to disable; nothing else breaks.
+════════════════════════════════════════════════════════ */
+
+function aiFbUp(ctrlId, btn) {
+  const ctrl = document.getElementById(ctrlId);
+  if (!ctrl) return;
+  ctrl.querySelectorAll('.ai-fb-btn').forEach(b => b.classList.remove('ai-fb-active','ai-fb-down-active'));
+  btn.classList.add('ai-fb-active');
+  // Show inline confirmation
+  let conf = ctrl.querySelector('.ai-fb-conf');
+  if (!conf) {
+    conf = document.createElement('span');
+    conf.className = 'ai-fb-conf';
+    ctrl.appendChild(conf);
+  }
+  conf.textContent = 'Thanks for your feedback';
+  conf.style.opacity = '1';
+  setTimeout(() => { conf.style.opacity = '0'; }, 2400);
+}
+
+function aiFbDown(ctrlId) {
+  document.getElementById('aiFbModal').style.display = 'flex';
+  document.getElementById('aiFbModal').dataset.ctrlId = ctrlId;
+}
+
+function aiFbSubmit() {
+  const ctrlId = document.getElementById('aiFbModal').dataset.ctrlId;
+  document.getElementById('aiFbModal').style.display = 'none';
+  // Clear checkboxes and textarea
+  document.querySelectorAll('.ai-fb-modal-check').forEach(c => c.checked = false);
+  const ta = document.getElementById('aiFbTextarea');
+  if (ta) ta.value = '';
+  // Show confirmation on the originating control
+  const ctrl = document.getElementById(ctrlId);
+  if (ctrl) {
+    ctrl.querySelectorAll('.ai-fb-btn').forEach(b => b.classList.remove('ai-fb-active'));
+    ctrl.querySelector('[title="Not helpful"]')?.classList.add('ai-fb-down-active');
+    let conf = ctrl.querySelector('.ai-fb-conf');
+    if (!conf) {
+      conf = document.createElement('span');
+      conf.className = 'ai-fb-conf';
+      ctrl.appendChild(conf);
+    }
+    conf.textContent = 'Thanks for your feedback';
+    conf.style.opacity = '1';
+    setTimeout(() => { conf.style.opacity = '0'; }, 2400);
+  }
+}
+
+function aiFbCancel() {
+  document.getElementById('aiFbModal').style.display = 'none';
+  document.querySelectorAll('.ai-fb-modal-check').forEach(c => c.checked = false);
+  const ta = document.getElementById('aiFbTextarea');
+  if (ta) ta.value = '';
+}
+
+/* ═══════════════════════════ END AI FEEDBACK ═══════════ */
+
 /* ══ CLOSE / BACK TO OVERVIEW ══ */
 function arCloseDetail() {
   arNavView = 'overview';
@@ -15157,11 +15343,19 @@ function arCloseDetail() {
   const s  = document.getElementById('arDpScroll');
   const w  = document.getElementById('artwWrapper');
   const bc = document.getElementById('arPageBc');
+  const bcSlot = document.getElementById('aicBcSlot');
   if (dp) dp.style.display = 'none';
   if (s)  { s.innerHTML = ''; s.style.display = 'block'; s.style.opacity = '1'; }
   if (w)  w.style.display = 'none';
-  if (bc) { bc.innerHTML = ''; bc.style.display = 'none'; }
+  // Clear breadcrumb text but keep the bar visible if investigations exist
+  if (bcSlot) bcSlot.innerHTML = '';
+  if (bc) {
+    const hasHistory = typeof AIC !== 'undefined' && AIC.store.length > 0;
+    bc.style.display = hasHistory ? 'flex' : 'none';
+    if (typeof AIC !== 'undefined') AIC.render();
+  }
   if (ov) ov.style.display = 'flex';
+  ovMemberCollapse(); // stay collapsed on return — agent can manually expand
   arSetOverviewBreadcrumb();
   arUpdateContextChips();
 }
@@ -16228,6 +16422,25 @@ function txnToggleRow(rowId, productId) {
 .c360-cp-send:hover{background:#0b7a6e;transform:scale(1.05);}
 /* ══ END SPLIT LAYOUT ══ */
 
+/* ── Member row collapse controls ── */
+.ov-member-row-hdr{display:flex;align-items:center;justify-content:space-between;padding:0 0 6px;}
+.ov-member-row-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);}
+.ov-member-row-collapse{display:inline-flex;align-items:center;gap:4px;background:none;border:none;cursor:pointer;font-size:10px;color:var(--t3);font-family:var(--f);padding:2px 6px;border-radius:5px;transition:all .1s;}
+.ov-member-row-collapse:hover{background:var(--s2);color:var(--t1);}
+.ov-member-snap{display:flex;align-items:center;justify-content:space-between;background:#fff;border-radius:10px;border:1px solid var(--border);padding:9px 14px;margin-bottom:10px;box-shadow:var(--sh1);}
+.ov-snap-left{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0;}
+.ov-snap-title{font-size:11px;font-weight:700;color:var(--t1);}
+.ov-snap-name{font-size:11px;font-weight:600;color:var(--t1);}
+.ov-snap-dot{color:var(--t3);font-size:10px;}
+.ov-snap-meta{font-size:10.5px;color:var(--t2);}
+.ov-snap-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;}
+.ov-snap-verified{background:rgba(13,124,82,.08);border:1px solid rgba(13,124,82,.2);color:#065f46;}
+.ov-snap-right{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.ov-snap-vh-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;border:1px solid rgba(91,95,207,.25);background:rgba(91,95,207,.06);color:#3d41a0;font-size:10.5px;font-weight:600;cursor:pointer;font-family:var(--f);transition:all .12s;white-space:nowrap;}
+.ov-snap-vh-btn:hover{background:rgba(91,95,207,.13);border-color:rgba(91,95,207,.4);}
+.ov-snap-expand{background:none;border:none;cursor:pointer;padding:4px;border-radius:5px;color:var(--t3);display:grid;place-items:center;transition:all .1s;}
+.ov-snap-expand:hover{background:var(--s2);color:var(--t1);}
+
 .ov-member-row{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -17164,6 +17377,30 @@ body { padding-right: 56px; }
   };
 })();
 </script>
+
+<!-- ══ AI FEEDBACK MODAL ══════════════════════════════ -->
+<div id="aiFbModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;align-items:center;justify-content:center;">
+  <div class="ai-fb-modal-box" onclick="event.stopPropagation()">
+    <div class="ai-fb-modal-hdr">
+      <span class="ai-fb-modal-title">Help us improve this recommendation</span>
+      <button class="ai-fb-modal-close" onclick="aiFbCancel()">✕</button>
+    </div>
+    <p class="ai-fb-modal-q">What was incorrect about this AI suggestion?</p>
+    <div class="ai-fb-modal-opts">
+      <label class="ai-fb-modal-lbl"><input type="checkbox" class="ai-fb-modal-check"> Wrong product/account identified</label>
+      <label class="ai-fb-modal-lbl"><input type="checkbox" class="ai-fb-modal-check"> Missing important context</label>
+      <label class="ai-fb-modal-lbl"><input type="checkbox" class="ai-fb-modal-check"> Incorrect interpretation</label>
+      <label class="ai-fb-modal-lbl"><input type="checkbox" class="ai-fb-modal-check"> Not relevant to the request</label>
+      <label class="ai-fb-modal-lbl"><input type="checkbox" class="ai-fb-modal-check"> Other</label>
+    </div>
+    <textarea id="aiFbTextarea" class="ai-fb-modal-ta" placeholder="Additional feedback…" rows="3"></textarea>
+    <div class="ai-fb-modal-btns">
+      <button class="ai-fb-modal-cancel" onclick="aiFbCancel()">Cancel</button>
+      <button class="ai-fb-modal-submit" onclick="aiFbSubmit()">Submit</button>
+    </div>
+  </div>
+</div>
+<!-- ══ END AI FEEDBACK MODAL ══ -->
 
 </body>
 </html>
