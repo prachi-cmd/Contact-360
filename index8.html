@@ -3124,6 +3124,18 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .ihs-chip-neutral{background:#fef9c3;border-color:#fde68a;color:#92400e;}
 .ihs-chip-auth{background:rgba(13,124,82,.07);border-color:rgba(13,124,82,.22);color:#065f46;}
 
+/* ── Collapsed rail: vertical Member Context label ── */
+.c360-ctx-rail.cr-rail-collapsed .cr-rail-toggle::after{
+  content:'Member Context';
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  transform:rotate(180deg);
+  font-size:9.5px;font-weight:600;letter-spacing:.08em;
+  color:#c8c7d8;
+  white-space:nowrap;
+  margin-top:10px;
+}
+
 /* ── Authenticated tag hover flyout ── */
 .ihs-auth-wrap{position:relative;cursor:default;}
 .auth-flyout{
@@ -4455,12 +4467,20 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="c360-conv-panel" id="c360ConvPanel">
 
                       <!-- Panel mini-header with tab shortcut -->
-                      <div class="c360-cp-topbar">
-                        <span class="c360-cp-topbar-label">💬 Conversations</span>
+                      <div class="c360-cp-topbar" id="c360CpTopbar">
+                        <button class="c360-cp-collapse-trigger" onclick="convPanelCollapse()" title="Collapse conversations">
+                          <svg class="c360-cp-chev" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                          <span class="c360-cp-topbar-label">Conversations</span>
+                        </button>
                         <button class="c360-cp-expand-btn" onclick="switchWFTab('conversations')" title="Open full conversation">
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
                         </button>
                       </div>
+
+                      <!-- Collapsed strip — shown only when panel is collapsed -->
+                      <button class="cp-collapsed-strip" id="cpCollapsedStrip" onclick="convPanelExpand()" title="Expand conversations" style="display:none">
+                        <svg class="cp-strip-chevron" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                      </button>
 
                       <!-- Message thread -->
                       <div class="msgs lg c360-cp-msgs" id="c360ConvMsgs">
@@ -8595,6 +8615,28 @@ function crToggleGroup(group) {
   const collapsed = items.style.display === 'none';
   items.style.display   = collapsed ? 'block' : 'none';
   if (chevron) chevron.style.transform = collapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+/* ── Conversations panel manual collapse / expand ── */
+/* No auto-collapse: only the agent decides when to collapse this panel */
+function convPanelCollapse() {
+  const panel  = document.getElementById('c360ConvPanel');
+  const topbar = document.getElementById('c360CpTopbar');
+  const strip  = document.getElementById('cpCollapsedStrip');
+  if (!panel) return;
+  panel.classList.add('cp-collapsed');
+  if (topbar) topbar.style.display = 'none';
+  if (strip)  strip.style.display  = 'flex';
+}
+
+function convPanelExpand() {
+  const panel  = document.getElementById('c360ConvPanel');
+  const topbar = document.getElementById('c360CpTopbar');
+  const strip  = document.getElementById('cpCollapsedStrip');
+  if (!panel) return;
+  panel.classList.remove('cp-collapsed');
+  if (topbar) topbar.style.display = '';
+  if (strip)  strip.style.display  = 'none';
 }
 
 /* ── Member row collapse / expand ── */
@@ -13174,8 +13216,173 @@ function aapBuildResponse(query){
   return `<div class="aap-txt-block" style="animation:aiws-card-in .3s var(--ease) both"><div class="aap-txt-query">"${query}"</div><div class="aap-txt-answer">${clarifyQ}</div><div class="aap-clarify-list">${optionsHTML}</div></div>`;
 }
 /* ── Legacy salary / payroll / ACH / compare ── */
+/* ════════════════════════════════════════════════════════
+   AI CONFIDENCE MODEL
+   Classifies queries before routing to handlers.
+════════════════════════════════════════════════════════ */
+
+/* Known identifier → product mapping */
+const KNOWN_IDS = {
+  '10048291':'member', '4821':'checking', '1039':'savings',
+  '8810':'hysavings', '7712':'autoloan', '3301':'mortgage',
+  '4412':'debitcard', '7777':'creditcard', '7439':'debitcard2',
+};
+
+function matchKnownIdentifier(q) {
+  for (const [id, pid] of Object.entries(KNOWN_IDS)) {
+    if (q.includes(id)) return pid;
+  }
+  return null;
+}
+
+/* HIGH-confidence signal words — maps to existing handlers */
+const HIGH_SIGNALS = [
+  'salary','payroll','deposited','has salary','ach',
+  'verif','authenticat','biometric','otp','voice',
+  'device','phone verif','failed','was emily','was the caller',
+  'balance','available','payoff','minimum payment',
+  'transaction','activity','payroll deposit','last payroll',
+  'disputed','dispute','chargeback','declined','blocked',
+  'mortgage','home loan','home mortgage',
+  'loan payment','auto loan','auto pay',
+  'credit card','debit card','debit','amazon','delta',
+  'marriott','southwest','beneficiary','high yield',
+  'recent','show','review','check','open','view','who',
+  'what','when','how','compare','last','latest','history',
+];
+
+/* MEDIUM-confidence: short topic-only queries needing clarification */
+const MEDIUM_CLARIFICATIONS = {
+  'balance': {
+    q: 'Which balance would you like to check?',
+    opts: [
+      {icon:'🏦', label:'Available Balance — Everyday Checking', fn:"aiAssistSend('available balance everyday checking')"},
+      {icon:'🏦', label:'Available Balance — Emergency Savings',  fn:"aiAssistSend('available balance savings')"},
+      {icon:'💳', label:'Available Credit — Visa Credit Card',    fn:"aiAssistSend('available credit card')"},
+    ],
+  },
+  'deposit': {
+    q: 'Which deposit would you like to review?',
+    opts: [
+      {icon:'🏦', label:'Salary Deposit — Everyday Checking', fn:"aiAssistSend('Has salary deposited?')"},
+      {icon:'🏦', label:'Transfer to Emergency Savings',       fn:"arOpenTransactions('savings')"},
+      {icon:'🏦', label:'High Yield Savings deposits',         fn:"arOpenTransactions('hysavings')"},
+    ],
+  },
+  'loan': {
+    q: 'Which loan would you like to review?',
+    opts: [
+      {icon:'🚗', label:'Auto Loan ••••7712',     fn:"crOpenDetail('autoloan')"},
+      {icon:'🏠', label:'Home Mortgage ••••3301', fn:"crOpenDetail('mortgage')"},
+    ],
+  },
+  'card': {
+    q: 'Which card would you like to review?',
+    opts: [
+      {icon:'💳', label:'Visa Debit Card ••••4412',  fn:"crOpenDetail('debitcard')"},
+      {icon:'💳', label:'Visa Credit Card ••••7777', fn:"crOpenDetail('creditcard')"},
+    ],
+  },
+  'payment': {
+    q: 'Which payment would you like to review?',
+    opts: [
+      {icon:'🚗', label:'Auto Loan payment history',    fn:"arOpenTransactions('autoloan')"},
+      {icon:'🏠', label:'Mortgage payment history',     fn:"arOpenTransactions('mortgage')"},
+      {icon:'💳', label:'Credit Card minimum payment',  fn:"aiAssistSend('minimum payment credit card')"},
+    ],
+  },
+  'account': {
+    q: 'Which account would you like to open?',
+    opts: [
+      {icon:'🏦', label:'Everyday Checking ••••4821', fn:"crOpenDetail('checking')"},
+      {icon:'🏦', label:'Emergency Savings ••••1039', fn:"crOpenDetail('savings')"},
+      {icon:'🏦', label:'High Yield Savings ••••8810', fn:"crOpenDetail('hysavings')"},
+    ],
+  },
+  'transaction': {
+    q: 'Which account\'s transactions would you like to see?',
+    opts: [
+      {icon:'🏦', label:'Everyday Checking',     fn:"arOpenTransactions('checking')"},
+      {icon:'💳', label:'Visa Credit Card',      fn:"arOpenTransactions('creditcard')"},
+      {icon:'💳', label:'Visa Debit Card',       fn:"arOpenTransactions('debitcard')"},
+    ],
+  },
+};
+
+function buildMediumClarification(query, clar) {
+  const optHTML = clar.opts.map(o =>
+    `<button class="aap-clarify-opt" onclick="${o.fn}">
+      <span class="aap-co-icon">${o.icon}</span>
+      <div style="flex:1;text-align:left"><div class="aap-co-name">${o.label}</div></div>
+      <span class="aap-co-arrow">→</span>
+    </button>`).join('');
+  return `<div class="aap-txt-block">
+    <div class="aap-txt-query">"${query}"</div>
+    <div class="aap-txt-answer">${clar.q}</div>
+    <div class="aap-clarify-list">${optHTML}</div>
+  </div>`;
+}
+
+function buildFallback(query) {
+  return `<div class="ai-fallback-card">
+    <div class="ai-fallback-orb">✦</div>
+    <div class="ai-fallback-title">I couldn't understand this request</div>
+    <div class="ai-fallback-body">Try asking about one of these topics:</div>
+    <div class="ai-fallback-topics">
+      <span>Account balances</span>
+      <span>Transactions</span>
+      <span>Verification history</span>
+      <span>Loan details</span>
+      <span>Cards</span>
+      <span>Payroll deposits</span>
+    </div>
+    <div class="ai-fallback-suggestions">
+      <div class="ai-fallback-suggestions-lbl">Suggested prompts</div>
+      <div class="ai-fallback-chips">
+        <button class="c2-orch-chip" onclick="aiAssistSend('Show available balance')">Show available balance</button>
+        <button class="c2-orch-chip" onclick="aiAssistSend('Show verification history')">Show verification history</button>
+        <button class="c2-orch-chip" onclick="aiAssistSend('Review payroll deposits')">Review payroll deposits</button>
+        <button class="c2-orch-chip" onclick="aiAssistSend('Show recent transactions')">Show recent transactions</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function assessConfidence(q) {
+  const words = q.trim().split(/\s+/);
+  // Known identifier → treat as high
+  if (matchKnownIdentifier(q)) return 'high';
+  // Very short with no signal → low
+  if (words.length <= 2 && !HIGH_SIGNALS.some(s => q.includes(s))) {
+    // Check medium topics
+    for (const [key] of Object.entries(MEDIUM_CLARIFICATIONS)) {
+      if (q.includes(key)) return 'medium';
+    }
+    return 'low';
+  }
+  // High signal words
+  if (HIGH_SIGNALS.some(s => q.includes(s))) return 'high';
+  // Medium: 1-3 words that match a topic
+  if (words.length <= 3) {
+    for (const [key] of Object.entries(MEDIUM_CLARIFICATIONS)) {
+      if (q.includes(key)) return 'medium';
+    }
+  }
+  return 'low';
+}
+
 function aapBuildLegacyResponse(query) {
   const q = query.toLowerCase();
+
+  /* ── PRE-TIER 0: Known identifier matching ── */
+  const knownPid = matchKnownIdentifier(q);
+  if (knownPid) {
+    if (knownPid === 'member') {
+      return aapVerifMsg(query, 'Matched member #10048291 — Emily Olivers. Showing member profile.');
+    }
+    setTimeout(() => arOpenDetail(knownPid), 350);
+    return aapTxnMsg(query, AR_DETAIL_DATA[knownPid]?.name || knownPid, 'Opening product details.');
+  }
 
   /* ── TIER 1: VERIFICATION — always checked first, never routes to transactions ── */
   const isVerifQ =
@@ -13289,9 +13496,26 @@ function aapBuildLegacyResponse(query) {
     return aapTxnMsg(query, 'Everyday Checking ••••4821', answer, [{label:'Open payroll deposits',fn:"arOpenPromptResult('payroll')"},{label:'Open Everyday Checking',fn:"arOpenDetail('checking')"}]);
   }
 
-  /* ── TIER 5: FALLBACK ── */
+  /* ── TIER 5: CONFIDENCE-AWARE FALLBACK ── */
+  const confidence = assessConfidence(q);
+
+  if (confidence === 'medium') {
+    // Find the best matching medium clarification
+    for (const [key, clar] of Object.entries(MEDIUM_CLARIFICATIONS)) {
+      if (q.includes(key)) return buildMediumClarification(query, clar);
+    }
+  }
+
+  if (confidence === 'low') {
+    return buildFallback(query);
+  }
+
+  // Generic helpful fallback for edge cases
   const answer = 'I can look up balances, transactions, payment history, verification status, membership details, and more for Emily\'s accounts. What would you like to know?';
-  return aapTxnMsg(query, null, answer, [{label:'View salary deposit status',fn:"aiAssistSend('Has salary deposited?')"},{label:'Show verification history',fn:"aiAssistSend('Show verification history')"}]);
+  return aapTxnMsg(query, null, answer, [
+    {label:'View salary deposit status', fn:"aiAssistSend('Has salary deposited?')"},
+    {label:'Show verification history',  fn:"aiAssistSend('Show verification history')"},
+  ]);
 }
 
 /* ── Shared transaction response builder ── */
@@ -14818,6 +15042,30 @@ const AR_DETAIL_DATA = {
 .aih-item:hover{background:rgba(91,95,207,.07);}
 .aih-item-orb{font-size:8px;color:#5b5fcf;flex-shrink:0;}
 .aih-item-lbl{font-size:11px;color:#0c0b18;}
+/* ── AI Fallback card (low confidence) ── */
+.ai-fallback-card{
+  display:flex;flex-direction:column;gap:10px;
+  padding:20px;background:#fff;border-radius:12px;
+  border:1px solid rgba(0,0,0,.07);box-shadow:0 1px 4px rgba(0,0,0,.05);
+  max-width:500px;
+}
+.ai-fallback-orb{font-size:18px;color:#5b5fcf;}
+.ai-fallback-title{font-size:15px;font-weight:700;color:#0c0b18;letter-spacing:-.02em;}
+.ai-fallback-body{font-size:12px;color:#6b6987;}
+.ai-fallback-topics{
+  display:flex;flex-wrap:wrap;gap:5px;
+}
+.ai-fallback-topics span{
+  font-size:11px;padding:3px 10px;border-radius:20px;
+  background:rgba(91,95,207,.07);border:1px solid rgba(91,95,207,.15);
+  color:#3d41a0;font-weight:500;
+}
+.ai-fallback-suggestions-lbl{
+  font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:#b0afc8;margin-bottom:6px;
+}
+.ai-fallback-chips{display:flex;flex-wrap:wrap;gap:5px;}
+
 /* ══ END AI INVESTIGATION HISTORY CONTROL ══ */
 
 /* ════════════════════════════════════════════
@@ -16964,7 +17212,31 @@ function txnToggleRow(rowId, productId) {
 /* ══ END WORKSPACE WRAPPER ══ */
 
 /* Conv panel ~20% */
-.c360-conv-panel{width:220px;min-width:180px;max-width:260px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid rgba(0,0,0,.08);background:#fff;overflow:hidden;}
+.c360-conv-panel{width:220px;min-width:180px;max-width:260px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid rgba(0,0,0,.08);background:#fff;overflow:hidden;transition:width .25s cubic-bezier(0.16,1,0.3,1),min-width .25s,max-width .25s;}
+
+/* Collapsed state */
+.c360-conv-panel.cp-collapsed{width:32px!important;min-width:32px!important;max-width:32px!important;}
+.c360-conv-panel.cp-collapsed .c360-cp-msgs,
+.c360-conv-panel.cp-collapsed .c360-cp-callbar,
+.c360-conv-panel.cp-collapsed .c360-cp-composer{display:none!important;}
+
+/* Collapsed strip button */
+.cp-collapsed-strip{
+  display:none;flex-direction:column;align-items:center;
+  justify-content:flex-start;
+  width:100%;height:100%;padding:10px 0;
+  background:none;border:none;cursor:pointer;
+  transition:background .1s;gap:0;
+}
+.cp-collapsed-strip:hover{background:rgba(91,95,207,.04);}
+.cp-strip-chevron{color:#9896b0;flex-shrink:0;transition:transform .18s;margin-bottom:10px;}
+.cp-collapsed-strip::after{
+  content:'Conversations';
+  writing-mode:vertical-rl;text-orientation:mixed;
+  transform:rotate(180deg);
+  font-size:9.5px;font-weight:600;letter-spacing:.08em;
+  color:#c8c7d8;white-space:nowrap;
+}
 
 /* Right panel toggle button */
 .cr-rail-toggle{
@@ -16985,7 +17257,8 @@ function txnToggleRow(rowId, productId) {
   transition:width .25s cubic-bezier(0.16,1,0.3,1),min-width .25s,max-width .25s;
 }
 .c360-ctx-rail.cr-rail-collapsed .cr-rail-toggle{
-  padding:8px 0;justify-content:center;border-bottom:none;
+  padding:10px 0;justify-content:flex-start;border-bottom:none;
+  flex-direction:column;align-items:center;height:100%;
 }
 .c360-ctx-rail:not(.cr-rail-collapsed){
   transition:width .25s cubic-bezier(0.16,1,0.3,1),min-width .25s,max-width .25s;
@@ -17114,9 +17387,18 @@ function txnToggleRow(rowId, productId) {
 .c360-ws-panel .ihs-root{flex-shrink:0;}
 .c360-ws-panel .c2-overview-scroll{flex:1;min-height:0;}
 /* Panel mini-header with tab shortcut */
-.c360-cp-topbar{display:flex;align-items:center;justify-content:space-between;padding:7px 10px 6px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--s1);}
-.c360-cp-topbar-label{font-size:10px;font-weight:700;color:var(--t2);font-family:var(--m);letter-spacing:.06em;}
-.c360-cp-expand-btn{background:none;border:none;cursor:pointer;padding:3px;border-radius:5px;color:var(--t3);display:grid;place-items:center;transition:all .12s;}
+.c360-cp-topbar{display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 0;border-bottom:1px solid rgba(0,0,0,.07);flex-shrink:0;background:#fff;}
+.c360-cp-collapse-trigger{
+  display:flex;align-items:center;gap:5px;
+  flex:1;padding:7px 8px 6px 12px;
+  background:none;border:none;cursor:pointer;font-family:var(--f);
+  transition:background .1s;
+}
+.c360-cp-collapse-trigger:hover{background:rgba(91,95,207,.04);}
+.c360-cp-chev{color:#9896b0;flex-shrink:0;transition:transform .18s;}
+.c360-cp-topbar-label{font-size:9.5px;font-weight:600;color:#9896b0;font-family:var(--f);letter-spacing:.03em;}
+.c360-cp-expand-btn{background:none;border:none;cursor:pointer;padding:3px;border-radius:5px;color:#b0afc8;display:grid;place-items:center;transition:all .12s;}
+.c360-cp-expand-btn:hover{color:#5b5fcf;background:rgba(91,95,207,.06);}
 .c360-cp-expand-btn:hover{background:var(--s2);color:var(--t1);}
 /* Recording dot */
 .c360-cp-rec-dot{width:9px;height:9px;border-radius:50%;background:#ef4444;}
