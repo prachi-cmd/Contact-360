@@ -3123,6 +3123,35 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .ihs-chip{font-size:9px;font-weight:600;padding:1px 7px;border-radius:20px;border:1px solid;display:inline-flex;align-items:center;gap:3px;white-space:nowrap;}
 .ihs-chip-neutral{background:#fef9c3;border-color:#fde68a;color:#92400e;}
 .ihs-chip-auth{background:rgba(13,124,82,.07);border-color:rgba(13,124,82,.22);color:#065f46;}
+
+/* ── Authenticated tag hover flyout ── */
+.ihs-auth-wrap{position:relative;cursor:default;}
+.auth-flyout{
+  display:none;
+  position:absolute;top:calc(100% + 6px);left:0;
+  z-index:200;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 4px 20px rgba(0,0,0,.12),0 1px 4px rgba(0,0,0,.06);
+  padding:14px 18px 10px;
+  min-width:240px;
+  pointer-events:none;
+}
+.ihs-auth-wrap:hover .auth-flyout{display:block;}
+.auth-flyout-title{
+  font-size:9px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.1em;color:#9896b0;margin-bottom:12px;
+}
+.auth-flyout-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 0;border-top:1px solid rgba(0,0,0,.06);
+}
+.auth-flyout-row:first-of-type{border-top:none;padding-top:0;}
+.auth-flyout-method{font-size:13px;font-weight:500;color:#1a1a2e;}
+.auth-flyout-status{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:13px;font-weight:600;color:#0d7c52;
+}
 .ihs-chip-beta{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.35);color:#92400e;font-size:8px;letter-spacing:.05em;}
 .ihs-toggle{display:flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;color:#0d7c52;background:none;border:none;cursor:pointer;font-family:var(--f);white-space:nowrap;flex-shrink:0;transition:opacity .13s;}
 .ihs-toggle:hover{opacity:.75;}
@@ -4506,10 +4535,35 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                               <div class="ihs-avatar">🤖</div>
                               <span class="ihs-title">Joe (AI Agent) interaction handoff</span>
                               <span class="ihs-chip ihs-chip-neutral">😐 Neutral</span>
-                              <span class="ihs-chip ihs-chip-auth">
+                              <span class="ihs-chip ihs-chip-auth ihs-auth-wrap" id="ihsAuthChip">
                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                 Authenticated
                                 <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="opacity:.6"><polyline points="6 9 12 15 18 9"/></svg>
+                                <!-- Hover flyout -->
+                                <div class="auth-flyout" id="authFlyout">
+                                  <div class="auth-flyout-title">Verification Parameters</div>
+                                  <div class="auth-flyout-row">
+                                    <span class="auth-flyout-method">OTP</span>
+                                    <span class="auth-flyout-status">
+                                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                      Verified
+                                    </span>
+                                  </div>
+                                  <div class="auth-flyout-row">
+                                    <span class="auth-flyout-method">SSN Last Four</span>
+                                    <span class="auth-flyout-status">
+                                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                      Verified
+                                    </span>
+                                  </div>
+                                  <div class="auth-flyout-row">
+                                    <span class="auth-flyout-method">Member Number</span>
+                                    <span class="auth-flyout-status">
+                                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                                      Verified
+                                    </span>
+                                  </div>
+                                </div>
                               </span>
                               <span class="ihs-dot">·</span>
                               <span class="ihs-chip ihs-chip-beta">BETA</span>
@@ -4560,9 +4614,15 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                             <span class="ihs-title">Joe (AI Agent) interaction handoff</span>
                             <span class="ihs-dot">·</span>
                             <span class="ihs-chip ihs-chip-neutral" style="padding:1px 7px">😐</span>
-                            <span class="ihs-chip ihs-chip-auth">
+                            <span class="ihs-chip ihs-chip-auth ihs-auth-wrap">
                               <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                               Authenticated
+                              <div class="auth-flyout">
+                                <div class="auth-flyout-title">Verification Parameters</div>
+                                <div class="auth-flyout-row"><span class="auth-flyout-method">OTP</span><span class="auth-flyout-status"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Verified</span></div>
+                                <div class="auth-flyout-row"><span class="auth-flyout-method">SSN Last Four</span><span class="auth-flyout-status"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Verified</span></div>
+                                <div class="auth-flyout-row"><span class="auth-flyout-method">Member Number</span><span class="auth-flyout-status"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Verified</span></div>
+                              </div>
                             </span>
                             <span class="ihs-dot">·</span>
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5;flex-shrink:0"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
