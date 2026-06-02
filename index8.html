@@ -27,9 +27,9 @@
   --sh3:0 8px 24px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.04);
   --bottom-bar:52px;
   /* ── Workspace spacing system ── */
-  --ws-pad-h: 20px;   /* horizontal margin — all workspace pages */
-  --ws-pad-top: 16px; /* top padding below handoff/tabs */
-  --ws-pad-bottom: 24px; /* bottom padding above orch bar */
+  --ws-pad-h: 18px;      /* horizontal margin — all workspace pages */
+  --ws-pad-top: 14px;    /* top padding below breadcrumb */
+  --ws-pad-bottom: 20px; /* bottom padding above orch bar */
   /* ── Contact360 workspace background ── */
   /* Slightly cooler than pure white — creates depth behind white widget cards */
   /* Inspired by Stripe Dashboard / Linear / Intercom inbox */
@@ -16285,7 +16285,7 @@ function txnToggleRow(rowId, productId) {
 .ar-card-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 7px;
 }
 /* Primary card spans full width */
 .ar-card-grid .ar-pc.ar-pc-primary {
@@ -16747,27 +16747,27 @@ function txnToggleRow(rowId, productId) {
 /* ── Product header ── */
 .dp-prod-hdr{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 16px;margin-bottom:10px;
+  padding:12px 14px;margin-bottom:8px;
   background:#fff;border:1px solid rgba(0,0,0,.08);
   border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.05);
   flex-wrap:wrap;gap:8px;
 }
 .dp-prod-hdr-left{display:flex;align-items:center;gap:10px;}
-.dp-prod-name{font-size:17px;font-weight:700;color:#0c0b18;letter-spacing:-.02em;line-height:1.2;}
+.dp-prod-name{font-size:16px;font-weight:700;color:#0c0b18;letter-spacing:-.02em;line-height:1.2;}
 .dp-prod-meta{font-size:10.5px;color:#9896b0;margin-top:2px;}
 
 /* Product Information + Membership Details — side by side */
 .dp-side-row{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:10px;
+  gap:8px;
   align-items:start;
 }
 .dp-side-col{margin:0;}
 @media(max-width:560px){.dp-side-row{grid-template-columns:1fr;}}
 
 /* ══ OVERVIEW — RECENT INTERACTION JOURNEY WIDGET ══════ */
-.ov-ij-widget{margin-top:10px;}
+.ov-ij-widget{margin-top:8px;}
 .ov-ij-rows{margin-top:10px;display:flex;flex-direction:column;}
 
 .ov-ij-row{
@@ -16813,47 +16813,93 @@ function txnToggleRow(rowId, productId) {
 
 /* AI result rendered in center workspace */
 .dp-ai-ws-wrap{
-  padding:20px var(--ws-pad-h) var(--ws-pad-bottom);
-  max-width:700px;
+  padding:var(--ws-pad-top) var(--ws-pad-h) var(--ws-pad-bottom);
+  max-width:640px;
 }
+
+/* Strip card styling — workspace layout is the container */
 .dp-ai-ws-wrap .aap-txt-block{
-  background:#fff;border:1px solid var(--border);
-  border-radius:12px;padding:16px 18px;
-  box-shadow:var(--sh1);
+  background:transparent;border:none;box-shadow:none;
+  padding:0;animation:none;
 }
-.dp-ai-ws-wrap .aap-loading-block{
-  background:#fff;border:1px solid var(--border);
-  border-radius:12px;padding:16px 18px;
-  box-shadow:var(--sh1);
-}
+
+/* Query shown as small muted label */
 .dp-ai-ws-wrap .aap-txt-query{
-  font-size:10px;color:#9896b0;font-style:italic;margin-bottom:8px;
+  font-size:10px;color:#9896b0;font-style:italic;
+  margin-bottom:10px;font-weight:400;letter-spacing:-.01em;
 }
+
+/* AI explanation as the primary heading */
 .dp-ai-ws-wrap .aap-txt-answer{
-  font-size:12.5px;color:#0c0b18;line-height:1.6;margin-bottom:10px;
+  font-size:14px;font-weight:600;color:#0c0b18;
+  line-height:1.5;margin-bottom:20px;
 }
+
+/* Text-only result (non-clarification) — give it a subtle container */
+.dp-ai-ws-wrap .aap-txt-actions{
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:14px;
+}
+
+/* "Select an option" label before clarification list */
 .dp-ai-ws-wrap .aap-clarify-list{
-  display:flex;flex-direction:column;gap:7px;margin-top:10px;
+  display:flex;flex-direction:column;gap:6px;
 }
+.dp-ai-ws-wrap .aap-clarify-list::before{
+  content:'Select an option to continue';
+  font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.07em;color:#b0afc8;margin-bottom:2px;
+}
+
+/* Compact structured option rows */
 .dp-ai-ws-wrap .aap-clarify-opt{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 14px;border-radius:9px;
-  border:1px solid var(--border);background:#fff;
+  display:flex;align-items:center;gap:12px;
+  padding:11px 14px;border-radius:9px;
+  border:1px solid rgba(0,0,0,.08);background:#fff;
   cursor:pointer;font-family:var(--f);
-  transition:all .12s;text-align:left;
+  transition:all .13s;text-align:left;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
 }
 .dp-ai-ws-wrap .aap-clarify-opt:hover{
-  border-color:rgba(91,95,207,.35);background:rgba(91,95,207,.04);
+  border-color:rgba(91,95,207,.32);
+  background:rgba(91,95,207,.04);
+  box-shadow:0 1px 6px rgba(91,95,207,.1);
+  transform:translateY(-1px);
 }
+.dp-ai-ws-wrap .aap-co-icon{font-size:18px;flex-shrink:0;}
+.dp-ai-ws-wrap .aap-co-name{
+  font-size:13px;font-weight:600;color:#0c0b18;
+}
+.dp-ai-ws-wrap .aap-co-arrow{
+  color:#9896b0;font-size:16px;margin-left:auto;flex-shrink:0;
+  transition:transform .13s;
+}
+.dp-ai-ws-wrap .aap-clarify-opt:hover .aap-co-arrow{
+  color:#5b5fcf;transform:translateX(3px);
+}
+
+/* Verification clarification items */
+.dp-ai-ws-wrap .aap-clarify-list .aap-clarify-opt .aap-co-name{
+  margin-bottom:2px;
+}
+
+/* Action buttons in text results */
 .dp-ai-ws-wrap .aap-ws-btn{
   display:inline-flex;align-items:center;
-  padding:5px 14px;border-radius:7px;
-  border:1px solid rgba(91,95,207,.25);background:rgba(91,95,207,.06);
-  color:#3d41a0;font-size:11px;font-weight:600;
+  padding:6px 14px;border-radius:7px;
+  border:1px solid rgba(91,95,207,.22);background:rgba(91,95,207,.06);
+  color:#3d41a0;font-size:11.5px;font-weight:600;
   cursor:pointer;font-family:var(--f);margin:3px 4px 0 0;
   transition:all .12s;
 }
 .dp-ai-ws-wrap .aap-ws-btn:hover{background:rgba(91,95,207,.14);}
+
+/* Loading in workspace */
+.dp-ai-ws-wrap .aap-loading-block{
+  background:transparent;border:none;box-shadow:none;padding:0;
+}
+.dp-ai-ws-wrap .aap-loading-header{
+  margin-bottom:14px;
+}
 
 /* ══ END WORKSPACE WRAPPER ══ */
 
@@ -17487,17 +17533,17 @@ function txnToggleRow(rowId, productId) {
 .dp-section{
   background:#fff;border:1px solid rgba(0,0,0,.07);
   border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.05);
-  padding:14px 16px;margin-bottom:10px;
+  padding:12px 14px;margin-bottom:8px;
 }
 .dp-section:last-child{margin-bottom:0;}
 
 /* ── Section header ── */
 .dp-section-head{
   display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:12px;padding-bottom:10px;
+  margin-bottom:10px;padding-bottom:8px;
   border-bottom:1px solid rgba(0,0,0,.06);
 }
-.dp-section-title{font-size:13px;font-weight:700;color:#0c0b18;letter-spacing:-.01em;}
+.dp-section-title{font-size:12.5px;font-weight:700;color:#0c0b18;letter-spacing:-.01em;}
 .dp-section-action{
   font-size:11px;font-weight:600;color:#5b5fcf;
   background:none;border:none;cursor:pointer;font-family:var(--f);padding:0;
