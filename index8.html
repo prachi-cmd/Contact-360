@@ -4478,6 +4478,10 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     </div><!-- /c360-conv-panel (persistent shell) -->
 
                     <!-- ══ CONTEXT RAIL — persistent member context & portfolio ══ -->
+                    <!-- ══ WORKSPACE WRAPPER — c360v2Main + CtxRail + shared orch bar ══ -->
+                    <div class="c360-ws-wrap">
+                    <div class="c360-ws-inner">
+
                     <!-- Main modes column (workspace) -->
                     <div id="c360v2Main" style="flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;min-height:0;transition:all .3s cubic-bezier(0.16,1,0.3,1)">
 
@@ -5238,30 +5242,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     </div><!-- /arDetailPage -->
 
                     <!-- AI Orchestration dock — persists across all C360 modes -->
-                    <div class="c2-orch-bar" id="c2OrchBar">
-
-                      <!-- Prompt chips -->
-                      <div class="c2-orch-chips" id="c2OrchChips">
-                        <span class="c2-orch-lbl">✦</span>
-                        <button class="c2-orch-chip" onclick="aiAssistSend('Has salary deposited?')">Has salary deposited?</button>
-                        <button class="c2-orch-chip" onclick="aiAssistSend('Review payroll deposits')">Review payroll deposits</button>
-                        <button class="c2-orch-chip" onclick="aiAssistSend('Check pending ACH')">Check pending ACH</button>
-                        <button class="c2-orch-chip" onclick="aiAssistSend('Compare last 3 salary deposits')">Compare last 3 salary deposits</button>
-                      </div>
-
-                      <!-- Ask Anything input -->
-                      <div class="c2-orch-input-row">
-                        <span class="c2-orch-input-icon">✦</span>
-                        <input class="c2-orch-input" id="c2OrchInput"
-                          placeholder="Ask anything about Emily Olivers' accounts, deposits, loans, or cards…"
-                          onkeydown="if(event.key==='Enter')aiAssistSend()"/>
-                        <button class="c2-orch-send" onclick="aiAssistSend()" title="Send">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                        </button>
-                      </div>
-
-                    </div>
-
                   </div><!-- /c360v2Main -->
 
                   <!-- ══ RIGHT: MEMBER CONTEXT PANEL ══════════════════ -->
@@ -5485,6 +5465,35 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                     </div><!-- /cr-scroll -->
                   </div><!-- /c360CtxRail (right panel) -->
+
+                  </div><!-- /c360-ws-inner -->
+
+                  <!-- ══ SHARED AI ORCHESTRATION BAR — spans workspace + member context ══ -->
+                  <div class="c2-orch-bar" id="c2OrchBar">
+
+                    <!-- Prompt chips -->
+                    <div class="c2-orch-chips" id="c2OrchChips">
+                      <span class="c2-orch-lbl">✦</span>
+                      <button class="c2-orch-chip" onclick="aiAssistSend('Has salary deposited?')">Has salary deposited?</button>
+                      <button class="c2-orch-chip" onclick="aiAssistSend('Review payroll deposits')">Review payroll deposits</button>
+                      <button class="c2-orch-chip" onclick="aiAssistSend('Check pending ACH')">Check pending ACH</button>
+                      <button class="c2-orch-chip" onclick="aiAssistSend('Compare last 3 salary deposits')">Compare last 3 salary deposits</button>
+                    </div>
+
+                    <!-- Ask Anything input -->
+                    <div class="c2-orch-input-row">
+                      <span class="c2-orch-input-icon">✦</span>
+                      <input class="c2-orch-input" id="c2OrchInput"
+                        placeholder="Ask anything about Emily Olivers' accounts, deposits, loans, or cards…"
+                        onkeydown="if(event.key==='Enter')aiAssistSend()"/>
+                      <button class="c2-orch-send" onclick="aiAssistSend()" title="Send">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                      </button>
+                    </div>
+
+                  </div><!-- /c2OrchBar shared -->
+
+                  </div><!-- /c360-ws-wrap -->
 
                   <!-- ══ AI ASSISTANT PANEL ══ -->
                   <div id="c2AiAssistPanel" style="
@@ -6498,9 +6507,15 @@ let askAiMessages = [];
 let askAiOpen = false; // kept for compatibility
 
 // Old panel functions redirected — no longer used
-function toggleAskAiPanel(){ aapOpenContextual(); }
-function toggleAskAiDrawer(){ aapOpenContextual(); }
-function openAskAiWithContext(ctx, prompt){ aapOpenContextual(); if(prompt) setTimeout(()=> aiAssistSend(prompt), 700); }
+function toggleAskAiPanel(){
+  const inp = document.getElementById('c2OrchInput');
+  if (inp) { inp.focus(); inp.scrollIntoView({behavior:'smooth',block:'end'}); }
+}
+function toggleAskAiDrawer(){ toggleAskAiPanel(); }
+function openAskAiWithContext(ctx, prompt){
+  toggleAskAiPanel();
+  if (prompt) setTimeout(() => aiAssistSend(prompt), 100);
+}
 
 /* ══════════════════════════════════════════════════════════
    CONTEXTUAL AI ASSISTANT — opens from toolbar or orch bar
@@ -12686,25 +12701,69 @@ let aapHistory = [];
 
 function aiAssistSend(preset) {
   const orchInput = document.getElementById('c2OrchInput');
-  const panelInput = document.getElementById('aapInput');
-  const query = preset || (aapOpen ? panelInput?.value?.trim() : orchInput?.value?.trim());
+  const query = preset || orchInput?.value?.trim();
   if (!query) return;
-
-  // Clear inputs
   if (orchInput) orchInput.value = '';
-  if (panelInput) panelInput.value = '';
 
-  // Mark any subsequent workspace navigation as AI-triggered (for AIC chip creation)
+  // Mark AI-triggered navigation for AIC chip creation
   window._aicFromAI = true;
   setTimeout(() => { window._aicFromAI = false; }, 2500);
 
-  // If panel is closed, open it first
-  if (!aapOpen) {
-    aapOpenPanel();
-    setTimeout(() => aiAssistRender(query), 380); // wait for slide animation
-  } else {
-    aiAssistRender(query);
-  }
+  // Render response directly in workspace — no side panel
+  aiAssistRender(query);
+}
+
+/* ── Classify query → loading copy ── */
+function aapLoadingText(query) {
+  const q = (query || '').toLowerCase();
+  if (q.includes('verif') || q.includes('authenticat') || q.includes('biometric') || q.includes('otp'))
+    return 'Checking verification history…';
+  if (q.includes('balance') || q.includes('available') || q.includes('payoff') || q.includes('minimum payment'))
+    return 'Looking up account details…';
+  if (q.includes('transaction') || q.includes('payroll') || q.includes('deposit') || q.includes('payment') ||
+      q.includes('transfer') || q.includes('dispute') || q.includes('decline'))
+    return 'Reviewing transaction history…';
+  if (q.includes('mortgage') || q.includes('loan') || q.includes('auto'))
+    return 'Reviewing loan details…';
+  if (q.includes('card') || q.includes('credit') || q.includes('debit'))
+    return 'Looking up card details…';
+  if (q.includes('member') || q.includes('relationship') || q.includes('beneficiary') || q.includes('owner'))
+    return 'Checking membership details…';
+  return 'Checking member context…';
+}
+
+function aiAssistRender(query) {
+  ensureContact360Active();
+  crRailCollapse();
+
+  const loadText = aapLoadingText(query);
+  const bcLabel  = aicLabelFromQuery(query);
+  const loadBc   = arBcHTML([{label:'Overview',fn:'arCloseDetail()'},{label:bcLabel}]);
+
+  // Show loading in workspace immediately
+  arShowModeA(`${loadBc}<div class="dp-ai-ws-wrap">${aapLoadingHTML(loadText)}</div>`);
+
+  const delay = 900 + Math.floor(Math.random() * 500) + (query.length > 30 ? 200 : 0);
+
+  setTimeout(() => {
+    const result = aapBuildResponse(query); // may schedule side-effect navigations
+    const resBc  = arBcHTML([{label:'Overview',fn:'arCloseDetail()'},{label:bcLabel}]);
+
+    // Always render the text/clarification result.
+    // If aapBuildResponse scheduled a side-effect (arOpenTransactions etc.),
+    // that fires at +350ms and naturally overrides this. No guard needed.
+    arShowModeA(`${resBc}<div class="dp-ai-ws-wrap">${result}</div>`);
+
+    // Capture in AIC investigation history
+    if (typeof AIC !== 'undefined') {
+      const cachedHtml = result;
+      const cachedBc   = resBc;
+      AIC.add(bcLabel, () => {
+        ensureContact360Active();
+        arShowModeA(`${cachedBc}<div class="dp-ai-ws-wrap">${cachedHtml}</div>`);
+      });
+    }
+  }, delay);
 }
 
 function aapOpenPanel() {
@@ -12730,30 +12789,6 @@ function aiAssistClose() {
     orchBar.style.display = '';
     setTimeout(() => { orchBar.style.opacity = '1'; orchBar.style.pointerEvents = ''; }, 50);
   }
-}
-
-/* ── Classify query → loading copy ── */
-function aapLoadingText(query) {
-  const q = (query || '').toLowerCase();
-  if (q.includes('verif') || q.includes('authenticat') || q.includes('biometric') || q.includes('otp'))
-    return 'Checking verification history…';
-  if (q.includes('balance') || q.includes('available') || q.includes('payoff') || q.includes('minimum payment'))
-    return 'Looking up account details…';
-  if (q.includes('transaction') || q.includes('payroll') || q.includes('deposit') || q.includes('payment') ||
-      q.includes('transfer') || q.includes('dispute') || q.includes('decline'))
-    return 'Reviewing transaction history…';
-  if (q.includes('transfer') || q.includes('block') || q.includes('replace') || q.includes('make payment') ||
-      q.includes('start') || q.includes('skip'))
-    return 'Checking permissions…';
-  if (q.includes('which') || q.includes('what account') || q.includes('which account'))
-    return 'Finding matching accounts…';
-  if (q.includes('mortgage') || q.includes('loan') || q.includes('auto'))
-    return 'Reviewing loan details…';
-  if (q.includes('card') || q.includes('credit') || q.includes('debit'))
-    return 'Looking up card details…';
-  if (q.includes('member') || q.includes('relationship') || q.includes('beneficiary') || q.includes('owner'))
-    return 'Checking membership details…';
-  return 'Checking member context…';
 }
 
 /* ── Loading state HTML ── */
@@ -12791,42 +12826,8 @@ function aicLabelFromQuery(query) {
   if (q.includes('ach') || q.includes('pending')) return 'ACH Review';
   if (q.includes('member') || q.includes('ownership') || q.includes('beneficiary')) return 'Membership Review';
   if (q.includes('card')) return 'Card Investigation';
-  // Capitalise first ~30 chars of query as fallback
   const trimmed = query.trim().replace(/[?!.]+$/, '');
   return trimmed.charAt(0).toUpperCase() + trimmed.slice(1, 32) + (trimmed.length > 32 ? '…' : '');
-}
-
-function aiAssistRender(query) {
-  const body = document.getElementById('aapBody');
-  if (!body) return;
-
-  const loadText = aapLoadingText(query);
-  body.insertAdjacentHTML('beforeend', aapLoadingHTML(loadText));
-  body.scrollTop = body.scrollHeight;
-
-  const base = 900;
-  const jitter = Math.floor(Math.random() * 500) + (query.length > 30 ? 200 : 0);
-  const delay = base + jitter;
-
-  setTimeout(() => {
-    const loadBlock = document.getElementById('aapLoadingBlock');
-    if (loadBlock) loadBlock.remove();
-    const result = aapBuildResponse(query);
-    body.insertAdjacentHTML('beforeend', result);
-    body.scrollTop = body.scrollHeight;
-
-    // Capture every AI query into the investigation history
-    if (typeof AIC !== 'undefined') {
-      const label = aicLabelFromQuery(query);
-      const q = query; // close over for restore
-      AIC.add(label, () => aiAssistSend(q));
-      // If on overview (no breadcrumb bar), ensure bar is shown for the history control
-      const bc = document.getElementById('arPageBc');
-      if (bc && bc.style.display === 'none' && AIC.store.length > 0) {
-        bc.style.display = 'flex';
-      }
-    }
-  }, delay);
 }
 
 /* ════════════════════════════════════════════
@@ -16798,7 +16799,63 @@ function txnToggleRow(rowId, productId) {
 .ov-ij-tag-amber{background:rgba(201,123,28,.07);border-color:rgba(201,123,28,.2);color:#92400e;}
 /* ══ END OVERVIEW INTERACTION JOURNEY ══ */
 
-/* ══ 3-COLUMN LAYOUT ══════════════════════════════════ */
+/* ══ WORKSPACE WRAPPER — c360v2Main + CtxRail share orch bar ══ */
+.c360-ws-wrap{
+  flex:1;display:flex;flex-direction:column;
+  min-width:0;overflow:hidden;
+}
+.c360-ws-inner{
+  flex:1;display:flex;flex-direction:row;
+  min-height:0;overflow:hidden;
+}
+/* Orch bar now belongs to ws-wrap, not c360v2Main */
+.c360-ws-wrap > .c2-orch-bar{flex-shrink:0;}
+
+/* AI result rendered in center workspace */
+.dp-ai-ws-wrap{
+  padding:20px var(--ws-pad-h) var(--ws-pad-bottom);
+  max-width:700px;
+}
+.dp-ai-ws-wrap .aap-txt-block{
+  background:#fff;border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;
+  box-shadow:var(--sh1);
+}
+.dp-ai-ws-wrap .aap-loading-block{
+  background:#fff;border:1px solid var(--border);
+  border-radius:12px;padding:16px 18px;
+  box-shadow:var(--sh1);
+}
+.dp-ai-ws-wrap .aap-txt-query{
+  font-size:10px;color:#9896b0;font-style:italic;margin-bottom:8px;
+}
+.dp-ai-ws-wrap .aap-txt-answer{
+  font-size:12.5px;color:#0c0b18;line-height:1.6;margin-bottom:10px;
+}
+.dp-ai-ws-wrap .aap-clarify-list{
+  display:flex;flex-direction:column;gap:7px;margin-top:10px;
+}
+.dp-ai-ws-wrap .aap-clarify-opt{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 14px;border-radius:9px;
+  border:1px solid var(--border);background:#fff;
+  cursor:pointer;font-family:var(--f);
+  transition:all .12s;text-align:left;
+}
+.dp-ai-ws-wrap .aap-clarify-opt:hover{
+  border-color:rgba(91,95,207,.35);background:rgba(91,95,207,.04);
+}
+.dp-ai-ws-wrap .aap-ws-btn{
+  display:inline-flex;align-items:center;
+  padding:5px 14px;border-radius:7px;
+  border:1px solid rgba(91,95,207,.25);background:rgba(91,95,207,.06);
+  color:#3d41a0;font-size:11px;font-weight:600;
+  cursor:pointer;font-family:var(--f);margin:3px 4px 0 0;
+  transition:all .12s;
+}
+.dp-ai-ws-wrap .aap-ws-btn:hover{background:rgba(91,95,207,.14);}
+
+/* ══ END WORKSPACE WRAPPER ══ */
 
 /* Conv panel ~20% */
 .c360-conv-panel{width:220px;min-width:180px;max-width:260px;flex-shrink:0;display:flex;flex-direction:column;border-right:1px solid rgba(0,0,0,.08);background:#fff;overflow:hidden;}
