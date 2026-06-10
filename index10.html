@@ -40,7 +40,8 @@
 /* ── GLOBAL RESET ────────────────────────────────────── */
 *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased;}
 html,body{height:100%;overflow:hidden;}
-body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex-direction:column;font-size:13px;letter-spacing:-.01em;padding-bottom:0;}
+html{height:100%;overflow:hidden;}
+body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex-direction:column;font-size:13px;letter-spacing:-.01em;padding-bottom:0;height:100%;overflow:hidden;}
 
 /* ── REFINED CARD SYSTEM ─────────────────────────────── */
 /* loan-card: lightweight, airy, minimal */
@@ -877,7 +878,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 @keyframes nameSlide{from{opacity:0;max-height:0}to{opacity:1;max-height:40px}}
 
 /* ══ TOPBAR ══ */
-.topbar{height:44px;background:var(--s0);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:8px;flex-shrink:0;box-shadow:var(--sh1);z-index:20;}
+.topbar{height:44px;background:var(--s0);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 14px;gap:8px;flex-shrink:0;box-shadow:var(--sh1);z-index:20;transition:padding-right .3s cubic-bezier(0.16,1,0.3,1);}
 .logo{width:28px;height:28px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;font-family:var(--m);}
 .vd{width:1px;height:20px;background:var(--border);}
 .chip{font-family:var(--m);font-size:11px;display:flex;align-items:center;gap:5px;border-radius:5px;padding:3px 9px;font-weight:500;}
@@ -1015,11 +1016,11 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 /* Global AI Assistant panel — fixed to application shell */
 #c2AiAssistPanel{
   position:fixed;
-  top:44px;               /* below topbar */
+  top:0;                  /* full height — starts from very top */
   right:46px;             /* left of action-rail */
   width:0;                /* closed by default; JS sets width */
-  height:calc(100vh - 44px);
-  z-index:40;
+  height:100vh;
+  z-index:50;             /* above topbar (z-index:20) */
   flex-direction:column;
   overflow:hidden;
   background:#fafaf8;
@@ -1070,6 +1071,26 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 }
 
 /* ── Product Navigator ── */
+/* ── Verification timeline cards ── */
+.verif-list{display:flex;flex-direction:column;gap:6px;margin:8px 0;}
+.verif-evt{
+  padding:9px 11px;border-radius:9px;
+  background:#f8f8fc;border:1px solid rgba(0,0,0,.07);
+  border-left:3px solid rgba(91,95,207,.2);
+}
+.verif-evt-hdr{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+.verif-evt-date{font-size:9.5px;color:#9896b0;font-weight:500;}
+.verif-evt-method{font-size:11.5px;font-weight:700;color:#0c0b18;margin-bottom:3px;}
+.verif-evt-meta{font-size:10px;color:#6b7280;line-height:1.4;}
+.verif-chip{
+  font-size:8.5px;font-weight:700;padding:2px 7px;border-radius:20px;
+  flex-shrink:0;
+}
+.verif-chip.pass{background:rgba(13,124,82,.1);color:#0d7c52;}
+.verif-chip.fail{background:rgba(239,68,68,.1);color:#dc2626;}
+/* Failed events get a red left border */
+.verif-evt:has(.verif-chip.fail){border-left-color:rgba(239,68,68,.4);}
+
 /* ── Compact context selector bar ── */
 .gap-ctx-bar{
   flex-shrink:0;
@@ -1113,7 +1134,140 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .gap-ctx-opt-name{font-size:11px;font-weight:600;color:#0c0b18;}
 .gap-ctx-opt-id{font-size:9.5px;color:#9896b0;margin-left:6px;}
 
-/* ── Compact context selector bar ── (end) */
+/* ── Mode tab switcher — hidden until a workflow is active ── */
+.gap-mode-tabs{
+  display:none;  /* shown by JS when workflow starts */
+  flex-shrink:0;
+  border-bottom:1px solid rgba(0,0,0,.09);background:#fff;padding:0 10px;
+}
+.gap-mtab{
+  flex:1;padding:7px 6px;border:none;background:none;
+  font-size:11px;font-weight:600;color:#9896b0;cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  font-family:var(--f);transition:all .12s;position:relative;
+}
+.gap-mtab:hover{color:#3d41a0;}
+.gap-mtab-sel{color:#3d41a0;border-bottom-color:#5b5fcf;}
+.gap-wf-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:7px;height:7px;border-radius:50%;background:#f59e0b;
+  position:absolute;top:5px;right:12px;
+}
+.gap-action-chip.gap-wf-chip{
+  background:rgba(245,158,11,.08);
+  border-color:rgba(245,158,11,.35);
+  color:#92400e;
+}
+.gap-action-chip.gap-wf-chip:hover{background:rgba(245,158,11,.15);}
+
+/* ── Workflow area ── */
+.gap-wf-area{
+  flex:1;min-height:0;display:flex;flex-direction:column;
+  overflow-y:auto;background:var(--c360-ws-bg);
+  scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.06) transparent;
+}
+.gap-wf-empty{
+  flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:24px 16px;text-align:center;
+}
+.gap-wf-empty-icon{font-size:28px;margin-bottom:10px;}
+.gap-wf-empty-title{font-size:12px;font-weight:700;color:#3a3854;margin-bottom:5px;}
+.gap-wf-empty-sub{font-size:10.5px;color:#9896b0;line-height:1.5;}
+
+/* Active workflow container */
+#gapWfActive{padding:10px;display:flex;flex-direction:column;gap:10px;}
+
+/* Progress steps */
+.wf-progress{display:flex;align-items:center;gap:0;margin-bottom:4px;}
+.wf-step-dot{
+  display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;
+}
+.wf-step-dot-inner{
+  width:22px;height:22px;border-radius:50%;border:2px solid rgba(0,0,0,.12);
+  background:#fff;display:grid;place-items:center;font-size:9px;font-weight:700;color:#9896b0;
+  flex-shrink:0;z-index:1;position:relative;
+}
+.wf-step-dot-inner.active{border-color:#5b5fcf;background:#5b5fcf;color:#fff;}
+.wf-step-dot-inner.done{border-color:#0d7c52;background:#0d7c52;color:#fff;}
+.wf-step-dot-label{font-size:8px;font-weight:600;color:#9896b0;text-align:center;white-space:nowrap;}
+.wf-step-dot.active .wf-step-dot-label{color:#3d41a0;}
+.wf-step-dot.done .wf-step-dot-label{color:#0d7c52;}
+.wf-step-line{flex:1;height:2px;background:rgba(0,0,0,.1);margin:0 -2px;position:relative;top:-9px;}
+.wf-step-line.done{background:#0d7c52;}
+
+/* Workflow card */
+.wf-card{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;overflow:hidden;}
+.wf-card-hdr{
+  padding:10px 12px;border-bottom:1px solid rgba(0,0,0,.06);
+  display:flex;align-items:center;gap:8px;
+}
+.wf-card-icon{font-size:14px;}
+.wf-card-title{font-size:12px;font-weight:700;color:#0c0b18;}
+.wf-card-sub{font-size:9.5px;color:#9896b0;margin-top:1px;}
+.wf-card-body{padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
+
+/* Options */
+.wf-options{display:flex;flex-direction:column;gap:5px;}
+.wf-option{
+  display:flex;align-items:center;gap:9px;padding:9px 11px;
+  border:1px solid rgba(0,0,0,.09);border-radius:8px;background:#fafafa;
+  cursor:pointer;transition:all .12s;font-family:var(--f);
+}
+.wf-option:hover{background:rgba(91,95,207,.04);border-color:rgba(91,95,207,.2);}
+.wf-option.wf-sel{background:rgba(91,95,207,.08);border-color:rgba(91,95,207,.35);}
+.wf-option-radio{
+  width:16px;height:16px;border-radius:50%;border:2px solid rgba(0,0,0,.2);
+  flex-shrink:0;display:grid;place-items:center;transition:all .12s;
+}
+.wf-option.wf-sel .wf-option-radio{border-color:#5b5fcf;background:#5b5fcf;}
+.wf-option.wf-sel .wf-option-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff;}
+.wf-option-label{font-size:11.5px;font-weight:600;color:#0c0b18;}
+.wf-option-sub{font-size:9.5px;color:#9896b0;margin-top:1px;}
+
+/* Review rows */
+.wf-review{background:#f8f8fc;border-radius:9px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;}
+.wf-review-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.wf-review-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#b0afc8;flex-shrink:0;}
+.wf-review-val{font-size:11px;font-weight:600;color:#0c0b18;text-align:right;}
+
+/* Done / success state */
+.wf-done{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:20px 14px;
+}
+.wf-done-icon{font-size:32px;margin-bottom:10px;}
+.wf-done-title{font-size:13px;font-weight:700;color:#0d7c52;margin-bottom:4px;}
+.wf-done-sub{font-size:10.5px;color:#6b7280;line-height:1.5;margin-bottom:14px;}
+.wf-done-ref{font-size:9px;color:#b0afc8;}
+
+/* Action buttons */
+.wf-actions{display:flex;gap:8px;margin-top:4px;}
+.wf-btn-primary{
+  flex:1;padding:9px 14px;border-radius:9px;border:none;
+  background:#5b5fcf;color:#fff;font-size:11.5px;font-weight:700;
+  cursor:pointer;font-family:var(--f);transition:all .12s;
+}
+.wf-btn-primary:hover{background:#4a4ec0;}
+.wf-btn-secondary{
+  padding:9px 14px;border-radius:9px;border:1px solid rgba(0,0,0,.1);
+  background:#fff;color:#6b7280;font-size:11.5px;font-weight:500;
+  cursor:pointer;font-family:var(--f);transition:all .12s;
+}
+.wf-btn-secondary:hover{background:rgba(0,0,0,.04);}
+.wf-btn-danger{
+  flex:1;padding:9px 14px;border-radius:9px;border:none;
+  background:#dc2626;color:#fff;font-size:11.5px;font-weight:700;
+  cursor:pointer;font-family:var(--f);transition:all .12s;
+}
+.wf-btn-danger:hover{background:#b91c1c;}
+/* Workflow input */
+.wf-input{
+  width:100%;border:1px solid rgba(0,0,0,.1);border-radius:8px;
+  padding:8px 10px;font-size:12px;font-family:var(--f);
+  outline:none;transition:border-color .12s;box-sizing:border-box;
+}
+.wf-input:focus{border-color:rgba(91,95,207,.4);}
+.wf-input-lbl{font-size:9.5px;font-weight:700;color:#6b7280;margin-bottom:4px;}
 .gap-prod-nav{flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.08);background:#fff;}
 .gap-prod-tabs{display:flex;padding:8px 10px 0;}
 .gap-ptab{flex:1;padding:5px 4px;border:none;background:none;font-size:10px;font-weight:600;color:#9896b0;cursor:pointer;border-bottom:2px solid transparent;font-family:var(--f);transition:all .14s;margin-bottom:-1px;}
@@ -4422,9 +4576,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <div class="wf-tabs">
         <button class="wft" id="wft-contact360" onclick="switchWFTab('contact360')">✦ Contact360</button>
         <button class="wft" id="wft-conversations" onclick="switchWFTab('conversations')">💬 Conversations</button>
-        <button class="wft" id="wft-journey" onclick="switchWFTab('journey')">⟳ Interaction Journey</button>
-        <button class="wft" id="wft-cobrowse" onclick="switchWFTab('cobrowse')"><span class="wft-dot"></span>🖥 Co-browse</button>
-        <button class="wft" id="wft-sharing" onclick="switchWFTab('sharing')">📤 Content Sharing</button>
+
       </div>
     </div>
 
@@ -4665,6 +4817,19 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                          Lives outside all modes. Stays visible across every page. -->
                     <!-- ══ LEFT: MEMBER CONTEXT RAIL ══ -->
                     <div class="mcr-rail" id="c360ConvPanel">
+                      <!-- Collapse button (visible when expanded) -->
+                      <div class="mcr-collapse-bar">
+                        <button class="mcr-collapse-btn" onclick="mcrToggle()" title="Collapse Member Context">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                        </button>
+                      </div>
+                      <!-- Collapsed strip (visible when collapsed) -->
+                      <div class="mcr-collapsed-strip" onclick="mcrToggle()" title="Expand Member Context">
+                        <button class="mcr-expand-btn">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </button>
+                        <span class="mcr-collapsed-label">Member Context</span>
+                      </div>
                       <div class="mcr-scroll">
 
                         <!-- Member Information -->
@@ -4685,7 +4850,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                         <div class="mcr-section">
                           <div class="mcr-section-hdr" style="display:flex;justify-content:space-between;align-items:center">
                             <span>Recent Interactions</span>
-                            <button class="mcr-viewall" onclick="switchWFTab('journey')">View all →</button>
+
                           </div>
                           <div class="mcr-ij-list">
                             <div class="mcr-ij-row">
@@ -4820,10 +4985,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z"/><path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>
                                 </button>
                               </div>
-                              <button class="ihs-cta" onclick="switchWFTab('journey')">
-                                View interaction journey
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                              </button>
+
                             </div>
                           </div><!-- /ihsSummaryWrap -->
                         </div><!-- /ihs-body expanded -->
@@ -4859,515 +5021,117 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
                       </div><!-- /ihsRoot -->
 
-                      <!-- Scrollable overview body -->
-                      <div class="c2-overview-scroll">
-
-                        <!-- ══ ACCEPTED REQUEST OVERLAY ══
-                             Shown when 'Accepted Request' scenario is active.
-                             Replaces standard overview content within the same Contact360 tab.
-                        ══════════════════════════════════ -->
-                        <div id="c360ArOverlay" style="display:none">
-
-                          <!-- Persistent breadcrumb (overview state) -->
-
-                          <!-- ── Member Info + Verification History row ── -->
-                          <!-- Collapsed snapshot bar — shown when row is collapsed -->
-                          <div class="ov-member-snap" id="ovMemberSnap" style="display:none">
-                            <div class="ov-snap-left">
-                              <span class="ov-snap-title">Member Snapshot</span>
-                              <span class="ov-snap-dot">·</span>
-                              <span class="ov-snap-name">Emily Olivers</span>
-                              <span class="ov-snap-dot">·</span>
-                              <span class="ov-snap-meta">Member #10048291</span>
-                            </div>
-                            <div class="ov-snap-right">
-                              <button class="ov-snap-vh-btn" onclick="arOpenVerificationHistory()">
-                                View Verification History
-                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg>
-                              </button>
-                              <button class="ov-snap-expand" onclick="ovMemberToggle()" title="Expand">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 12 15 18 9"/></svg>
-                              </button>
-                            </div>
-                          </div>
-
-                          <!-- Expanded member row with collapse control -->
-                          <div class="ov-member-row-wrap" id="ovMemberWrap">
-                            <div class="ov-member-row-hdr">
-                              <span class="ov-member-row-lbl">Member &amp; Verification</span>
-                              <button class="ov-member-row-collapse" onclick="ovMemberToggle()" title="Collapse">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="18 15 12 9 6 15"/></svg>
-                                Collapse
-                              </button>
-                            </div>
-
-                          <div class="ov-member-row">
-
-                            <!-- Member Information -->
-                            <div class="ov-card">
-                              <div class="ov-card-hdr">
-                                <span class="ov-card-title">Member Information</span>
-                              </div>
-                              <div class="ov-member-name">Emily Olivers</div>
-                              <div class="ov-info-rows">
-                                <div class="ov-info-row">
-                                  <span class="ov-info-lbl">Member No.</span>
-                                  <span class="ov-info-val">10048291</span>
-                                </div>
-                                <div class="ov-info-row">
-                                  <span class="ov-info-lbl">Status</span>
-                                  <span class="ov-info-val" style="color:#0d7c52;font-weight:600;">Active Member</span>
-                                </div>
-                                <div class="ov-info-row">
-                                  <span class="ov-info-lbl">Member Since</span>
-                                  <span class="ov-info-val">March 12, 2018</span>
-                                </div>
-                                <div class="ov-info-row">
-                                  <span class="ov-info-lbl">Primary Phone</span>
-                                  <span class="ov-info-val">(503) 555-0182</span>
-                                </div>
-                                <div class="ov-info-row">
-                                  <span class="ov-info-lbl">Email</span>
-                                  <span class="ov-info-val">michael.reynolds@email.com</span>
-                                </div>
-                                <div class="ov-info-row">
-                                  <span class="ov-info-lbl">Address</span>
-                                  <span class="ov-info-val">842 Willow Creek Drive, Bend, 97701</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Verification History -->
-                            <div class="ov-card" id="vhWidget">
-                              <div class="ov-card-hdr">
-                                <span class="ov-card-title">
-                                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-                                  Verification History
-                                </span>
-                              </div>
-                              <div class="vh-timeline">
-                                <div class="vh-tl-event">
-                                  <div class="vh-tl-dot"></div>
-                                  <div class="vh-tl-body">
-                                    <div class="vh-tl-date">Today · 10:42 AM</div>
-                                    <div class="vh-tl-method">Voice Biometric</div>
-                                  </div>
-                                </div>
-                                <div class="vh-tl-event">
-                                  <div class="vh-tl-dot"></div>
-                                  <div class="vh-tl-body">
-                                    <div class="vh-tl-date">Aug 12, 2025</div>
-                                    <div class="vh-tl-method">Phone Verification</div>
-                                  </div>
-                                </div>
-                              </div>
-                              <button class="vh-view-all" onclick="arOpenVerificationHistory()" style="margin-top:10px">View full history →</button>
-                            </div>
-
-                          </div><!-- /ov-member-row -->
-                          </div><!-- /ov-member-row-wrap -->
-
-                          <!-- Product card stack — simplified collapsed only -->
-                          <div id="arProductStack" class="ar-card-grid">
-
-                            <!-- ★ PRIORITY: Everyday Checking — full-width, AI-prioritized -->
-                            <div class="ar-pc ar-pc-primary" id="ar-pc-checking" onclick="arOpenDetail('checking')" style="cursor:pointer">
-                              <!-- AI context bar -->
-                              <div class="ar-pc-ai-bar">
-                                <span class="ar-pc-ai-bar-orb">✦</span>
-                                <span class="ar-pc-ai-bar-text">Most relevant to current request</span>
-                                <div class="ai-fb-ctrl" id="aiFbBar">
-                                  <button class="ai-fb-btn" onclick="aiFbUp('aiFbBar',this)" title="Helpful">👍</button>
-                                  <button class="ai-fb-btn" onclick="aiFbDown('aiFbBar')" title="Not helpful">👎</button>
-                                </div>
-                              </div>
-
-                              <!-- Main identity row -->
-                              <div class="ar-pc-compact">
-                                <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-deposit">Deposit</span>
-                                  <span class="ar-acct-id">•••• 4821</span>
-                                </div>
-                                <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">Everyday Checking</div>
-                                  <div class="ar-pc-desc">Classic Checking · Primary Owner</div>
-                                </div>
-                                <div class="ar-pc-ops">
-                                  <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips">
-                                    <span class="ar-alert-chip restrict">OLB Restricted</span>
-                                    <span class="ar-alert-chip more">+3</span>
-                                  </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('checking')">View Details</button>
-                                </div>
-                              </div>
-
-                              <!-- Enriched details: balance + recent activity -->
-                              <div class="ar-pc-enriched">
-
-                                <!-- Balance summary -->
-                                <div class="ar-pc-bal-strip">
-                                  <div class="ar-pc-bal-item">
-                                    <span class="ar-pc-bal-lbl">Available Balance</span>
-                                    <span class="ar-pc-bal-val">$4,782.15</span>
-                                  </div>
-                                  <div class="ar-pc-bal-divider"></div>
-                                  <div class="ar-pc-bal-item">
-                                    <span class="ar-pc-bal-lbl">Actual Balance</span>
-                                    <span class="ar-pc-bal-val">$4,782.15</span>
-                                  </div>
-                                </div>
-
-                                <!-- Recent activity preview -->
-                                <div class="ar-pc-act-strip" onclick="event.stopPropagation();arOpenTransactions('checking')">
-                                  <div class="ar-pc-act-hdr">Recent Activity</div>
-                                  <div class="ar-pc-act-row">
-                                    <span class="ar-pc-act-name">Tesla Payroll Deposit</span>
-                                    <span class="ar-pc-act-amt ar-pc-act-cr">+$3,420.00</span>
-                                    <span class="ar-pc-act-badge ar-pc-act-posted">Posted</span>
-                                  </div>
-                                  <div class="ar-pc-act-row">
-                                    <span class="ar-pc-act-name">Starbucks</span>
-                                    <span class="ar-pc-act-amt">−$8.75</span>
-                                    <span class="ar-pc-act-badge ar-pc-act-posted">Posted</span>
-                                  </div>
-                                  <div class="ar-pc-act-row">
-                                    <span class="ar-pc-act-name">Amazon Marketplace</span>
-                                    <span class="ar-pc-act-amt">−$92.18</span>
-                                    <span class="ar-pc-act-badge ar-pc-act-posted">Posted</span>
-                                  </div>
-                                </div>
-
-                              </div><!-- /ar-pc-enriched -->
-                            </div>
-
-                            <!-- Deposits group — 2-col grid (handled by parent grid) -->
-                            <div id="arOtherCards" class="ar-other-cards">
-                            <div class="ar-pc" id="ar-pc-savings" onclick="arOpenDetail('savings')" style="cursor:pointer">
-                              <div class="ar-pc-compact">
-                                <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-deposit">Deposit</span>
-                                  <span class="ar-acct-id">•••• 1039</span>
-                                </div>
-                                <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">Savings Account</div>
-                                  <div class="ar-pc-desc">Emergency Savings · Joint Owner</div>
-                                </div>
-                                <div class="ar-pc-ops">
-                                  <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips">
-                                  </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('savings')">View Details</button>
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- High Yield Savings -->
-                            <div class="ar-pc" id="ar-pc-hysavings" onclick="arOpenDetail('hysavings')" style="cursor:pointer">
-                              <div class="ar-pc-compact">
-                                <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-deposit">Deposit</span>
-                                  <span class="ar-acct-id">•••• 8810</span>
-                                </div>
-                                <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">High Yield Savings</div>
-                                  <div class="ar-pc-desc">Premium Savings · Beneficiary</div>
-                                </div>
-                                <div class="ar-pc-ops">
-                                  <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips">
-                                  </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('hysavings')">View Details</button>
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Spacer row — visual gap between deposit / loan groups -->
-                            <div class="ar-pc-group-gap" style="grid-column:1/-1"></div>
-
-                            <!-- Auto Loan -->
-                            <div class="ar-pc" id="ar-pc-autoloan" onclick="arOpenDetail('autoloan')" style="cursor:pointer">
-                              <div class="ar-pc-compact">
-                                <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-loan">Loan</span>
-                                  <span class="ar-acct-id">•••• 7712</span>
-                                </div>
-                                <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">Auto Loan</div>
-                                  <div class="ar-pc-desc">Vehicle Financing · Primary Borrower</div>
-                                </div>
-                                <div class="ar-pc-ops">
-                                  <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips">
-                                  </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('autoloan')">View Details</button>
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Home Mortgage -->
-                            <div class="ar-pc" id="ar-pc-mortgage" onclick="arOpenDetail('mortgage')" style="cursor:pointer">
-                              <div class="ar-pc-compact">
-                                <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-loan">Loan</span>
-                                  <span class="ar-acct-id">•••• 3301</span>
-                                </div>
-                                <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">Home Mortgage</div>
-                                  <div class="ar-pc-desc">30-Year Fixed · Co-Borrower</div>
-                                </div>
-                                <div class="ar-pc-ops">
-                                  <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips">
-                                  </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('mortgage')">View Details</button>
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Spacer row — visual gap between loan / card groups -->
-                            <div class="ar-pc-group-gap" style="grid-column:1/-1"></div>
-
-                            <!-- Visa Debit Card -->
-                            <div class="ar-pc" id="ar-pc-debitcard" onclick="arOpenDetail('debitcard')" style="cursor:pointer">
-                              <div class="ar-pc-compact">
-                                <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-card">Card</span>
-                                  <span class="ar-acct-id">•••• 4412</span>
-                                </div>
-                                <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">Visa Debit Card</div>
-                                  <div class="ar-pc-desc">Visa Debit · Primary Cardholder</div>
-                                </div>
-                                <div class="ar-pc-ops">
-                                  <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips">
-                                  </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('debitcard')">View Details</button>
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Visa Credit Card -->
-                            <div class="ar-pc" id="ar-pc-creditcard" onclick="arOpenDetail('creditcard')" style="cursor:pointer">
-                              <div class="ar-pc-compact">
-                                <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-card">Card</span>
-                                  <span class="ar-acct-id">•••• 7777</span>
-                                </div>
-                                <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">Visa Credit Card</div>
-                                  <div class="ar-pc-desc">Visa Credit · Authorized User</div>
-                                </div>
-                                <div class="ar-pc-ops">
-                                  <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips">
-                                    <span class="ar-alert-chip warn">Declined Txn</span>
-                                  </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('creditcard')">View Details</button>
-                                </div>
-                              </div>
-                            </div>
-
-                            <!-- Visa Debit Card ••••7439 — Not Associated -->
-                            <div class="ar-pc" id="ar-pc-debitcard2" onclick="arOpenDetail('debitcard2')" style="cursor:pointer">
-                              <div class="ar-pc-compact">
-                                <div class="ar-pc-left">
-                                  <span class="ar-type-badge ar-card">Card</span>
-                                  <span class="ar-acct-id">•••• 7439</span>
-                                </div>
-                                <div class="ar-pc-mid">
-                                  <div class="ar-pc-name">Visa Debit Card</div>
-                                  <div class="ar-pc-desc">Emergency Savings · Not Associated</div>
-                                </div>
-                                <div class="ar-pc-ops">
-                                  <span class="ar-status-badge ar-active">Active</span>
-                                  <div class="ar-ops-chips">
-                                  </div>
-                                  <button class="ar-view-btn" onclick="event.stopPropagation();arOpenDetail('debitcard2')">View Details</button>
-                                </div>
-                              </div>
-                            </div>
-
-                            </div><!-- /arOtherCards -->
-
-                          </div><!-- /arProductStack -->
-
-                          <!-- ── Recent Interaction Journey Widget ── -->
-                          <div class="ov-card ov-ij-widget" id="ovIjWidget">
-                            <div class="ov-card-hdr" style="margin-bottom:0">
-                              <span class="ov-card-title">
-                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                                Recent Interaction Journey
-                              </span>
-                              <button class="vh-view-all" onclick="switchWFTab('journey')" style="font-size:10px">View all →</button>
-                            </div>
-
-                            <!-- Interaction rows -->
-                            <div class="ov-ij-rows">
-
-                              <!-- Row 1 -->
-                              <div class="ov-ij-row">
-                                <div class="ov-ij-icon ov-ij-icon-video" title="Video">📹</div>
-                                <div class="ov-ij-body">
-                                  <div class="ov-ij-topic">Car Loan — Document Sharing</div>
-                                  <div class="ov-ij-meta">Emma Blue · Main Contact Centre</div>
-                                </div>
-                                <div class="ov-ij-right">
-                                  <span class="ov-ij-time">1 day ago</span>
-                                  <span class="ov-ij-tag ov-ij-tag-pink">Car Loan</span>
-                                </div>
-                              </div>
-
-                              <!-- Row 2 -->
-                              <div class="ov-ij-row">
-                                <div class="ov-ij-icon ov-ij-icon-chat" title="Chat">💬</div>
-                                <div class="ov-ij-body">
-                                  <div class="ov-ij-topic">Transfer Money — Dispute</div>
-                                  <div class="ov-ij-meta">Diana Hernandez · Collections</div>
-                                </div>
-                                <div class="ov-ij-right">
-                                  <span class="ov-ij-time">2 days ago</span>
-                                  <span class="ov-ij-tag ov-ij-tag-teal">Transfer Money</span>
-                                </div>
-                              </div>
-
-                              <!-- Row 3 -->
-                              <div class="ov-ij-row">
-                                <div class="ov-ij-icon ov-ij-icon-voice" title="Voice">📞</div>
-                                <div class="ov-ij-body">
-                                  <div class="ov-ij-topic">Auto Loan — Skip Payment Request</div>
-                                  <div class="ov-ij-meta">Michael Torres · Loan Department</div>
-                                </div>
-                                <div class="ov-ij-right">
-                                  <span class="ov-ij-time">This week</span>
-                                  <span class="ov-ij-tag ov-ij-tag-amber">Skip Payment</span>
-                                </div>
-                              </div>
-
-                            </div><!-- /ov-ij-rows -->
-                        <!-- CURRENT INTERACTION — full-width conversation, outside scroll container -->
-                        </div><!-- /c360ArOverlay -->
-
-                        <!-- No-handoff: no-context notice (visible only in no-handoff mode) -->
-                        <div class="c2-nh-header" id="nhHeader">
-                          <span class="c2-nh-dot"></span>
-                          No AI interaction context available. Member contacted directly — no handoff summary. All accounts shown equally. Use the prompt bar to query.
+                      <!-- ══ CONVERSATION PANEL — embedded below handoff ══ -->
+                      <div id="c360ConvEmbed" style="flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--s0);min-height:0;">
+                        <div class="msgs lg" id="c360EmbedMsgs">
+                          <div class="sys"><span>📅 Today, November 25th</span></div>
+                          <div class="mb ag"><div class="mav lg" style="background:#7DA3F3;border-radius:50%;">AR</div><div class="mbody"><div class="mt lg">Hello Sarah! How can I help you today?</div><div class="mm">10:00 AM</div></div></div>
+                          <div class="mb mem"><div class="mav lg" style="background:#E07A5F;border-radius:50%;">SJ</div><div class="mbody"><div class="mt lg">Hi! I'm trying to check on my loan application status. I submitted it two weeks ago.</div><div class="mm">10:01 AM</div></div></div>
+                          <div class="mb ag"><div class="mav lg" style="background:#7DA3F3;border-radius:50%;">AR</div><div class="mbody"><div class="mt lg">Of course, let me pull that up. Could you confirm your date of birth?</div><div class="mm">10:02 AM</div></div></div>
+                          <div class="mb mem"><div class="mav lg" style="background:#E07A5F;border-radius:50%;">SJ</div><div class="mbody"><div class="mt lg">Sure — March 14, 1985.</div><div class="mm">10:03 AM</div></div></div>
+                          <div class="mb ag"><div class="mav lg" style="background:#7DA3F3;border-radius:50%;">AR</div><div class="mbody"><div class="mt lg">Got it! I can see your application. Would you like to start a video call?</div><div class="mm">10:04 AM</div></div></div>
+                          <div class="mb mem"><div class="mav lg" style="background:#E07A5F;border-radius:50%;">SJ</div><div class="mbody"><div class="mt lg">Yes, that would be really helpful!</div><div class="mm">10:04 AM</div></div></div>
                         </div>
-
-                        <!-- No-handoff: AI response brief (appears after payroll query) -->
-                        <div id="nhAiBrief" style="display:none;margin-bottom:14px;padding:12px 14px;border-radius:9px;background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(14,165,233,.04));border-left:2px solid #6366f1;border-top:1px solid rgba(99,102,241,.12);border-right:1px solid rgba(99,102,241,.06);border-bottom:1px solid rgba(99,102,241,.06);animation:aiws-card-in .35s var(--ease) both">
-                          <div class="c2-ai-sum-head">
-                            <span class="c2-ai-sum-orb">✦</span>
-                            <span class="c2-ai-sum-title" style="font-size:10px">Context Detected</span>
-                            <span class="c2-chip intent">Payroll Inquiry</span>
-                            <span class="c2-chip conf">Confirmed</span>
-                          </div>
-                          <div class="c2-ai-sum-text">Payroll from ACME Corp found in Everyday Checking ····3743. $3,420 received May 12 — 2 days later than prior 3 deposits. Funds confirmed.</div>
-                        </div>
-
-                      </div><!-- /c2-overview-scroll -->
-
-                      </div><!-- /c360-ws-panel -->
-
-                      <!-- ══ FULL-WIDTH CONVERSATION — fills remaining height ══ -->
-                      <div class="mcw-conv-section">
-                        <!-- Scrollable message history — reuses existing .msgs styling -->
-                        <div class="msgs lg mcw-conv-msgs" id="mcwConvThread">
-                          <div class="sys"><span>📅 Today, May 29th</span></div>
-                          <div class="mb ag">
-                            <div class="mav lg" style="background:#5b5fcf;border-radius:50%;">AI</div>
-                            <div class="mbody">
-                              <div class="mt lg">Hello! I'm the Eltropy AI assistant. I've connected you with an agent who can help with your salary deposit inquiry. Please hold for a moment.</div>
-                              <div class="mm">4:12 AM</div>
-                            </div>
-                          </div>
-                          <div class="mb mem">
-                            <div class="mav lg" style="background:#E07A5F;border-radius:50%;">EO</div>
-                            <div class="mbody">
-                              <div class="mt lg">Hi, I'm checking on my Tesla payroll deposit — it was supposed to hit yesterday but I don't see it in my account.</div>
-                              <div class="mm">4:12 AM</div>
-                            </div>
-                          </div>
-                          <div class="mb ag">
-                            <div class="mav lg" style="background:#5b5fcf;border-radius:50%;">AI</div>
-                            <div class="mbody">
-                              <div class="mt lg">I can see your Everyday Checking account. I've identified a recurring Tesla payroll deposit pattern, but no current-cycle deposit has posted. Transferring you to a specialist now.</div>
-                              <div class="mm">4:13 AM</div>
-                            </div>
-                          </div>
-                          <div class="sys"><span>Agent joined the conversation</span></div>
-                        </div>
-                        <!-- Sticky composer -->
-                        <div class="rc-composer" id="rcComposerC360">
-                          <!-- Channel bar -->
+                        <!-- Rich composer -->
+                        <div class="rich-composer">
+                          <!-- Row 1: Channel switcher -->
                           <div class="rc-channels">
-                            <button class="rc-ch rc-ch-sel" onclick="rcSetChannel(this,'text')">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
-                              <span>Text</span>
+                            <button class="rc-ch active" title="Chat" onclick="setChannel(this)">
+                              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                             </button>
-                            <button class="rc-ch" onclick="rcSetChannel(this,'note')" title="Internal Note">
-                              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                            <div class="rc-ch-divider"></div>
+                            <button class="rc-ch teal" title="Text SMS" onclick="setChannel(this)">
+                              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 00-2 2v18l4-4h14a2 2 0 002-2V4a2 2 0 00-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+                              <span>Text SMS</span>
                             </button>
-                            <button class="rc-ch" onclick="rcSetChannel(this,'voice')" title="Voice">
-                              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.7 10.32 19.79 19.79 0 01.67 1.7 2 2 0 012.66 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 7.9a16 16 0 006.06 6.06l1.27-.9a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 15.92z"/></svg>
+                            <div class="rc-ch-divider"></div>
+                            <button class="rc-ch" title="Flag">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
                             </button>
-                            <button class="rc-ch" onclick="rcSetChannel(this,'video')" title="Video">
-                              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                            <div class="rc-ch-divider"></div>
+                            <button class="rc-ch" title="Voice Call">
+                              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z" transform="rotate(45 12 12)"/></svg>
+                            </button>
+                            <div class="rc-ch-divider"></div>
+                            <button class="rc-ch" title="Video Call">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
                             </button>
                           </div>
-                          <!-- Toolbar -->
-                          <div class="rc-toolbar">
-                            <div class="rc-tb-left">
-                              <button class="rc-tb-btn" title="Bullet list"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
-                              <button class="rc-tb-btn" title="Numbered list"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></button>
-                              <button class="rc-tb-btn" title="Emoji"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M8 13s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></button>
-                              <button class="rc-tb-btn" title="Image"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
-                            </div>
-                            <div class="rc-tb-right">
-                              <button class="rc-tool-pill" title="Spell check"><span style="font-family:serif;font-size:11px;font-weight:700;letter-spacing:-.5px">abc</span></button>
-                              <button class="rc-tool-pill" title="Language">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-                                <span>English</span>
+                          <!-- Row 2: Formatting toolbar -->
+                          <div class="rc-format">
+                            <button class="rc-fmt" title="Bold"><b>B</b></button>
+                            <div class="rc-ch-divider"></div>
+                            <button class="rc-fmt" title="Bullet list">
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg>
+                            </button>
+                            <button class="rc-fmt" title="Numbered list">
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4" stroke="currentColor" stroke-width="1.5"/><path d="M4 10h2" stroke="currentColor" stroke-width="1.5"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1" stroke="currentColor" stroke-width="1.5"/></svg>
+                            </button>
+                            <div class="rc-ch-divider"></div>
+                            <button class="rc-fmt" title="Image">
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            </button>
+                            <button class="rc-fmt" title="AI assist" style="color:var(--accent)">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+                            </button>
+                          </div>
+                          <!-- Row 3: Input -->
+                          <div class="rc-input-wrap">
+                            <textarea class="rc-input" id="c360EmbedInput" placeholder="Type your message | Tip: Press enter to send the message or shift + enter to add a new line | Max 1000 characters" rows="3"></textarea>
+                            <button class="rc-expand" title="Expand">
+                              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                            </button>
+                          </div>
+                          <!-- Row 4: Actions + Transfer + Send -->
+                          <div class="rc-actions">
+                            <div class="rc-act-left">
+                              <button class="rc-act" title="Canned responses">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                               </button>
-                              <button class="rc-tool-pill" title="Settings"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
-                              <button class="rc-tool-pill rc-ai-pill">
-                                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9.19 9.19 2 12l7.19 2.81L12 22l2.81-7.19L22 12l-7.19-2.81L12 2z"/></svg>
-                                AI Compose
+                              <button class="rc-act" title="Settings">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
                               </button>
-                            </div>
-                          </div>
-                          <!-- Editor -->
-                          <div class="rc-editor-area">
-                            <div class="rc-editor" id="rcEditorC360" contenteditable="true" data-placeholder="Type a message…"></div>
-                          </div>
-                          <!-- Bottom bar -->
-                          <div class="rc-bottom-bar">
-                            <div class="rc-bot-left">
-                              <button class="rc-bot-btn" title="Signature"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></button>
-                              <button class="rc-bot-btn" title="Settings"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
-                              <button class="rc-bot-btn" title="Download"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
-                              <button class="rc-bot-btn" title="Attach"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
-                              <button class="rc-bot-btn rc-bot-pen" title="Canned responses"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg></button>
-                              <button class="rc-bot-btn" title="Saved responses"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg></button>
-                              <button class="rc-bot-btn" title="Snippets"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></button>
-                              <button class="rc-bot-btn" title="Starred"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>
-                              <button class="rc-bot-btn" title="Timer"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
-                              <button class="rc-bot-btn" title="Contact"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></button>
-                              <div class="rc-bot-sep"></div>
-                              <button class="rc-transfer-btn" onclick="">
+                              <div class="rc-act-sep"></div>
+                              <button class="rc-act" title="Signature">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                              </button>
+                              <button class="rc-act" title="Download">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                              </button>
+                              <button class="rc-act" title="Attach">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+                              </button>
+                              <button class="rc-act rc-act-highlight" title="Highlight / Canned">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.707 5.826l-3.535-3.533a1 1 0 00-1.414 0L3.415 14.630 2 20.97l6.337-1.412 12.370-12.319a1 1 0 000-1.413z"/></svg>
+                              </button>
+                              <button class="rc-act" title="Canned message">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                              </button>
+                              <button class="rc-act" title="Favorite">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                              </button>
+                              <button class="rc-act" title="Priority">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                              </button>
+                              <button class="rc-act" title="Contact">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                              </button>
+                              <div class="rc-act-sep"></div>
+                              <button class="rc-transfer">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
                                 Transfer
                               </button>
-                              <div class="rc-bot-sep"></div>
-                              <button class="rc-bot-btn rc-aa-btn" title="Typography"><span>Aa</span></button>
                             </div>
-                            <button class="rc-send-btn" onclick="rcSend('mcwConvThread','rcEditorC360')">
-                              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+                            <button class="rc-send" onclick="sendMsg('c360EmbedMsgs','c360EmbedInput')">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
                             </button>
                           </div>
                         </div>
-                      </div>
+                      </div><!-- /c360ConvEmbed -->
+
+                      </div><!-- /c360-ws-panel -->
+
+                      
 
                     </div><!-- /overview mode -->
 
@@ -5701,10 +5465,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
             </div>
             </div>
 
-          <div class="wf-pane s1-wf-pane s1-hidden" id="s1-cobrowse"><div class="ph-pane"><div class="ph-icon">🖥</div><div class="ph-title">Start a Co-browse session</div><div class="ph-sub">Share screen with Sarah Johnson to guide her through the application</div><button style="margin-top:8px;background:var(--accent);border:none;color:#fff;border-radius:7px;padding:8px 20px;font-size:11px;font-family:var(--f);cursor:pointer;font-weight:600">+ Start Co-browse</button></div></div>
-          <div class="wf-pane s1-wf-pane s1-hidden" id="s1-workflows"><div class="ph-pane"><div class="ph-icon">⚙</div><div class="ph-title">Workflows</div><div class="ph-sub">Manage active workflows for this member</div></div></div>
-          <div class="wf-pane s1-wf-pane s1-hidden" id="s1-salesforce"><div class="ph-pane"><div class="ph-icon">☁</div><div class="ph-title">Salesforce</div><div class="ph-sub">View and update records</div></div></div>
-          <div class="wf-pane s1-wf-pane s1-hidden" id="s1-sharing"><div class="ph-pane"><div class="ph-icon">📤</div><div class="ph-title">Content Sharing</div><div class="ph-sub">Send documents and resources to Sarah</div></div></div>
         </div>
       </div>
 
@@ -6228,9 +5988,30 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
         </div>
       </div>
 
-      <!-- Conversation-only scroll area (no static product detail) -->
+      <!-- Mode tab switcher -->
+      <div class="gap-mode-tabs">
+        <button class="gap-mtab gap-mtab-sel" id="gapTabConv" onclick="gapSwitchMode('conversation')">Conversation</button>
+        <button class="gap-mtab" id="gapTabWf" onclick="gapSwitchMode('workflow')">
+          Workflow
+          <span class="gap-wf-badge" id="gapWfBadge" style="display:none"></span>
+        </button>
+      </div>
+
+      <!-- Conversation-only scroll area -->
       <div class="gap-scroll" id="gapScrollArea">
         <div id="aapBody"></div>
+      </div>
+
+      <!-- Workflow area -->
+      <div class="gap-wf-area" id="gapWfArea" style="display:none">
+        <div class="gap-wf-empty" id="gapWfEmpty">
+          <div class="gap-wf-empty-icon">⚡</div>
+          <div class="gap-wf-empty-title">No active workflow</div>
+          <div class="gap-wf-empty-sub">Start a workflow from a prompt or type: block card, replace card, make payment, skip payment, file dispute.</div>
+        </div>
+        <div id="gapWfActive" style="display:none">
+          <!-- JS-populated workflow steps -->
+        </div>
       </div>
 
       <!-- Input -->
@@ -6325,14 +6106,11 @@ function switchWFTab(tab){
     const c360Pane = document.getElementById('s1-contact360');
     const outerPanes = {
       conversations: document.getElementById('s1-conversations'),
-      cobrowse:      document.getElementById('s1-cobrowse'),
-      sharing:       document.getElementById('s1-sharing'),
     };
 
     // Helper: switch outer pane — direct display control (wf-pane default is display:none)
-    // Journey, cobrowse, sharing all render inside c360-loaded → keep s1-contact360 visible
     function setOuterPane(which) {
-      const useC360 = (which === 'contact360' || which === 'journey' || which === 'cobrowse' || which === 'sharing');
+      const useC360 = (which === 'contact360');
       if (c360Pane) { c360Pane.style.display = useC360 ? 'flex' : 'none'; c360Pane.style.flexDirection = 'column'; c360Pane.style.flex = '1'; }
       // Only standalone pane is conversations
       const convPane = outerPanes.conversations;
@@ -6366,26 +6144,8 @@ function switchWFTab(tab){
     if (cp)   cp.style.display   = 'none';
     if (wm) wm.style.paddingRight = aapOpen ? aapWidth+'px' : '0';
 
-    if (tab === 'journey') {
-      setOuterPane('journey');
-      if (jv) { jv.style.display = 'flex'; jv.style.flexDirection = 'column'; }
-      // Always re-render IJ so data is visible on every visit
-      _ijRendered = false; ijRenderIfNeeded();
-      setTimeout(arUpdateContextChips, 50);
-      return;
-    }
     if (tab === 'conversations') {
       setOuterPane('conversations');
-      return;
-    }
-    if (tab === 'cobrowse') {
-      setOuterPane('cobrowse');
-      if (cbv) { cbv.style.display = 'flex'; cbv.style.flexDirection = 'column'; }
-      return;
-    }
-    if (tab === 'sharing') {
-      setOuterPane('sharing');
-      if (shv) { shv.style.display = 'flex'; shv.style.flexDirection = 'column'; }
       return;
     }
     return;
@@ -8969,13 +8729,25 @@ function gapCall(fn, ...args) {
 function gapClassifyQuery(raw) {
   const q = raw.toLowerCase();
 
+  // Workflow triggers — resolved immediately, no AI delay
+  if (/block.*card|block card/.test(q))                              return { type:'workflow', wfId:'block_card' };
+  if (/replace.*card|card.*replace/.test(q))                        return { type:'workflow', wfId:'replace_card' };
+  if (/make.*payment|pay.*loan|loan.*payment|credit.*payment/.test(q)) return { type:'workflow', wfId:'make_payment' };
+  if (/skip.*payment|payment.*skip|defer.*payment/.test(q))         return { type:'workflow', wfId:'skip_payment' };
+  if (/dispute|file.*dispute|report.*transaction|unauthorized/.test(q)) return { type:'workflow', wfId:'file_dispute' };
+
   // Salary / Payroll / ACH — always use current request context → checking
   if (/salary|payroll|did.*(deposit|arrive|come)|ach|missing deposit|check pending|review payroll|compare.*deposit|compare.*salary/.test(q))
     return { type: 'salary', pid: 'checking' };
 
-  // Verification
-  if (/verif|authenticat|biometric|was emily|otp|who was verified|failed attempt/.test(q))
-    return { type: 'verification', pid: null };
+  // Verification — filtered sub-types first, then general history
+  if (/verif|authenticat|biometric|was emily|otp|who.*verif|failed.*verif|verif.*fail|verif.*attempt|verif.*history|verif.*detail|verif.*status|how.*verif/.test(q)) {
+    if (/fail/.test(q))                             return { type:'verif_failed', pid:null };
+    if (/voice|biometric|idgo|device/.test(q))      return { type:'verif_voice',  pid:null };
+    if (/phone|otp|sms|text/.test(q))               return { type:'verif_phone',  pid:null };
+    if (/who.*verif|agent.*verif|verif.*agent/.test(q)) return { type:'verif_who', pid:null };
+    return { type:'verification', pid:null };
+  }
 
   // Membership / Ownership / Linked
   if (/membership|linked account|linked product|primary owner|ownership|who owns|who is.*owner|account name|account nickname|name on card|connected/.test(q))
@@ -9096,19 +8868,78 @@ function gapBuildAnswer(type, productId) {
     + chips('Show pending transactions','Check for disputes','Compare to last month','Show payroll deposits');
   }
 
+  /* ── Verification history data ── */
+  const VERIF_HISTORY = [
+    { date:'May 29, 2026', method:'Phone Number Verification', channel:'Voice', status:'passed', agent:'AI Auto-verify', confidence:null, note:null },
+    { date:'May 29, 2026', method:'Device Biometric (IDgo)',   channel:'Voice', status:'passed', agent:'System',        confidence:'98%', note:null },
+    { date:'Aug 12, 2025', method:'Voice Biometric',           channel:'Phone', status:'passed', agent:'Sarah K.',      confidence:'94%', note:null },
+    { date:'Aug 01, 2025', method:'SSN Last Four',             channel:'Phone', status:'passed', agent:'Mike L.',       confidence:null,  note:null },
+    { date:'Jul 19, 2025', method:'Phone Number Verification', channel:'Text',  status:'failed', agent:null,            confidence:null,  note:'OTP timeout' },
+  ];
+  function verifCard(v) {
+    const isPass = v.status === 'passed';
+    const chip = `<span class="verif-chip ${isPass?'pass':'fail'}">${isPass?'Passed':'Failed'}</span>`;
+    return `<div class="verif-evt">
+      <div class="verif-evt-hdr">${chip}<span class="verif-evt-date">${v.date}</span></div>
+      <div class="verif-evt-method">${v.method}</div>
+      <div class="verif-evt-meta">${v.channel}${v.confidence?` · ${v.confidence} confidence`:''}${v.agent?` · ${v.agent}`:''}${v.note?` · <em>${v.note}</em>`:''}</div>
+    </div>`;
+  }
+  function verifInsights(events) {
+    const passed = events.filter(e=>e.status==='passed').length;
+    const failed = events.filter(e=>e.status==='failed').length;
+    const methods = events.filter(e=>e.status==='passed').map(e=>e.method);
+    const top = methods.sort((a,b) => methods.filter(x=>x===b).length - methods.filter(x=>x===a).length)[0];
+    return evBlock(
+      `<div class="gap-ev-header"><span class="gap-ev-name">Verification Insights</span><span class="gap-ev-badge">Authenticated</span></div>`
+      + evR('Last verification','Today · 10:42 AM')
+      + evR('Most used method', top || 'Voice Biometric')
+      + evR('Events shown',`${passed} passed, ${failed} failed`)
+      + evR('Current status','Verified ✓')
+    );
+  }
+
   if (type === 'verification') {
-    return `<p class="gap-ans-text">Emily Olivers is authenticated. Two verification events are on record for today\u2019s session.</p>`
-    + evBlock(`<div class="gap-ev-header"><span class="gap-ev-name">Verification Summary</span><span class="gap-ev-badge">Authenticated</span></div>`
-      +evR('Voice Biometric','Today \u00b7 10:42 AM \u2713')+evR('Phone Verification','Aug 12, 2025 \u2713')
-      +evR('OTP','Verified \u2713')+evR('SSN Last Four','Verified \u2713')+evR('Member Number','Verified \u2713')
-    )
-    + chips('Show failed attempts','Voice biometric history','Compare verification methods','Review device trust');
+    const events = VERIF_HISTORY.slice(0,5);
+    return `<p class="gap-ans-text">Emily Olivers has completed multiple verification events. Here are the most recent 5, with 1 failed attempt in the last 12 months.</p>`
+    + verifInsights(events)
+    + `<div class="verif-list">${events.map(verifCard).join('')}</div>`
+    + chips('Show failed attempts','Voice verification history','Device verification history','Who verified the member?');
+  }
+
+  if (type === 'verif_failed') {
+    const events = VERIF_HISTORY.filter(e=>e.status==='failed');
+    const msg = events.length ? `${events.length} failed verification attempt found.` : 'No failed verification attempts on record.';
+    return `<p class="gap-ans-text">${msg}</p>`
+    + (events.length ? `<div class="verif-list">${events.map(verifCard).join('')}</div>` : '')
+    + chips('Show full history','Voice verification history','Who verified the member?');
+  }
+
+  if (type === 'verif_voice') {
+    const events = VERIF_HISTORY.filter(e=>/biometric|voice|idgo|device/i.test(e.method));
+    return `<p class="gap-ans-text">${events.length} voice or biometric verification event${events.length!==1?'s':''} on record for Emily Olivers.</p>`
+    + `<div class="verif-list">${events.map(verifCard).join('')}</div>`
+    + chips('Show full history','Show failed attempts','Who verified the member?','Device verification history');
+  }
+
+  if (type === 'verif_phone') {
+    const events = VERIF_HISTORY.filter(e=>/phone|otp|sms/i.test(e.method));
+    return `<p class="gap-ans-text">${events.length} phone or OTP verification event${events.length!==1?'s':''} on record.</p>`
+    + `<div class="verif-list">${events.map(verifCard).join('')}</div>`
+    + chips('Show full history','Show failed attempts','Voice verification history');
+  }
+
+  if (type === 'verif_who') {
+    const agentEvents = VERIF_HISTORY.filter(e=>e.agent && e.agent!=='System'&&e.agent!=='AI Auto-verify');
+    return `<p class="gap-ans-text">Verification events performed by agents:</p>`
+    + `<div class="verif-list">${agentEvents.map(verifCard).join('')}</div>`
+    + chips('Show full history','Show failed attempts','Voice verification history');
   }
 
   if (type === 'verif_detail') {
     const m={voice:'Voice Biometric',device:'Device Biometric (IDgo)',phone:'Phone Verification',otp:'One-Time Passcode'}[productId]||productId;
     return `<p class="gap-ans-text">${m} verification is on record for Emily Olivers.</p>`
-    + evBlock(evR('Method',m)+evR('Result','Verified \u2713')+evR('Date','Today \u00b7 10:42 AM'))
+    + evBlock(evR('Method',m)+evR('Result','Verified ✓')+evR('Date','Today · 10:42 AM'))
     + chips('View full verification history','Show failed attempts','Compare methods');
   }
 
@@ -9148,7 +8979,8 @@ function gapBuildAnswer(type, productId) {
     + evBlock(`<div class="gap-ev-header"><span class="gap-ev-name">${p.name} ${p.id}</span><span class="gap-ev-badge">${p.status}</span></div>`
       +evR('Next Payment Due',pmt.due)+evR('Amount Due',pmt.amt)+evR('Interest Rate',pmt.rate)+(pmt.remaining?evR('Remaining',pmt.remaining):'')
     )
-    + chips('Show payment history','Check payoff amount','Skip payment eligibility','Show balance');
+    + chips('Show payment history','Check payoff amount','Skip payment eligibility','Show balance')
+    + wfChips('make_payment','skip_payment');
   }
 
   if (type === 'card_status') {
@@ -9161,7 +8993,8 @@ function gapBuildAnswer(type, productId) {
     + evBlock(`<div class="gap-ev-header"><span class="gap-ev-name">${p.name} ${p.id}</span><span class="gap-ev-badge">${info.chip}</span></div>`
       +evR('Status',info.issue)+evR('Reason',info.reason)+(info.blocked?evR('Blocked Date',info.blocked):'')+evR('Role',p.role)
     )
-    + chips('Show declined transactions','View recent activity','Block card','Start dispute');
+    + chips('Show declined transactions','View recent activity','Membership details')
+    + wfChips('block_card','replace_card','file_dispute');
   }
 
   if (type === 'detail') {
@@ -9245,7 +9078,12 @@ const GAP_DELAYS = {
   salary:       1800,
   transactions: 1500,
   membership:   1600,
-  verification: 1200,
+  verification: 1400,
+  verif_failed: 900,
+  verif_voice:  900,
+  verif_phone:  900,
+  verif_who:    900,
+  verif_detail: 900,
   balance:       900,
   payment:      1000,
   card_status:  1100,
@@ -9264,7 +9102,11 @@ function gapSkeletonFor(type) {
     salary:       `${l(68)}${card(60,90,82,68,76)}${chips(3)}`,
     transactions: `${l(55)}<div class="gap-sk-card">${[1,2,3,4].map(txRow).join('')}</div>${chips(3)}`,
     membership:   `${l(62)}${card(90,72,84,60,76,66)}${chips(3)}`,
-    verification: `${l(65)}${card(70,86,75,82,60)}${chips(3)}`,
+    verification: `${l(65)}${card(60,90,72,80)}${card(85,60,75,88,65)}${chips(3)}`,
+    verif_failed: `${l(50)}${card(60,90,70)}${chips(2)}`,
+    verif_voice:  `${l(55)}${card(70,85,60,75)}${chips(3)}`,
+    verif_phone:  `${l(55)}${card(65,80,55)}${chips(2)}`,
+    verif_who:    `${l(50)}${card(60,80,70)}${chips(2)}`,
     balance:      `${l(50)}${card(74,62,80)}${chips(2)}`,
     payment:      `${l(55)}${card(70,65,75,60)}${chips(2)}`,
     card_status:  `${l(62)}${card(80,68,65,72)}${chips(3)}`,
@@ -9304,8 +9146,14 @@ function gapSend(preset) {
   body.insertAdjacentHTML('beforeend', `<div class="gap-user-bubble gap-user-bubble-in">${query}</div>`);
   gapScrollLatest();
 
-  // 2. Classify early so skeleton matches response type
+  // 2. Classify early — workflows launch immediately with no loading delay
   const classified = gapClassifyQuery(query);
+
+  if (classified?.type === 'workflow') {
+    gapLaunchWorkflow(classified.wfId);
+    return;
+  }
+
   const type = classified?.type || '_fallback';
   const delay = GAP_DELAYS[type] || GAP_DELAYS._fallback;
 
@@ -9425,6 +9273,422 @@ function rcSetChannel(btn, channel) {
     editor.setAttribute('data-placeholder', phMap[channel]||'Type a message…');
     editor.contentEditable = (channel==='text'||channel==='note') ? 'true' : 'false';
   }
+}
+
+/* ────────────────────────────────────────────────────
+   WORKFLOW ENGINE
+──────────────────────────────────────────────────── */
+let gapActiveMode = 'conversation'; // 'conversation' | 'workflow'
+let gapWfState = null; // { id, step, data, steps }
+
+function gapSwitchMode(mode) {
+  gapActiveMode = mode;
+  const scrollArea = document.getElementById('gapScrollArea');
+  const wfArea     = document.getElementById('gapWfArea');
+  if (scrollArea) scrollArea.style.display = mode === 'conversation' ? 'flex' : 'none';
+  if (wfArea)     wfArea.style.display     = mode === 'workflow'     ? 'flex' : 'none';
+  document.getElementById('gapTabConv')?.classList.toggle('gap-mtab-sel', mode==='conversation');
+  document.getElementById('gapTabWf')?.classList.toggle('gap-mtab-sel',   mode==='workflow');
+  if (mode === 'workflow') gapWfRender();
+}
+
+/* ── Workflow definitions ── */
+const GAP_WF_DEFS = {
+  block_card: {
+    title:'Block Card', icon:'🔒',
+    steps:['Select Card','Select Reason','Review & Confirm'],
+  },
+  replace_card: {
+    title:'Replace Card', icon:'💳',
+    steps:['Select Card','Reason','Delivery','Review & Submit'],
+  },
+  make_payment: {
+    title:'Make Payment', icon:'💸',
+    steps:['Select Account','Payment Source','Amount','Review & Confirm'],
+  },
+  skip_payment: {
+    title:'Skip Payment', icon:'⏸',
+    steps:['Select Loan','Check Eligibility','Terms','Confirm'],
+  },
+  file_dispute: {
+    title:'File Dispute', icon:'⚖',
+    steps:['Select Account','Transaction','Reason','Review & Submit'],
+  },
+};
+
+/* ── Start workflow ── */
+function gapStartWorkflow(wfId) {
+  if (gapWfState && gapWfState.id !== wfId) {
+    const wf = GAP_WF_DEFS[gapWfState.id];
+    if (!confirm(`You have an active workflow: ${wf?.title}. Start ${GAP_WF_DEFS[wfId]?.title} instead?`)) return;
+  }
+  gapWfState = { id:wfId, step:0, data:{} };
+  // Show tab switcher only now that a workflow is active
+  const tabs = document.querySelector('.gap-mode-tabs');
+  if (tabs) tabs.style.display = 'flex';
+  const badge = document.getElementById('gapWfBadge');
+  if (badge) badge.style.display = 'inline-flex';
+  gapSwitchMode('workflow');
+}
+
+function gapWfCancel() {
+  gapWfState = null;
+  // Hide tab switcher — return to conversation-only state
+  const tabs = document.querySelector('.gap-mode-tabs');
+  if (tabs) tabs.style.display = 'none';
+  const badge = document.getElementById('gapWfBadge');
+  if (badge) badge.style.display = 'none';
+  document.getElementById('gapWfActive').style.display = 'none';
+  document.getElementById('gapWfEmpty').style.display = 'flex';
+  gapSwitchMode('conversation');
+}
+
+function gapWfNext() {
+  if (!gapWfState) return;
+  // Collect any selected options
+  document.querySelectorAll('#gapWfActive .wf-option.wf-sel').forEach(el => {
+    if (el.dataset.field) gapWfState.data[el.dataset.field] = el.dataset.value;
+  });
+  document.querySelectorAll('#gapWfActive .wf-input').forEach(el => {
+    if (el.dataset.field) gapWfState.data[el.dataset.field] = el.value;
+  });
+  gapWfState.step++;
+  gapWfRender();
+}
+
+function gapWfBack() {
+  if (!gapWfState || gapWfState.step === 0) return;
+  gapWfState.step--;
+  gapWfRender();
+}
+
+function gapWfSelectOption(el, field, value) {
+  const parent = el.closest('.wf-options');
+  parent?.querySelectorAll('.wf-option').forEach(o => o.classList.remove('wf-sel'));
+  el.classList.add('wf-sel');
+  if (!gapWfState) return;
+  gapWfState.data[field] = value;
+}
+
+/* ── Workflow renderers ── */
+function wfProgress(def, step) {
+  const steps = def.steps;
+  const isDone = step >= steps.length;
+  return `<div class="wf-progress">${steps.map((s,i) => {
+    const cls = isDone||i<step?'done':i===step?'active':'';
+    const dot  = isDone||i<step?'<svg width="10" height="10" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>':i+1;
+    const line = i<steps.length-1
+      ? `<div class="wf-step-line${isDone||i<step?' done':''}"></div>` : '';
+    return `<div class="wf-step-dot ${cls}">
+      <div class="wf-step-dot-inner ${cls}">${dot}</div>
+      <div class="wf-step-dot-label">${s}</div>
+    </div>${line}`;
+  }).join('')}</div>`;
+}
+function wfOption(field, value, label, sub='') {
+  const sel = gapWfState?.data[field]===value ? ' wf-sel' : '';
+  return `<div class="wf-option${sel}" data-field="${field}" data-value="${value}" onclick="gapWfSelectOption(this,'${field}','${value}')">
+    <div class="wf-option-radio"></div>
+    <div><div class="wf-option-label">${label}</div>${sub?`<div class="wf-option-sub">${sub}</div>`:''}</div>
+  </div>`;
+}
+function wfReview(rows) {
+  return `<div class="wf-review">${rows.map(([l,v])=>`<div class="wf-review-row"><span class="wf-review-lbl">${l}</span><span class="wf-review-val">${v}</span></div>`).join('')}</div>`;
+}
+function wfActions(primary, secondary='Cancel') {
+  return `<div class="wf-actions">
+    <button class="wf-btn-secondary" onclick="gapWfCancel()">${secondary}</button>
+    <button class="wf-btn-primary" onclick="gapWfNext()">${primary}</button>
+  </div>`;
+}
+function wfDone(title, sub, ref) {
+  return `<div class="wf-done">
+    <div class="wf-done-icon">✅</div>
+    <div class="wf-done-title">${title}</div>
+    <div class="wf-done-sub">${sub}</div>
+    <div class="wf-done-ref">${ref}</div>
+    <button class="wf-btn-secondary" style="margin-top:12px;width:100%" onclick="gapWfCancel();gapSwitchMode('conversation')">Back to Conversation</button>
+  </div>`;
+}
+
+/* ── Step content builders ── */
+const WF_STEPS = {
+  block_card: [
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('card','debitcard','Visa Debit Card','••••4412 · Currently Blocked')}
+        ${wfOption('card','creditcard','Visa Credit Card','••••7777 · Active')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('reason','lost','Lost Card')}
+        ${wfOption('reason','stolen','Stolen Card')}
+        ${wfOption('reason','fraud','Fraud Suspected')}
+        ${wfOption('reason','member_request','Member Request')}
+        ${wfOption('reason','other','Other')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => {
+      const d = gapWfState.data;
+      const cardName = d.card==='debitcard'?'Visa Debit Card ••••4412':'Visa Credit Card ••••7777';
+      const reasons = {lost:'Lost Card',stolen:'Stolen Card',fraud:'Fraud Suspected',member_request:'Member Request',other:'Other'};
+      return `<div class="wf-card-body">
+        ${wfReview([['Card',cardName],['Reason',reasons[d.reason]||d.reason||'—'],['Effect','Card blocked immediately'],['Replacement','Not requested — use Replace Card workflow']])}
+        <div class="wf-actions">
+          <button class="wf-btn-secondary" onclick="gapWfBack()">← Back</button>
+          <button class="wf-btn-danger" onclick="gapWfNext()">Confirm Block</button>
+        </div>
+      </div>`;
+    },
+    () => wfDone('Card block request initiated','The card will be blocked immediately. Member will be unable to use it for purchases or ATM.','Ref #BLK-'+Math.floor(Math.random()*90000+10000)),
+  ],
+
+  replace_card: [
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('card','debitcard','Visa Debit Card','••••4412 · Blocked')}
+        ${wfOption('card','creditcard','Visa Credit Card','••••7777 · Active')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('reason','damaged','Damaged Card')}
+        ${wfOption('reason','lost','Lost Card')}
+        ${wfOption('reason','stolen','Stolen Card')}
+        ${wfOption('reason','expired','Expired Card')}
+        ${wfOption('reason','fraud','Fraud Replacement')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('delivery','standard','Standard Delivery','5–7 business days · No fee')}
+        ${wfOption('delivery','express','Express Delivery','2–3 business days · $15.00 fee')}
+        ${wfOption('delivery','branch','Branch Pickup','Same day available')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => {
+      const d = gapWfState.data;
+      const reasons = {damaged:'Damaged',lost:'Lost',stolen:'Stolen',expired:'Expired',fraud:'Fraud Replacement'};
+      const deliveries = {standard:'Standard (5–7 days, no fee)',express:'Express (2–3 days, $15.00)',branch:'Branch Pickup (same day)'};
+      return `<div class="wf-card-body">
+        ${wfReview([['Card',d.card==='debitcard'?'Visa Debit ••••4412':'Visa Credit ••••7777'],['Reason',reasons[d.reason]||'—'],['Delivery',deliveries[d.delivery]||'—'],['Address','842 Willow Creek Dr, Bend OR 97701']])}
+        <div class="wf-actions">
+          <button class="wf-btn-secondary" onclick="gapWfBack()">← Back</button>
+          <button class="wf-btn-primary" onclick="gapWfNext()">Submit Request</button>
+        </div>
+      </div>`;
+    },
+    () => wfDone('Replacement card requested','New card will be issued per selected delivery method. Current card status updated.','Ref #REP-'+Math.floor(Math.random()*90000+10000)),
+  ],
+
+  make_payment: [
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('product','autoloan','Auto Loan ••••7712','Next payment: $485.00 due Aug 1')}
+        ${wfOption('product','creditcard','Visa Credit Card ••••7777','Minimum due: $42.00 by Jun 15')}
+        ${wfOption('product','mortgage','Home Mortgage ••••3301','Next payment: $1,842.00 due Jul 1')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('source','checking','Everyday Checking ••••4821','Available: $4,782.15')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => {
+      const mins = {autoloan:'$485.00',creditcard:'$42.00',mortgage:'$1,842.00'};
+      const d = gapWfState.data;
+      const min = mins[d.product]||'$0.00';
+      return `<div class="wf-card-body">
+        <div class="wf-options">
+          ${wfOption('amount','minimum',`Minimum Due · ${min}`)}
+          ${wfOption('amount','full','Full Balance','Payoff entire balance')}
+          ${wfOption('amount','custom','Custom Amount')}
+        </div>
+        ${d.amount==='custom'?`<div style="margin-top:8px"><div class="wf-input-lbl">Enter amount</div><input class="wf-input" type="number" placeholder="0.00" data-field="customAmount" value="${d.customAmount||''}"/></div>`:''}
+        ${wfActions('Continue')}
+      </div>`;
+    },
+    () => {
+      const d = gapWfState.data;
+      const products = {autoloan:'Auto Loan ••••7712',creditcard:'Visa Credit ••••7777',mortgage:'Home Mortgage ••••3301'};
+      const amounts = {minimum:'Minimum Due',full:'Full Balance',custom:d.customAmount?`$${d.customAmount}`:'Custom'};
+      return `<div class="wf-card-body">
+        ${wfReview([['Product',products[d.product]||'—'],['Source','Everyday Checking ••••4821'],['Amount',amounts[d.amount]||'—'],['Date','Today · '+new Date().toLocaleDateString()],['Confirmation','Sent to registered email']])}
+        <div class="wf-actions">
+          <button class="wf-btn-secondary" onclick="gapWfBack()">← Back</button>
+          <button class="wf-btn-primary" onclick="gapWfNext()">Confirm Payment</button>
+        </div>
+      </div>`;
+    },
+    () => wfDone('Payment initiated','Your payment has been submitted and will be processed within 1 business day.','Ref #PAY-'+Math.floor(Math.random()*90000+10000)),
+  ],
+
+  skip_payment: [
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('loan','autoloan','Auto Loan ••••7712','Next payment: $485.00 due Aug 1, 2025')}
+        ${wfOption('loan','mortgage','Home Mortgage ••••3301','Next payment: $1,842.00 due Jul 1')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => `<div class="wf-card-body">
+      <div style="background:rgba(13,124,82,.06);border:1px solid rgba(13,124,82,.2);border-radius:9px;padding:10px 12px;margin-bottom:8px">
+        <div style="font-size:11px;font-weight:700;color:#0d7c52;margin-bottom:4px">✓ Eligible</div>
+        <div style="font-size:10.5px;color:#374151;line-height:1.5">Emily Olivers is eligible to skip one payment. Last skip was more than 12 months ago.</div>
+      </div>
+      ${wfReview([['Loan',gapWfState.data.loan==='autoloan'?'Auto Loan ••••7712':'Home Mortgage ••••3301'],['Payment','$'+(gapWfState.data.loan==='autoloan'?'485.00':'1,842.00')],['Skip Fee','$25.00'],['Interest','Continues to accrue']])}
+      ${wfActions('Continue')}
+    </div>`,
+    () => `<div class="wf-card-body">
+      <div class="wf-review">
+        <div class="wf-review-row"><span class="wf-review-lbl">Terms</span></div>
+        <ul style="font-size:10.5px;color:#374151;margin:4px 0 0 14px;line-height:1.8;padding:0">
+          <li>Payment is skipped — not waived</li>
+          <li>Loan term extended by 1 month</li>
+          <li>Interest accrues during skip period</li>
+          <li>$25.00 skip fee applied to account</li>
+          <li>Member must not be currently delinquent</li>
+        </ul>
+      </div>
+      ${wfActions('I Understand — Continue')}
+    </div>`,
+    () => {
+      const d = gapWfState.data;
+      return `<div class="wf-card-body">
+        ${wfReview([['Loan',d.loan==='autoloan'?'Auto Loan ••••7712':'Home Mortgage ••••3301'],['Skipped Payment','$'+(d.loan==='autoloan'?'485.00':'1,842.00')],['New Due Date',d.loan==='autoloan'?'September 1, 2025':'August 1, 2025'],['Skip Fee','$25.00'],['Confirmed By','Agent']])}
+        <div class="wf-actions">
+          <button class="wf-btn-secondary" onclick="gapWfBack()">← Back</button>
+          <button class="wf-btn-primary" onclick="gapWfNext()">Confirm Skip</button>
+        </div>
+      </div>`;
+    },
+    () => wfDone('Skip payment initiated','The payment has been deferred. Member has been notified.','Ref #SKP-'+Math.floor(Math.random()*90000+10000)),
+  ],
+
+  file_dispute: [
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('account','checking','Everyday Checking ••••4821','Checking account')}
+        ${wfOption('account','debitcard','Visa Debit Card ••••4412','Debit card — currently blocked')}
+        ${wfOption('account','creditcard','Visa Credit Card ••••7777','Credit card')}
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => {
+      const txns = {
+        checking:[['May 15','Tesla Payroll','+$3,420.00'],['May 12','Amazon','-$92.18'],['May 10','Shell Gas','-$65.42']],
+        debitcard:[['May 28','Target','-$45.20'],['May 27','Grocery','-$78.40']],
+        creditcard:[['May 20','Delta Airlines','DECLINED'],['May 18','Marriott','-$342.00'],['May 15','Amazon Prime','-$14.99']],
+      };
+      const d = gapWfState.data;
+      const rows = (txns[d.account]||txns.creditcard).map(([dt,nm,am]) =>
+        `${wfOption('transaction',dt+nm,`${dt} · ${nm}`,'Amount: '+am)}`).join('');
+      return `<div class="wf-card-body">
+        <div class="wf-options">${rows}</div>
+        ${wfActions('Continue')}
+      </div>`;
+    },
+    () => `<div class="wf-card-body">
+      <div class="wf-options">
+        ${wfOption('reason','unauthorized','Unauthorized Transaction','I did not authorize this charge')}
+        ${wfOption('reason','duplicate','Duplicate Charge','Charged more than once')}
+        ${wfOption('reason','wrong_amount','Incorrect Amount','Amount does not match')}
+        ${wfOption('reason','not_received','Goods/Services Not Received')}
+        ${wfOption('reason','other','Other')}
+      </div>
+      <div style="margin-top:8px">
+        <div class="wf-input-lbl">Additional notes (optional)</div>
+        <textarea class="wf-input" rows="2" placeholder="Describe the issue…" data-field="notes">${gapWfState.data.notes||''}</textarea>
+      </div>
+      ${wfActions('Continue')}
+    </div>`,
+    () => {
+      const d = gapWfState.data;
+      const accs = {checking:'Everyday Checking ••••4821',debitcard:'Visa Debit ••••4412',creditcard:'Visa Credit ••••7777'};
+      const reasons = {unauthorized:'Unauthorized Transaction',duplicate:'Duplicate Charge',wrong_amount:'Incorrect Amount',not_received:'Goods/Services Not Received',other:'Other'};
+      return `<div class="wf-card-body">
+        ${wfReview([['Account',accs[d.account]||'—'],['Transaction',d.transaction||'—'],['Reason',reasons[d.reason]||'—'],['Notes',d.notes||'None'],['Case assigned to','Disputes Team']])}
+        <div class="wf-actions">
+          <button class="wf-btn-secondary" onclick="gapWfBack()">← Back</button>
+          <button class="wf-btn-primary" onclick="gapWfNext()">Submit Dispute</button>
+        </div>
+      </div>`;
+    },
+    () => wfDone('Dispute case initiated','A dispute case has been opened and assigned to the Disputes Team. Member will receive a confirmation within 24 hours.','Case #DSP-'+Math.floor(Math.random()*90000+10000)),
+  ],
+};
+
+/* ── Render active workflow ── */
+function gapWfRender() {
+  const emptyEl  = document.getElementById('gapWfEmpty');
+  const activeEl = document.getElementById('gapWfActive');
+  if (!emptyEl || !activeEl) return;
+  if (!gapWfState) {
+    emptyEl.style.display  = 'flex';
+    activeEl.style.display = 'none';
+    return;
+  }
+  emptyEl.style.display  = 'none';
+  activeEl.style.display = 'flex';
+
+  const def   = GAP_WF_DEFS[gapWfState.id];
+  const steps = WF_STEPS[gapWfState.id];
+  if (!def || !steps) return;
+
+  const isDone  = gapWfState.step >= def.steps.length;
+  const content = isDone ? steps[def.steps.length]() : steps[gapWfState.step]();
+
+  activeEl.innerHTML = `
+    ${wfProgress(def, gapWfState.step)}
+    <div class="wf-card">
+      <div class="wf-card-hdr">
+        <span class="wf-card-icon">${def.icon}</span>
+        <div>
+          <div class="wf-card-title">${def.title}</div>
+          <div class="wf-card-sub">${isDone?'Completed':def.steps[gapWfState.step]||''}</div>
+        </div>
+      </div>
+      ${content}
+    </div>`;
+}
+
+/* ── Quick-action chip launcher ── */
+function gapLaunchWorkflow(wfId) {
+  const def = GAP_WF_DEFS[wfId];
+  if (!def) return;
+  // Add conversation confirmation
+  const body = document.getElementById('aapBody');
+  if (body) {
+    document.querySelectorAll('#aapBody .gap-action-chips, #aapBody .gap-detail-chips').forEach(el => el.remove());
+    body.insertAdjacentHTML('beforeend',
+      `<div class="gap-ai-msg gap-ai-msg-in"><div class="gap-ai-msg-body">
+        <p class="gap-ans-text">${def.icon} Starting workflow: <strong>${def.title}</strong></p>
+      </div></div>`);
+  }
+  gapStartWorkflow(wfId);
+}
+
+/* ── Quick action chip helper ── */
+function wfChips(...ids) {
+  return `<div class="gap-action-chips">${ids.map(id=>{
+    const def=GAP_WF_DEFS[id];
+    if(!def)return '';
+    return `<button class="gap-action-chip gap-wf-chip" onclick="gapLaunchWorkflow('${id}')">${def.icon} ${def.title}</button>`;
+  }).join('')}</div>`;
+}
+let mcrCollapsed = false;
+function mcrToggle() {
+  mcrCollapsed = !mcrCollapsed;
+  const rail = document.getElementById('c360ConvPanel');
+  if (rail) rail.classList.toggle('mcr-collapsed', mcrCollapsed);
 }
 
 /* Ask AI button focuses panel input */
@@ -9551,6 +9815,12 @@ function acceptCall(){
 
   // 3. Open global AI Assistant panel
   aapOpenPanel();
+
+  // Scroll contact360 conversation thread to latest message
+  setTimeout(() => {
+    const thread = document.getElementById('mcwConvThread');
+    if (thread) thread.scrollTop = thread.scrollHeight;
+  }, 150);
 
   // 3. Update member header to the caller's identity
   document.getElementById('mbName').textContent = 'Emily Olivers';
@@ -13825,6 +14095,9 @@ function setAapWidth(w) {
   if (panel) panel.style.width = w + 'px';
   const wm = document.querySelector('.workspace-main');
   if (wm && aapOpen) wm.style.paddingRight = w + 'px';
+  // Squeeze topbar so header content stops before panel
+  const tb = document.querySelector('.topbar');
+  if (tb && aapOpen) tb.style.paddingRight = (w + 46 + 14) + 'px';
 }
 
 function aapOpenPanel() {
@@ -13833,6 +14106,9 @@ function aapOpenPanel() {
   if (panel) panel.style.width = aapWidth + 'px';
   const wm = document.querySelector('.workspace-main');
   if (wm) wm.style.paddingRight = aapWidth + 'px';
+  // Topbar stops before panel
+  const tb = document.querySelector('.topbar');
+  if (tb) tb.style.paddingRight = (aapWidth + 46 + 14) + 'px';
   // Clear any pre-populated product detail
   const pd = document.getElementById('gapProdDetail');
   if (pd) pd.innerHTML = '';
@@ -13849,6 +14125,9 @@ function aiAssistClose() {
   if (panel) panel.style.width = '0';
   const wm = document.querySelector('.workspace-main');
   if (wm) wm.style.paddingRight = '0';
+  // Restore topbar full width
+  const tb = document.querySelector('.topbar');
+  if (tb) tb.style.paddingRight = '';
   document.getElementById('globalAskAiBtn')?.classList.remove('active');
 }
 
@@ -18590,6 +18869,53 @@ function txnToggleRow(rowId, productId) {
   display:flex;flex-direction:column;
   border-right:1px solid rgba(0,0,0,.08);
   background:#fafafa;overflow:hidden;
+  transition:width .22s cubic-bezier(0.16,1,0.3,1),
+             min-width .22s cubic-bezier(0.16,1,0.3,1);
+}
+/* Collapsed state — narrow strip */
+.mcr-rail.mcr-collapsed{
+  width:32px !important;
+  min-width:32px !important;
+  max-width:32px !important;
+}
+.mcr-rail.mcr-collapsed .mcr-scroll{ display:none; }
+.mcr-rail.mcr-collapsed .mcr-collapse-bar{ display:none; }
+.mcr-rail.mcr-collapsed .mcr-collapsed-strip{ display:flex; }
+
+/* Collapse bar — shown when expanded */
+.mcr-collapse-bar{
+  flex-shrink:0;
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:6px 8px 4px;
+  border-bottom:1px solid rgba(0,0,0,.06);
+}
+.mcr-collapse-btn{
+  width:22px;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.1);
+  background:transparent;cursor:pointer;color:#9896b0;
+  display:grid;place-items:center;transition:all .12s;
+}
+.mcr-collapse-btn:hover{background:rgba(0,0,0,.06);color:#3a3854;}
+
+/* Collapsed strip — hidden by default, shown when collapsed */
+.mcr-collapsed-strip{
+  display:none;
+  flex-direction:column;align-items:center;
+  padding:10px 0 16px;cursor:pointer;
+  width:32px;
+}
+.mcr-expand-btn{
+  width:22px;height:22px;border-radius:6px;border:1px solid rgba(0,0,0,.1);
+  background:transparent;cursor:pointer;color:#9896b0;
+  display:grid;place-items:center;transition:all .12s;margin-bottom:10px;flex-shrink:0;
+}
+.mcr-collapsed-strip:hover .mcr-expand-btn{background:rgba(0,0,0,.06);color:#3a3854;}
+.mcr-collapsed-label{
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  color:#b0afc8;
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  transform:rotate(180deg);
+  user-select:none;
 }
 .mcr-scroll{flex:1;overflow-y:auto;padding-bottom:16px;scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.06) transparent;}
 .mcr-section{padding:12px 14px;border-bottom:1px solid rgba(0,0,0,.06);}
@@ -18627,49 +18953,18 @@ function txnToggleRow(rowId, productId) {
 .mcr-ij-title{font-size:10.5px;font-weight:600;color:#0c0b18;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .mcr-ij-meta{font-size:9px;color:#9896b0;margin-top:1px;}
 
-/* ══ CENTER: FULL-WIDTH CONVERSATION ══════════════════ */
-/* Force full-height fill on the accepted-request workspace chain */
-#c360-loaded.c360-ready,
-.aiws-workspace,
-#aiwsFocal,
-#c360v2,
-#c360v2Main,
-#c360v2Overview {
-  background: var(--s0) !important;
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
-}
-/* Overview flex chain: IHS (shrink:0) → conv (flex:1, fills ALL rest) */
-#c360v2Overview{
-  display:flex !important;
-  flex-direction:column;
-  overflow:hidden;
-  flex:1;
-  min-height:0;
-}
-#c360v2Overview .c360-ws-panel{flex-shrink:0;flex-grow:0;}
-/* Collapse the overview-scroll div — holds hidden overlay content only */
-#c360v2Overview .c2-overview-scroll{display:none !important;}
-
-/* Conversation section fills all remaining height */
-.mcw-conv-section{
-  flex:1;
-  min-height:0;
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  background:var(--s0);
-}
-/* Only messages scroll — add bottom padding so last msg clears composer */
-.mcw-conv-msgs.msgs{
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  padding:12px var(--ws-pad-h) 14px;
-  scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.07) transparent;
-  background:var(--s0);
-  display:flex;flex-direction:column;justify-content:flex-end;
-}
+/* ═══════════════════════════════════════════════════════════
+   CONTACT360 OVERVIEW — IHS only (conversation removed)
+═══════════════════════════════════════════════════════════ */
+#c360-loaded.c360-ready { flex:1; display:flex; flex-direction:column; overflow:hidden; background:var(--s0) !important; }
+.aiws-workspace           { flex:1; display:flex; overflow:hidden; min-height:0; background:var(--s0) !important; }
+#aiwsFocal                { flex:1 !important; height:100% !important; min-height:0 !important; overflow:hidden; }
+#c360v2                   { flex:1; display:flex !important; flex-direction:row; overflow:hidden; min-height:0 !important; }
+#c360v2Main               { flex:1; display:flex; flex-direction:column; overflow:hidden; min-height:0; }
+/* NOTE: do NOT use display:flex !important here — JS sets display:none on tab switches */
+#c360v2Overview           { flex:1; flex-direction:column; overflow:hidden; min-height:0; background:var(--s0) !important; }
+#c360v2Overview .c360-ws-panel { flex:1; overflow:hidden; display:flex; flex-direction:column; }
+.c2-overview-scroll { display:none !important; height:0 !important; overflow:hidden !important; }
 /* Composer replaced by .rc-composer */
 .mcw-composer{ display:none; }
 .mcw-input{
