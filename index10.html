@@ -1070,7 +1070,50 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 }
 
 /* ── Product Navigator ── */
-/* ── Product navigator ── */
+/* ── Compact context selector bar ── */
+.gap-ctx-bar{
+  flex-shrink:0;
+  padding:7px 10px;
+  border-bottom:1px solid rgba(0,0,0,.08);
+  background:#fff;
+  position:relative;
+}
+.gap-ctx-sel-wrap{position:relative;}
+.gap-ctx-lbl{font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#b0afc8;display:block;margin-bottom:3px;}
+.gap-ctx-sel{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:6px 10px;border:1px solid rgba(91,95,207,.25);border-radius:8px;
+  background:rgba(91,95,207,.04);cursor:pointer;transition:all .12s;
+  font-size:11.5px;font-weight:600;color:#3d41a0;gap:6px;
+}
+.gap-ctx-sel:hover{background:rgba(91,95,207,.09);border-color:rgba(91,95,207,.4);}
+/* Dropdown */
+.gap-ctx-dropdown{
+  position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:60;
+  background:#fff;border:1px solid rgba(0,0,0,.1);border-radius:10px;
+  box-shadow:0 6px 24px rgba(0,0,0,.12);overflow:hidden;max-height:280px;overflow-y:auto;
+}
+.gap-ctx-all{
+  display:flex;align-items:center;gap:7px;font-weight:700;
+  padding:9px 12px;border-bottom:1px solid rgba(0,0,0,.07);
+  font-size:11px;color:#0c0b18;cursor:pointer;transition:background .1s;
+}
+.gap-ctx-all:hover{background:rgba(91,95,207,.05);}
+.gap-ctx-group{
+  font-size:8.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:#b0afc8;padding:7px 12px 3px;
+}
+.gap-ctx-opt{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:7px 12px;cursor:pointer;transition:background .1s;
+  border-bottom:1px solid rgba(0,0,0,.04);
+}
+.gap-ctx-opt:last-child{border-bottom:none;}
+.gap-ctx-opt:hover{background:rgba(91,95,207,.05);}
+.gap-ctx-opt-name{font-size:11px;font-weight:600;color:#0c0b18;}
+.gap-ctx-opt-id{font-size:9.5px;color:#9896b0;margin-left:6px;}
+
+/* ── Compact context selector bar ── (end) */
 .gap-prod-nav{flex-shrink:0;border-bottom:1px solid rgba(0,0,0,.08);background:#fff;}
 .gap-prod-tabs{display:flex;padding:8px 10px 0;}
 .gap-ptab{flex:1;padding:5px 4px;border:none;background:none;font-size:10px;font-weight:600;color:#9896b0;cursor:pointer;border-bottom:2px solid transparent;font-family:var(--f);transition:all .14s;margin-bottom:-1px;}
@@ -6156,36 +6199,37 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       </div>
 
       <!-- Product Navigator -->
-      <div class="gap-prod-nav">
-        <div class="gap-prod-tabs">
-          <button class="gap-ptab gap-ptab-sel" id="gtab-deposits" onclick="gapSetCat('deposits')">Deposits</button>
-          <button class="gap-ptab" id="gtab-loans"    onclick="gapSetCat('loans')">Loans</button>
-          <button class="gap-ptab" id="gtab-cards"    onclick="gapSetCat('cards')">Cards</button>
-        </div>
-        <div class="gap-prod-sel-wrap" id="gapProdSelWrap">
-          <div class="gap-prod-sel" id="gapProdSel" onclick="gapToggleDropdown()">
-            <div class="gap-prod-sel-left">
-              <span class="gap-prod-sel-name" id="gapSelName">Browse products</span>
-              <span class="gap-prod-sel-id" id="gapSelId"></span>
-            </div>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span class="gap-prod-sel-status ok" id="gapSelStatus">Active</span>
-              <svg class="gap-prod-sel-chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-            </div>
+      <!-- Compact current context selector -->
+      <div class="gap-ctx-bar">
+        <div class="gap-ctx-sel-wrap">
+          <span class="gap-ctx-lbl">Context</span>
+          <div class="gap-ctx-sel" id="gapCtxSel" onclick="gapToggleCtxDropdown()">
+            <span id="gapCtxName">All Products</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
-          <div class="gap-prod-dropdown" id="gapProdDropdown" style="display:none"></div>
+          <!-- Grouped dropdown -->
+          <div class="gap-ctx-dropdown" id="gapCtxDropdown" style="display:none">
+            <div class="gap-ctx-opt gap-ctx-all" onclick="gapSetContext(null)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              All Products
+            </div>
+            <div class="gap-ctx-group">Deposits</div>
+            <div class="gap-ctx-opt" onclick="gapSetContext('checking')"><div class="gap-ctx-opt-name">Everyday Checking</div><div class="gap-ctx-opt-id">••••4821</div></div>
+            <div class="gap-ctx-opt" onclick="gapSetContext('savings')"><div class="gap-ctx-opt-name">Emergency Savings</div><div class="gap-ctx-opt-id">••••1039</div></div>
+            <div class="gap-ctx-opt" onclick="gapSetContext('hysavings')"><div class="gap-ctx-opt-name">High Yield Savings</div><div class="gap-ctx-opt-id">••••8810</div></div>
+            <div class="gap-ctx-group">Loans</div>
+            <div class="gap-ctx-opt" onclick="gapSetContext('autoloan')"><div class="gap-ctx-opt-name">Auto Loan</div><div class="gap-ctx-opt-id">••••7712</div></div>
+            <div class="gap-ctx-opt" onclick="gapSetContext('mortgage')"><div class="gap-ctx-opt-name">Home Mortgage</div><div class="gap-ctx-opt-id">••••3301</div></div>
+            <div class="gap-ctx-group">Cards</div>
+            <div class="gap-ctx-opt" onclick="gapSetContext('debitcard')"><div class="gap-ctx-opt-name">Visa Debit Card</div><div class="gap-ctx-opt-id">••••4412</div></div>
+            <div class="gap-ctx-opt" onclick="gapSetContext('creditcard')"><div class="gap-ctx-opt-name">Visa Credit Card</div><div class="gap-ctx-opt-id">••••7777</div></div>
+            <div class="gap-ctx-opt" onclick="gapSetContext('debitcard2')"><div class="gap-ctx-opt-name">Visa Debit Card</div><div class="gap-ctx-opt-id">••••7439</div></div>
+          </div>
         </div>
       </div>
 
-      <!-- Unified scroll area -->
+      <!-- Conversation-only scroll area (no static product detail) -->
       <div class="gap-scroll" id="gapScrollArea">
-        <!-- Product detail (JS-populated) -->
-        <div id="gapProdDetail"></div>
-
-        <!-- AI conversation divider -->
-        <div class="gap-ai-divider"><span>AI Conversation</span></div>
-
-        <!-- AI thread -->
         <div id="aapBody"></div>
       </div>
 
@@ -8782,89 +8826,72 @@ document.addEventListener('click', e => {
   if (!e.target.closest('#gapProdSelWrap')) gapCloseDropdown();
 });
 
-/* ── Render dropdown list ── */
-function gapRenderProdList(cat) {
-  const dd = document.getElementById('gapProdDropdown');
-  if (!dd) return;
-  dd.innerHTML = (GAP_PRODUCTS[cat]||[]).map(p => {
-    const sel = p.id === gapSelectedProduct ? ' selected' : '';
-    return `<div class="gap-prod-dropdown-item${sel}" onclick="gapSetProd('${p.id}');gapCloseDropdown()">
-      <div class="gap-prod-dd-left">
-        <span class="gap-prod-dd-name">${p.name}</span>
-        <span class="gap-prod-dd-id">••••${p.masked}</span>
-      </div>
-      <span class="gap-prod-dd-badge ${p.statusCls==='gap-pi-ok'?'ok':'warn'}">${p.status}</span>
-    </div>`;
-  }).join('');
-}
+/* ── Context selector state ── */
+let gapSelectedContext = null; // null = All Products
+let _gapCtxDropOpen = false;
 
-/* ── Update selector display ── */
-function gapUpdateSelector(pid) {
-  const cat = gapSelectedCategory;
-  const prod = (GAP_PRODUCTS[cat]||[]).find(p => p.id === pid);
-  if (!prod) return;
-  const nameEl = document.getElementById('gapSelName');
-  const idEl = document.getElementById('gapSelId');
-  const stEl = document.getElementById('gapSelStatus');
-  if (nameEl) nameEl.textContent = prod.name;
-  if (idEl) idEl.textContent = '••••' + prod.masked;
-  if (stEl) {
-    stEl.textContent = prod.status;
-    stEl.className = 'gap-prod-sel-status ' + (prod.statusCls === 'gap-pi-ok' ? 'ok' : 'warn');
+function gapToggleCtxDropdown() {
+  _gapCtxDropOpen = !_gapCtxDropOpen;
+  const dd = document.getElementById('gapCtxDropdown');
+  if (dd) dd.style.display = _gapCtxDropOpen ? 'block' : 'none';
+}
+function gapCloseCtxDropdown() {
+  _gapCtxDropOpen = false;
+  const dd = document.getElementById('gapCtxDropdown');
+  if (dd) dd.style.display = 'none';
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.gap-ctx-sel-wrap')) gapCloseCtxDropdown();
+});
+
+/* ── Set context — adds AI message in thread ── */
+function gapSetContext(pid) {
+  gapSelectedContext = pid;
+  gapCloseCtxDropdown();
+  // Update selector label
+  const nameEl = document.getElementById('gapCtxName');
+  if (nameEl) {
+    if (!pid) {
+      nameEl.textContent = 'All Products';
+    } else {
+      const allP = [...(GAP_PRODUCTS.deposits||[]),...(GAP_PRODUCTS.loans||[]),...(GAP_PRODUCTS.cards||[])];
+      const p = allP.find(x => x.id === pid);
+      nameEl.textContent = p ? `${p.name} ••••${p.masked}` : pid;
+    }
   }
+  if (!pid) return; // clearing context — no thread message needed
+  // Insert context-switch AI message in thread
+  const body = document.getElementById('aapBody');
+  if (!body) return;
+  document.querySelectorAll('#aapBody .gap-action-chips, #aapBody .gap-detail-chips').forEach(el => el.remove());
+  body.insertAdjacentHTML('beforeend',
+    `<div class="gap-ai-msg gap-ai-msg-in"><div class="gap-ai-msg-body">${gapBuildContextSwitchMsg(pid)}</div></div>`);
+  gapScrollLatest();
 }
 
-/* ── Category / product switching ── */
-/* Track whether agent has manually selected a product */
+function gapBuildContextSwitchMsg(pid) {
+  const p  = GAP_DATA[pid] || {};
+  const d  = GAP_PROD_DETAIL[pid] || {};
+  const rows = (d.rows || []).map(([l,v]) => evR(l,v)).join('');
+  const prompts = (d.prompts || ['Recent transactions','Product information','Linked relationships']).slice(0,4);
+  return `<p class="gap-ans-text">Context switched to <strong>${p.name||pid} ${p.id||''}</strong>.</p>`
+    + evBlock(`<div class="gap-ev-header"><span class="gap-ev-name">${p.name||pid} ${p.id||''}</span><span class="gap-ev-badge">${p.status||'Active'}</span></div>${rows}`)
+    + chips(...prompts);
+}
+
+/* ── Backwards-compat stubs (gapSetProd now routes through context) ── */
+function gapSetProd(pid) { gapSetContext(pid); }
+function gapSetCat() {}
+function gapRenderProdList() {}
+function gapUpdateSelector() {}
 let gapProductManuallySelected = false;
 
-function gapSetCat(cat) {
-  gapSelectedCategory = cat;
-  ['deposits','loans','cards'].forEach(c => {
-    const tab = document.getElementById('gtab-'+c);
-    if (tab) tab.classList.toggle('gap-ptab-sel', c===cat);
-  });
-  // Populate dropdown but do NOT auto-select a product
-  gapRenderProdList(cat);
-  // If no manual selection yet, show placeholder in selector
-  if (!gapProductManuallySelected) {
-    const nm  = document.getElementById('gapSelName');
-    const sid = document.getElementById('gapSelId');
-    const st  = document.getElementById('gapSelStatus');
-    if (nm)  nm.textContent  = 'Select a product';
-    if (sid) sid.textContent = '';
-    if (st)  { st.textContent=''; st.className='gap-prod-sel-status'; }
-  }
-}
-
-function gapSetProd(pid) {
-  gapSelectedProduct = pid;
-  gapProductManuallySelected = true;
-  gapRenderProdList(gapSelectedCategory);
-  gapUpdateSelector(pid);
-  const detail = document.getElementById('gapProdDetail');
-  if (detail) detail.innerHTML = gapBuildProductDetail(pid);
-  const scroll = document.getElementById('gapScrollArea');
-  if (scroll) scroll.scrollTop = 0;
-}
-
-/* ── Initialize product nav — populate tabs only, no product pre-selected ── */
+/* ── DOMContentLoaded — no product pre-selected ── */
 document.addEventListener('DOMContentLoaded', function() {
-  // Just highlight the deposits tab; populate dropdown without selecting
-  ['deposits','loans','cards'].forEach(c => {
-    const tab = document.getElementById('gtab-'+c);
-    if (tab) tab.classList.toggle('gap-ptab-sel', c==='deposits');
-  });
-  gapSelectedCategory = 'deposits';
-  gapRenderProdList('deposits');
-  // Clear selector placeholder
-  const nm  = document.getElementById('gapSelName');
-  const sid = document.getElementById('gapSelId');
-  const st  = document.getElementById('gapSelStatus');
-  if (nm)  nm.textContent  = 'Browse products';
-  if (sid) sid.textContent = '';
-  if (st)  { st.textContent=''; st.className='gap-prod-sel-status'; }
+  // Context starts at All Products — nothing to initialize
 });
+
+
 
 
 /* ── Clarification response builder ── */
@@ -8962,7 +8989,8 @@ function gapClassifyQuery(raw) {
     if (/mortgage|home loan/.test(q))   return { type:'balance', pid:'mortgage' };
     if (/credit card|visa credit/.test(q)) return { type:'balance', pid:'creditcard' };
     if (/checking/.test(q))             return { type:'balance', pid:'checking' };
-    // Ambiguous — ask clarification
+    // Generic balance → use selected context or ask clarification
+    if (gapSelectedContext) return { type:'balance', pid: gapSelectedContext };
     return { type:'clarify', clarifyType:'balance',
       question:'Which account would you like to check the balance for?',
       options:['checking','savings','hysavings','autoloan','mortgage','creditcard'] };
@@ -8973,6 +9001,8 @@ function gapClassifyQuery(raw) {
     if (/auto|car/.test(q))             return { type:'payment', pid:'autoloan' };
     if (/mortgage|home/.test(q))        return { type:'payment', pid:'mortgage' };
     if (/credit|visa credit/.test(q))   return { type:'payment', pid:'creditcard' };
+    if (gapSelectedContext && ['autoloan','mortgage','creditcard'].includes(gapSelectedContext))
+      return { type:'payment', pid: gapSelectedContext };
     return { type:'clarify', clarifyType:'payment',
       question:'Which product are you asking about?',
       options:['autoloan','mortgage','creditcard'] };
@@ -8992,7 +9022,9 @@ function gapClassifyQuery(raw) {
   if (/status|warning flag|warning|card status|any flag/.test(q)) {
     if (/debit|visa debit/.test(q))      return { type:'card_status', pid:'debitcard' };
     if (/credit|visa credit/.test(q))    return { type:'card_status', pid:'creditcard' };
-    // Generic status → ask clarification
+    // Generic status → use selected context or ask clarification
+    if (gapSelectedContext && ['debitcard','debitcard2','creditcard'].includes(gapSelectedContext))
+      return { type:'card_status', pid: gapSelectedContext };
     return { type:'clarify', clarifyType:'card_status',
       question:'Which card would you like to check the status for?',
       options:['debitcard','creditcard'] };
@@ -9196,17 +9228,7 @@ function gapBuildAnswer(type, productId) {
 /* ── Relationship navigation — switch AI context to a related product ── */
 function gapNavToProduct(pid) {
   if (!pid) { gapSend('Membership details'); return; }
-  gapSetProd(pid);
-  const d = GAP_DATA[pid] || {};
-  const body = document.getElementById('aapBody');
-  if (body) body.insertAdjacentHTML('beforeend',
-    `<div class="gap-ai-msg gap-ai-msg-in"><div class="gap-ai-msg-body">
-      <p class="gap-ans-text">Switched context to <strong>${d.name||pid} ${d.id||''}</strong>.</p>
-      ${chips('Product information','Alerts & restrictions','Linked relationships','Show balance')}
-    </div></div>`);
-  gapScrollLatest();
-  const scroll = document.getElementById('gapScrollArea');
-  if (scroll) scroll.scrollTop = 0;
+  gapSetContext(pid);
 }
 
 /* ── Smooth scroll helper — scrolls the gap-scroll container, not aapBody ── */
