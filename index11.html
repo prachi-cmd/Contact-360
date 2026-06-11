@@ -970,37 +970,31 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
 
 /* ══ INBOX TOGGLE STRIP ══ */
 .inbox-strip{
-  width:24px;flex-shrink:0;background:var(--s1);border-right:1px solid var(--border);
+  width:20px;flex-shrink:0;background:#fafafa;border-right:1px solid #e5e5e5;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   cursor:pointer;position:relative;z-index:8;transition:background .15s;
 }
-.inbox-strip:hover{background:var(--s2);}
-.inbox-strip.alerting .strip-pill{border-color:var(--red);animation:pillPulse 1.2s infinite;}
-@keyframes pillPulse{0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,.25);}50%{box-shadow:0 0 0 5px rgba(220,38,38,0);}}
+.inbox-strip:hover{background:#f5f5f5;}
+.inbox-strip.alerting .strip-pill{border-color:#dc2626;}
 .strip-pill{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  padding:10px 5px;background:var(--s0);border:1px solid var(--border);
-  border-radius:8px;width:22px;box-shadow:0 2px 8px rgba(0,0,0,.1);
-  transition:all .18s;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  width:20px;height:36px;background:transparent;
+  border:none;border-radius:0;
+  transition:all .15s;position:relative;
 }
-.inbox-strip:hover .strip-pill{background:var(--accent);border-color:var(--accent);box-shadow:0 4px 12px rgba(0,121,107,.25);}
-.strip-arrow{font-size:8px;color:var(--accent);line-height:1;transition:all .18s;font-weight:900;transform:scaleX(.85);}
-.inbox-strip:hover .strip-arrow{color:#fff;}
-.strip-divider{width:10px;height:1px;background:var(--border);transition:background .18s;}
-.inbox-strip:hover .strip-divider{background:rgba(255,255,255,.35);}
-.strip-label{
-  writing-mode:vertical-rl;transform:rotate(180deg);
-  font-size:8px;font-weight:700;color:var(--t3);font-family:var(--m);
-  letter-spacing:.04em;user-select:none;transition:color .18s;white-space:nowrap;
+.strip-arrow{
+  font-size:11px;color:#737373;line-height:1;transition:color .15s;
 }
-.inbox-strip:hover .strip-label{color:#fff;}
+.inbox-strip:hover .strip-arrow{color:#1a1a1a;}
+.strip-divider{display:none;}
+.strip-label{display:none;}
 .strip-badge{
-  position:absolute;top:-6px;right:-6px;min-width:16px;height:16px;border-radius:8px;
-  background:var(--red);color:#fff;font-size:8px;font-weight:700;
+  position:absolute;top:-8px;right:-8px;min-width:16px;height:16px;border-radius:8px;
+  background:#dc2626;color:#fff;font-size:8px;font-weight:700;
   display:none;align-items:center;justify-content:center;
-  font-family:var(--m);padding:0 3px;border:1.5px solid var(--s1);z-index:5;
+  font-family:var(--m);padding:0 3px;border:1.5px solid #fafafa;z-index:5;
 }
-.strip-badge.show{display:flex;animation:badgePop .35s cubic-bezier(.34,1.56,.64,1);}
+.strip-badge.show{display:flex;}
 .strip-names{display:none;}
 
 /* ══ STATE 1 SPLIT — conv 35% left + workflow 65% right ══ */
@@ -4546,10 +4540,7 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
     <div class="strip-pill" id="stripPill">
       <div class="strip-badge" id="stripBadge">1</div>
       <div class="strip-arrow" id="stripArrow">◀</div>
-      <div class="strip-divider"></div>
-      <div class="strip-label" id="stripLabel">Hide Inbox</div>
     </div>
-    <div class="strip-names" id="stripNames"></div>
   </div>
 
   <!-- WORKSPACE -->
@@ -4767,7 +4758,7 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
           <!-- Contact360 tab pane -->
           <div class="wf-pane" id="s1-contact360" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
             <!-- SKELETON STATE (shown while loading) -->
-            <div id="c360-skeleton" class="sk-wrap">
+            <div id="c360-skeleton" class="sk-wrap" style="display:none;">
               <div class="sk-section">
                 <div class="sk-row">
                   <div class="sk sk-circle sk-avatar"></div>
@@ -4816,84 +4807,7 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
                     <!-- ══ PERSISTENT CONVERSATION PANEL — Contact360 shell ══
                          Lives outside all modes. Stays visible across every page. -->
                     <!-- ══ LEFT: MEMBER CONTEXT RAIL ══ -->
-                    <div class="mcr-rail" id="c360ConvPanel">
-                      <!-- Collapse button (visible when expanded) -->
-                      <div class="mcr-collapse-bar">
-                        <button class="mcr-collapse-btn" onclick="mcrToggle()" title="Collapse Member Context">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-                        </button>
-                      </div>
-                      <!-- Collapsed strip (visible when collapsed) -->
-                      <div class="mcr-collapsed-strip" onclick="mcrToggle()" title="Expand Member Context">
-                        <button class="mcr-expand-btn">
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-                        </button>
-                        <span class="mcr-collapsed-label">Member Context</span>
-                      </div>
-                      <div class="mcr-scroll">
-
-                        <!-- Member Information -->
-                        <div class="mcr-section">
-                          <div class="mcr-section-hdr">Member Information</div>
-                          <div class="mcr-member-name">Emily Olivers</div>
-                          <div class="mcr-rows">
-                            <div class="mcr-row"><span class="mcr-lbl">Member No.</span><span class="mcr-val">10048291</span></div>
-                            <div class="mcr-row"><span class="mcr-lbl">Status</span><span class="mcr-val mcr-active">Active Member</span></div>
-                            <div class="mcr-row"><span class="mcr-lbl">Since</span><span class="mcr-val">March 12, 2018</span></div>
-                            <div class="mcr-row"><span class="mcr-lbl">Phone</span><span class="mcr-val">(503) 555-0182</span></div>
-                            <div class="mcr-row"><span class="mcr-lbl">Email</span><span class="mcr-val mcr-truncate">michael.reynolds@email.com</span></div>
-                            <div class="mcr-row"><span class="mcr-lbl">Address</span><span class="mcr-val">842 Willow Creek Dr, Bend OR 97701</span></div>
-                          </div>
-                        </div>
-
-                        <!-- Recent Interaction Journey -->
-                        <div class="mcr-section">
-                          <div class="mcr-section-hdr" style="display:flex;justify-content:space-between;align-items:center">
-                            <span>Recent Interactions</span>
-
-                          </div>
-                          <div class="mcr-ij-list">
-                            <div class="mcr-ij-row">
-                              <span class="mcr-ij-icon mcr-ij-video">📹</span>
-                              <div class="mcr-ij-body">
-                                <div class="mcr-ij-title">Car Loan – Document Sharing</div>
-                                <div class="mcr-ij-meta">Emma Blue · May 9</div>
-                              </div>
-                            </div>
-                            <div class="mcr-ij-row">
-                              <span class="mcr-ij-icon mcr-ij-chat">💬</span>
-                              <div class="mcr-ij-body">
-                                <div class="mcr-ij-title">Transfer Money – Dispute</div>
-                                <div class="mcr-ij-meta">Diana Hernandez · May 4</div>
-                              </div>
-                            </div>
-                            <div class="mcr-ij-row">
-                              <span class="mcr-ij-icon mcr-ij-voice">📞</span>
-                              <div class="mcr-ij-body">
-                                <div class="mcr-ij-title">Auto Loan – Skip Payment</div>
-                                <div class="mcr-ij-meta">Michael Torres · Apr 28</div>
-                              </div>
-                            </div>
-                            <div class="mcr-ij-row">
-                              <span class="mcr-ij-icon mcr-ij-chat">💬</span>
-                              <div class="mcr-ij-body">
-                                <div class="mcr-ij-title">Card Dispute – Visa Credit</div>
-                                <div class="mcr-ij-meta">Emma Blue · Apr 21</div>
-                              </div>
-                            </div>
-                            <div class="mcr-ij-row">
-                              <span class="mcr-ij-icon mcr-ij-voice">📞</span>
-                              <div class="mcr-ij-body">
-                                <div class="mcr-ij-title">Fee Reversal – NSF Inquiry</div>
-                                <div class="mcr-ij-meta">Diana Hernandez · Apr 14</div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                      </div><!-- /mcr-scroll -->
-
-</div><!-- /mcr-rail -->
+<!-- mcr-rail removed — member context now lives in AI Assistant panel -->
 
                     <!-- ══ CONTEXT RAIL — persistent member context & portfolio ══ -->
                     <!-- ══ WORKSPACE WRAPPER — c360v2Main + CtxRail + shared orch bar ══ -->
@@ -5958,36 +5872,6 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
         <button class="aap-close" onclick="aiAssistClose()" title="Close">✕</button>
       </div>
 
-      <!-- Product Navigator -->
-      <!-- Compact current context selector -->
-      <div class="gap-ctx-bar">
-        <div class="gap-ctx-sel-wrap">
-          <span class="gap-ctx-lbl">Context</span>
-          <div class="gap-ctx-sel" id="gapCtxSel" onclick="gapToggleCtxDropdown()">
-            <span id="gapCtxName">All Products</span>
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-          </div>
-          <!-- Grouped dropdown -->
-          <div class="gap-ctx-dropdown" id="gapCtxDropdown" style="display:none">
-            <div class="gap-ctx-opt gap-ctx-all" onclick="gapSetContext(null)">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              All Products
-            </div>
-            <div class="gap-ctx-group">Deposits</div>
-            <div class="gap-ctx-opt" onclick="gapSetContext('checking')"><div class="gap-ctx-opt-name">Everyday Checking</div><div class="gap-ctx-opt-id">••••4821</div></div>
-            <div class="gap-ctx-opt" onclick="gapSetContext('savings')"><div class="gap-ctx-opt-name">Emergency Savings</div><div class="gap-ctx-opt-id">••••1039</div></div>
-            <div class="gap-ctx-opt" onclick="gapSetContext('hysavings')"><div class="gap-ctx-opt-name">High Yield Savings</div><div class="gap-ctx-opt-id">••••8810</div></div>
-            <div class="gap-ctx-group">Loans</div>
-            <div class="gap-ctx-opt" onclick="gapSetContext('autoloan')"><div class="gap-ctx-opt-name">Auto Loan</div><div class="gap-ctx-opt-id">••••7712</div></div>
-            <div class="gap-ctx-opt" onclick="gapSetContext('mortgage')"><div class="gap-ctx-opt-name">Home Mortgage</div><div class="gap-ctx-opt-id">••••3301</div></div>
-            <div class="gap-ctx-group">Cards</div>
-            <div class="gap-ctx-opt" onclick="gapSetContext('debitcard')"><div class="gap-ctx-opt-name">Visa Debit Card</div><div class="gap-ctx-opt-id">••••4412</div></div>
-            <div class="gap-ctx-opt" onclick="gapSetContext('creditcard')"><div class="gap-ctx-opt-name">Visa Credit Card</div><div class="gap-ctx-opt-id">••••7777</div></div>
-            <div class="gap-ctx-opt" onclick="gapSetContext('debitcard2')"><div class="gap-ctx-opt-name">Visa Debit Card</div><div class="gap-ctx-opt-id">••••7439</div></div>
-          </div>
-        </div>
-      </div>
-
       <!-- Mode tab switcher -->
       <div class="gap-mode-tabs">
         <button class="gap-mtab gap-mtab-sel" id="gapTabConv" onclick="gapSwitchMode('conversation')">Conversation</button>
@@ -6012,6 +5896,14 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
         <div id="gapWfActive" style="display:none">
           <!-- JS-populated workflow steps -->
         </div>
+      </div>
+
+      <!-- Back to Home bar — shown only when in thread/detail view -->
+      <div class="gap-back-home-bar" id="gapBackHomeBar" style="display:none">
+        <button class="gap-back-home-btn" onclick="gapShowHome()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Back to Home
+        </button>
       </div>
 
       <!-- Input -->
@@ -6070,14 +5962,12 @@ function toggleInbox(){
   inboxOpen = !inboxOpen;
   document.getElementById('inboxWrap').classList.toggle('closed', !inboxOpen);
   document.getElementById('stripArrow').textContent = inboxOpen ? '◀' : '▶';
-  document.getElementById('stripLabel').textContent = inboxOpen ? 'Hide Inbox' : 'Show Inbox';
   // clear alert styling when opening
   if(inboxOpen){
     document.getElementById('inboxStrip').classList.remove('alerting');
     // keep badge visible until they actually view it — clear after short delay
     setTimeout(()=>{
       document.getElementById('stripBadge').classList.remove('show');
-      document.getElementById('stripNames').innerHTML = '';
     }, 600);
   }
 }
@@ -6196,7 +6086,6 @@ function collapseForSession(){
     inboxOpen = false;
     document.getElementById('inboxWrap').classList.add('closed');
     document.getElementById('stripArrow').textContent = '▶';
-    document.getElementById('stripLabel').textContent = 'Show Inbox';
   }
   setTimeout(()=> toast('↔  Nav & inbox collapsed — more space for your session'), 300);
 }
@@ -6205,7 +6094,6 @@ function restoreForBrowsing(){
     inboxOpen = true;
     document.getElementById('inboxWrap').classList.remove('closed');
     document.getElementById('stripArrow').textContent = '◀';
-    document.getElementById('stripLabel').textContent = 'Hide Inbox';
     document.getElementById('inboxStrip').classList.remove('alerting');
     setTimeout(()=>{ document.getElementById('stripBadge').classList.remove('show'); }, 600);
   }
@@ -8456,98 +8344,90 @@ let gapSelectedCategory = 'deposits';
 /* ── Product detail data ── */
 const GAP_PROD_DETAIL = {
   checking: {
-    name:'Everyday Checking', masked:'4821', status:'Active', statusCls:'ok',
-    rows: [['Role','Primary Owner'],['Available Balance','$4,782.15'],['Actual Balance','$4,782.15'],['Restriction','OLB Restricted']],
+    name:'Everyday Checking', masked:'4821', status:'OLB Restricted', statusCls:'warn',
+    rows: [['Role','Primary Owner'],['Available Balance','$4,782.15'],['Actual Balance','$4,782.15']],
     alert: 'OLB Restricted — Online Banking access disabled',
-    prompts: ['Recent transactions','Payroll activity','Product information','Alerts & restrictions','Linked relationships','Membership details'],
-    info: [['Product Type','Classic Checking'],['Account Subtype','Personal Checking'],['Open Date','March 12, 2018'],['Routing Number','321470665'],['Branch','Bend Main Branch'],['Ownership','Individual — Primary Owner'],['Status','Active']],
-    alerts_detail: [['OLB Restricted','Active'],['Reason','Online Banking access manually disabled'],['Effective Date','March 1, 2025'],['ACH','Not restricted'],['Fraud Alert','None'],['Account Freeze','No']],
+    prompts: ['Recent transactions','Payroll activity','Alerts & restrictions','Linked relationships'],
+    info: [['Product Type','Classic Checking'],['Open Date','March 12, 2018'],['Routing Number','321470665'],['Branch','Bend Main Branch'],['Ownership','Primary Owner']],
+    alerts_detail: [['OLB Restricted','Active'],['Reason','Online Banking access manually disabled'],['Effective Date','March 1, 2025'],['ACH','Not restricted'],['Fraud Alert','None']],
     relationships: [
       {label:'Linked Savings',    name:'Emergency Savings',  id:'••••1039', pid:'savings'},
       {label:'Debit Card',        name:'Visa Debit Card',    id:'••••4412', pid:'debitcard'},
       {label:'Loan Payment Acct', name:'Auto Loan',          id:'••••7712', pid:'autoloan'},
-      {label:'Membership',        name:'Emily Olivers',      id:'#10048291', pid:null},
     ],
   },
   savings: {
     name:'Emergency Savings', masked:'1039', status:'Active', statusCls:'ok',
-    rows: [['Role','Joint Owner'],['Available Balance','$12,450.00'],['Interest Earned YTD','$24.38']],
+    rows: [['Role','Joint Owner'],['Available Balance','$12,450.00'],['Interest YTD','$24.38']],
     alert: null,
-    prompts: ['Recent transactions','Account balance','Product information','Alerts & restrictions','Linked relationships','Membership details'],
-    info: [['Product Type','Regular Savings'],['Account Subtype','Emergency Savings'],['Open Date','March 12, 2018'],['APY','0.05%'],['Ownership','Joint Owner'],['Status','Active']],
-    alerts_detail: [['Alerts','None'],['Restrictions','None'],['Fraud Alert','None'],['Account Freeze','No']],
+    prompts: ['Recent transactions','Account balance','Alerts & restrictions','Linked relationships'],
+    info: [['Product Type','Regular Savings'],['Open Date','March 12, 2018'],['APY','0.05%'],['Ownership','Joint Owner']],
+    alerts_detail: [['Alerts','None'],['Restrictions','None'],['Fraud Alert','None']],
     relationships: [
       {label:'Related Checking',  name:'Everyday Checking',  id:'••••4821', pid:'checking'},
-      {label:'Membership',        name:'Emily Olivers',      id:'#10048291', pid:null},
     ],
   },
   hysavings: {
     name:'High Yield Savings', masked:'8810', status:'Active', statusCls:'ok',
     rows: [['Role','Beneficiary'],['Balance','$8,200.00'],['APY','2.75%']],
     alert: null,
-    prompts: ['Account balance','Product information','Alerts & restrictions','Linked relationships','Membership details'],
-    info: [['Product Type','Premium Savings'],['Account Subtype','High Yield'],['Open Date','June 1, 2021'],['APY','2.75%'],['Min Balance','$1,000'],['Ownership','Beneficiary'],['Status','Active']],
-    alerts_detail: [['Alerts','None'],['Restrictions','None'],['Fraud Alert','None']],
-    relationships: [
-      {label:'Membership', name:'Emily Olivers', id:'#10048291', pid:null},
-    ],
+    prompts: ['Account balance','Alerts & restrictions','Linked relationships'],
+    info: [['Product Type','Premium Savings'],['Open Date','June 1, 2021'],['APY','2.75%'],['Min Balance','$1,000'],['Ownership','Beneficiary']],
+    alerts_detail: [['Alerts','None'],['Restrictions','None']],
+    relationships: [],
   },
   autoloan: {
     name:'Auto Loan', masked:'7712', status:'Active', statusCls:'ok',
     rows: [['Role','Primary Borrower'],['Remaining Balance','$14,250.00'],['Next Payment','Aug 1 · $485.00'],['Rate','6.9%']],
     alert: null,
-    prompts: ['Payment details','Payoff amount','Product information','Alerts & restrictions','Linked relationships','Membership details'],
-    info: [['Loan Type','Auto Loan'],['Vehicle','2021 Honda Accord'],['Original Amount','$22,000.00'],['Term','60 months'],['Interest Rate','6.9%'],['Maturity Date','August 2027'],['Loan Status','Active — Good Standing']],
-    alerts_detail: [['Delinquent','No'],['Past Due','No'],['Collections','Not in collections'],['Payment Warning','None'],['Loan Status','Good Standing']],
+    prompts: ['Payment details','Payoff amount','Alerts & restrictions','Linked relationships'],
+    info: [['Loan Type','Auto Loan'],['Vehicle','2021 Honda Accord'],['Original Amount','$22,000.00'],['Term','60 months'],['Interest Rate','6.9%'],['Maturity Date','August 2027']],
+    alerts_detail: [['Delinquent','No'],['Past Due','No'],['Collections','Not in collections'],['Status','Good Standing']],
     relationships: [
       {label:'Payment Account',   name:'Everyday Checking',  id:'••••4821', pid:'checking'},
       {label:'Associated Card',   name:'Visa Debit Card',    id:'••••4412', pid:'debitcard'},
-      {label:'Membership',        name:'Emily Olivers',      id:'#10048291', pid:null},
     ],
   },
   mortgage: {
     name:'Home Mortgage', masked:'3301', status:'Active', statusCls:'ok',
     rows: [['Role','Co-Borrower'],['Remaining Balance','$287,500.00'],['Next Payment','Jul 1 · $1,842.00'],['Rate','3.875%']],
     alert: null,
-    prompts: ['Payment details','Payoff amount','Product information','Alerts & restrictions','Linked relationships','Membership details'],
-    info: [['Loan Type','30-Year Fixed Mortgage'],['Property','842 Willow Creek Dr, Bend OR'],['Original Amount','$320,000.00'],['Term','360 months'],['Interest Rate','3.875%'],['Maturity Date','January 2050'],['Loan Status','Active — Good Standing']],
-    alerts_detail: [['Delinquent','No'],['Past Due','No'],['Collections','Not in collections'],['Escrow','Active'],['Loan Status','Good Standing']],
+    prompts: ['Payment details','Payoff amount','Alerts & restrictions','Linked relationships'],
+    info: [['Loan Type','30-Year Fixed Mortgage'],['Property','842 Willow Creek Dr, Bend OR'],['Original Amount','$320,000.00'],['Term','360 months'],['Interest Rate','3.875%'],['Maturity Date','January 2050']],
+    alerts_detail: [['Delinquent','No'],['Past Due','No'],['Collections','Not in collections'],['Escrow','Active'],['Status','Good Standing']],
     relationships: [
       {label:'Payment Account',  name:'Everyday Checking',  id:'••••4821', pid:'checking'},
-      {label:'Membership',       name:'Emily Olivers',      id:'#10048291', pid:null},
     ],
   },
   debitcard: {
     name:'Visa Debit Card', masked:'4412', status:'Blocked', statusCls:'warn',
     rows: [['Role','Primary Cardholder'],['Block Reason','3 incorrect PINs'],['Block Date','May 29, 2025'],['Linked Account','Checking ••••4821']],
     alert: 'Blocked — 3 consecutive incorrect PIN attempts on May 29',
-    prompts: ['Recent activity','Product information','Alerts & restrictions','Linked relationships','Unblock card'],
-    info: [['Card Product','Visa Debit'],['Card Network','Visa'],['Expiration','12/2026'],['Cardholder','Emily Olivers'],['Ownership','Primary Cardholder'],['Associated Account','Everyday Checking ••••4821'],['Card Status','Blocked']],
-    alerts_detail: [['Card Status','BLOCKED'],['Block Reason','3 consecutive incorrect PIN attempts'],['PIN Attempts','3 of 3 (locked)'],['Block Date','May 29, 2025'],['Fraud Watch','No'],['Travel Notice','None'],['Suspicious Activity','Triggered — PIN lockout']],
+    prompts: ['Recent activity','Alerts & restrictions','Linked relationships','Unblock card'],
+    info: [['Card Product','Visa Debit'],['Expiration','12/2026'],['Cardholder','Emily Olivers'],['Associated Account','Everyday Checking ••••4821']],
+    alerts_detail: [['Block Reason','3 consecutive incorrect PIN attempts'],['PIN Attempts','3 of 3 (locked)'],['Block Date','May 29, 2025'],['Travel Notice','None'],['Suspicious Activity','Triggered — PIN lockout']],
     relationships: [
       {label:'Parent Account', name:'Everyday Checking', id:'••••4821', pid:'checking'},
-      {label:'Membership',     name:'Emily Olivers',     id:'#10048291', pid:null},
     ],
   },
   creditcard: {
     name:'Visa Credit Card', masked:'7777', status:'Active', statusCls:'ok',
-    rows: [['Role','Authorized User'],['Balance','$2,100.00 / $5,000.00'],['Available Credit','$2,900.00'],['Last Decline','Delta Airlines · May 20']],
+    rows: [['Role','Authorized User'],['Balance','$2,100 / $5,000'],['Available','$2,900'],['Last Decline','Delta Airlines · May 20']],
     alert: 'Declined transaction — Delta Airlines, May 20',
-    prompts: ['Recent activity','Declined transactions','Product information','Alerts & restrictions','Linked relationships','Payment details'],
-    info: [['Card Product','Visa Signature Credit'],['Card Network','Visa'],['Credit Limit','$5,000.00'],['Available Credit','$2,900.00'],['APR','19.99%'],['Rewards','Visa Rewards Points'],['Expiration','09/2027'],['Cardholder','Emily Olivers'],['Card Status','Active']],
-    alerts_detail: [['Card Status','Active'],['Fraud Watch','No'],['Declined Transaction','Delta Airlines — May 20 (insufficient funds)'],['Suspicious Activity','None'],['Travel Notice','None'],['Card Freeze','No']],
+    prompts: ['Recent activity','Declined transactions','Alerts & restrictions','Payment details'],
+    info: [['Card Product','Visa Signature Credit'],['Credit Limit','$5,000.00'],['APR','19.99%'],['Rewards','Visa Rewards Points'],['Expiration','09/2027'],['Cardholder','Emily Olivers']],
+    alerts_detail: [['Declined Transaction','Delta Airlines — May 20 (insufficient funds)'],['Fraud Watch','No'],['Travel Notice','None']],
     relationships: [
       {label:'Autopay Account',  name:'Everyday Checking', id:'••••4821', pid:'checking'},
-      {label:'Membership',       name:'Emily Olivers',     id:'#10048291', pid:null},
     ],
   },
   debitcard2: {
-    name:'Visa Debit Card', masked:'7439', status:'Active', statusCls:'ok',
-    rows: [['Role','Not Associated'],['Note','Not linked to Emily Olivers']],
+    name:'Visa Debit Card', masked:'7439', status:'Not Associated', statusCls:'ok',
+    rows: [['Note','Not linked to Emily Olivers']],
     alert: null,
-    prompts: ['Product information','Linked relationships'],
-    info: [['Card Product','Visa Debit'],['Card Network','Visa'],['Cardholder','Not Associated'],['Note','This card is not linked to Emily Olivers']],
-    alerts_detail: [['Alerts','None']],
+    prompts: [],
+    info: [['Card Product','Visa Debit'],['Cardholder','Not Associated'],['Note','This card is not linked to Emily Olivers']],
+    alerts_detail: [],
     relationships: [],
   },
 };
@@ -8685,33 +8565,1178 @@ function gapAnswerForProduct(type, pid) {
   setTimeout(() => gapAppendAnswer(type, pid), 400);
 }
 
-/* ── Context-aware landing card (injected when panel first opens) ── */
+/* ── Bento Home — injected when panel first opens ── */
 function gapBuildLandingCard() {
-  return `<div class="gap-ai-msg gap-ai-msg-in" id="gapLandingCard">
-    <div class="gap-ai-msg-body">
-      <div class="gap-landing-card">
-        <div class="gap-landing-hdr">
-          <span class="gap-landing-orb">✦</span>
-          <span class="gap-landing-title">Context · Current Request</span>
-        </div>
-        <div class="gap-landing-reason">Missing salary deposit</div>
-        <div class="gap-evidence" style="margin-top:8px">
-          ${evR('Most relevant','Everyday Checking ••••4821')}
-          ${evR('Signal','Recurring Tesla payroll — no current-cycle deposit found')}
-          ${evR('Auth status','Authenticated ✓')}
-        </div>
+  return `<div id="gapHomeView" class="gap-home-view">
+
+    <!-- Member header: dark, compact -->
+    <div class="gap-member-dark">
+      <div class="gap-member-dark-avatar">EO</div>
+      <div class="gap-member-dark-info">
+        <div class="gap-member-dark-name">Emily Olivers</div>
+        <div class="gap-member-dark-meta">#10048291 · 2018</div>
       </div>
-      <div class="gap-action-chips">
-        <button class="gap-action-chip" onclick="gapSend('Review payroll activity')">Review payroll activity</button>
-        <button class="gap-action-chip" onclick="gapSend('Check pending ACH')">Check pending ACH</button>
-        <button class="gap-action-chip" onclick="gapSend('Compare previous salary deposits')">Compare previous deposits</button>
-        <button class="gap-action-chip" onclick="gapSend('Review account restrictions')">Review account restrictions</button>
+      <div class="gap-member-dark-status">ACT</div>
+    </div>
+
+    <!-- Customer Memory Component -->
+    <div class="gap-memory-header" onclick="gapToggleMemory()">
+      <svg class="gap-memory-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+        <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+      </svg>
+      <span class="gap-memory-title">Emily's Memory</span>
+      <svg class="gap-memory-chevron" id="gapMemChev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+
+    <div class="gap-memory-dropdown" id="gapMemoryDropdown" style="display:none;">
+      <!-- Open Issue Card -->
+      <div class="gap-mem-card">
+        <div class="gap-mem-card-header">
+          <span class="gap-mem-category">OPEN ISSUE</span>
+          <span class="gap-mem-badge gap-mem-mid">Mid</span>
+          <span class="gap-mem-time">1mo ago</span>
+        </div>
+        <div class="gap-mem-divider"></div>
+        <ul class="gap-mem-list">
+          <li>Pending $45.20 Starbucks charge (reported May 12)</li>
+          <li>Auto-loan co-signer form missing a signature</li>
+        </ul>
+        <button class="gap-mem-more">Show More</button>
+      </div>
+
+      <!-- Active Context Card -->
+      <div class="gap-mem-card">
+        <div class="gap-mem-card-header">
+          <span class="gap-mem-category">ACTIVE CONTEXT</span>
+          <span class="gap-mem-time">Today</span>
+        </div>
+        <div class="gap-mem-divider"></div>
+        <ul class="gap-mem-list">
+          <li>Currently discussing auto-loan payment with Andrew Reynold</li>
+          <li>Escalated from IVR — requested custom payment amount</li>
+        </ul>
       </div>
     </div>
+
+    <!-- Products: single column (only show problem badges) -->
+    <div class="gap-card" onclick="gapShowDetail('deposits')">
+      <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M2 9.5h20"/></svg>
+      <div class="gap-card-content">
+        <div class="gap-card-label">Deposits</div>
+        <div class="gap-card-sub">3 accounts</div>
+      </div>
+      <div class="gap-card-right">
+        <div class="gap-card-value">$4,782</div>
+        <div class="gap-badge gap-badge-warn">OLB RESTRICTED</div>
+      </div>
+    </div>
+
+    <div class="gap-card" onclick="gapShowDetail('cards')">
+      <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <div class="gap-card-content">
+        <div class="gap-card-label">Cards</div>
+        <div class="gap-card-sub">1 active · 1 blocked</div>
+      </div>
+      <div class="gap-card-right">
+        <div class="gap-card-value">3 cards</div>
+        <div class="gap-badge gap-badge-danger">BLOCKED</div>
+      </div>
+    </div>
+
+    <div class="gap-card" onclick="gapShowDetail('loans')">
+      <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <div class="gap-card-content">
+        <div class="gap-card-label">Loans</div>
+        <div class="gap-card-sub">2 active loans · $14,250 total</div>
+      </div>
+    </div>
+
+    <div class="gap-card" onclick="gapShowDetail('verification')">
+      <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <div class="gap-card-content">
+        <div class="gap-card-label">Verification</div>
+        <div class="gap-card-sub">Authenticated · OTP verified</div>
+      </div>
+    </div>
+
+    <!-- Journey section with title -->
+    <div class="gap-section-label">Recent Interactions</div>
+    <div class="gap-card" onclick="gapShowDetail('journey')">
+      <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      <div class="gap-card-content">
+        <div class="gap-card-label">Car Loan – Document Sharing</div>
+        <div class="gap-card-sub">Emma Blue · May 9</div>
+      </div>
+    </div>
+
+    <div class="gap-card" onclick="gapShowDetail('journey')">
+      <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <div class="gap-card-content">
+        <div class="gap-card-label">Transfer Money – Dispute</div>
+        <div class="gap-card-sub">Diana Hernandez · May 4</div>
+      </div>
+    </div>
+
+    <div class="gap-card" onclick="gapShowDetail('journey')">
+      <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      <div class="gap-card-content">
+        <div class="gap-card-label">Auto Loan – Skip Payment</div>
+        <div class="gap-card-sub">Michael Torres · Apr 28</div>
+      </div>
+    </div>
+
+    <!-- Prompt chips with spacing and label -->
+    <div class="gap-chip-section">
+      <div class="gap-chip-label">Try asking</div>
+      <div class="gap-chips-wrap">
+        <button class="gap-chip-card" onclick="gapSend('Show deposit details')">Deposit details</button>
+        <button class="gap-chip-card" onclick="gapSend('Why is the card blocked?')">Card block reason</button>
+        <button class="gap-chip-card" onclick="gapSend('Loan payment schedule')">Payment schedule</button>
+      </div>
+    </div>
+
   </div>`;
 }
 
 /* ── Landing card CSS helper (see <style> for rules) ── */
+
+/* ════════════════════════════════
+   BENTO HOME VIEW
+════════════════════════════════ */
+const GAP_BENTO_CSS = `
+<style id="gapBentoCSS">
+/* ════════════════════════════════════════════════════════════
+   COMPACT UNIFIED SYSTEM — Detail view density everywhere
+   ════════════════════════════════════════════════════════════ */
+
+#aapBody {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.gap-home-view,
+.gap-detail-view,
+.gap-journey-view {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MEMBER HEADER
+   ══════════════════════════════════════════════════════════════ */
+.gap-member-dark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #1a1a1a;
+  border-radius: 5px;
+  margin-bottom: 6px;
+}
+.gap-member-dark-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  background: rgba(255,255,255,.12);
+  display: grid;
+  place-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+.gap-member-dark-info {
+  flex: 1;
+  min-width: 0;
+}
+.gap-member-dark-name {
+  font-size: 11px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 1px;
+}
+.gap-member-dark-meta {
+  font-size: 10px;
+  color: rgba(255,255,255,.6);
+}
+.gap-member-dark-status {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: rgba(34,197,94,.18);
+  color: #dcfce7;
+  letter-spacing: .01em;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CUSTOMER MEMORY COMPONENT
+   ══════════════════════════════════════════════════════════════ */
+.gap-memory-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  margin-bottom: 6px;
+}
+.gap-memory-header:hover {
+  border-color: #6366f1;
+  background: #fafafa;
+}
+.gap-memory-icon {
+  color: #6366f1;
+  flex-shrink: 0;
+}
+.gap-memory-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.gap-memory-chevron {
+  color: #a3a3a3;
+  flex-shrink: 0;
+  transition: transform .25s;
+}
+
+.gap-memory-dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 6px;
+  animation: gap-dropdown-in .2s ease both;
+}
+@keyframes gap-dropdown-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.gap-mem-card {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+.gap-mem-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.gap-mem-category {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #737373;
+  flex: 1;
+}
+.gap-mem-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 12px;
+  letter-spacing: .01em;
+}
+.gap-mem-mid {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  color: #92400e;
+}
+.gap-mem-high {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+}
+.gap-mem-time {
+  font-size: 10px;
+  color: #a3a3a3;
+}
+.gap-mem-divider {
+  height: 1px;
+  background: #e5e5e5;
+  margin-bottom: 8px;
+}
+.gap-mem-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px 0;
+}
+.gap-mem-list li {
+  font-size: 11px;
+  color: #1a1a1a;
+  line-height: 1.5;
+  padding-left: 14px;
+  position: relative;
+  margin-bottom: 6px;
+}
+.gap-mem-list li:last-child {
+  margin-bottom: 0;
+}
+.gap-mem-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: #1a1a1a;
+  font-weight: 700;
+}
+.gap-mem-more {
+  width: 100%;
+  padding: 6px;
+  background: #fafafa;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #737373;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s;
+}
+.gap-mem-more:hover {
+  border-color: #1a1a1a;
+  background: #f5f5f5;
+  color: #1a1a1a;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   CARD SYSTEM — Compact like detail view
+   ══════════════════════════════════════════════════════════════ */
+.gap-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  margin-bottom: 4px;
+  transition: border-color .15s, background .15s;
+}
+.gap-card:hover {
+  border-color: #1a1a1a;
+  background: #fafafa;
+}
+.gap-card:last-child {
+  margin-bottom: 0;
+}
+.gap-card-static {
+  cursor: default;
+}
+.gap-card-static:hover {
+  border-color: #e5e5e5;
+  background: #fff;
+}
+
+/* Alert variant */
+.gap-alert-card {
+  background: #fffbeb;
+  border-color: #fde68a;
+  border-left: 2px solid #f59e0b;
+  cursor: default;
+}
+.gap-alert-card:hover {
+  background: #fffbeb;
+  border-color: #fde68a;
+}
+
+/* Card elements */
+.gap-card-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: #1a1a1a;
+}
+.gap-alert-card .gap-card-icon {
+  color: #92400e;
+}
+.gap-card-content {
+  flex: 1;
+  min-width: 0;
+}
+.gap-card-label {
+  font-size: 11px;
+  color: #1a1a1a;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.gap-card-sub {
+  font-size: 10px;
+  color: #737373;
+  margin-top: 1px;
+  line-height: 1.3;
+}
+.gap-card-text {
+  font-size: 10px;
+  color: #92400e;
+  line-height: 1.35;
+  flex: 1;
+}
+.gap-card-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  flex-shrink: 0;
+}
+.gap-card-value {
+  font-size: 11px;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BADGES
+   ══════════════════════════════════════════════════════════════ */
+.gap-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: .01em;
+}
+.gap-badge-ok {
+  background: #dcfce7;
+  color: #15803d;
+}
+.gap-badge-warn {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.gap-badge-danger {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PROMPT CHIPS — Grey, compact, wrap to text
+   ══════════════════════════════════════════════════════════════ */
+.gap-chip-card {
+  display: inline-block;
+  padding: 6px 10px;
+  background: #f5f5f5;
+  border: 1px solid #d4d4d4;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  color: #1a1a1a;
+  font-weight: 500;
+  text-align: center;
+  transition: border-color .15s, background .15s;
+  margin: 0 4px 4px 0;
+  white-space: nowrap;
+}
+.gap-chip-card:hover {
+  border-color: #1a1a1a;
+  background: #e8e8e8;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════════════════════════ */
+/* Breadcrumb navigation */
+.gap-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.gap-bc-arrow {
+  color: #737373;
+  flex-shrink: 0;
+}
+.gap-bc-link {
+  font-size: 10px;
+  font-weight: 600;
+  color: #737373;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+  transition: color .15s;
+}
+.gap-bc-link:hover {
+  color: #1a1a1a;
+}
+.gap-bc-sep {
+  color: #d4d4d4;
+  flex-shrink: 0;
+}
+
+.gap-detail-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 6px;
+  letter-spacing: -.01em;
+}
+
+.gap-back-home-bar {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border-top: 1px solid #e5e5e5;
+  background: #fafafa;
+}
+.gap-back-home-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #737373;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: all .15s;
+}
+.gap-back-home-btn:hover {
+  color: #1a1a1a;
+  background: #f5f5f5;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   DETAIL VIEW SECTIONS
+   ══════════════════════════════════════════════════════════════ */
+.gap-pd-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  margin-bottom: 6px;
+}
+.gap-pd-role {
+  font-size: 10px;
+  color: #737373;
+  flex: 1;
+}
+
+.gap-detail-alert {
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-left: 2px solid #f59e0b;
+  border-radius: 5px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  font-size: 10px;
+  color: #92400e;
+  line-height: 1.4;
+}
+
+.gap-pd-section {
+  margin-bottom: 8px;
+}
+.gap-pd-section-lbl {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #a3a3a3;
+  padding: 0 0 4px;
+  margin-bottom: 4px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.gap-detail-row {
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  margin-bottom: 4px;
+}
+.gap-detail-row:last-child {
+  margin-bottom: 0;
+}
+.gap-dr-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+.gap-dr-val {
+  font-size: 10px;
+  color: #737373;
+  line-height: 1.3;
+}
+.gap-dr-val.gap-badge-ok { color: #15803d; font-weight: 600; }
+.gap-dr-val.gap-badge-danger { color: #dc2626; font-weight: 600; }
+.gap-dr-val.gap-badge-warn { color: #dc2626; font-weight: 600; }
+
+.gap-detail-row-link {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  font-family: inherit;
+  text-align: left;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 8px 10px;
+  margin-bottom: 4px;
+  transition: border-color .15s, background .15s;
+}
+.gap-detail-row-link:last-child {
+  margin-bottom: 0;
+}
+.gap-detail-row-link:hover {
+  border-color: #1a1a1a;
+  background: #fafafa;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CONVERSATION THREAD
+   ══════════════════════════════════════════════════════════════ */
+.gap-user-bubble {
+  padding: 8px 12px;
+  background: #6366f1;
+  color: #fff;
+  border-radius: 16px 16px 4px 16px;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0 10px 8px auto;
+  width: fit-content;
+  max-width: 75%;
+  line-height: 1.4;
+}
+
+.gap-ai-msg {
+  margin: 0 10px 8px 10px;
+  width: calc(100% - 20px);
+}
+.gap-ai-msg-body {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 11px;
+  color: #1a1a1a;
+  line-height: 1.5;
+  width: 100%;
+}
+
+.gap-ai-msg-body h3 {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 6px 0;
+}
+.gap-ai-msg-body p {
+  font-size: 11px;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+.gap-ai-msg-body p:last-child {
+  margin-bottom: 0;
+}
+
+.gap-ai-msg-body .gap-card {
+  margin-bottom: 4px;
+}
+.gap-ai-msg-body .gap-card:last-child {
+  margin-bottom: 0;
+}
+
+.gap-ai-msg-body .gap-chip-card {
+  margin: 0 4px 4px 0;
+  display: inline-flex;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   LOADING SKELETON
+   ══════════════════════════════════════════════════════════════ */
+.gap-ai-loading .gap-ai-msg-body {
+  background: #fafafa;
+  border-color: #f0f0f0;
+}
+.gap-sk-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.gap-sk-line {
+  height: 10px;
+  background: #e5e5e5;
+  border-radius: 3px;
+  animation: gap-sk-pulse 1.5s ease-in-out infinite;
+}
+.gap-sk-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+}
+.gap-sk-chip {
+  height: 26px;
+  background: #e5e5e5;
+  border-radius: 5px;
+  animation: gap-sk-pulse 1.5s ease-in-out infinite;
+}
+.gap-sk-txn {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.gap-sk-txn:last-child {
+  border-bottom: none;
+}
+.gap-sk-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+@keyframes gap-sk-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   JOURNEY TIMELINE
+   ══════════════════════════════════════════════════════════════ */
+.gap-ij-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 10px;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  margin-bottom: 8px;
+}
+.gap-ij-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 11px;
+  font-family: inherit;
+  color: #1a1a1a;
+}
+.gap-ij-search-input::placeholder {
+  color: #a3a3a3;
+}
+
+.gap-ij-list {
+  display: flex;
+  flex-direction: column;
+}
+.gap-ij-group {
+  margin-bottom: 12px;
+}
+.gap-ij-group-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: #a3a3a3;
+  padding: 0 0 6px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.gap-ij-card-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  position: relative;
+}
+.gap-ij-card-wrapper::before {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  width: 1px;
+  height: calc(100% - 28px);
+  background: #e5e5e5;
+}
+.gap-ij-card-wrapper:last-child::before {
+  display: none;
+}
+
+.gap-ij-timeline-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  color: #fff;
+  flex-shrink: 0;
+  border: 2px solid #fafafa;
+  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+}
+
+.gap-ij-card {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 8px 10px;
+}
+
+.gap-ij-card-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: #737373;
+  margin-bottom: 4px;
+}
+.gap-ij-time {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.gap-ij-header-sep {
+  color: #d4d4d4;
+}
+.gap-ij-handler-inline {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+.gap-ij-channel-inline {
+  color: #737373;
+}
+.gap-ij-queue-inline {
+  color: #737373;
+}
+
+.gap-ij-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.gap-ij-description {
+  font-size: 10px;
+  color: #737373;
+  line-height: 1.5;
+  margin: 0 0 6px;
+}
+
+.gap-ij-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+.gap-ij-no-tags {
+  font-size: 10px;
+  color: #a3a3a3;
+  font-style: italic;
+}
+
+.gap-ij-metadata {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 9px;
+  color: #a3a3a3;
+  padding-top: 6px;
+  border-top: 1px solid #f5f5f5;
+}
+.gap-ij-duration {
+  font-weight: 600;
+}
+
+.gap-ij-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 6px;
+}
+.gap-ij-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #737373;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: color .15s;
+}
+.gap-ij-action-btn:hover {
+  color: #1a1a1a;
+}
+.gap-ij-chevron {
+  transition: transform .25s;
+}
+
+.gap-ij-subs {
+  border-top: 1px solid #f5f5f5;
+  padding: 6px 0 4px;
+  background: #fafafa;
+  margin-top: 6px;
+  border-radius: 0 0 5px 5px;
+}
+.gap-ij-sub-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 0;
+}
+.gap-ij-sub-icon {
+  font-size: 12px;
+  width: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.gap-ij-sub-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 1px;
+}
+.gap-ij-sub-detail {
+  font-size: 10px;
+  color: #737373;
+  line-height: 1.3;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   AI RESPONSE ELEMENTS
+   ══════════════════════════════════════════════════════════════ */
+.gap-evidence {
+  margin-bottom: 6px;
+}
+.gap-ev-header {
+  background: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.gap-ev-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.gap-ev-badge {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #dcfce7;
+  color: #15803d;
+  letter-spacing: .01em;
+}
+.gap-ev-badge.warn {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.gap-ev-sep {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #a3a3a3;
+  padding: 6px 0 4px;
+  margin-top: 4px;
+  border-top: 1px solid #f5f5f5;
+}
+
+.verif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.verif-evt {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 8px 10px;
+}
+.verif-evt-hdr {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+.verif-chip {
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: .01em;
+}
+.verif-chip.pass {
+  background: #dcfce7;
+  color: #15803d;
+}
+.verif-chip.fail {
+  background: #fef2f2;
+  color: #dc2626;
+}
+.verif-evt-date {
+  font-size: 10px;
+  color: #737373;
+}
+.verif-evt-method {
+  font-size: 11px;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+.verif-evt-meta {
+  font-size: 10px;
+  color: #737373;
+  line-height: 1.3;
+}
+
+.gap-rel-list {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+.gap-rel-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+.gap-rel-row:last-child {
+  border-bottom: none;
+}
+.gap-rel-left {
+  flex: 1;
+  min-width: 0;
+}
+.gap-rel-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #1a1a1a;
+  display: block;
+  margin-bottom: 2px;
+}
+.gap-rel-name {
+  font-size: 10px;
+  color: #737373;
+}
+.gap-rel-nav {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid #e5e5e5;
+  background: #fff;
+  color: #737373;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.gap-rel-nav:hover {
+  border-color: #1a1a1a;
+  background: #fafafa;
+  color: #1a1a1a;
+}
+
+.gap-ans-text {
+  font-size: 11px;
+  color: #1a1a1a;
+  line-height: 1.5;
+  margin: 0 0 8px 0;
+}
+
+.gap-ev-txn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+.gap-ev-txn:last-child {
+  border-bottom: none;
+}
+.gap-ev-txn-d {
+  font-size: 10px;
+  color: #1a1a1a;
+}
+.gap-ev-txn-a {
+  font-size: 10px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Section labels */
+.gap-section-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #a3a3a3;
+  margin: 8px 0 4px;
+}
+
+/* Chip wrapping */
+.gap-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.gap-chip-section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e5e5;
+}
+.gap-chip-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: #a3a3a3;
+  margin-bottom: 6px;
+}
+
+</style>`;
+
+// Inject bento CSS once on first call
+(function() {
+  if (!document.getElementById('gapBentoCSS')) {
+    document.head.insertAdjacentHTML('beforeend', GAP_BENTO_CSS);
+  }
+})();
 
 function gapCall(fn, ...args) {
   const name = fn?.name || '';
@@ -8835,9 +9860,9 @@ const GAP_DATA = {
   debitcard2: { name:'Visa Debit Card',    id:'\u2022\u2022\u2022\u20227439', role:'Not Associated',     status:'Active',   balance:null },
 };
 
-function evR(l,v){return `<div class="gap-ev-row"><span class="gap-ev-lbl">${l}</span><span class="gap-ev-val">${v}</span></div>`;}
+function evR(l,v){return `<div class="gap-card" style="cursor:default;"><div class="gap-card-content"><div class="gap-card-label" style="font-size:10px;font-weight:600;">${l}</div><div class="gap-card-sub">${v}</div></div></div>`;}
 function evBlock(rows){return `<div class="gap-evidence">${rows}</div>`;}
-function chips(...ls){return `<div class="gap-action-chips">${ls.map(l=>`<button class="gap-action-chip" onclick="gapSend('${l.replace(/'/g,"&apos;")}')">${l}</button>`).join('')}</div>`;}
+function chips(...ls){return ls.length ? `<div class="gap-chip-section"><div class="gap-chip-label">Try asking</div><div class="gap-chips-wrap">${ls.map(l=>`<button class="gap-chip-card" onclick="gapSend('${l.replace(/'/g,"&apos;")}')">${l}</button>`).join('')}</div></div>` : '';}
 
 function gapBuildAnswer(type, productId) {
   const p = GAP_DATA[productId] || GAP_DATA.checking;
@@ -9064,6 +10089,570 @@ function gapNavToProduct(pid) {
   gapSetContext(pid);
 }
 
+/* ── Bento Home navigation ── */
+
+// Detail data for each tile
+/* ── Category tile config — product lists per tile ── */
+const GAP_TILE_CATS = {
+  deposits: {
+    label: 'Deposits',
+    catAlert: 'OLB Restricted on Everyday Checking.',
+    catChips: ['Review account restrictions', 'Check pending ACH', 'Review payroll activity'],
+    products: [
+      { pid:'checking',  icon:'🏦', name:'Everyday Checking',  id:'••••4821', badge:'Active',  badgeCls:'gap-bt-ok',     sub:'$4,782.15 available', alertChip:'OLB Restricted' },
+      { pid:'savings',   icon:'🏦', name:'Emergency Savings',  id:'••••1039', badge:'Active',  badgeCls:'gap-bt-ok',     sub:'$12,450.00 balance',  alertChip:null },
+      { pid:'hysavings', icon:'🏦', name:'High Yield Savings', id:'••••8810', badge:'Active',  badgeCls:'gap-bt-ok',     sub:'$8,200.00 · 2.75% APY', alertChip:null },
+    ]
+  },
+  cards: {
+    label: 'Cards',
+    catAlert: 'Visa Debit ••••4412 is blocked — 3 incorrect PIN attempts.',
+    catChips: ['Why is the card blocked?', 'Show card transactions', 'Block or replace a card'],
+    products: [
+      { pid:'debitcard',  icon:'💳', name:'Visa Debit Card',   id:'••••4412', badge:'Blocked', badgeCls:'gap-bt-danger', sub:'Blocked — 3 incorrect PINs', alertChip:'Blocked' },
+      { pid:'creditcard', icon:'💳', name:'Visa Credit Card',  id:'••••7777', badge:'Active',  badgeCls:'gap-bt-ok',     sub:'$2,100 used · $5,000 limit', alertChip:'Declined txn' },
+      { pid:'debitcard2', icon:'💳', name:'Visa Debit Card',   id:'••••7439', badge:'Active',  badgeCls:'gap-bt-ok',     sub:'Not associated', alertChip:null },
+    ]
+  },
+  loans: {
+    label: 'Loans',
+    catAlert: null,
+    catChips: ['Skip payment eligible?', 'Auto loan payoff amount', 'Loan payment history'],
+    products: [
+      { pid:'autoloan', icon:'🚗', name:'Auto Loan',      id:'••••7712', badge:'Active', badgeCls:'gap-bt-ok', sub:'$14,250 remaining · due Aug 1', alertChip:null },
+      { pid:'mortgage', icon:'🏠', name:'Home Mortgage',  id:'••••3301', badge:'Active', badgeCls:'gap-bt-ok', sub:'$287,500 remaining · due Jul 1', alertChip:null },
+    ]
+  },
+  verification: {
+    label: 'Verification',
+    catAlert: null,
+    catChips: ['Full verification history', 'Failed verification attempts', 'How was Emily verified?'],
+    products: [
+      { pid:null, icon:'✓', name:'OTP (SMS)',      id:'', badge:'Passed', badgeCls:'gap-bt-ok', sub:'May 9, 2026 · 2:08 PM', alertChip:null },
+      { pid:null, icon:'✓', name:'SSN Last 4',     id:'', badge:'Passed', badgeCls:'gap-bt-ok', sub:'May 9, 2026 · 2:08 PM', alertChip:null },
+      { pid:null, icon:'✓', name:'Member Number',  id:'', badge:'Passed', badgeCls:'gap-bt-ok', sub:'May 9, 2026 · 2:08 PM', alertChip:null },
+    ]
+  },
+  journey: {
+    label: 'Interaction Journey',
+    isJourney: true,
+    catAlert: null,
+    catChips: ['Summarize last interaction', 'What was discussed about the card?', 'Show fee reversal history'],
+    products: []
+  }
+};
+
+function gapShowDetail(tileId) {
+  const cat = GAP_TILE_CATS[tileId];
+  if (!cat) return;
+
+  const home = document.getElementById('gapHomeView');
+  if (home) home.style.display = 'none';
+
+  const body = document.getElementById('aapBody');
+  if (!body) return;
+
+  document.getElementById('gapDetailView')?.remove();
+
+  // Journey tile gets its own full renderer
+  if (cat.isJourney) {
+    gapShowJourney();
+    return;
+  }
+
+  const alertHtml = cat.catAlert
+    ? `<div class="gap-detail-alert">${cat.catAlert}</div>`
+    : '';
+
+  // For verification and journey: non-clickable rows. For deposits/cards/loans: clickable product cards.
+  const isClickable = ['deposits','cards','loans'].includes(tileId);
+
+  const productsHtml = cat.products.map(p => {
+    const badgeHtml = p.alertChip || p.badge
+      ? `<span class="gap-badge ${p.badgeCls === 'gap-bt-ok' ? 'gap-badge-ok' : 'gap-badge-warn'}">${p.alertChip || p.badge}</span>`
+      : '';
+    if (isClickable && p.pid) {
+      return `<div class="gap-card" onclick="gapShowProductDetail('${p.pid}','${tileId}')">
+        <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        <div class="gap-card-content">
+          <div class="gap-card-label">${p.name} <span style="font-size:10px;color:#a1a1aa;">${p.id}</span></div>
+          <div class="gap-card-sub">${p.sub}</div>
+        </div>
+        <div class="gap-card-right">
+          ${badgeHtml}
+        </div>
+      </div>`;
+    } else {
+      return `<div class="gap-card" style="cursor:default;">
+        <svg class="gap-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/></svg>
+        <div class="gap-card-content">
+          <div class="gap-card-label">${p.name}</div>
+          <div class="gap-card-sub">${p.sub}</div>
+        </div>
+        ${badgeHtml}
+      </div>`;
+    }
+  }).join('');
+
+  const chipsHtml = cat.catChips.length 
+    ? `<div class="gap-chip-section">
+         <div class="gap-chip-label">Try asking</div>
+         <div class="gap-chips-wrap">${cat.catChips.map(c =>
+           `<button class="gap-chip-card" onclick="gapSend('${c.replace(/'/g,"&apos;")}')">${c}</button>`
+         ).join('')}</div>
+       </div>`
+    : '';
+
+  const html = `<div id="gapDetailView" class="gap-detail-view">
+    <div class="gap-breadcrumb">
+      <svg class="gap-bc-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      <button class="gap-bc-link" onclick="gapShowHome()">Home</button>
+    </div>
+    <div class="gap-detail-label">${cat.label}</div>
+    ${alertHtml}
+    ${productsHtml}
+    ${chipsHtml}
+  </div>`;
+
+  body.insertAdjacentHTML('afterbegin', html);
+  const backBar = document.getElementById('gapBackHomeBar');
+  if (backBar) backBar.style.display = '';
+}
+
+/* ── Show full metadata for a specific product (drill-in from category list) ── */
+function gapShowProductDetail(pid, parentTileId) {
+  const d = GAP_PROD_DETAIL[pid];
+  const p = GAP_DATA[pid];
+  if (!d || !p) return;
+
+  document.getElementById('gapDetailView')?.remove();
+
+  const body = document.getElementById('aapBody');
+  if (!body) return;
+
+  const statusCls = d.statusCls === 'ok' ? 'gap-bt-ok' : d.statusCls === 'warn' ? 'gap-bt-warn' : 'gap-bt-danger';
+  const catLabel = GAP_TILE_CATS[parentTileId]?.label || 'Products';
+
+  // Alert banner
+  const alertHtml = d.alert
+    ? `<div class="gap-detail-alert">${d.alert}</div>`
+    : '';
+
+  // Section helper
+  function section(label, rowsArr) {
+    if (!rowsArr || !rowsArr.length) return '';
+    const rows = rowsArr.map(([l,v]) =>
+      `<div class="gap-detail-row">
+        <div class="gap-dr-name">${l}</div>
+        <div class="gap-dr-val">${v}</div>
+      </div>`
+    ).join('');
+    return `<div class="gap-pd-section">
+      <div class="gap-pd-section-lbl">${label}</div>
+      <div class="gap-detail-rows">${rows}</div>
+    </div>`;
+  }
+
+  // Linked relationships section
+  const relsHtml = (d.relationships && d.relationships.length)
+    ? `<div class="gap-pd-section">
+        <div class="gap-pd-section-lbl">Linked</div>
+        <div class="gap-detail-rows">${d.relationships.map(r =>
+          r.pid
+            ? `<button class="gap-detail-row gap-detail-row-link" onclick="gapShowProductDetail('${r.pid}','${parentTileId}')">
+                <div class="gap-dr-name">${r.label}</div>
+                <div class="gap-dr-val">${r.name} ${r.id}</div>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;color:#d4d4d4;margin-left:auto"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>`
+            : `<div class="gap-detail-row">
+                <div class="gap-dr-name">${r.label}</div>
+                <div class="gap-dr-val">${r.name} ${r.id}</div>
+              </div>`
+        ).join('')}</div>
+      </div>`
+    : '';
+
+  // Action chips
+  const chipsHtml = d.prompts.length
+    ? `<div class="gap-chip-section">
+         <div class="gap-chip-label">Try asking</div>
+         <div class="gap-chips-wrap">${d.prompts.map(c =>
+           `<button class="gap-chip-card" onclick="gapSend('${c.replace(/'/g,"&apos;")}')">${c}</button>`
+         ).join('')}</div>
+       </div>`
+    : '';
+
+  const html = `<div id="gapDetailView" class="gap-detail-view">
+    <div class="gap-breadcrumb">
+      <svg class="gap-bc-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      <button class="gap-bc-link" onclick="gapShowHome()">Home</button>
+      <svg class="gap-bc-sep" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      <button class="gap-bc-link" onclick="gapShowDetail('${parentTileId}')">${catLabel}</button>
+    </div>
+    <div class="gap-detail-label">${p.name} <span style="font-size:11px;font-weight:400;color:#71717a;">${p.id}</span></div>
+    <div class="gap-pd-status-row">
+      <span class="gap-badge ${statusCls === 'gap-bt-ok' ? 'gap-badge-ok' : statusCls === 'gap-bt-warn' ? 'gap-badge-warn' : 'gap-badge-danger'}">${p.status}</span>
+      <span class="gap-pd-role">${p.role}</span>
+    </div>
+    ${alertHtml}
+    ${section('Summary', d.rows)}
+    ${section('Product Info', d.info)}
+    ${section('Alerts & Restrictions', d.alerts_detail)}
+    ${relsHtml}
+    ${chipsHtml}
+  </div>`;
+
+  body.insertAdjacentHTML('afterbegin', html);
+  const backBar = document.getElementById('gapBackHomeBar');
+  if (backBar) backBar.style.display = '';
+  // Scroll to top of panel
+  const scroll = document.getElementById('gapScrollArea');
+  if (scroll) scroll.scrollTop = 0;
+}
+
+/* ── Full Interaction Journey view inside AI panel ── */
+function gapShowJourney() {
+  const body = document.getElementById('aapBody');
+  if (!body) return;
+
+  // Build all group + card HTML using IJ_DATA
+  function gapIJCardHTML(card, isLive=false) {
+    const tagHTML = card.tags.map(t =>
+      `<span class="ij-tag ${t.cls}" style="font-size:9px;padding:2px 6px;border-radius:3px;">${t.label}</span>`
+    ).join('');
+
+    const noTags = !card.tags.length
+      ? `<span class="gap-ij-no-tags">No tags &amp; summary available</span>`
+      : '';
+
+    const summarySection = card.summary
+      ? `<div class="gap-ij-summary" id="gapIJSum_${card.id}" style="display:none">
+           <p class="gap-ij-summary-text">${card.summary}</p>
+         </div>`
+      : '';
+
+    const subsSection = card.subs?.length
+      ? `<div class="gap-ij-subs" id="gapIJSubs_${card.id}" style="display:none">
+           ${card.subs.map(s =>
+             `<div class="gap-ij-sub-row">
+               <span class="gap-ij-sub-icon">${s.icon}</span>
+               <div>
+                 <div class="gap-ij-sub-label">${s.label}</div>
+                 <div class="gap-ij-sub-detail">${s.detail}</div>
+               </div>
+             </div>`
+           ).join('')}
+         </div>`
+      : '';
+
+    const summaryBtn = card.summary
+      ? `<button class="gap-ij-action-btn" id="gapIJSumBtn_${card.id}" onclick="gapIJToggleSummary('${card.id}')">
+           <svg class="gap-ij-chevron" id="gapIJChev_${card.id}" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+           Show summary
+         </button>`
+      : '';
+
+    const subsBtn = card.subs?.length
+      ? `<button class="gap-ij-action-btn gap-ij-sub-btn" id="gapIJSubBtn_${card.id}" onclick="gapIJToggleSubs('${card.id}')">
+           <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="3" x2="6" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
+           View sub-interactions
+         </button>`
+      : '';
+
+    // Determine avatar color and channel icon based on handler and channels
+    const avatarBg = card.handler.includes('AI') ? 'linear-gradient(135deg, #7c3aed, #5b21b6)' : 'linear-gradient(135deg, #059669, #047857)';
+    // Pick a random channel icon from the card's channels
+    const channelIcons = ['📞', '💬', '📹', '📧'];
+    const randomIcon = card.channelIcons?.length ? card.channelIcons[0].icon : channelIcons[Math.floor(Math.random() * channelIcons.length)];
+    const avatarIcon = randomIcon;
+
+    // Format: "TODAY · 10:01 AM" or "APR 3, 2026"
+    const timeStr = card.time || 'Unknown time';
+    const liveStatus = isLive ? '<span style="font-size:9px;font-weight:600;color:#059669;margin-left:6px;"><span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#059669;margin-right:3px;"></span>LIVE</span>' : '';
+
+    return `<div class="gap-ij-card-wrapper" id="gapIJCard_${card.id}" data-handler="${card.handler.toLowerCase()}" data-tags="${card.tags.map(t=>t.label).join(' ').toLowerCase()}">
+      <!-- Timeline avatar badge -->
+      <div class="gap-ij-timeline-avatar" style="background:${avatarBg};">${avatarIcon}</div>
+
+      <!-- Card content -->
+      <div class="gap-ij-card">
+        <!-- Compact header: time, live status, handler, channel, queue -->
+        <div class="gap-ij-card-header">
+          <span class="gap-ij-time">${timeStr}</span>
+          ${liveStatus}
+          <span class="gap-ij-header-sep">·</span>
+          <span class="gap-ij-handler-inline">${card.handler}</span>
+          <span class="gap-ij-header-sep">·</span>
+          <span class="gap-ij-channel-inline">${card.channelIcons.map(c=>c.label).join(' / ')}</span>
+          <span class="gap-ij-header-sep">·</span>
+          <span class="gap-ij-queue-inline">${card.queue}</span>
+        </div>
+
+        <!-- Bold title -->
+        <div class="gap-ij-title">${card.title || 'Interaction'}</div>
+
+        <!-- Summary text always visible (description) -->
+        ${card.summary ? `<p class="gap-ij-description">${card.summary}</p>` : ''}
+
+        <!-- Tags -->
+        ${(tagHTML || noTags) ? `<div class="gap-ij-tags">${tagHTML || noTags}</div>` : ''}
+
+        <!-- Metadata footer -->
+        <div class="gap-ij-metadata">
+          <span class="gap-ij-duration">${card.duration || '4m'}</span>
+          ${card.sentiment ? `<span class="gap-ij-sentiment">sentiment: ${card.sentiment}</span>` : ''}
+          ${card.csat ? `<span class="gap-ij-csat">CSAT ${card.csat}</span>` : ''}
+        </div>
+
+        <!-- Toggle buttons for detailed info -->
+        ${(summaryBtn || subsBtn) ? `<div class="gap-ij-actions">${summaryBtn}${subsBtn}</div>` : ''}
+
+        <!-- Expandable sections -->
+        ${subsSection}
+      </div>
+    </div>`;
+  }
+
+  const groupsHTML = IJ_DATA.map((g, gi) =>
+    `<div class="gap-ij-group">
+       <div class="gap-ij-group-label">${g.group}</div>
+       ${g.cards.map((card, ci) => {
+         const isFirst = gi === 0 && ci === 0;
+         return gapIJCardHTML(card, isFirst);
+       }).join('')}
+     </div>`
+  ).join('');
+
+  const html = `<div id="gapDetailView" class="gap-detail-view gap-journey-view">
+    <div class="gap-breadcrumb">
+      <svg class="gap-bc-arrow" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      <button class="gap-bc-link" onclick="gapShowHome()">Home</button>
+    </div>
+    <div class="gap-detail-label">Interaction Journey</div>
+
+    <!-- Search bar -->
+    <div class="gap-ij-search-bar">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#b0afc8;flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="gapIJSearchInput" class="gap-ij-search-input" placeholder="Search keywords" oninput="gapIJSearch(this.value)" />
+    </div>
+
+    <!-- Journey cards -->
+    <div id="gapIJList" class="gap-ij-list">${groupsHTML}</div>
+
+    <!-- Ask chips -->
+    <div class="gap-chip-section">
+      <div class="gap-chip-label">Try asking</div>
+      <div class="gap-chips-wrap">
+        <button class="gap-chip-card" onclick="gapSend('Summarize last interaction')">Summarize last interaction</button>
+        <button class="gap-chip-card" onclick="gapSend('What was discussed about the card?')">Card discussion summary</button>
+        <button class="gap-chip-card" onclick="gapSend('Show fee reversal history')">Fee reversal history</button>
+      </div>
+    </div>
+  </div>`;
+
+  body.insertAdjacentHTML('afterbegin', html);
+  const backBar = document.getElementById('gapBackHomeBar');
+  if (backBar) backBar.style.display = '';
+  const scroll = document.getElementById('gapScrollArea');
+  if (scroll) scroll.scrollTop = 0;
+}
+
+function gapIJToggleSummary(id) {
+  const panel = document.getElementById('gapIJSum_' + id);
+  const chev  = document.getElementById('gapIJChev_' + id);
+  const btn   = document.getElementById('gapIJSumBtn_' + id);
+  if (!panel) return;
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : '';
+  if (chev) chev.style.transform = open ? '' : 'rotate(180deg)';
+  if (btn) btn.innerHTML = btn.innerHTML.replace(open ? 'Hide summary' : 'Show summary', open ? 'Show summary' : 'Hide summary');
+}
+
+function gapIJToggleSubs(id) {
+  const panel = document.getElementById('gapIJSubs_' + id);
+  const btn   = document.getElementById('gapIJSubBtn_' + id);
+  if (!panel) return;
+  const open = panel.style.display !== 'none';
+  panel.style.display = open ? 'none' : '';
+  if (btn) {
+    const svg = btn.querySelector('svg').outerHTML;
+    btn.innerHTML = svg + (open ? ' View sub-interactions' : ' Hide sub-interactions');
+  }
+}
+
+function gapIJSearch(query) {
+  const q = query.toLowerCase().trim();
+  const list = document.getElementById('gapIJList');
+  if (!list) return;
+  list.querySelectorAll('.gap-ij-group').forEach(group => {
+    let groupVisible = false;
+    group.querySelectorAll('.gap-ij-card').forEach(card => {
+      const text = (card.dataset.handler + ' ' + card.dataset.tags + ' ' + card.textContent).toLowerCase();
+      const match = !q || text.includes(q);
+      card.style.display = match ? '' : 'none';
+      if (match) groupVisible = true;
+    });
+    group.style.display = groupVisible ? '' : 'none';
+  });
+}
+
+/* ── Journey view CSS (injected once) ── */
+(function() {
+  if (document.getElementById('gapJourneyCSS')) return;
+  const style = document.createElement('style');
+  style.id = 'gapJourneyCSS';
+  style.textContent = `
+.gap-journey-view { padding: 10px 10px 8px; }
+.gap-ij-search-bar {
+  display: flex; align-items: center; gap: 7px;
+  padding: 6px 10px; margin-bottom: 12px;
+  background: var(--s1); border: 1px solid var(--border); border-radius: 10px;
+}
+.gap-ij-search-input {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-size: 11px; font-family: var(--f); color: var(--t1);
+}
+.gap-ij-search-input::placeholder { color: #b0afc8; }
+.gap-ij-list { display: flex; flex-direction: column; gap: 0; }
+.gap-ij-group { margin-bottom: 16px; }
+.gap-ij-group-label {
+  font-size: 10px; font-weight: 600; color: #9896b0;
+  padding: 0 0 10px; letter-spacing: .02em; text-transform: uppercase;
+}
+/* Timeline wrapper — avatar on left, card on right */
+.gap-ij-card-wrapper {
+  display: flex; gap: 8px; align-items: flex-start;
+  margin-bottom: 12px; position: relative;
+}
+.gap-ij-card-wrapper::before {
+  content: '';
+  position: absolute; left: 13px; top: 28px;
+  width: 1px; height: calc(100% - 28px);
+  background: rgba(0,0,0,.1);
+}
+.gap-ij-card-wrapper:last-child::before { display: none; }
+/* Avatar badge */
+.gap-ij-timeline-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 14px; font-weight: 600; color: #fff;
+  flex-shrink: 0; border: 2px solid #fafaf8;
+  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+}
+/* Main card */
+.gap-ij-card {
+  flex: 1; background: #fff; border: 1px solid #e5e4f0;
+  border-radius: 12px; padding: 11px 12px; overflow: hidden;
+}
+.gap-ij-card-header {
+  display: flex; align-items: center;
+  gap: 4px; flex-wrap: wrap;
+  font-size: 10px; color: #9896b0; margin-bottom: 6px;
+  line-height: 1.4;
+}
+.gap-ij-time { font-weight: 600; color: #6b6987; }
+.gap-ij-header-sep { color: #d4d4d4; }
+.gap-ij-handler-inline { font-weight: 500; color: #0c0b18; }
+.gap-ij-channel-inline { color: #9896b0; }
+.gap-ij-queue-inline { color: #9896b0; }
+/* Bold title */
+.gap-ij-title {
+  font-size: 12px; font-weight: 700; color: #0c0b18;
+  margin-bottom: 7px; line-height: 1.3;
+}
+/* Description paragraph */
+.gap-ij-description {
+  font-size: 10.5px; color: #6b6987; line-height: 1.55;
+  margin: 0 0 8px; margin-bottom: 8px;
+}
+/* Tags row */
+.gap-ij-tags {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  margin-bottom: 7px;
+}
+.gap-ij-no-tags { font-size: 9.5px; color: #b0afc8; font-style: italic; }
+/* Metadata footer */
+.gap-ij-metadata {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 9px; color: #b0afc8;
+  padding-top: 6px; border-top: 1px solid rgba(0,0,0,.04);
+  margin-bottom: 6px;
+}
+.gap-ij-duration { font-weight: 600; }
+.gap-ij-sentiment { color: #9896b0; }
+.gap-ij-csat { color: #9896b0; }
+/* Action buttons */
+.gap-ij-actions {
+  display: flex; align-items: center; gap: 12px;
+  padding-top: 6px;
+}
+.gap-ij-action-btn {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 600; color: #0d7c52;
+  background: none; border: none; cursor: pointer; font-family: var(--f);
+  transition: opacity .12s;
+}
+.gap-ij-action-btn:hover { opacity: .7; }
+.gap-ij-sub-btn { color: #5b5fcf; }
+.gap-ij-chevron { transition: transform .25s; }
+.gap-ij-chevron.rotated { transform: rotate(180deg); }
+/* Expandable panels */
+.gap-ij-subs {
+  border-top: 1px solid rgba(0,0,0,.06);
+  padding: 7px 0 8px; background: rgba(0,0,0,.018);
+  margin-top: 6px;
+}
+.gap-ij-sub-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,.04);
+}
+.gap-ij-sub-row:last-child { border-bottom: none; }
+.gap-ij-sub-icon { font-size: 12px; width: 18px; text-align: center; flex-shrink: 0; margin-top: 1px; }
+.gap-ij-sub-label { font-size: 10.5px; font-weight: 600; color: #0c0b18; margin-bottom: 1px; }
+.gap-ij-sub-detail { font-size: 9.5px; color: #9896b0; line-height: 1.4; }
+  `;
+  document.head.appendChild(style);
+})();
+
+/* ── Customer Memory toggle ── */
+let _memoryOpen = false;
+function gapToggleMemory() {
+  _memoryOpen = !_memoryOpen;
+  const dropdown = document.getElementById('gapMemoryDropdown');
+  const chevron = document.getElementById('gapMemChev');
+  if (dropdown) dropdown.style.display = _memoryOpen ? '' : 'none';
+  if (chevron) chevron.style.transform = _memoryOpen ? 'rotate(180deg)' : '';
+}
+
+function gapShowHome() {
+  // Remove detail view and thread messages
+  document.getElementById('gapDetailView')?.remove();
+  // Clear thread messages but keep home view node
+  const body = document.getElementById('aapBody');
+  if (body) {
+    // Remove all thread bubbles and AI messages, keep home view
+    [...body.children].forEach(el => {
+      if (el.id !== 'gapHomeView') el.remove();
+    });
+  }
+  // Show home view
+  const home = document.getElementById('gapHomeView');
+  if (home) {
+    home.style.display = '';
+  } else {
+    if (body) body.insertAdjacentHTML('afterbegin', gapBuildLandingCard());
+  }
+  // Hide back bar
+  const backBar = document.getElementById('gapBackHomeBar');
+  if (backBar) backBar.style.display = 'none';
+  // Scroll to top
+  const scroll = document.getElementById('gapScrollArea');
+  if (scroll) scroll.scrollTop = 0;
+}
+
+/* ── When a query is sent: hide home view, keep thread in aapBody ── */
+const _gapSendOriginal = null; // patched below after gapSend is defined
+
 /* ── Smooth scroll helper — scrolls the gap-scroll container, not aapBody ── */
 function gapScrollLatest() {
   const scroll = document.getElementById('gapScrollArea');
@@ -9133,6 +10722,14 @@ function gapSend(preset) {
   if (!query) return;
   if (input) input.value = '';
   _gapCurrentQuery = query;
+
+  // Hide home and detail views — thread takes over
+  const homeView = document.getElementById('gapHomeView');
+  if (homeView) homeView.style.display = 'none';
+  document.getElementById('gapDetailView')?.remove();
+  // Show back-to-home bar
+  const backBar = document.getElementById('gapBackHomeBar');
+  if (backBar) backBar.style.display = '';
 
   const body = document.getElementById('aapBody');
   if (!body) return;
@@ -9678,11 +11275,12 @@ function gapLaunchWorkflow(wfId) {
 
 /* ── Quick action chip helper ── */
 function wfChips(...ids) {
-  return `<div class="gap-action-chips">${ids.map(id=>{
+  const chipHtml = ids.map(id=>{
     const def=GAP_WF_DEFS[id];
     if(!def)return '';
-    return `<button class="gap-action-chip gap-wf-chip" onclick="gapLaunchWorkflow('${id}')">${def.icon} ${def.title}</button>`;
-  }).join('')}</div>`;
+    return `<button class="gap-chip-card" onclick="gapLaunchWorkflow('${id}')">${def.icon} ${def.title}</button>`;
+  }).join('');
+  return chipHtml ? `<div class="gap-chip-section"><div class="gap-chip-label">Actions</div><div class="gap-chips-wrap">${chipHtml}</div></div>` : '';
 }
 let mcrCollapsed = false;
 function mcrToggle() {
@@ -13465,58 +15063,62 @@ function ihsToggle() {
 const IJ_DATA = [
   { group:'1 day ago', cards:[
     { id:'ij1',
-      channelIcons:[{icon:'📹',cls:'ij-ch-video',label:'Video'},{icon:'✏️',cls:'ij-ch-chat',label:'Chat'}],
-      handler:'Emma Blue', queue:'Main Contact Centre',
-      tags:[{label:'Car loan',cls:'ij-tag-pink'},{label:'Documents sharing info',cls:'ij-tag-pink'},{label:'Member Number',cls:'ij-tag-green'}],
-      summary:'Emily was connected via video to agent Emma Blue to discuss a car loan document request. Agent shared the required documents via the secure portal and verified member number. Interaction resolved with documents delivered.',
+      time:'TODAY · 10:01 AM', channelIcons:[{icon:'📹',cls:'ij-ch-video',label:'Video'},{icon:'✏️',cls:'ij-ch-chat',label:'Chat'}],
+      handler:'Andrew Reynold (you)', queue:'Lending',
+      tags:[{label:'Loan payment',cls:'ij-tag-pink'},{label:'Step-up verify',cls:'ij-tag-amber'}],
+      title:'In progress — current interaction',
+      summary:null, duration:'2m', sentiment:null, csat:null,
       subs:[
-        {icon:'🤖',label:'AI Voice Bot',detail:'Greeting + intent capture — routed to video queue'},
-        {icon:'👤',label:'Emma Blue — Human Agent',detail:'Verified identity · Shared loan documents · Resolved'},
+        {icon:'🤖',label:'AI Voice Bot',detail:'Greeting + intent capture — routed to lending queue'},
+        {icon:'👤',label:'You — Human Agent',detail:'Verified identity · Discussing loan payment options'},
+      ],
+    },
+    { id:'ij1b',
+      time:'TODAY · 9:54 AM', channelIcons:[{icon:'📞',cls:'ij-ch-voice',label:'Voice'}],
+      handler:'Alex (AI Assistant)', queue:'IVR',
+      tags:[{label:'Loan payment',cls:'ij-tag-pink'},{label:'Escalated',cls:'ij-tag-amber'},{label:'Phone-verified',cls:'ij-tag-green'}],
+      title:'Phone-verified, escalated to human',
+      summary:'Member contacted IVR about an auto-loan payment. Phone verified. Escalated when she asked for a custom payment amount above the autopay minimum.',
+      duration:'4m', sentiment:'neutral', csat:null,
+      subs:[
+        {icon:'🤖',label:'Alex — AI Assistant',detail:'Phone verification · Intent detection · Escalation triggered'},
       ],
     },
   ]},
   { group:'2 days ago', cards:[
     { id:'ij2',
-      channelIcons:[{icon:'📞',cls:'ij-ch-voice',label:'Voice'},{icon:'🔄',cls:'ij-ch-red',label:'Transfer'}],
-      handler:'Diana Hernandez', queue:'Member Services',
-      tags:[], summary:null,
+      time:'APR 3, 2026', channelIcons:[{icon:'📞',cls:'ij-ch-voice',label:'Voice'}],
+      handler:'Sarah Walters', queue:'Collections',
+      tags:[{label:'Balance inquiry',cls:'ij-tag-teal'},{label:'OTP',cls:'ij-tag-amber'},{label:'Member #',cls:'ij-tag-green'}],
+      title:'Balance inquiry · resolved',
+      summary:'Member called to confirm auto-loan due date. Agent verified identity (OTP + Member #) and walked through next 3 payments. Member declined autopay enrollment.',
+      duration:'4m', sentiment:null, csat:'5/5',
       subs:[
-        {icon:'🤖',label:'AI Voice Bot',detail:'Handled initial greeting — transferred to member services'},
-        {icon:'👤',label:'Diana Hernandez — Human Agent',detail:'No tags or summary recorded for this session'},
+        {icon:'📞',label:'Voice Call',detail:'Member initiated — routed to Collections'},
+        {icon:'👤',label:'Sarah Walters — Human Agent',detail:'Identity verified · Payment schedule reviewed · Autopay declined'},
       ],
     },
     { id:'ij3',
-      channelIcons:[{icon:'💬',cls:'ij-ch-chat',label:'Chat'},{icon:'👥',cls:'ij-ch-group',label:'Transfer'}],
-      handler:'Diana Hernandez', queue:'Collections',
-      tags:[{label:'Secure Link',cls:'ij-tag-teal'},{label:'Verification Code Info',cls:'ij-tag-amber'},{label:'Transfer Money',cls:'ij-tag-teal'},{label:'+3 More',cls:'ij-tag-more'}],
-      summary:'Member contacted collections regarding a pending transfer dispute. Agent sent a secure link for identity verification, provided verification code information, and initiated a transfer money workflow. Three additional workflow steps completed — escalation note filed.',
+      time:'FEB 18, 2026', channelIcons:[{icon:'💬',cls:'ij-ch-chat',label:'Chat'}],
+      handler:'Marcus Thomas', queue:'Member services',
+      tags:[{label:'Card unlock',cls:'ij-tag-teal'},{label:'Travel notice',cls:'ij-tag-green'},{label:'OTP + SSN',cls:'ij-tag-amber'}],
+      title:'Travel notice + card unlock',
+      summary:'Card declined while travelling. Agent verified (OTP + SSN last 4), set travel notice for May–June, re-authorised debit card. Member happy.',
+      duration:'6m', sentiment:null, csat:'5/5',
       subs:[
-        {icon:'🤖',label:'AI Chat Bot',detail:'Routed to collections after intent detection'},
-        {icon:'👤',label:'Diana Hernandez — Human Agent',detail:'Secure link sent · Verification completed · Transfer initiated'},
-        {icon:'🔗',label:'Secure Link Session',detail:'Member authenticated via OTP — document signed'},
-        {icon:'⬆',label:'Escalation Filed',detail:'Transfer dispute escalated to supervisor queue'},
+        {icon:'💬',label:'Chat Message',detail:'Member initiated — Member services queue'},
+        {icon:'👤',label:'Marcus Thomas — Human Agent',detail:'Card verified · Travel notice set · Re-authorisation complete'},
       ],
     },
     { id:'ij4',
-      channelIcons:[{icon:'💬',cls:'ij-ch-chat',label:'Chat'},{icon:'📌',cls:'ij-ch-tag',label:'Tag'}],
-      handler:'Diana Hernandez', queue:'Collections',
-      tags:[{label:'Secure Link',cls:'ij-tag-teal'},{label:'Verification Code Info',cls:'ij-tag-amber'},{label:'Transfer Money',cls:'ij-tag-teal'},{label:'+3 More',cls:'ij-tag-more'}],
-      summary:'Follow-up interaction for the same transfer dispute. Member confirmed receipt of secure link and completed identity verification. Transfer money workflow finalized. No further escalation required.',
+      time:'JAN 6, 2026', channelIcons:[{icon:'📞',cls:'ij-ch-voice',label:'Voice'}],
+      handler:'Alex (AI Assistant)', queue:'IVR self-serve',
+      tags:[{label:'Statement download',cls:'ij-tag-teal'},{label:'Self-serve',cls:'ij-tag-green'}],
+      title:'Statement download · self-serve',
+      summary:'Voice-biometric verified. Downloaded Dec statement (PDF) via IVR. Self-serve resolution — no agent escalation needed.',
+      duration:'3m', sentiment:null, csat:null,
       subs:[
-        {icon:'👤',label:'Diana Hernandez — Human Agent',detail:'Follow-up on transfer workflow · Confirmed resolution'},
-        {icon:'🔗',label:'Secure Link Session',detail:'Re-authentication completed'},
-      ],
-    },
-  ]},
-  { group:'Earlier this week', cards:[
-    { id:'ij5',
-      channelIcons:[{icon:'📞',cls:'ij-ch-voice',label:'Voice'}],
-      handler:'Michael Torres', queue:'Loan Department',
-      tags:[{label:'Auto Loan',cls:'ij-tag-pink'},{label:'Skip Payment Request',cls:'ij-tag-amber'}],
-      summary:'Emily called the loan department requesting a skip payment on her auto loan. Agent reviewed eligibility — Emily is a joint borrower and skip payment was restricted. Caller was informed and a servicing note was created for the primary owner.',
-      subs:[
-        {icon:'🤖',label:'AI Voice Bot',detail:'Intent: loan inquiry — routed to loan department'},
-        {icon:'👤',label:'Michael Torres — Human Agent',detail:'Reviewed skip payment eligibility · Restriction noted · Servicing note created'},
+        {icon:'🤖',label:'Alex — AI Voice IVR',detail:'Voice verification · Document delivery · Self-service'},
       ],
     },
   ]},
@@ -18350,20 +19952,7 @@ function txnToggleRow(rowId, productId) {
 .gap-ai-content *, .gap-ai-msg-body * { max-width:100%; box-sizing:border-box; }
 
 /* ── User message bubble ── */
-.gap-user-bubble{
-  margin:8px 10px 4px;padding:8px 12px;
-  background:rgba(91,95,207,.1);border-radius:10px 10px 3px 10px;
-  font-size:12px;color:#2d2b4e;font-weight:500;text-align:right;
-}
-
-/* ── AI message — left-border design, full width ── */
-.gap-ai-msg{
-  margin:4px 10px 12px;
-  border-left:2px solid rgba(91,95,207,.28);
-  padding-left:10px;
-}
-.gap-ai-msg-lbl{ display:none; }  /* label removed per spec */
-.gap-ai-msg-body{width:100%;overflow-x:hidden;}
+/* User bubble and AI message styles now defined in unified GAP_BENTO_CSS */
 
 /* ── Direct answer text ── */
 .gap-ans-text{
@@ -18599,11 +20188,7 @@ function txnToggleRow(rowId, productId) {
 }
 .gap-chip:hover{border-color:rgba(91,95,207,.3);background:rgba(91,95,207,.04);color:#3d41a0;}
 /* Conversation bubbles */
-.gap-user-bubble{
-  margin:8px 12px 4px;padding:8px 12px;
-  background:rgba(91,95,207,.08);border-radius:10px 10px 2px 10px;
-  font-size:11px;color:#3a3854;font-weight:500;text-align:right;
-}
+/* User bubble styles in unified CSS above */
 .gap-ai-bubble{
   display:flex;align-items:flex-start;gap:7px;
   margin:4px 12px 8px;
@@ -18865,18 +20450,11 @@ function txnToggleRow(rowId, productId) {
 
 /* ══ LEFT: MEMBER CONTEXT RAIL ══════════════════════════ */
 .mcr-rail{
-  width:240px;min-width:200px;max-width:260px;flex-shrink:0;
-  display:flex;flex-direction:column;
-  border-right:1px solid rgba(0,0,0,.08);
-  background:#fafafa;overflow:hidden;
-  transition:width .22s cubic-bezier(0.16,1,0.3,1),
-             min-width .22s cubic-bezier(0.16,1,0.3,1);
+  display:none !important;
 }
 /* Collapsed state — narrow strip */
 .mcr-rail.mcr-collapsed{
-  width:32px !important;
-  min-width:32px !important;
-  max-width:32px !important;
+  display:none !important;
 }
 .mcr-rail.mcr-collapsed .mcr-scroll{ display:none; }
 .mcr-rail.mcr-collapsed .mcr-collapse-bar{ display:none; }
