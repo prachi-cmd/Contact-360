@@ -1106,6 +1106,7 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
   scrollbar-color:rgba(91,95,207,.2) transparent;
   padding:12px;
   background:transparent;
+  container-type:inline-size;
 }
 .gap-scroll::-webkit-scrollbar{width:6px;}
 .gap-scroll::-webkit-scrollbar-thumb{background:rgba(91,95,207,.2);border-radius:3px;}
@@ -8778,6 +8779,11 @@ const GAP_BENTO_CSS = `
   gap: 8px;
   margin-bottom: 0;
 }
+@container (max-width: 300px) {
+  .gap-products-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* ══════════════════════════════════════════════════════════════
    MEMBER HEADER
@@ -9205,12 +9211,23 @@ const GAP_BENTO_CSS = `
   border-bottom: 1px solid #e5e5e5;
 }
 
+.gap-detail-rows {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+@container (max-width: 300px) {
+  .gap-detail-rows {
+    grid-template-columns: 1fr;
+  }
+}
+
 .gap-detail-row {
   padding: 8px 10px;
   background: #fff;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
-  margin-bottom: 4px;
+  border: 0.5px solid rgba(91,95,207,.12);
+  border-radius: 7px;
+  margin-bottom: 0;
 }
 .gap-detail-row:last-child {
   margin-bottom: 0;
@@ -9238,11 +9255,12 @@ const GAP_BENTO_CSS = `
   font-family: inherit;
   text-align: left;
   background: #fff;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
+  border: 0.5px solid rgba(91,95,207,.12);
+  border-radius: 7px;
   padding: 8px 10px;
-  margin-bottom: 4px;
+  margin-bottom: 0;
   transition: border-color .15s, background .15s;
+  grid-column: 1 / -1;
 }
 .gap-detail-row-link:last-child {
   margin-bottom: 0;
@@ -9565,6 +9583,29 @@ const GAP_BENTO_CSS = `
    ══════════════════════════════════════════════════════════════ */
 .gap-evidence {
   margin-bottom: 6px;
+}
+.gap-ev-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+@container (max-width: 300px) {
+  .gap-ev-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.gap-ev-row { display: contents; }
+/* Full-width items always span both columns */
+.gap-ev-header,
+.gap-ev-sep,
+.gap-ev-txn,
+.verif-list,
+.verif-evt,
+.gap-rel-row,
+.gap-rel-list,
+.gap-ev-grid > div:not(.gap-ev-row),
+.gap-ev-grid > p {
+  grid-column: 1 / -1;
 }
 .gap-ev-header {
   background: #f5f5f5;
@@ -9936,8 +9977,8 @@ const GAP_DATA = {
   debitcard2: { name:'Visa Debit Card',    id:'\u2022\u2022\u2022\u20227439', role:'Not Associated',     status:'Active',   balance:null },
 };
 
-function evR(l,v){return `<div class="gap-card" style="cursor:default;"><div class="gap-card-content"><div class="gap-card-label" style="font-size:10px;font-weight:600;">${l}</div><div class="gap-card-sub">${v}</div></div></div>`;}
-function evBlock(rows){return `<div class="gap-evidence">${rows}</div>`;}
+function evR(l,v){return `<div class="gap-ev-row"><div class="gap-card" style="cursor:default;"><div class="gap-card-content"><div class="gap-card-label" style="font-size:10px;font-weight:600;">${l}</div><div class="gap-card-sub">${v}</div></div></div></div>`;}
+function evBlock(rows){return `<div class="gap-evidence"><div class="gap-ev-grid">${rows}</div></div>`;}
 function chips(...ls){return ls.length ? `<div class="gap-chip-section"><div class="gap-chip-label">Try asking</div><div class="gap-chips-wrap">${ls.map(l=>`<button class="gap-chip-card" onclick="gapSend('${l.replace(/'/g,"&apos;")}')">${l}</button>`).join('')}</div></div>` : '';}
 
 /* ── Reusable SVG donut chart ──
@@ -10149,39 +10190,68 @@ function gapBuildAnswer(type, productId) {
 
     + `<div class="mb-card">
         <div class="mb-card-hdr">
-          <span class="mb-cat">Opportunities</span>
-          <span class="mb-badge mb-badge-eoc">End of call</span>
+          <span class="mb-cat">Active intent</span>
+          <span class="mb-badge mb-badge-high">High</span>
         </div>
-        <div class="mb-opp-list">
-          <div class="mb-opp-row">
-            <div class="mb-opp-ico mb-ico-teal">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#0d7c52" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div style="padding:4px 0;">
+          <div style="display:flex;align-items:flex-start;gap:9px;padding:8px 12px;border-bottom:0.5px solid #f5f5f5;">
+            <div style="width:6px;height:6px;border-radius:50%;background:#5b5fcf;flex-shrink:0;margin-top:4px;"></div>
+            <div style="flex:1;">
+              <div style="font-size:11px;font-weight:500;color:#0c0b18;line-height:1.3;">Visited auto loan rate calculator</div>
+              <div style="font-size:9.5px;color:#b0afc8;margin-top:2px;">3 times this week · last visited May 30</div>
             </div>
-            <div class="mb-opp-body">
-              <div class="mb-opp-title">Refinance window</div>
-              <div class="mb-opp-sub">Auto loan · 35% paid · good standing</div>
-            </div>
-            <div class="mb-opp-chip mb-chip-refer">Refer</div>
           </div>
-          <div class="mb-opp-row">
-            <div class="mb-opp-ico mb-ico-purple">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#5b5fcf" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          <div style="display:flex;align-items:flex-start;gap:9px;padding:8px 12px;border-bottom:0.5px solid #f5f5f5;">
+            <div style="width:6px;height:6px;border-radius:50%;background:#5b5fcf;flex-shrink:0;margin-top:4px;"></div>
+            <div style="flex:1;">
+              <div style="font-size:11px;font-weight:500;color:#0c0b18;line-height:1.3;">Compared 60 vs 72-month loan terms</div>
+              <div style="font-size:9.5px;color:#b0afc8;margin-top:2px;">Website · May 28</div>
             </div>
-            <div class="mb-opp-body">
-              <div class="mb-opp-title">Open High-Yield Savings</div>
-              <div class="mb-opp-sub">Viewed terms twice · deposits trending ↑</div>
-            </div>
-            <div class="mb-opp-chip mb-chip-refer">Refer</div>
           </div>
-          <div class="mb-opp-row">
-            <div class="mb-opp-ico mb-ico-amber">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <div style="display:flex;align-items:flex-start;gap:9px;padding:8px 12px;border-bottom:0.5px solid #f5f5f5;">
+            <div style="width:6px;height:6px;border-radius:50%;background:#5b5fcf;flex-shrink:0;margin-top:4px;"></div>
+            <div style="flex:1;">
+              <div style="font-size:11px;font-weight:500;color:#0c0b18;line-height:1.3;">Opened High-Yield Savings product page</div>
+              <div style="font-size:9.5px;color:#b0afc8;margin-top:2px;">Twice in last 30 days · last May 22</div>
             </div>
-            <div class="mb-opp-body">
-              <div class="mb-opp-title">Set up auto-pay</div>
-              <div class="mb-opp-sub">38 manual payments across loans</div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:9px;padding:8px 12px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:#9896b0;flex-shrink:0;margin-top:4px;"></div>
+            <div style="flex:1;">
+              <div style="font-size:11px;font-weight:500;color:#0c0b18;line-height:1.3;">Searched mortgage refinance rates</div>
+              <div style="font-size:9.5px;color:#b0afc8;margin-top:2px;">External browser · inferred · May 19</div>
             </div>
-            <div class="mb-opp-chip mb-chip-offer">Offer</div>
+          </div>
+        </div>
+      </div>`
+
+    + `<div class="mb-card">
+        <div class="mb-card-hdr">
+          <span class="mb-cat">Opportunities</span>
+          <span class="mb-badge mb-badge-eoc">2 active</span>
+        </div>
+        <div style="padding:4px 0;">
+          <div style="padding:8px 12px;border-bottom:0.5px solid #f5f5f5;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+              <div style="font-size:11px;font-weight:500;color:#0c0b18;flex:1;">Auto Loan Refinance</div>
+              <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(91,95,207,.08);border:0.5px solid rgba(91,95,207,.2);color:#3d41a0;">In Underwriting</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+              <div><div style="font-size:9.5px;color:#b0afc8;">Owner</div><div style="font-size:10.5px;color:#0c0b18;">Andrew R.</div></div>
+              <div><div style="font-size:9.5px;color:#b0afc8;">Value</div><div style="font-size:10.5px;color:#0c0b18;">$22,000</div></div>
+              <div><div style="font-size:9.5px;color:#b0afc8;">Close date</div><div style="font-size:10.5px;color:#0c0b18;">Jul 15</div></div>
+            </div>
+          </div>
+          <div style="padding:8px 12px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;">
+              <div style="font-size:11px;font-weight:500;color:#0c0b18;flex:1;">HYSA Account Opening</div>
+              <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(245,158,11,.08);border:0.5px solid rgba(245,158,11,.25);color:#92400e;">Application Started</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;">
+              <div><div style="font-size:9.5px;color:#b0afc8;">Owner</div><div style="font-size:10.5px;color:#0c0b18;">Sarah K.</div></div>
+              <div><div style="font-size:9.5px;color:#b0afc8;">Value</div><div style="font-size:10.5px;color:#0c0b18;">$10,000</div></div>
+              <div><div style="font-size:9.5px;color:#b0afc8;">Close date</div><div style="font-size:10.5px;color:#0c0b18;">Aug 5</div></div>
+            </div>
           </div>
         </div>
       </div>`
@@ -16103,17 +16173,17 @@ function arToggleCard(id, event) {
 .aap-home-btn{
   width:28px;height:28px;
   display:flex;align-items:center;justify-content:center;
-  background:transparent;
-  border:0.5px solid rgba(91,95,207,.2);
+  background:rgba(0,0,0,.06);
+  border:0.5px solid rgba(0,0,0,.12);
   border-radius:5px;
   cursor:pointer;flex-shrink:0;
-  color:#9896b0;
+  color:#6b6987;
   transition:all .15s;
   position:relative;
 }
 .aap-home-btn:hover{
-  background:rgba(91,95,207,.06);
-  border-color:rgba(91,95,207,.35);
+  background:rgba(91,95,207,.1);
+  border-color:rgba(91,95,207,.3);
   color:#5b5fcf;
 }
 .aap-home-btn:hover::after{
