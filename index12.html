@@ -5972,14 +5972,6 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
         <div id="gapWfActive" style="display:none"></div>
       </div>
 
-      <!-- Back to Home bar — shown only when in thread/detail view -->
-      <div class="gap-back-home-bar" id="gapBackHomeBar" style="display:none">
-        <button class="gap-back-home-btn" onclick="gapShowHome()">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          Back to Home
-        </button>
-      </div>
-
       <!-- NBA — end of call, above prompt bar -->
       <div class="aap-nba-bottom" id="aapNba">
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;color:#0d7c52;margin-top:1px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -5990,8 +5982,12 @@ body{font-family:var(--f);background:var(--s0);color:var(--t1);display:flex;flex
         <button class="aap-nba-dismiss" onclick="document.getElementById('aapNba').style.display='none'" title="Dismiss">✕</button>
       </div>
 
-      <!-- Fixed prompt bar — always just above input -->
+      <!-- Fixed prompt bar — Home button + quick chips in one row -->
       <div class="aap-prompt-bar" id="aapPromptBar">
+        <button class="aap-home-btn" id="aapHomeBtn" style="display:none;" onclick="gapShowHome()" title="Back to home">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </button>
+        <div class="aap-prompt-divider" id="aapPromptDivider" style="display:none;"></div>
         <div class="aap-prompt-chips" id="aapPromptChips"></div>
       </div>
 
@@ -8435,7 +8431,7 @@ const GAP_PROD_DETAIL = {
     name:'Everyday Checking', masked:'4821', status:'OLB Restricted', statusCls:'warn',
     rows: [['Role','Primary Owner'],['Available Balance','$4,782.15'],['Actual Balance','$5,000.15'],['Pending','3 items · $218.00']],
     alert: 'OLB Restricted — Online Banking access disabled since Mar 1, 2025',
-    prompts: ['Recent transactions','Checking account balance','Account restrictions'],
+    prompts: ['Recent checking transactions','Checking account balance','Account restrictions'],
     info: [['Product Type','Classic Checking'],['Open Date','March 12, 2018'],['Routing Number','321470665'],['Branch','Bend Main Branch'],['Ownership','Primary Owner']],
     alerts_detail: [['OLB Restricted','Active'],['Reason','Online Banking access manually disabled'],['Effective Date','March 1, 2025'],['ACH','Not restricted'],['Fraud Alert','None']],
     relationships: [
@@ -8448,7 +8444,7 @@ const GAP_PROD_DETAIL = {
     name:'Emergency Savings', masked:'1039', status:'Active', statusCls:'ok',
     rows: [['Role','Joint Owner'],['Available Balance','$12,450.00'],['Interest YTD','$24.38'],['APY','0.05%']],
     alert: null,
-    prompts: ['Recent transactions','Savings account balance','Account restrictions'],
+    prompts: ['Recent savings transactions','Savings account balance','Account restrictions'],
     info: [['Product Type','Regular Savings'],['Open Date','March 12, 2018'],['APY','0.05%'],['Min Balance','None'],['Ownership','Joint Owner']],
     alerts_detail: [['Alerts','None'],['Restrictions','None'],['Fraud Alert','None']],
     relationships: [
@@ -8600,7 +8596,7 @@ function gapBuildContextSwitchMsg(pid) {
   const p  = GAP_DATA[pid] || {};
   const d  = GAP_PROD_DETAIL[pid] || {};
   const rows = (d.rows || []).map(([l,v]) => evR(l,v)).join('');
-  const prompts = (d.prompts || ['Recent transactions','Product information','Linked relationships']).slice(0,4);
+  const prompts = (d.prompts || ['Recent checking transactions','Product information','Linked relationships']).slice(0,4);
   return `<p class="gap-ans-text">Context switched to <strong>${p.name||pid} ${p.id||''}</strong>.</p>`
     + evBlock(`<div class="gap-ev-header"><span class="gap-ev-name">${p.name||pid} ${p.id||''}</span><span class="gap-ev-badge">${p.status||'Active'}</span></div>${rows}`)
     + chips(...prompts);
@@ -9864,14 +9860,19 @@ function gapClassifyQuery(raw) {
       options:['autoloan','mortgage','creditcard'] };
   }
 
-  // Transactions / Activity
+  // Transactions / Activity — ambiguous without product name → clarify
   if (/transaction|activity|recent activity|declined|card activity|pending transaction|show.*history|last.*transaction|recent.*transaction|show.*transaction/.test(q)) {
     if (/credit card|visa credit/.test(q))  return { type:'transactions', pid:'creditcard' };
     if (/debit|visa debit/.test(q))         return { type:'transactions', pid:'debitcard' };
     if (/savings/.test(q))                  return { type:'transactions', pid:'savings' };
     if (/checking/.test(q))                 return { type:'transactions', pid:'checking' };
+    if (/auto|car|loan/.test(q))            return { type:'transactions', pid:'autoloan' };
+    // Generic with context set → use it
     if (gapSelectedContext) return { type:'transactions', pid:gapSelectedContext };
-    return { type:'transactions', pid:'checking' };
+    // Generic with no context → clarify
+    return { type:'clarify', clarifyType:'transactions',
+      question:'Which account or card would you like to see transactions for?',
+      options:['checking','savings','debitcard','creditcard'] };
   }
 
   // Card block / status — must come BEFORE general alerts
@@ -9882,8 +9883,18 @@ function gapClassifyQuery(raw) {
 
   // Alerts & Restrictions (account-level)
   if (/alert|restriction|warning flag|warning|fraud|freeze|restrict|delinquent|past due|collection|olb|online banking/.test(q)) {
-    const pid = /savings|emergency/.test(q)?'savings':/high yield/.test(q)?'hysavings':/auto|car/.test(q)?'autoloan':/mortgage|home/.test(q)?'mortgage':/credit card|visa credit/.test(q)?'creditcard':/debit|visa debit/.test(q)?'debitcard':'checking';
-    return { type:'alerts', pid };
+    if (/savings|emergency/.test(q))        return { type:'alerts', pid:'savings' };
+    if (/high yield/.test(q))               return { type:'alerts', pid:'hysavings' };
+    if (/auto|car/.test(q))                 return { type:'alerts', pid:'autoloan' };
+    if (/mortgage|home/.test(q))            return { type:'alerts', pid:'mortgage' };
+    if (/credit card|visa credit/.test(q))  return { type:'alerts', pid:'creditcard' };
+    if (/debit|visa debit/.test(q))         return { type:'alerts', pid:'debitcard' };
+    // Generic with context → use it
+    if (gapSelectedContext) return { type:'alerts', pid:gapSelectedContext };
+    // Generic no context → clarify
+    return { type:'clarify', clarifyType:'alerts',
+      question:'Which account would you like to check restrictions for?',
+      options:['checking','savings','hysavings','debitcard','creditcard'] };
   }
 
   // Linked Relationships
@@ -9897,6 +9908,10 @@ function gapClassifyQuery(raw) {
     const pid = /savings|emergency/.test(q)?'savings':/high yield/.test(q)?'hysavings':/auto|car/.test(q)?'autoloan':/mortgage|home/.test(q)?'mortgage':/credit card|visa credit/.test(q)?'creditcard':/debit|visa debit/.test(q)?'debitcard':'checking';
     return { type:'product_info', pid };
   }
+
+  // Interaction summary
+  if (/summarize.*interaction|last.*interaction|interaction.*summary|what.*discussed|discussed.*card|discussed.*last/.test(q))
+    return { type:'interaction_summary', pid:null };
 
   // Member Brief
   if (/member brief|member context|life context|opportunities|member profile|what to know|emily.s profile/.test(q))
@@ -10087,7 +10102,20 @@ function gapBuildAnswer(type, productId) {
       +`<div class="gap-ev-sep">Cards</div>`
       +evR('Visa Debit ••••4412','Primary Cardholder')+evR('Visa Credit ••••7777','Authorized User')
     )
-    + chips('Show linked products','Show verification history','Recent transactions','Account restrictions');
+    + chips('Show linked products','Show verification history','Recent checking transactions','Checking account restrictions');
+  }
+
+  if (type === 'interaction_summary') {
+    return `<p class="gap-ans-text">Emily's last interaction was a voice call today at 10:38 AM, escalated from IVR. She was requesting a custom payment amount on her Auto Loan.</p>`
+    + evBlock(
+        `<div class="gap-ev-header"><span class="gap-ev-name">Today · Voice · 10:38 AM</span><span class="gap-ev-badge">Escalated</span></div>`
+      + evR('Channel','Voice — inbound')
+      + evR('Reason','Custom loan payment request')
+      + evR('Escalation','IVR → Andrew Reynolds')
+      + evR('Verification','OTP passed at 10:42 AM')
+      + evR('Outcome','In progress')
+    )
+    + chips('Auto loan next payment','Skip payment eligible?','Show all cases for Emily');
   }
 
   if (type === 'member_brief') {
@@ -10188,7 +10216,7 @@ function gapBuildAnswer(type, productId) {
       </div>`
 
     + `</div>`
-    + chips('Show all cases for Emily','Skip payment eligible?','Recent transactions');
+    + chips('Show all cases for Emily','Skip payment eligible?','Recent checking transactions');
   }
 
   if (type === 'cases') {
@@ -10309,7 +10337,7 @@ function gapBuildAnswer(type, productId) {
       + evR('Reversals (12 months)','1 of 3 allowed')
       + evR('Approval Required','Manager approval for amounts over $58')
     )
-    + chips('Recent transactions','Account restrictions','Checking account balance');
+    + chips('Recent checking transactions','Checking account restrictions','Checking account balance');
   }
 
   if (type === 'payment_history') {
@@ -10504,7 +10532,7 @@ const GAP_TILE_CATS = {
   deposits: {
     label: 'Deposits',
     catAlert: null,
-    catChips: ['Recent transactions','Checking account balance','Account restrictions'],
+    catChips: ['Recent checking transactions','Checking account balance','Checking account restrictions'],
     products: [
       { pid:'checking',  icon:'🏦', name:'Everyday Checking',  id:'••••4821', badge:'Active',  badgeCls:'gap-bt-ok',     sub:'$4,782.15 available', alertChip:'OLB Restricted' },
       { pid:'savings',   icon:'🏦', name:'Emergency Savings',  id:'••••1039', badge:'Active',  badgeCls:'gap-bt-ok',     sub:'$12,450.00 balance',  alertChip:null },
@@ -10544,7 +10572,7 @@ const GAP_TILE_CATS = {
     label: 'Interaction Journey',
     isJourney: true,
     catAlert: null,
-    catChips: ['Summarize last interaction','Fee reversal history','Recent transactions'],
+    catChips: ['Summarize last interaction','Fee reversal history','Recent checking transactions'],
     products: []
   }
 };
@@ -10625,8 +10653,8 @@ function gapShowDetail(tileId) {
   </div>`;
 
   body.insertAdjacentHTML('afterbegin', html);
-  const backBar = document.getElementById('gapBackHomeBar');
-  if (backBar) backBar.style.display = '';
+  document.getElementById('aapHomeBtn').style.display = '';
+  document.getElementById('aapPromptDivider').style.display = '';
   // Set category chips in fixed prompt bar
   gapSetPromptBar(cat.catChips);
 }
@@ -10734,8 +10762,8 @@ function gapShowProductDetail(pid, parentTileId) {
   </div>`;
 
   body.insertAdjacentHTML('afterbegin', html);
-  const backBar = document.getElementById('gapBackHomeBar');
-  if (backBar) backBar.style.display = '';
+  document.getElementById('aapHomeBtn').style.display = '';
+  document.getElementById('aapPromptDivider').style.display = '';
   // Set product prompts in fixed bar
   gapSetPromptBar(d.prompts || []);
   // Scroll to top of panel
@@ -10884,8 +10912,8 @@ function gapShowJourney() {
   </div>`;
 
   body.insertAdjacentHTML('afterbegin', html);
-  const backBar = document.getElementById('gapBackHomeBar');
-  if (backBar) backBar.style.display = '';
+  document.getElementById('aapHomeBtn').style.display = '';
+  document.getElementById('aapPromptDivider').style.display = '';
   const scroll = document.getElementById('gapScrollArea');
   if (scroll) scroll.scrollTop = 0;
 }
@@ -11080,8 +11108,8 @@ function gapShowHome() {
     if (body) body.insertAdjacentHTML('afterbegin', gapBuildLandingCard());
   }
   // Hide back bar
-  const backBar = document.getElementById('gapBackHomeBar');
-  if (backBar) backBar.style.display = 'none';
+  document.getElementById('aapHomeBtn').style.display = 'none';
+  document.getElementById('aapPromptDivider').style.display = 'none';
   // Expand context strip back to full
   const ctxExpanded = document.getElementById('aapCtxExpanded');
   const ctxCollapsed = document.getElementById('aapCtxCollapsed');
@@ -11122,6 +11150,7 @@ const GAP_DELAYS = {
   payment_history: 1400,
   card_status:     1100,
   skip_payment:    1300,
+  interaction_summary: 1300,
   member_brief:    1300,
   cases:           1200,
   alerts:           900,
@@ -11192,8 +11221,8 @@ function gapSend(preset) {
   if (homeView) homeView.style.display = 'none';
   document.getElementById('gapDetailView')?.remove();
   // Show back-to-home bar
-  const backBar = document.getElementById('gapBackHomeBar');
-  if (backBar) backBar.style.display = '';
+  document.getElementById('aapHomeBtn').style.display = '';
+  document.getElementById('aapPromptDivider').style.display = '';
   // Collapse context strip to single line
   const ctxExpanded = document.getElementById('aapCtxExpanded');
   const ctxCollapsed = document.getElementById('aapCtxCollapsed');
@@ -16066,16 +16095,53 @@ function arToggleCard(id, event) {
 /* Fixed prompt bar — always above input */
 .aap-prompt-bar{
   flex-shrink:0;
+  display:flex;align-items:center;gap:8px;
   padding:8px 14px;
   border-top:0.5px solid rgba(91,95,207,.08);
   background:rgba(255,255,255,.6);
 }
-.aap-prompt-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.aap-home-btn{
+  width:28px;height:28px;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;
+  border:0.5px solid rgba(91,95,207,.2);
+  border-radius:5px;
+  cursor:pointer;flex-shrink:0;
+  color:#9896b0;
+  transition:all .15s;
+  position:relative;
+}
+.aap-home-btn:hover{
+  background:rgba(91,95,207,.06);
+  border-color:rgba(91,95,207,.35);
+  color:#5b5fcf;
+}
+.aap-home-btn:hover::after{
+  content:'Back to home';
+  position:absolute;
+  bottom:calc(100% + 6px);
+  left:50%;
+  transform:translateX(-50%);
+  background:#0c0b18;
+  color:white;
+  font-size:10px;
+  font-weight:400;
+  padding:4px 8px;
+  border-radius:4px;
+  white-space:nowrap;
+  pointer-events:none;
+  font-family:inherit;
+}
+.aap-prompt-divider{
+  width:0.5px;height:12px;
+  background:rgba(91,95,207,.2);flex-shrink:0;
+}
+.aap-prompt-chips{display:flex;flex-wrap:wrap;gap:5px;flex:1;}
 .aap-prompt-chip{
   font-size:10.5px;padding:5px 10px;
   background:white;border:0.5px solid rgba(91,95,207,.18);
   border-radius:5px;color:#0c0b18;cursor:pointer;
-  font-family:inherit;transition:all .15s;
+  font-family:inherit;transition:all .15s;white-space:nowrap;
 }
 .aap-prompt-chip:hover{background:rgba(91,95,207,.05);border-color:rgba(91,95,207,.3);}
 
