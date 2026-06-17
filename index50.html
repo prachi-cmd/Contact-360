@@ -4172,21 +4172,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <!-- Test tab pane (state 1) -->
           <div class="wf-pane s1-wf-pane" id="s1-test">
             <div class="test-split">
-              <div class="test-pane test-pane-top" id="s1TestTop">
-                <div class="ph-pane">
-                  <div class="ph-icon">📊</div>
-                  <div class="ph-title">Top Section</div>
-                  <div class="ph-sub">Upper workspace area</div>
-                </div>
-              </div>
+              <div class="test-pane test-pane-top" id="s1TestTop"></div>
               <div class="test-vresize-handle" data-target="s1"></div>
-              <div class="test-pane test-pane-bottom" id="s1TestBottom">
-                <div class="ph-pane">
-                  <div class="ph-icon">📋</div>
-                  <div class="ph-title">Bottom Section</div>
-                  <div class="ph-sub">Lower workspace area</div>
-                </div>
-              </div>
+              <div class="test-pane test-pane-bottom" id="s1TestBottom"></div>
             </div>
           </div>
           <!-- Conversations tab pane (state 1 split) -->
@@ -4876,21 +4864,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
               <!-- Test tab pane (states 2-4 right panel) -->
               <div class="wf-pane on" id="s234-test">
                 <div class="test-split">
-                  <div class="test-pane test-pane-top" id="s234TestTop">
-                    <div class="ph-pane">
-                      <div class="ph-icon">📊</div>
-                      <div class="ph-title">Top Section</div>
-                      <div class="ph-sub">Upper workspace area</div>
-                    </div>
-                  </div>
+                  <div class="test-pane test-pane-top" id="s234TestTop"></div>
                   <div class="test-vresize-handle" data-target="s234"></div>
-                  <div class="test-pane test-pane-bottom" id="s234TestBottom">
-                    <div class="ph-pane">
-                      <div class="ph-icon">📋</div>
-                      <div class="ph-title">Bottom Section</div>
-                      <div class="ph-sub">Lower workspace area</div>
-                    </div>
-                  </div>
+                  <div class="test-pane test-pane-bottom" id="s234TestBottom"></div>
                 </div>
               </div>
               <!-- Conversations tab pane (states 2–4 right panel) -->
@@ -13860,9 +13836,8 @@ document.querySelectorAll('.test-vresize-handle').forEach(handle => {
   min-height: 80px;
   overflow: auto;
   background: var(--s0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0;
+  display: block;
 }
 
 .test-pane-top {
