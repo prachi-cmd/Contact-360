@@ -4813,16 +4813,16 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       <div class="test-ms-widget-box">
                         <div class="test-ms-widget-header">
                           <div class="test-ms-widget-title">Loans (2)</div>
-                          <button class="test-ms-view-all">View All</button>
+                          <button class="test-ms-view-all" onclick="startCategory('loans')">View All</button>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('loan','7712')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">2022 Tesla Model 3</span><span class="test-ms-item-number">•••• 7712</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">47% paid</span><span class="test-ms-status-chip active">Active</span></div>
+                          <span class="test-ms-status-chip active">Active</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('loan','4521')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">Primary Residence - Malibu</span><span class="test-ms-item-number">•••• 4521</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">29% paid</span><span class="test-ms-status-chip active">Active</span></div>
+                          <span class="test-ms-status-chip active">Active</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                       </div>
@@ -4830,7 +4830,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       <div class="test-ms-widget-box">
                         <div class="test-ms-widget-header">
                           <div class="test-ms-widget-title">Deposits (3)</div>
-                          <button class="test-ms-view-all">View All</button>
+                          <button class="test-ms-view-all" onclick="startCategory('deposits')">View All</button>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('deposit','2914')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">Business Operations</span><span class="test-ms-item-number">•••• 2914</span></div>
@@ -4852,21 +4852,21 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       <div class="test-ms-widget-box">
                         <div class="test-ms-widget-header">
                           <div class="test-ms-widget-title">Cards (3)</div>
-                          <button class="test-ms-view-all">View All</button>
+                          <button class="test-ms-view-all" onclick="startCategory('cards')">View All</button>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('card','3456')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">American Express Platinum</span><span class="test-ms-item-number">•••• 3456</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">26% used</span><span class="test-ms-status-chip active">Active</span></div>
+                          <span class="test-ms-status-chip active">Active</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('card','7892')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">Visa Signature Credit</span><span class="test-ms-item-number">•••• 7892</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">100% used</span><span class="test-ms-status-chip blocked">Blocked</span></div>
+                          <span class="test-ms-status-chip blocked">Blocked</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('card','5123')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">Discover Cashback</span><span class="test-ms-item-number">•••• 5123</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">35% used</span><span class="test-ms-status-chip active">Active</span></div>
+                          <span class="test-ms-status-chip active">Active</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                       </div>
@@ -5715,16 +5715,16 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       <div class="test-ms-widget-box">
                         <div class="test-ms-widget-header">
                           <div class="test-ms-widget-title">Loans (2)</div>
-                          <button class="test-ms-view-all">View All</button>
+                          <button class="test-ms-view-all" onclick="startCategory('loans')">View All</button>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('loan','7712')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">2022 Tesla Model 3</span><span class="test-ms-item-number">•••• 7712</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">47% paid</span><span class="test-ms-status-chip active">Active</span></div>
+                          <span class="test-ms-status-chip active">Active</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('loan','4521')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">Primary Residence - Malibu</span><span class="test-ms-item-number">•••• 4521</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">29% paid</span><span class="test-ms-status-chip active">Active</span></div>
+                          <span class="test-ms-status-chip active">Active</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                       </div>
@@ -5732,7 +5732,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       <div class="test-ms-widget-box">
                         <div class="test-ms-widget-header">
                           <div class="test-ms-widget-title">Deposits (3)</div>
-                          <button class="test-ms-view-all">View All</button>
+                          <button class="test-ms-view-all" onclick="startCategory('deposits')">View All</button>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('deposit','2914')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">Business Operations</span><span class="test-ms-item-number">•••• 2914</span></div>
@@ -5754,21 +5754,21 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       <div class="test-ms-widget-box">
                         <div class="test-ms-widget-header">
                           <div class="test-ms-widget-title">Cards (3)</div>
-                          <button class="test-ms-view-all">View All</button>
+                          <button class="test-ms-view-all" onclick="startCategory('cards')">View All</button>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('card','3456')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">American Express Platinum</span><span class="test-ms-item-number">•••• 3456</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">26% used</span><span class="test-ms-status-chip active">Active</span></div>
+                          <span class="test-ms-status-chip active">Active</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('card','7892')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">Visa Signature Credit</span><span class="test-ms-item-number">•••• 7892</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">100% used</span><span class="test-ms-status-chip blocked">Blocked</span></div>
+                          <span class="test-ms-status-chip blocked">Blocked</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                         <div class="test-ms-item" onclick="openProductDetail('card','5123')">
                           <div class="test-ms-item-left"><span class="test-ms-item-name">Discover Cashback</span><span class="test-ms-item-number">•••• 5123</span></div>
-                          <div style="display:flex;align-items:center;gap:8px;"><span class="test-ms-item-metric">35% used</span><span class="test-ms-status-chip active">Active</span></div>
+                          <span class="test-ms-status-chip active">Active</span>
                           <div class="test-ms-tooltip">Click to ask AI</div>
                         </div>
                       </div>
