@@ -997,7 +997,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .ar-sep{width:24px;height:1px;background:var(--border);margin:4px 0;}
 
 /* MEMBER HEADER */
-.member-bar{background:var(--s0);border-bottom:1px solid var(--border);flex-shrink:0;box-shadow:var(--sh1);}
+.member-bar{background:var(--s0);border-bottom:1px solid var(--border);flex-shrink:0;box-shadow:var(--sh1);position:relative;z-index:100;overflow:visible;}
 .mb-top{height:48px;display:flex;align-items:center;padding:0 16px;gap:10px;}
 .mb-ava{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#00796B,#0d9488);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:var(--m);flex-shrink:0;}
 .mb-info{flex:1;}
@@ -3999,7 +3999,21 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <div class="mb-top">
         <div class="mb-info">
           <div class="mb-name" id="mbName">Sarah Johnson</div>
-          <div class="mb-sub" id="mbSub">+1 (123) 456 78 90</div>
+          <div class="mb-sub" id="mbSub" style="position:relative;">
+            <span class="mb-detail-trigger" id="mbDetailTrigger" style="display:none;">
+              <span class="mb-member-no" id="mbMemberNo">EMB-2019-4821</span>
+              <span style="color:#c8c7d8;margin:0 4px;">·</span>
+              <span class="mb-phone" id="mbPhone">+1 (123) 456 78 90</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:3px;opacity:.8;vertical-align:middle;color:#525252;"><polyline points="6 9 12 15 18 9"/></svg>
+              <div class="mb-detail-flyout">
+                <div class="mb-flyout-title">Member Details</div>
+                <div class="mb-flyout-row"><span class="mb-flyout-key">Email</span><span class="mb-flyout-val" id="mbEmail">emily.olivers@email.com</span></div>
+                <div class="mb-flyout-row"><span class="mb-flyout-key">Member since</span><span class="mb-flyout-val" id="mbSince">March 12, 2019</span></div>
+                <div class="mb-flyout-row"><span class="mb-flyout-key">Status</span><span class="mb-flyout-val" style="color:#0d7c52;font-weight:600;">Active Member</span></div>
+                <div class="mb-flyout-row"><span class="mb-flyout-key">Address</span><span class="mb-flyout-val" id="mbAddress">1204 Sunset Blvd, Los Angeles, CA 90028</span></div>
+              </div>
+            </span>
+          </div>
         </div>
         <div class="mb-r">
           <div class="agch"><div class="agav">AR</div>Andrew Raynold ▾</div>
@@ -4296,6 +4310,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <span class="ms-kv-key">Payment amount</span><span class="ms-kv-val">$534.25</span>
                   <span class="ms-kv-key">Skip payment</span><span class="ms-kv-val good">Eligible</span>
                 </div>
+                <button class="ms-ask-ai-link" onclick="snapshotProductClick('loan','7712')">Ask more about this loan</button>
               </div>
             </div>
             <div class="ms-item" id="b-loan-4521">
@@ -4318,6 +4333,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <span class="ms-kv-key">Skip payment</span><span class="ms-kv-val warn">Used May 2026</span>
                 </div>
                 <div class="ms-owner-row"><span class="ms-owner-chip">Joint</span> Robert Chen (Primary) · Emily (Co-Borrower)</div>
+                <button class="ms-ask-ai-link" onclick="snapshotProductClick('loan','4521')">Ask more about this loan</button>
               </div>
             </div>
             <button class="ms-view-all-bottom" onclick="snapshotProductClick('loans','all')">View all loans</button>
@@ -4355,6 +4371,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Interest Credit</span><span class="ms-last-txn-amt credit">+$11.54</span></div>
                     <div class="ms-last-txn-date">Jun 01</div>
                   </div>
+                  <button class="ms-ask-ai-link" onclick="snapshotProductClick('deposit','5891')">Ask more about this account</button>
                 </div>
               </div>
             <div class="ms-item" id="b-dep-2914">
@@ -4376,6 +4393,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Wire Transfer - Vendor Pmt</span><span class="ms-last-txn-amt debit">−$2,500.00</span></div>
                     <div class="ms-last-txn-date">Jun 16</div>
                   </div>
+                  <button class="ms-ask-ai-link" onclick="snapshotProductClick('deposit','2914')">Ask more about this account</button>
                 </div>
               </div>
             <div class="ms-item" id="b-dep-7641">
@@ -4399,6 +4417,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Transfer from Checking</span><span class="ms-last-txn-amt credit">+$1,500.00</span></div>
                   <div class="ms-last-txn-date">May 15</div>
                 </div>
+                <button class="ms-reason-btn orange" onclick="snapshotProductClick('deposit','7641')">Why was Courtesy Pay limited?</button>
               </div>
             </div>
             <!-- Healthy items hidden by default -->
@@ -4444,6 +4463,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Paris, France - Luxury Boutique</span><span class="ms-last-txn-amt declined">DECLINED</span></div>
                   <div class="ms-last-txn-date">Jun 17 · −$3,850.00</div>
                 </div>
+                <button class="ms-reason-btn red" onclick="snapshotProductClick('card','7892')">Why was this card blocked?</button>
               </div>
             </div>
             <!-- Healthy cards hidden -->
@@ -4467,6 +4487,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Business Conference - Hotel</span><span class="ms-last-txn-amt debit">−$1,250.00</span></div>
                     <div class="ms-last-txn-date">Jun 14</div>
                   </div>
+                  <button class="ms-ask-ai-link" onclick="snapshotProductClick('card','3456')">Ask more about this card</button>
                 </div>
               </div>
               <div class="ms-item" id="b-card-5123">
@@ -4492,6 +4513,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Whole Foods Market</span><span class="ms-last-txn-amt debit">−$127.65</span></div>
                     <div class="ms-last-txn-date">Jun 10</div>
                   </div>
+                  <button class="ms-ask-ai-link" onclick="snapshotProductClick('card','5123')">Ask more about this card</button>
                 </div>
               </div>
             <button class="ms-view-all-bottom" onclick="snapshotProductClick('cards','all')">View all cards</button>
@@ -5067,7 +5089,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <span class="ms-kv-key">Payment amount</span><span class="ms-kv-val">$534.25</span>
                   <span class="ms-kv-key">Skip payment</span><span class="ms-kv-val good">Eligible</span>
                 </div>
-              </div>
+</div>
             </div>
             <div class="ms-item" id="s2-b-loan-4521">
               <div class="ms-item-row" onclick="snapshotProductClick('loan','4521')">
@@ -5089,6 +5111,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <span class="ms-kv-key">Skip payment</span><span class="ms-kv-val warn">Used May 2026</span>
                 </div>
                 <div class="ms-owner-row"><span class="ms-owner-chip">Joint</span> Robert Chen (Primary) · Emily (Co-Borrower)</div>
+                <button class="ms-ask-ai-link" onclick="snapshotProductClick('loan','4521')">Ask more about this loan</button>
               </div>
             </div>
             <button class="ms-view-all-bottom" onclick="snapshotProductClick('loans','all')">View all loans</button>
@@ -5126,6 +5149,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Interest Credit</span><span class="ms-last-txn-amt credit">+$11.54</span></div>
                     <div class="ms-last-txn-date">Jun 01</div>
                   </div>
+                  <button class="ms-ask-ai-link" onclick="snapshotProductClick('deposit','5891')">Ask more about this account</button>
                 </div>
               </div>
             <div class="ms-item" id="s2-b-dep-2914">
@@ -5147,6 +5171,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Wire Transfer - Vendor Pmt</span><span class="ms-last-txn-amt debit">−$2,500.00</span></div>
                     <div class="ms-last-txn-date">Jun 16</div>
                   </div>
+                  <button class="ms-ask-ai-link" onclick="snapshotProductClick('deposit','2914')">Ask more about this account</button>
                 </div>
               </div>
             <div class="ms-item" id="s2-b-dep-7641">
@@ -5170,6 +5195,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Transfer from Checking</span><span class="ms-last-txn-amt credit">+$1,500.00</span></div>
                   <div class="ms-last-txn-date">May 15</div>
                 </div>
+                <button class="ms-reason-btn orange" onclick="snapshotProductClick('deposit','7641')">Why was Courtesy Pay limited?</button>
               </div>
             </div>
             <!-- Healthy items hidden by default -->
@@ -5215,6 +5241,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Paris, France - Luxury Boutique</span><span class="ms-last-txn-amt declined">DECLINED</span></div>
                   <div class="ms-last-txn-date">Jun 17 · −$3,850.00</div>
                 </div>
+                <button class="ms-reason-btn red" onclick="snapshotProductClick('card','7892')">Why was this card blocked?</button>
               </div>
             </div>
             <!-- Healthy cards hidden -->
@@ -5238,6 +5265,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Business Conference - Hotel</span><span class="ms-last-txn-amt debit">−$1,250.00</span></div>
                     <div class="ms-last-txn-date">Jun 14</div>
                   </div>
+                  <button class="ms-ask-ai-link" onclick="snapshotProductClick('card','3456')">Ask more about this card</button>
                 </div>
               </div>
               <div class="ms-item" id="s2-b-card-5123">
@@ -5263,6 +5291,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="ms-last-txn-row"><span class="ms-last-txn-desc">Whole Foods Market</span><span class="ms-last-txn-amt debit">−$127.65</span></div>
                     <div class="ms-last-txn-date">Jun 10</div>
                   </div>
+                  <button class="ms-ask-ai-link" onclick="snapshotProductClick('card','5123')">Ask more about this card</button>
                 </div>
               </div>
             <button class="ms-view-all-bottom" onclick="snapshotProductClick('cards','all')">View all cards</button>
@@ -5970,7 +5999,10 @@ function goToState(n){
   if(n===2){
     document.getElementById('layer1').classList.add('active');
     document.getElementById('layer234').classList.remove('active');
-    document.getElementById('mbSub').textContent = '+1 (123) 456 78 90';
+    const mbPhoneReset = document.getElementById('mbPhone');
+    if (mbPhoneReset) mbPhoneReset.textContent = '+1 (123) 456 78 90';
+    const dt = document.getElementById('mbDetailTrigger');
+    if (dt) dt.style.display = 'none';
     stopTimer();
     restoreForBrowsing();
     switchWFTab('conversations');
@@ -6495,17 +6527,15 @@ function toggleRightPanel(){
   const isOpen = panel.classList.contains('open');
   
   if(isOpen){
-    // Closing AI panel → expand Member Snapshot
+    // Closing AI panel
     panel.classList.remove('open');
     panel.style.width = '';
     if(handle) handle.classList.remove('visible');
-    expandMemberSnapshot();
   } else {
-    // Opening AI panel → collapse Member Snapshot
+    // Opening AI panel
     panel.style.width = '';
     panel.classList.add('open');
     if(handle) handle.classList.add('visible');
-    collapseMemberSnapshot();
     
     const sb = document.getElementById('sidebar');
     if(sb && sb.classList.contains('expanded')){
@@ -8230,7 +8260,10 @@ function acceptCall(){
 
   // 2b. Update member header to the caller's identity
   document.getElementById('mbName').textContent = 'Emily Olivers';
-  document.getElementById('mbSub').textContent = '+1 (310) 928 7361';
+  const detailTrigger = document.getElementById('mbDetailTrigger');
+  if (detailTrigger) detailTrigger.style.display = 'inline';
+  const mbPhoneEl = document.getElementById('mbPhone');
+  if (mbPhoneEl) mbPhoneEl.textContent = '+1 (310) 928 7361';
   // Show membership tags
   const mbTags = document.getElementById('mbTags');
   if(mbTags) mbTags.style.display = 'flex';
@@ -14921,12 +14954,11 @@ function snapshotProductClick(productType, productId) {
     panel.classList.add('open');
     if (handle) handle.classList.add('visible');
   }
-  // Collapse Member Snapshot to give Messages full width
-  collapseMemberSnapshot();
   // Show product detail in AI panel
   setTimeout(function() {
     openProductDetail(productType, productId);
   }, wasOpen ? 50 : 300);
+  setTimeout(updateIHSState, 50);
 }
 
 </script>
@@ -17365,36 +17397,87 @@ body {
 #s234TestTop .test-pane-body .ms-scroll::-webkit-scrollbar-thumb { background: rgba(0,0,0,.06); border-radius: 3px; }
 
 
-/* ── Product Hover Tooltip ── */
+/* ── Product Items ── */
 .ms-item {
   position: relative;
   cursor: pointer;
 }
 
-.ms-item::after {
-  content: '✦ Click here to Ask AI';
-  position: absolute;
-  bottom: -20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(4px);
-  background: linear-gradient(135deg, #5b5fcf 0%, #7c5fcf 100%);
-  color: white;
-  padding: 3px 10px;
-  border-radius: 6px;
-  font-size: 9px;
-  font-weight: 600;
-  white-space: nowrap;
-  z-index: 30;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
-  box-shadow: 0 2px 8px rgba(91, 95, 207, 0.25);
-  letter-spacing: 0.01em;
+
+/* Member detail flyout */
+.mb-detail-trigger {
+  position: relative;
+  cursor: pointer;
 }
 
-.ms-item:hover::after {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+.mb-member-no {
+  font-weight: 500;
+  color: var(--t2);
+}
+
+.mb-phone {
+  font-weight: 500;
+  color: var(--t2);
+}
+
+.mb-detail-flyout {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 500;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.12), 0 1px 4px rgba(0,0,0,.06);
+  padding: 14px 18px 10px;
+  min-width: 260px;
+  display: none;
+  pointer-events: none;
+}
+
+.mb-detail-trigger:hover .mb-detail-flyout {
+  display: block;
+}
+
+.mb-detail-trigger:hover svg {
+  opacity: 1 !important;
+}
+
+.mb-flyout-title {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: #9896b0;
+  margin-bottom: 10px;
+}
+
+.mb-flyout-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-top: 1px solid rgba(0,0,0,.06);
+  gap: 12px;
+}
+
+.mb-flyout-row:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.mb-flyout-key {
+  font-size: 11px;
+  font-weight: 500;
+  color: #9896b0;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.mb-flyout-val {
+  font-size: 11px;
+  font-weight: 500;
+  color: #1a1a2e;
+  text-align: right;
 }
 
 </style>
