@@ -1032,6 +1032,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 /* Contact 360 — AI affordances */
 .c360-wrap .c360-ai-icon{width:24px;height:24px;border-radius:6px;border:none;background:transparent;color:var(--accent);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;transition:background .12s,transform .12s;}
 .c360-wrap .c360-ai-icon:hover{background:var(--as);transform:scale(1.08);}
+/* Contact 360 — explicit "View details" affordance */
+.c360-wrap .c360-details-btn{display:inline-flex;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-family:inherit;font-size:9px;font-weight:600;letter-spacing:.02em;color:var(--accent);padding:2px 5px;border-radius:6px;flex-shrink:0;transition:background .12s;white-space:nowrap;}
+.c360-wrap .c360-details-btn:hover{background:var(--as);}
+.c360-wrap .c360-details-btn .ms-item-chevron{color:inherit;width:12px;height:12px;}
+.c360-wrap .c360-dt-hide{display:none;}
+.c360-wrap .ms-item.open .c360-dt-show{display:none;}
+.c360-wrap .ms-item.open .c360-dt-hide{display:inline;}
 .c360-wrap .c360-flag-cta{width:auto;display:inline-flex;align-items:center;justify-content:center;gap:5px;margin:9px 0 2px;padding:6px 12px;border-radius:8px;font-size:10.5px;font-weight:600;}
 .c360-wrap .c360-flag-cta.red{background:rgba(211,47,47,.1);color:#c62828;border:1px solid rgba(211,47,47,.28);}
 .c360-wrap .c360-flag-cta.orange{background:rgba(201,123,28,.12);color:#92400e;border:1px solid rgba(201,123,28,.3);}
@@ -4419,7 +4426,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <div class="ms-item-right">
                   <span class="ms-item-number">•••• 7712</span>
                   <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('loan','7712')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                 </div>
               </div>
 <div class="c360-summary">
@@ -4444,7 +4451,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <div class="ms-item-right">
                   <span class="ms-item-number">•••• 4521</span>
                   <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('loan','4521')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                 </div>
               </div>
 <div class="c360-summary">
@@ -4486,7 +4493,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-item-right">
                     <span class="ms-item-number">•••• 5891</span>
                     <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('deposit','5891')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                   </div>
                 </div>
 <div class="c360-summary c360-balsum">
@@ -4512,7 +4519,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-item-right">
                     <span class="ms-item-number">•••• 2914</span>
                     <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('deposit','2914')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                   </div>
                 </div>
 <div class="c360-summary c360-balsum">
@@ -4538,7 +4545,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <span class="ms-item-name">Family Vacation Account</span>
                 <div class="ms-item-right">
                   <span class="ms-item-number">•••• 7641</span>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                 </div>
               </div>
 <div class="c360-summary c360-balsum">
@@ -4583,7 +4590,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <span class="ms-item-name">Visa Signature Credit</span>
                 <div class="ms-item-right">
                   <span class="ms-item-number">•••• 7892</span>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                 </div>
               </div>
 <div class="c360-summary">
@@ -4614,7 +4621,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-item-right">
                     <span class="ms-item-number">•••• 3456</span>
                     <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('card','3456')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                   </div>
                 </div>
 <div class="c360-summary">
@@ -4640,7 +4647,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-item-right">
                     <span class="ms-item-number">•••• 5123</span>
                     <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('card','5123')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                   </div>
                 </div>
 <div class="c360-summary">
@@ -5240,7 +5247,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <div class="ms-item-right">
                   <span class="ms-item-number">•••• 7712</span>
                   <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('loan','7712')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                 </div>
               </div>
 <div class="c360-summary">
@@ -5265,7 +5272,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <div class="ms-item-right">
                   <span class="ms-item-number">•••• 4521</span>
                   <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('loan','4521')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                 </div>
               </div>
 <div class="c360-summary">
@@ -5307,7 +5314,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-item-right">
                     <span class="ms-item-number">•••• 5891</span>
                     <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('deposit','5891')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                   </div>
                 </div>
 <div class="c360-summary c360-balsum">
@@ -5333,7 +5340,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-item-right">
                     <span class="ms-item-number">•••• 2914</span>
                     <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('deposit','2914')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                   </div>
                 </div>
 <div class="c360-summary c360-balsum">
@@ -5359,7 +5366,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <span class="ms-item-name">Family Vacation Account</span>
                 <div class="ms-item-right">
                   <span class="ms-item-number">•••• 7641</span>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                 </div>
               </div>
 <div class="c360-summary c360-balsum">
@@ -5404,7 +5411,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 <span class="ms-item-name">Visa Signature Credit</span>
                 <div class="ms-item-right">
                   <span class="ms-item-number">•••• 7892</span>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                 </div>
               </div>
 <div class="c360-summary">
@@ -5435,7 +5442,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-item-right">
                     <span class="ms-item-number">•••• 3456</span>
                     <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('card','3456')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                   </div>
                 </div>
 <div class="c360-summary">
@@ -5461,7 +5468,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="ms-item-right">
                     <span class="ms-item-number">•••• 5123</span>
                     <button class="c360-ai-icon" title="Ask AI about this" onclick="snapshotProductClick('card','5123')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg></button>
-                  <span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  <button class="c360-details-btn" onclick="c360ToggleFromBtn(event)" aria-label="Toggle details"><span class="c360-dt-show">View details</span><span class="c360-dt-hide">Hide details</span><span class="ms-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></button>
                   </div>
                 </div>
 <div class="c360-summary">
@@ -5826,7 +5833,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <div class="ai-title">AI Assistant</div>
     </div>
     <div class="ai-header-actions">
-      <button class="ai-header-btn" onclick="refreshAI()" title="Home">↻</button>
+      <button class="ai-header-btn" id="homeBtn" onclick="refreshAI()" title="Home" style="display:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5"/>
+          <path d="M5 9.5V20a1 1 0 001 1h12a1 1 0 001-1V9.5"/>
+          <path d="M9.5 21v-6h5v6"/>
+        </svg>
+      </button>
       <button class="ai-header-btn" onclick="closeAI()" title="Close">✕</button>
     </div>
   </div>
@@ -14155,9 +14168,6 @@ window.addEventListener('resize', () => {
 </script>
 
 <script>
-// ══════════════════════════════════════
-// AI ASSISTANT PANEL — Emily Olivers
-// ══════════════════════════════════════
 
 // ══════════════════════════════════════
 // SHARED DATA — Emily Olivers complete profile
@@ -14364,14 +14374,18 @@ function statusPill(status) {
 function openConversation() {
   document.getElementById('aiHome').style.display = 'none';
   document.getElementById('aiConversation').classList.add('active');
+  document.getElementById('homeBtn').style.display = 'flex';
 }
+let lastUserMsg = null;
 function pushUser(text) {
   const t = document.getElementById('messageThread');
   const el = document.createElement('div');
   el.className = 'ai-msg user';
   el.textContent = text;
   t.appendChild(el);
-  scrollDown();
+  lastUserMsg = el;
+  // Bring the new question to the top of the view; the response renders below it.
+  scrollQueryToTop(true);
 }
 let aiTimer = null;
 function pushAssistant(html) {
@@ -14387,7 +14401,7 @@ function pushAssistant(html) {
   loader.innerHTML = `<div class="ai-msg-label">◆ AI Assistant</div>
     <div class="ai-typing"><span></span><span></span><span></span><em class="ai-typing-text">Generating response…</em></div>`;
   t.appendChild(loader);
-  scrollDown();
+  scrollQueryToTop(false);
 
   // 2) After a short delay, replace it with the real response
   const delay = 850 + Math.random() * 900; // ~0.85–1.75s
@@ -14399,12 +14413,14 @@ function pushAssistant(html) {
     el.className = 'ai-msg assistant';
     el.innerHTML = `<div class="ai-msg-label">◆ AI Assistant</div>${html}`;
     t.appendChild(el);
-    scrollDown();
+    // Keep the question anchored at the top; the answer flows beneath it.
+    scrollQueryToTop(false);
   }, delay);
 }
-function scrollDown() {
-  const c = document.getElementById('aiConversation');
-  c.scrollTop = c.scrollHeight;
+// Anchor the most recent user query near the top of the scroll viewport.
+function scrollQueryToTop(smooth) {
+  if (!lastUserMsg) return;
+  lastUserMsg.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' });
 }
 
 // ── Category entry points (clarification step) ──
@@ -14675,20 +14691,89 @@ const CATEGORIES = {
   ]
 };
 
-function followups(kind, id) {
-  const more = CATEGORIES[kind]
-    .filter(f => f[0] !== activeFacet)
-    .map(f => `<button class="fchip" onclick="showFacet('${kind}','${id}','${f[0]}')">${f[1]}</button>`).join('');
+// Natural-language questions per category (clearer than noun labels;
+// ownership vs membership kept distinct).
+const QUESTIONS = {
+  loan: {
+    status: "What's the current status?", balances: "What's the balance & payoff?",
+    ownership: "Who's on this loan?", payments: "When's the next payment due?",
+    interest: "What's the interest & APR?", progress: "How much is paid off?",
+    membership: "List borrowers and their roles", alerts: "Any alerts or restrictions?"
+  },
+  deposit: {
+    balances: "What are the current balances?", ownership: "Who owns this account?",
+    permissions: "What actions are permitted?", limits: "Show the account limits",
+    earnings: "How much interest has it earned?", routing: "Show routing & account numbers",
+    membership: "List members and their roles", txns: "Show recent transactions",
+    alerts: "Any alerts or restrictions?"
+  },
+  card: {
+    credit: "What's the credit line?", payments: "What's the payment due?",
+    interest: "Interest charges", ownership: "Who's on this card?",
+    membership: "List members and their roles", txns: "Show recent transactions",
+    alerts: "Any alerts or restrictions?"
+  }
+};
+// Situation-aware phrasing for a couple of card states
+function questionText(kind, item, key) {
+  if (kind === 'card' && item.status === 'Blocked') {
+    if (key === 'alerts') return 'Why was this card blocked?';
+    if (key === 'txns')   return 'Show the declined & failed charges';
+  }
+  return QUESTIONS[kind][key];
+}
+// Order categories by relevance to the account's current state (silent ranking).
+function orderedFacets(kind, item) {
+  let order;
+  if (kind === 'loan') {
+    order = ['balances','payments','progress','interest','ownership','membership','status','alerts'];
+    if (item.pastDue > 0 || item.daysDelinquent > 0)
+      order = ['payments','status', ...order.filter(k => k !== 'payments' && k !== 'status')];
+  } else if (kind === 'deposit') {
+    order = ['txns','membership','ownership','permissions','limits','earnings','routing','balances','alerts'];
+  } else { // card
+    order = item.status === 'Blocked'
+      ? ['alerts','txns','ownership','payments','credit','interest','membership']
+      : ['txns','payments','credit','interest','ownership','membership','alerts'];
+  }
+  // An active alert is the most important thing to see first
+  if (item.alert && order[0] !== 'alerts')
+    order = ['alerts', ...order.filter(k => k !== 'alerts')];
+  // Don't suggest the category already on screen
+  return order.filter(k => k !== activeFacet);
+}
 
-  const nav = { loan: ['deposits','cards'], deposit: ['loans','cards'], card: ['loans','deposits'] };
-  const navLabel = { loans: 'Loans', deposits: 'Deposits', cards: 'Cards' };
-  const navChips = nav[kind].map(c =>
-    `<button class="fchip nav" onclick="startCategory('${c}')">→ ${navLabel[c]}</button>`).join('');
+const CHEV = `<svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`;
+const TOP_N = 3; // questions shown before "Show more"
+
+function followups(kind, id) {
+  const item = (kind === 'loan' ? SHARED_DATA.loans : kind === 'deposit' ? SHARED_DATA.deposits : SHARED_DATA.cards)
+    .find(x => x.id === id);
+  const keys = orderedFacets(kind, item);
+
+  const rowsHtml = keys.map((k, i) =>
+    `<div class="A-row${i >= TOP_N ? ' A-extra' : ''}" onclick="showFacet('${kind}','${id}','${k}')">${questionText(kind, item, k)}${CHEV}</div>`
+  ).join('');
+  const moreBtn = keys.length > TOP_N
+    ? `<button class="A-more" onclick="toggleMore(this)"><span class="more-label">Show more</span><svg class="more-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>`
+    : '';
+
+  const cur = kind === 'loan' ? 'loans' : kind === 'deposit' ? 'deposits' : 'cards';
+  const chips = ['loans','cards','deposits'].map(c =>
+    `<button class="nav-chip${c === cur ? ' current' : ''}" onclick="startCategory('${c}')">${c[0].toUpperCase() + c.slice(1)}</button>`
+  ).join('');
 
   return `<div class="fwrap">
-    <div class="fgroup"><div class="fgroup-label">Explore more</div><div class="fchips">${more}</div></div>
-    <div class="fgroup"><div class="fgroup-label">Switch to</div><div class="fchips">${navChips}</div></div>
+    <div class="fu-lead">Anything else? Tap to ask:</div>
+    <div class="A-list">${rowsHtml}${moreBtn}</div>
+    <div class="switch-label">Or open another product</div>
+    <div class="switch-chips">${chips}</div>
   </div>`;
+}
+function toggleMore(btn) {
+  const list = btn.closest('.A-list');
+  const expanded = list.classList.toggle('expanded');
+  btn.querySelector('.more-label').textContent = expanded ? 'Show less' : 'Show more';
 }
 
 // ── Row + view helpers ──
@@ -15008,6 +15093,7 @@ function refreshAI() {
   document.getElementById('aiHome').style.display = 'flex';
   document.getElementById('aiConversation').classList.remove('active');
   document.getElementById('messageThread').innerHTML = '';
+  document.getElementById('homeBtn').style.display = 'none';
 }
 function closeAI() { if(typeof toggleRightPanel === 'function') toggleRightPanel(); }
 
@@ -15017,7 +15103,6 @@ function openProductDetail(productType, productId) {
   if (productType === 'loan') return showLoan(productId);
   if (productType === 'deposit') return showDeposit(productId);
   if (productType === 'card') return showCard(productId);
-  // Category-level views (from "View all" buttons)
   if (productType === 'alerts') return showAlerts();
   if (productType === 'loans') return clarifyLoans();
   if (productType === 'deposits') return clarifyDeposits();
@@ -15025,9 +15110,8 @@ function openProductDetail(productType, productId) {
   if (productType === 'transactions') return startCategory('brief');
 }
 
-// Called from Member Snapshot product clicks → ensures AI panel is open, then shows product
+// Connection from Contact360 / Member Snapshot — preserved
 function snapshotProductClick(productType, productId) {
-  // Open the right panel (AI Assistant) if not already open
   const panel = document.getElementById('rightPanelExpandable');
   const handle = document.getElementById('panelResizeHandle');
   const wasOpen = panel && panel.classList.contains('open');
@@ -15036,13 +15120,9 @@ function snapshotProductClick(productType, productId) {
     panel.classList.add('open');
     if (handle) handle.classList.add('visible');
   }
-  // Show product detail in AI panel
-  setTimeout(function() {
-    openProductDetail(productType, productId);
-  }, wasOpen ? 50 : 300);
-  setTimeout(updateIHSState, 50);
+  setTimeout(function(){ openProductDetail(productType, productId); }, wasOpen ? 50 : 300);
+  setTimeout(function(){ if(typeof updateIHSState==='function') updateIHSState(); }, 50);
 }
-
 </script>
 
 <script>
@@ -17562,8 +17642,360 @@ body {
   text-align: right;
 }
 
+
+/* ════ AI ASSISTANT PANEL — updated build (appended; overrides earlier panel rules) ════ */
+
+:root {
+  /* AI Assistant Design Tokens (IHS-Harmonized) */
+  --ai-bg-start: #f5f3ff;
+  --ai-bg-end: #ede9fe;
+  --ai-card-bg: #fdfcf7;
+  --ai-card-hover: #f5f4f2;
+  --ai-text-primary: #3a3854;
+  --ai-text-secondary: #2d2b45;
+  --ai-text-tertiary: #9896b0;
+  --ai-accent: #5b5fcf;
+  --ai-border: rgba(0,0,0,.08);
+  --ai-border-purple: rgba(91, 95, 207, .15);
+
+  /* Status / semantic (sourced from IHS sentiment tokens) */
+  --ok-bg: rgba(13,124,82,.08);    --ok-bd: rgba(13,124,82,.22);    --ok-tx: #0d7c52;
+  --warn-bg: rgba(201,123,28,.08); --warn-bd: rgba(201,123,28,.30); --warn-tx: #92400e; --warn-ln: #c97b1c;
+  --crit-bg: rgba(211,47,47,.08);  --crit-bd: rgba(211,47,47,.28);  --crit-tx: #c62828; --crit-ln: #d32f2f;
+}
+
+
+
+/* ══════════════════════════════════════
+   AI ASSISTANT PANEL
+══════════════════════════════════════ */
+.ai-panel {
+  /* Embedded: fills its section. Bounds keep it within the 280–400px slot. */
+  width: 100%;
+  min-width: 280px;
+  max-width: 400px;
+  height: 800px;            /* embedded: set to 100% of the host section */
+  /* The panel responds to ITS OWN width (not the viewport) so it adapts
+     correctly inside a resizable container. */
+  container-type: inline-size;
+  container-name: aip;
+  /* Demo only: drag the bottom-right corner to test 280–400px. */
+  resize: horizontal;
+  background: linear-gradient(180deg, var(--ai-bg-start) 0%, var(--ai-bg-end) 100%);
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0,0,0,.12);
+}
+
+/* Responsive behaviour driven by the PANEL width (container queries) */
+@container aip (max-width: 340px) {
+  .pd-rows { grid-template-columns: 1fr; gap: 8px 0; }
+  .ai-welcome-text { font-size: 16px; }
+  .ai-welcome { padding: 20px 14px 16px; }
+  .pd-sec { padding: 10px 12px; }
+  .ai-suggested-card { padding: 12px; gap: 10px; }
+}
+
+/* ── Header ── */
+.ai-header {
+  padding: 12px 16px;
+  border-bottom: 0.5px solid var(--ai-border-purple);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,255,255,.3);
+}
+.ai-title-section { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.ai-icon {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: white; flex-shrink: 0;
+}
+.ai-title { font-size: 15px; font-weight: 500; color: #0c0b18; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ai-header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.ai-header-btn {
+  width: 32px; height: 32px; border-radius: 6px;
+  border: 1px solid var(--ai-border); background: white;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 14px; color: #525252;
+  transition: background 0.12s;
+}
+.ai-header-btn:hover { background: #f5f5f5; }
+
+/* ── Home (fills panel so input stays pinned to bottom) ── */
+.ai-home {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Welcome Section ── */
+.ai-welcome { padding: 24px 18px 18px; text-align: center; }
+.ai-welcome-emoji { font-size: 30px; margin-bottom: 10px; }
+.ai-welcome-text { font-size: 17px; font-weight: 600; color: var(--ai-text-primary); line-height: 1.35; letter-spacing: -.01em; }
+.ai-member-name { font-weight: 700; color: var(--ai-accent); }
+
+/* ── Content Area ── */
+.ai-content {
+  flex: 1; overflow-y: auto; padding: 0 16px 16px 16px;
+  min-height: 0;
+  scrollbar-width: thin; scrollbar-color: rgba(91, 95, 207, .2) transparent;
+}
+.ai-content::-webkit-scrollbar { width: 6px; }
+.ai-content::-webkit-scrollbar-thumb { background: rgba(91, 95, 207, .2); border-radius: 3px; }
+
+/* ── Section Label ── */
+.ai-section-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ai-text-tertiary); margin-bottom: 10px;
+}
+
+/* ── Suggested Cards ── */
+.ai-suggested-card {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--ai-card-bg);
+  border: 1px solid var(--ai-border);
+  border-radius: 11px;
+  padding: 13px 14px;
+  margin-bottom: 9px;
+  cursor: pointer;
+  transition: border-color .13s ease, background .13s ease, transform .13s ease;
+}
+.ai-suggested-card:hover {
+  background: var(--ai-card-hover);
+  border-color: var(--ai-border-purple);
+  transform: translateY(-1px);
+}
+.ai-card-ic {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: rgba(91, 95, 207, .09);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ai-accent); flex-shrink: 0;
+}
+.ai-card-ic svg { width: 17px; height: 17px; }
+.ai-card-text { min-width: 0; flex: 1; }
+.ai-card-title {
+  font-size: 13px; font-weight: 600; color: var(--ai-text-primary);
+  letter-spacing: -.01em; margin-bottom: 3px;
+}
+.ai-card-description { font-size: 11px; color: var(--ai-text-tertiary); line-height: 1.35; }
+
+/* ── Action Buttons (Cases & Member Brief) ── */
+.ai-action-buttons { display: flex; gap: 8px; margin-top: 12px; margin-bottom: 16px; }
+.ai-action-btn {
+  flex: 1; font-size: 10.5px; font-weight: 600; padding: 8px 12px;
+  background: white; border: 1px solid rgba(0,0,0,.12); border-radius: 7px;
+  color: var(--ai-text-primary); cursor: pointer; transition: all 0.13s ease; text-align: center;
+}
+.ai-action-btn:hover { border-color: var(--ai-accent); color: var(--ai-accent); background: rgba(91, 95, 207, .04); }
+
+/* ── Input Section ── */
+.ai-input-section { padding: 12px 16px; border-top: 0.5px solid var(--ai-border-purple); flex-shrink: 0; }
+.ai-input-wrapper {
+  display: flex; gap: 8px; align-items: center; padding: 10px 12px;
+  border: 1px solid rgba(91, 95, 207, .2); border-radius: 8px; background: white;
+}
+.ai-input {
+  flex: 1; border: none; outline: none; font-size: 13px; color: var(--ai-text-secondary);
+  background: transparent; font-family: inherit; resize: none; max-height: 100px;
+}
+.ai-input::placeholder { color: #b0afc8; }
+.ai-send-btn {
+  background: none; border: none; color: var(--ai-accent); font-size: 18px;
+  cursor: pointer; line-height: 1; font-weight: 600; padding: 0; transition: opacity 0.12s;
+}
+.ai-send-btn:hover { opacity: 0.7; }
+.ai-disclaimer { font-size: 9px; color: #b0afc8; margin-top: 6px; text-align: center; line-height: 1.3; }
+
+/* ── Conversation View (Hidden by default) ── */
+.ai-conversation { flex: 1; overflow-y: auto; padding: 16px; display: none;
+  scrollbar-width: thin; scrollbar-color: rgba(91, 95, 207, .2) transparent; }
+.ai-conversation::-webkit-scrollbar { width: 6px; }
+.ai-conversation::-webkit-scrollbar-thumb { background: rgba(91, 95, 207, .2); border-radius: 3px; }
+.ai-conversation.active { display: block; }
+
+.ai-msg { margin-bottom: 14px; font-size: 12.5px; line-height: 1.6; }
+.ai-msg.user {
+  color: #fff; background: #5C5685; align-self: flex-end;
+  padding: 8px 12px; border-radius: 10px; border-bottom-right-radius: 2px;
+  max-width: 85%; margin-left: auto; width: fit-content; font-weight: 500;
+  scroll-margin-top: 14px;
+}
+.ai-msg.assistant { color: var(--ai-text-secondary); }
+.ai-msg-label {
+  font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ai-text-tertiary); margin-bottom: 5px; display: flex; align-items: center; gap: 5px;
+}
+
+/* Typing / generating indicator */
+.ai-typing { display: inline-flex; gap: 4px; align-items: center; padding: 4px 2px; }
+.ai-typing span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--ai-accent);
+  opacity: .35; animation: ai-bounce 1.2s infinite ease-in-out;
+}
+.ai-typing span:nth-child(2) { animation-delay: .15s; }
+.ai-typing span:nth-child(3) { animation-delay: .30s; }
+.ai-typing-text { font-style: italic; font-size: 12.5px; color: var(--ai-text-tertiary); margin-left: 5px; }
+@keyframes ai-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: .35; }
+  40% { transform: translateY(-4px); opacity: 1; }
+}
+
+/* ── Clarification option list ── */
+.opt-list { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+.opt {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  background: var(--ai-card-bg); border: 1px solid var(--ai-border);
+  border-radius: 9px; padding: 9px 12px; cursor: pointer; transition: all 0.12s ease;
+}
+.opt:hover { border-color: var(--ai-accent); background: #fff; }
+.opt-main { min-width: 0; }
+.opt-name { font-size: 12px; font-weight: 600; color: var(--ai-text-primary); }
+.opt-sub { font-size: 10px; color: var(--ai-text-tertiary); margin-top: 1px; }
+.opt-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.opt-bal { font-size: 12px; font-weight: 600; color: var(--ai-text-secondary); white-space: nowrap; }
+
+/* ── Status pills ── */
+.pill {
+  font-size: 9px; font-weight: 700; letter-spacing: .02em; padding: 2px 7px;
+  border-radius: 20px; border: 1px solid; white-space: nowrap; text-transform: uppercase;
+}
+.pill.active { background: var(--ok-bg);   border-color: var(--ok-bd);   color: var(--ok-tx); }
+.pill.blocked{ background: var(--crit-bg); border-color: var(--crit-bd); color: var(--crit-tx); }
+.pill.warn   { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn-tx); }
+
+/* ── Product detail card ── */
+.pd {
+  background: #fff; border: 1px solid var(--ai-border); border-radius: 12px;
+  overflow: hidden; margin-top: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.pd-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 13px 14px 11px; }
+.pd-head-l { min-width: 0; }
+.pd-name { font-size: 13.5px; font-weight: 700; color: var(--ai-text-primary); letter-spacing: -.01em; }
+.pd-sub { font-size: 10.5px; color: var(--ai-text-tertiary); margin-top: 2px; }
+.pd-divider { height: 1px; background: var(--ai-border); margin: 0; }
+
+.pd-sec { padding: 11px 14px; }
+.pd-sec + .pd-sec { border-top: 1px solid rgba(0,0,0,.05); }
+.pd-sec-label {
+  font-size: 8.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ai-text-tertiary); margin-bottom: 8px;
+}
+.pd-rows { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 14px; }
+.pd-rows.one { grid-template-columns: 1fr; }
+.pd-k { font-size: 9.5px; color: var(--ai-text-tertiary); margin-bottom: 1px; }
+.pd-v { font-size: 12px; font-weight: 600; color: var(--ai-text-secondary); }
+.pd-v.mono { font-variant-numeric: tabular-nums; }
+
+/* Progress (loans) */
+.pd-prog-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 5px; }
+.pd-prog-pct { font-size: 12px; font-weight: 700; color: var(--ai-accent); }
+.pd-prog-lbl { font-size: 10px; color: var(--ai-text-tertiary); }
+.pd-prog-track { height: 7px; background: #ece9f8; border-radius: 20px; overflow: hidden; }
+.pd-prog-fill { height: 100%; background: linear-gradient(90deg, #7c80e0, #5b5fcf); border-radius: 20px; }
+
+/* Alert banner */
+.pd-alert {
+  margin: 0 14px 12px; border-radius: 9px; padding: 9px 11px;
+  border: 1px solid; border-left-width: 3px; display: flex; gap: 8px; align-items: flex-start;
+}
+.pd-alert.crit { background: var(--crit-bg); border-color: var(--crit-bd); border-left-color: var(--crit-ln); }
+.pd-alert.warn { background: var(--warn-bg); border-color: var(--warn-bd); border-left-color: var(--warn-ln); }
+.pd-alert-ic { flex-shrink: 0; margin-top: 1px; }
+.pd-alert.crit .pd-alert-ic { color: var(--crit-ln); }
+.pd-alert.warn .pd-alert-ic { color: var(--warn-ln); }
+.pd-alert-title { font-size: 11px; font-weight: 700; color: var(--ai-text-primary); margin-bottom: 2px; }
+.pd-alert-desc { font-size: 10.5px; color: var(--ai-text-secondary); line-height: 1.45; }
+
+/* Transaction row */
+.pd-txn { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.pd-txn-l { min-width: 0; }
+.pd-txn-name { font-size: 11.5px; font-weight: 600; color: var(--ai-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pd-txn-meta { font-size: 9.5px; color: var(--ai-text-tertiary); margin-top: 1px; }
+.pd-txn-amt { font-size: 12px; font-weight: 700; white-space: nowrap; }
+.pd-txn-amt.in { color: var(--ok-tx); }
+.pd-txn-amt.out { color: var(--ai-text-secondary); }
+.pd-txn-amt.dec { color: var(--crit-tx); text-decoration: line-through; }
+.pd-txn-stack { padding: 9px 0; align-items: flex-start; }
+.pd-txn-stack + .pd-txn-stack { border-top: 1px solid rgba(0,0,0,.05); }
+.pd-txn-stack .pd-txn-meta + .pd-txn-meta { margin-top: 1px; }
+.pd-txn-r { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; flex-shrink: 0; }
+
+/* Transaction filter chips */
+.txnfilters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.txnfilter {
+  font-size: 9.5px; font-weight: 600; color: var(--ai-text-tertiary);
+  background: transparent; border: 1px solid var(--ai-border); border-radius: 20px;
+  padding: 3px 9px; cursor: pointer; transition: all .12s; font-family: inherit; white-space: nowrap;
+}
+.txnfilter:hover { border-color: var(--ai-accent); color: var(--ai-accent); }
+.txnfilter.on { background: var(--ai-accent); border-color: var(--ai-accent); color: #fff; }
+
+/* Transaction status pill */
+.txn-st { font-size: 8px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase; padding: 1px 6px; border-radius: 20px; border: 1px solid; }
+.txn-st.posted    { background: var(--ok-bg);   border-color: var(--ok-bd);   color: var(--ok-tx); }
+.txn-st.pending   { background: var(--warn-bg); border-color: var(--warn-bd); color: var(--warn-tx); }
+.txn-st.bad       { background: var(--crit-bg); border-color: var(--crit-bd); color: var(--crit-tx); }
+.txn-st.cancelled { background: #f0f0f3; border-color: #e2e2e8; color: #777; }
+
+/* Members chips */
+.pd-members { display: flex; flex-direction: column; gap: 6px; }
+.pd-member { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.pd-member-l { min-width: 0; }
+.pd-member-name { font-size: 11.5px; font-weight: 600; color: var(--ai-text-secondary); }
+.pd-role { font-size: 9px; font-weight: 600; color: var(--ai-text-tertiary); background: #f0eefb; border-radius: 20px; padding: 2px 8px; white-space: nowrap; flex-shrink: 0; }
+.pd-subhead { font-size: 9.5px; font-weight: 600; color: var(--ai-text-tertiary); margin: 9px 0 6px; }
+
+/* Tooltip (blocked reason) */
+.tip { position: relative; cursor: help; border-bottom: 1px dotted var(--ai-text-tertiary); }
+.tip:hover::after {
+  content: attr(data-tip); position: absolute; left: 0; top: calc(100% + 6px); z-index: 50;
+  width: 220px; background: #2d2b45; color: #fff; font-size: 10px; font-weight: 400;
+  line-height: 1.4; padding: 8px 10px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.2);
+}
+
+/* ── Follow-up suggestions (trimmed list + badge switch) ── */
+.fwrap { margin-top: 12px; }
+.fu-lead { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ai-text-tertiary); margin: 2px 2px 8px; }
+.chev { color: var(--ai-text-tertiary); flex-shrink: 0; }
+.A-list { display: flex; flex-direction: column; }
+.A-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 11px 4px; border-top: 1px solid var(--ai-border);
+  font-size: 12.5px; font-weight: 500; color: var(--ai-text-primary);
+  cursor: pointer; transition: background .12s, padding .12s; background: transparent;
+}
+.A-row:first-child { border-top: none; }
+.A-row:hover { background: rgba(91,95,207,.05); padding-left: 8px; padding-right: 8px; border-radius: 8px; }
+.A-extra { display: none; }
+.A-list.expanded .A-extra { display: flex; }
+.A-more {
+  display: flex; align-items: center; gap: 6px; align-self: flex-start;
+  padding: 9px 4px 2px; background: none; border: none; cursor: pointer; font-family: inherit;
+  font-size: 12px; font-weight: 600; color: var(--ai-accent);
+}
+.A-more:hover { opacity: .8; }
+.more-chev { transition: transform .25s; }
+.A-list.expanded .A-more .more-chev { transform: rotate(180deg); }
+
+.switch-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ai-text-tertiary); margin: 16px 2px 8px; }
+.switch-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.nav-chip {
+  font-size: 11px; font-weight: 600; color: var(--ai-accent);
+  background: rgba(91,95,207,.06); border: 1px solid var(--ai-border-purple);
+  border-radius: 20px; padding: 6px 13px; cursor: pointer; transition: all .12s; font-family: inherit;
+}
+.nav-chip:hover { background: rgba(91,95,207,.12); }
+.nav-chip.current { background: var(--ai-accent); border-color: var(--ai-accent); color: #fff; }
+
 </style>
 
-<script>function c360ToggleItem(e){var t=e.target;if(t.closest&&(t.closest(".ms-detail")||t.closest("button")))return;e.currentTarget.classList.toggle("open");}</script>
+<script>function c360ToggleItem(e){var t=e.target;if(t.closest&&(t.closest(".ms-detail")||t.closest("button")))return;e.currentTarget.classList.toggle("open");}
+function c360ToggleFromBtn(e){e.stopPropagation();var it=e.currentTarget.closest(".ms-item");if(it)it.classList.toggle("open");}</script>
 </body>
 </html>
