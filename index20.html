@@ -5744,7 +5744,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <div class="ai-title">AI Assistant</div>
     </div>
     <div class="ai-header-actions">
-      <button class="ai-header-btn" onclick="refreshAI()" title="Home">↻</button>
+      <button class="ai-header-btn" id="homeBtn" onclick="refreshAI()" title="Home" style="display:none;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9.5L12 3l9 6.5"/>
+          <path d="M5 9.5V20a1 1 0 001 1h12a1 1 0 001-1V9.5"/>
+          <path d="M9.5 21v-6h5v6"/>
+        </svg>
+      </button>
       <button class="ai-header-btn" onclick="closeAI()" title="Close">✕</button>
     </div>
   </div>
@@ -5859,7 +5865,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
     </div>
   </div>
   
-  <!-- ══ RIGHT UTILITY BAR (48px) - At body level, sibling to workspace ══ -->
+    <!-- ══ RIGHT UTILITY BAR (48px) - At body level, sibling to workspace ══ -->
   <div class="right-util-bar" id="rightUtilBar">
     <!-- AI Assistant / Layers (Active with gradient) -->
     <button class="rub-btn rub-active" title="AI Assistant" onclick="toggleRightPanel()">
@@ -14073,9 +14079,7 @@ window.addEventListener('resize', () => {
 </script>
 
 <script>
-// ══════════════════════════════════════
-// AI ASSISTANT PANEL — Emily Olivers
-// ══════════════════════════════════════
+// AI ASSISTANT PANEL — Emily Olivers (v3)
 
 // ══════════════════════════════════════
 // SHARED DATA — Emily Olivers complete profile
@@ -14282,14 +14286,18 @@ function statusPill(status) {
 function openConversation() {
   document.getElementById('aiHome').style.display = 'none';
   document.getElementById('aiConversation').classList.add('active');
+  document.getElementById('homeBtn').style.display = 'flex';
 }
+let lastUserMsg = null;
 function pushUser(text) {
   const t = document.getElementById('messageThread');
   const el = document.createElement('div');
   el.className = 'ai-msg user';
   el.textContent = text;
   t.appendChild(el);
-  scrollDown();
+  lastUserMsg = el;
+  // Bring the new question to the top of the view; the response renders below it.
+  scrollQueryToTop(true);
 }
 let aiTimer = null;
 function pushAssistant(html) {
@@ -14305,7 +14313,7 @@ function pushAssistant(html) {
   loader.innerHTML = `<div class="ai-msg-label">◆ AI Assistant</div>
     <div class="ai-typing"><span></span><span></span><span></span><em class="ai-typing-text">Generating response…</em></div>`;
   t.appendChild(loader);
-  scrollDown();
+  scrollQueryToTop(false);
 
   // 2) After a short delay, replace it with the real response
   const delay = 850 + Math.random() * 900; // ~0.85–1.75s
@@ -14317,12 +14325,14 @@ function pushAssistant(html) {
     el.className = 'ai-msg assistant';
     el.innerHTML = `<div class="ai-msg-label">◆ AI Assistant</div>${html}`;
     t.appendChild(el);
-    scrollDown();
+    // Keep the question anchored at the top; the answer flows beneath it.
+    scrollQueryToTop(false);
   }, delay);
 }
-function scrollDown() {
-  const c = document.getElementById('aiConversation');
-  c.scrollTop = c.scrollHeight;
+// Anchor the most recent user query near the top of the scroll viewport.
+function scrollQueryToTop(smooth) {
+  if (!lastUserMsg) return;
+  lastUserMsg.scrollIntoView({ block: 'start', behavior: smooth ? 'smooth' : 'auto' });
 }
 
 // ── Category entry points (clarification step) ──
@@ -14593,20 +14603,89 @@ const CATEGORIES = {
   ]
 };
 
-function followups(kind, id) {
-  const more = CATEGORIES[kind]
-    .filter(f => f[0] !== activeFacet)
-    .map(f => `<button class="fchip" onclick="showFacet('${kind}','${id}','${f[0]}')">${f[1]}</button>`).join('');
+// Natural-language questions per category (clearer than noun labels;
+// ownership vs membership kept distinct).
+const QUESTIONS = {
+  loan: {
+    status: "What's the current status?", balances: "What's the balance & payoff?",
+    ownership: "Who's on this loan?", payments: "When's the next payment due?",
+    interest: "What's the interest & APR?", progress: "How much is paid off?",
+    membership: "List borrowers and their roles", alerts: "Any alerts or restrictions?"
+  },
+  deposit: {
+    balances: "What are the current balances?", ownership: "Who owns this account?",
+    permissions: "What actions are permitted?", limits: "Show the account limits",
+    earnings: "How much interest has it earned?", routing: "Show routing & account numbers",
+    membership: "List members and their roles", txns: "Show recent transactions",
+    alerts: "Any alerts or restrictions?"
+  },
+  card: {
+    credit: "What's the credit line?", payments: "What's the payment due?",
+    interest: "Interest charges", ownership: "Who's on this card?",
+    membership: "List members and their roles", txns: "Show recent transactions",
+    alerts: "Any alerts or restrictions?"
+  }
+};
+// Situation-aware phrasing for a couple of card states
+function questionText(kind, item, key) {
+  if (kind === 'card' && item.status === 'Blocked') {
+    if (key === 'alerts') return 'Why was this card blocked?';
+    if (key === 'txns')   return 'Show the declined & failed charges';
+  }
+  return QUESTIONS[kind][key];
+}
+// Order categories by relevance to the account's current state (silent ranking).
+function orderedFacets(kind, item) {
+  let order;
+  if (kind === 'loan') {
+    order = ['balances','payments','progress','interest','ownership','membership','status','alerts'];
+    if (item.pastDue > 0 || item.daysDelinquent > 0)
+      order = ['payments','status', ...order.filter(k => k !== 'payments' && k !== 'status')];
+  } else if (kind === 'deposit') {
+    order = ['txns','membership','ownership','permissions','limits','earnings','routing','balances','alerts'];
+  } else { // card
+    order = item.status === 'Blocked'
+      ? ['alerts','txns','ownership','payments','credit','interest','membership']
+      : ['txns','payments','credit','interest','ownership','membership','alerts'];
+  }
+  // An active alert is the most important thing to see first
+  if (item.alert && order[0] !== 'alerts')
+    order = ['alerts', ...order.filter(k => k !== 'alerts')];
+  // Don't suggest the category already on screen
+  return order.filter(k => k !== activeFacet);
+}
 
-  const nav = { loan: ['deposits','cards'], deposit: ['loans','cards'], card: ['loans','deposits'] };
-  const navLabel = { loans: 'Loans', deposits: 'Deposits', cards: 'Cards' };
-  const navChips = nav[kind].map(c =>
-    `<button class="fchip nav" onclick="startCategory('${c}')">→ ${navLabel[c]}</button>`).join('');
+const CHEV = `<svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`;
+const TOP_N = 3; // questions shown before "Show more"
+
+function followups(kind, id) {
+  const item = (kind === 'loan' ? SHARED_DATA.loans : kind === 'deposit' ? SHARED_DATA.deposits : SHARED_DATA.cards)
+    .find(x => x.id === id);
+  const keys = orderedFacets(kind, item);
+
+  const rowsHtml = keys.map((k, i) =>
+    `<div class="A-row${i >= TOP_N ? ' A-extra' : ''}" onclick="showFacet('${kind}','${id}','${k}')">${questionText(kind, item, k)}${CHEV}</div>`
+  ).join('');
+  const moreBtn = keys.length > TOP_N
+    ? `<button class="A-more" onclick="toggleMore(this)"><span class="more-label">Show more</span><svg class="more-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>`
+    : '';
+
+  const cur = kind === 'loan' ? 'loans' : kind === 'deposit' ? 'deposits' : 'cards';
+  const chips = ['loans','cards','deposits'].map(c =>
+    `<button class="nav-chip${c === cur ? ' current' : ''}" onclick="startCategory('${c}')">${c[0].toUpperCase() + c.slice(1)}</button>`
+  ).join('');
 
   return `<div class="fwrap">
-    <div class="fgroup"><div class="fgroup-label">Explore more</div><div class="fchips">${more}</div></div>
-    <div class="fgroup"><div class="fgroup-label">Switch to</div><div class="fchips">${navChips}</div></div>
+    <div class="fu-lead">Anything else? Tap to ask:</div>
+    <div class="A-list">${rowsHtml}${moreBtn}</div>
+    <div class="switch-label">Or open another product</div>
+    <div class="switch-chips">${chips}</div>
   </div>`;
+}
+function toggleMore(btn) {
+  const list = btn.closest('.A-list');
+  const expanded = list.classList.toggle('expanded');
+  btn.querySelector('.more-label').textContent = expanded ? 'Show less' : 'Show more';
 }
 
 // ── Row + view helpers ──
@@ -14926,8 +15005,9 @@ function refreshAI() {
   document.getElementById('aiHome').style.display = 'flex';
   document.getElementById('aiConversation').classList.remove('active');
   document.getElementById('messageThread').innerHTML = '';
+  document.getElementById('homeBtn').style.display = 'none';
 }
-function closeAI() { if(typeof toggleRightPanel === 'function') toggleRightPanel(); }
+function closeAI() { alert('In the full prototype, this would close the AI panel'); }
 
 // Entry point used by Member Snapshot → opens a product detail directly
 function openProductDetail(productType, productId) {
@@ -14935,7 +15015,15 @@ function openProductDetail(productType, productId) {
   if (productType === 'loan') return showLoan(productId);
   if (productType === 'deposit') return showDeposit(productId);
   if (productType === 'card') return showCard(productId);
-  // Category-level views (from "View all" buttons)
+}
+
+
+// ── Integration with Member Snapshot ──
+function openProductDetail(productType, productId) {
+  openConversation();
+  if (productType === 'loan') return showLoan(productId);
+  if (productType === 'deposit') return showDeposit(productId);
+  if (productType === 'card') return showCard(productId);
   if (productType === 'alerts') return showAlerts();
   if (productType === 'loans') return clarifyLoans();
   if (productType === 'deposits') return clarifyDeposits();
@@ -14943,23 +15031,22 @@ function openProductDetail(productType, productId) {
   if (productType === 'transactions') return startCategory('brief');
 }
 
-// Called from Member Snapshot product clicks → ensures AI panel is open, then shows product
 function snapshotProductClick(productType, productId) {
-  // Open the right panel (AI Assistant) if not already open
-  const panel = document.getElementById('rightPanelExpandable');
-  const handle = document.getElementById('panelResizeHandle');
-  const wasOpen = panel && panel.classList.contains('open');
+  var panel = document.getElementById('rightPanelExpandable');
+  var handle = document.getElementById('panelResizeHandle');
+  var wasOpen = panel && panel.classList.contains('open');
   if (panel && !wasOpen) {
     panel.style.width = '';
     panel.classList.add('open');
     if (handle) handle.classList.add('visible');
   }
-  // Show product detail in AI panel
   setTimeout(function() {
     openProductDetail(productType, productId);
   }, wasOpen ? 50 : 300);
-  setTimeout(updateIHSState, 50);
+  if (typeof updateIHSState === 'function') setTimeout(updateIHSState, 50);
 }
+
+function closeAI() { if(typeof toggleRightPanel === 'function') toggleRightPanel(); }
 
 </script>
 
@@ -16207,14 +16294,9 @@ function viewAll(section) {
 /* ═══ AI ASSISTANT PANEL (embedded in right panel) ═══ */
 /* Override standalone demo styles for embedded context */
 .right-panel-inner .ai-panel {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: none !important;
-  height: 100% !important;
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  resize: none !important;
+  width: 100% !important; min-width: 0 !important; max-width: none !important;
+  height: 100% !important; border: none !important; border-radius: 0 !important;
+  box-shadow: none !important; resize: none !important;
 }
 
 
@@ -16237,7 +16319,7 @@ function viewAll(section) {
   --crit-bg: rgba(211,47,47,.08);  --crit-bd: rgba(211,47,47,.28);  --crit-tx: #c62828; --crit-ln: #d32f2f;
 }
 
-/* (reset already in host) */
+
 
 body {
   font-family: -apple-system, 'SF Pro Text', 'DM Sans', sans-serif;
@@ -16407,8 +16489,9 @@ body {
   color: #fff; background: #5C5685; align-self: flex-end;
   padding: 8px 12px; border-radius: 10px; border-bottom-right-radius: 2px;
   max-width: 85%; margin-left: auto; width: fit-content; font-weight: 500;
+  scroll-margin-top: 14px;
 }
-.ai-msg.assistant { color: var(--ai-text-secondary); width: 100%; }
+.ai-msg.assistant { color: var(--ai-text-secondary); }
 .ai-msg-label {
   font-size: 9px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
   color: var(--ai-text-tertiary); margin-bottom: 5px; display: flex; align-items: center; gap: 5px;
@@ -16538,26 +16621,43 @@ body {
 .tip:hover::after {
   content: attr(data-tip); position: absolute; left: 0; top: calc(100% + 6px); z-index: 50;
   width: 220px; background: #2d2b45; color: #fff; font-size: 10px; font-weight: 400;
-  line-height: 1.4; padding: 8px 10px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.10);
+  line-height: 1.4; padding: 8px 10px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,.2);
 }
 
-/* ── Follow-up chips ── */
-.fwrap { margin-top: 10px; }
-.fgroup + .fgroup { margin-top: 9px; }
-.fgroup-label {
-  font-size: 8.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--ai-text-tertiary); margin-bottom: 6px;
+/* ── Follow-up suggestions (trimmed list + badge switch) ── */
+.fwrap { margin-top: 12px; }
+.fu-lead { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ai-text-tertiary); margin: 2px 2px 8px; }
+.chev { color: var(--ai-text-tertiary); flex-shrink: 0; }
+.A-list { display: flex; flex-direction: column; }
+.A-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 11px 4px; border-top: 1px solid var(--ai-border);
+  font-size: 12.5px; font-weight: 500; color: var(--ai-text-primary);
+  cursor: pointer; transition: background .12s, padding .12s; background: transparent;
 }
-.fchips { display: flex; flex-wrap: wrap; gap: 6px; }
-.fchip {
-  font-size: 10.5px; font-weight: 600; color: var(--ai-text-primary);
-  background: var(--ai-card-bg); border: 1px solid var(--ai-border);
-  border-radius: 20px; padding: 5px 11px; cursor: pointer; transition: all .12s ease;
-  display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; font-family: inherit;
+.A-row:first-child { border-top: none; }
+.A-row:hover { background: rgba(91,95,207,.05); padding-left: 8px; padding-right: 8px; border-radius: 8px; }
+.A-extra { display: none; }
+.A-list.expanded .A-extra { display: flex; }
+.A-more {
+  display: flex; align-items: center; gap: 6px; align-self: flex-start;
+  padding: 9px 4px 2px; background: none; border: none; cursor: pointer; font-family: inherit;
+  font-size: 12px; font-weight: 600; color: var(--ai-accent);
 }
-.fchip:hover { border-color: var(--ai-accent); color: var(--ai-accent); background: #fff; }
-.fchip.nav { background: rgba(91,95,207,.06); border-color: var(--ai-border-purple); color: var(--ai-accent); }
-.fchip.nav:hover { background: rgba(91,95,207,.12); }
+.A-more:hover { opacity: .8; }
+.more-chev { transition: transform .25s; }
+.A-list.expanded .A-more .more-chev { transform: rotate(180deg); }
+
+.switch-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ai-text-tertiary); margin: 16px 2px 8px; }
+.switch-chips { display: flex; flex-wrap: wrap; gap: 7px; }
+.nav-chip {
+  font-size: 11px; font-weight: 600; color: var(--ai-accent);
+  background: rgba(91,95,207,.06); border: 1px solid var(--ai-border-purple);
+  border-radius: 20px; padding: 6px 13px; cursor: pointer; transition: all .12s; font-family: inherit;
+}
+.nav-chip:hover { background: rgba(91,95,207,.12); }
+.nav-chip.current { background: var(--ai-accent); border-color: var(--ai-accent); color: #fff; }
+
 
 
 /* ══ INTERACTION HANDOFF SUMMARY (IHS) ══ */
