@@ -5769,7 +5769,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       </div>
 
       <div class="ai-action-buttons">
-        <button class="ai-action-btn" onclick="startCategory('brief')">📖 Member Brief</button>
+        <button class="ai-action-btn" onclick="setRightPanelView('snapshot')">👤 Member Overview</button>
       </div>
     </div>
   </div>
@@ -6901,13 +6901,18 @@ function openRightPanel(view){
   const currentView = document.getElementById('rpViewSnapshot') &&
     document.getElementById('rpViewSnapshot').style.display !== 'none' ? 'snapshot' : 'ai';
 
-  // Clicking the icon of the already-open view → close the panel
+  // Member Overview is the resting state and always stays open.
+  // Clicking the AI icon while AI is showing → fall back to Member Overview (panel stays open).
   if(isOpen && currentView === view){
-    closeRightPanel();
+    if(view === 'ai'){
+      setRightPanelView('snapshot');
+      return;
+    }
+    // Snapshot icon while snapshot showing → no-op (it's always open)
     return;
   }
 
-  // Open (or already open) → show requested view at the same size, with handle
+  // Show requested view at the same size, with handle; panel stays open
   setRightPanelView(view);
   panel.style.width = '';
   panel.classList.add('open');
@@ -6920,18 +6925,15 @@ function openRightPanel(view){
   }
 }
 
+// "Closing" the AI panel returns to Member Overview (the panel never fully closes)
 function closeRightPanel(){
   const panel = document.getElementById('rightPanelExpandable');
   const handle = document.getElementById('panelResizeHandle');
-  const rubAI = document.getElementById('rubAI');
-  const rubSnap = document.getElementById('rubSnapshot');
   if(!panel) return;
-  panel.classList.remove('open');
   panel.style.width = '';
-  if(handle) handle.classList.remove('visible');
-  if(rubAI) rubAI.classList.remove('rub-active');
-  if(rubSnap) rubSnap.classList.remove('rub-active');
-  expandMemberSnapshot();
+  panel.classList.add('open');
+  if(handle) handle.classList.add('visible');
+  setRightPanelView('snapshot');
 }
 
 // Backwards-compatible: default toggle targets the AI view
