@@ -4177,8 +4177,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <!-- Test tab pane (state 1) -->
           <div class="wf-pane s1-wf-pane" id="s1-test">
             <div class="test-split-wrapper">
-              <div class="test-split">
-                <div class="test-pane test-pane-top" id="s1TestTop">
+              <div class="test-split book-deck" id="s1Deck">
+                <div class="test-pane test-pane-top mov-page" id="s1TestTop" onclick="bringForward('s1Deck','mov')">
+                  <div class="bp-peek">
+                    <div class="iconwrap"><div class="sic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="pbadge">!</span></div>
+                    <span class="vlabel">Member Overview</span>
+                  </div>
+                  <button class="bp-collapse" title="Collapse — show Conversation" onclick="event.stopPropagation();bringForward('s1Deck','conv')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg></button>
                   <div class="test-pane-header">
                     <button class="test-collapse-trigger" onclick="togglePaneCollapse(this)" title="Collapse right panel">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -4188,6 +4193,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                       </svg>
                     </button>
                     <span class="test-pane-label" style="font-size:11.5px;">Member Overview</span>
+                    <button class="bp-hdr-collapse" title="Collapse Member Overview" onclick="event.stopPropagation();bringForward('s1Deck','conv')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></button>
                   </div>
                   <div class="test-pane-body">
                     <div class="ms-scroll">
@@ -4601,7 +4607,12 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                 </div>
                 </div>
                 <div class="test-vresize-handle" data-target="s1"></div>
-                <div class="test-pane test-pane-bottom" id="s1TestBottom">
+                <div class="test-pane test-pane-bottom conv-page hasnew" id="s1TestBottom" onclick="bringForward('s1Deck','conv')">
+                  <div class="bp-peek">
+                    <div class="iconwrap"><div class="sic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="pbadge">2</span></div>
+                    <span class="vlabel">Conversation</span>
+                  </div>
+                  <button class="bp-collapse" title="Collapse — show Member Overview" onclick="event.stopPropagation();bringForward('s1Deck','mov')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></button>
                   <div class="test-pane-body">
 
                     <!-- Interaction Handoff Summary -->
@@ -6553,7 +6564,9 @@ function toggleRightPanel(){
 
 // Collapse Member Snapshot programmatically
 function collapseMemberSnapshot() {
+  document.querySelectorAll('.test-split.book-deck').forEach(function(d){ if(d.id) bringForward(d.id,'conv'); });
   document.querySelectorAll('.test-pane-top').forEach(pane => {
+    if (pane.closest('.test-split.book-deck')) return; // handled by book-deck logic
     if (pane.classList.contains('collapsed')) return;
     const split = pane.closest('.test-split');
     if (!split) return;
@@ -6574,7 +6587,9 @@ function collapseMemberSnapshot() {
 
 // Expand Member Snapshot programmatically
 function expandMemberSnapshot() {
+  document.querySelectorAll('.test-split.book-deck').forEach(function(d){ if(d.id) bringForward(d.id,'mov'); });
   document.querySelectorAll('.test-pane-top').forEach(pane => {
+    if (pane.closest('.test-split.book-deck')) return; // handled by book-deck logic
     if (!pane.classList.contains('collapsed')) return;
     const split = pane.closest('.test-split');
     if (!split) return;
@@ -15046,6 +15061,62 @@ function snapshotProductClick(productType, productId) {
   if (typeof updateIHSState === 'function') setTimeout(updateIHSState, 50);
 }
 
+function bringForward(deckId, which) {
+  var deck = document.getElementById(deckId);
+  if (!deck) return;
+  if (!deck.classList.contains('bp-on')) return; // book mode only active while AI panel is open
+  var conv = deck.querySelector('.conv-page');
+  var mov  = deck.querySelector('.mov-page');
+  var front = which === 'conv' ? conv : mov;
+  var back  = which === 'conv' ? mov  : conv;
+  if (!front || !back) return;
+  if (front.classList.contains('bp-front')) return; // already expanded
+  front.classList.remove('bp-back'); front.classList.add('bp-front');
+  back.classList.remove('bp-front'); back.classList.add('bp-back');
+  if (which === 'conv') front.classList.remove('hasnew'); // clear unread pulse
+  if (typeof updateIHSState === 'function') setTimeout(updateIHSState, 50);
+}
+
+/* Book-deck follows the AI Assistant panel:
+   AI open  → activate deck, auto-collapse Conversation (Member Overview stays expanded).
+   AI closed → deactivate deck, both panes side-by-side (enough room). */
+function syncBookDecks() {
+  var aiPanel = document.getElementById('rightPanelExpandable');
+  var aiOpen = !!(aiPanel && aiPanel.classList.contains('open'));
+  document.querySelectorAll('.test-split.book-deck').forEach(function(deck){
+    var conv = deck.querySelector('.conv-page');
+    var mov  = deck.querySelector('.mov-page');
+    if (aiOpen) {
+      if (!deck.classList.contains('bp-on')) {
+        deck.classList.add('bp-on');
+        // default when squeezed: Member Overview expanded, Conversation collapsed to peek
+        if (mov && conv) {
+          mov.classList.add('bp-front');  mov.classList.remove('bp-back');
+          conv.classList.add('bp-back');  conv.classList.remove('bp-front');
+        }
+      }
+    } else if (deck.classList.contains('bp-on')) {
+      deck.classList.remove('bp-on');
+      if (conv) conv.classList.remove('bp-front','bp-back');
+      if (mov)  mov.classList.remove('bp-front','bp-back');
+    }
+  });
+}
+
+// Keep decks in sync no matter which code path opens/closes the AI panel
+(function initBookDeckSync(){
+  function start(){
+    var panel = document.getElementById('rightPanelExpandable');
+    if (!panel) { setTimeout(start, 200); return; }
+    try {
+      new MutationObserver(syncBookDecks).observe(panel, { attributes:true, attributeFilter:['class'] });
+    } catch(e){}
+    syncBookDecks(); // set correct initial (flat) state
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
 function closeAI() { if(typeof toggleRightPanel === 'function') toggleRightPanel(); }
 
 </script>
@@ -15071,7 +15142,11 @@ function toggleIHS(btn) {
 // Auto-collapse IHS when either panel squeezes the messages area
 function updateIHSState() {
   const aiOpen = document.getElementById('rightPanelExpandable')?.classList.contains('open');
-  const snapshotExpanded = document.querySelector('.test-pane-top') && !document.querySelector('.test-pane-top').classList.contains('collapsed');
+  let snapshotExpanded = false;
+  document.querySelectorAll('.test-pane-top').forEach(function(p){
+    if (p.closest('.test-split.book-deck')) { if (p.classList.contains('bp-front')) snapshotExpanded = true; }
+    else if (!p.classList.contains('collapsed')) snapshotExpanded = true;
+  });
   const shouldCollapse = aiOpen || snapshotExpanded;
   document.querySelectorAll('.ihs-root').forEach(root => {
     const toggleText = root.querySelector('.ihs-toggle-text');
@@ -17579,6 +17654,86 @@ body {
   color: #1a1a2e;
   text-align: right;
 }
+
+
+/* ══════════════════════════════════════════════════════════════
+   BOOK-PAGES COLLAPSE — Conversation ↔ Member Overview
+   Page-card visual language (matches collapse-book-pages mockup):
+   rounded, floating cards inside a 6px-inset deck.
+   • AI panel CLOSED → two cards side-by-side, both expanded.
+   • AI panel OPEN (.bp-on) → cards overlap; the receded one peeks
+     on its home edge (Conversation left, Member Overview right).
+   Scoped to .test-split.book-deck so base .test-pane rules elsewhere
+   are untouched.
+   ══════════════════════════════════════════════════════════════ */
+.test-split.book-deck{padding:6px;gap:6px;background:var(--bg);overflow:hidden;}
+.test-split.book-deck .test-vresize-handle{display:none!important;}
+.test-split.book-deck .test-pane-header .test-collapse-trigger{display:none;}
+.test-split.book-deck .test-pane{
+  border:1px solid var(--border);border-radius:11px;background:var(--s0);
+  overflow:hidden;box-shadow:var(--sh1);
+}
+
+/* ── AI open: overlapping book deck ── */
+.test-split.book-deck.bp-on{position:relative;display:block;}
+.test-split.book-deck.bp-on .test-pane{
+  position:absolute;top:6px;bottom:6px;
+  flex:none!important;min-width:0!important;max-width:none!important;width:auto!important;
+  transition:left .46s cubic-bezier(.22,1,.36,1),right .46s cubic-bezier(.22,1,.36,1),
+             transform .46s cubic-bezier(.22,1,.36,1),box-shadow .4s ease;
+  will-change:left,right,transform;
+}
+.test-split.book-deck.bp-on .conv-page{transform-origin:left center;}
+.test-split.book-deck.bp-on .mov-page{transform-origin:right center;}
+.test-split.book-deck.bp-on .conv-page.bp-front{left:6px;right:52px;z-index:2;transform:none;
+  box-shadow:8px 0 22px -6px rgba(0,0,0,.16),var(--sh2);}
+.test-split.book-deck.bp-on .mov-page.bp-front{left:52px;right:6px;z-index:2;transform:none;
+  box-shadow:-8px 0 22px -6px rgba(0,0,0,.16),var(--sh2);}
+.test-split.book-deck.bp-on .test-pane.bp-back{left:6px;right:6px;z-index:1;transform:scale(.985);
+  box-shadow:var(--sh1);cursor:pointer;}
+
+/* real content fades as a page recedes; peek fades in */
+.test-split.book-deck.bp-on .test-pane > .test-pane-header,
+.test-split.book-deck.bp-on .test-pane > .test-pane-body{transition:opacity .2s ease;}
+.test-split.book-deck.bp-on .test-pane.bp-back > .test-pane-header,
+.test-split.book-deck.bp-on .test-pane.bp-back > .test-pane-body{opacity:0;pointer-events:none;}
+
+/* peek — identity strip on the page's own home edge */
+.test-split.book-deck .bp-peek{position:absolute;top:0;bottom:0;width:46px;display:flex;
+  flex-direction:column;align-items:center;justify-content:flex-start;padding:16px 0;gap:11px;
+  background:var(--s0);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:3;}
+.test-split.book-deck .conv-page .bp-peek{left:0;}
+.test-split.book-deck .mov-page .bp-peek{right:0;}
+.test-split.book-deck.bp-on .test-pane.bp-back .bp-peek{opacity:1;pointer-events:auto;}
+.test-split.book-deck .bp-peek .iconwrap{position:relative;flex-shrink:0;}
+.test-split.book-deck .bp-peek .sic{width:30px;height:30px;border-radius:9px;display:flex;
+  align-items:center;justify-content:center;}
+.test-split.book-deck .conv-page .bp-peek .sic{background:var(--ts);color:var(--teal);border:1px solid rgba(0,150,136,.2);}
+.test-split.book-deck .mov-page .bp-peek .sic{background:var(--as);color:var(--accent);border:1px solid rgba(0,137,123,.2);}
+.test-split.book-deck .bp-peek .pbadge{position:absolute;top:-6px;right:-7px;min-width:17px;height:17px;
+  padding:0 4px;border-radius:20px;background:var(--teal);color:#fff;font-size:9px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;border:2px solid var(--s0);}
+.test-split.book-deck .mov-page .bp-peek .pbadge{background:var(--red);}
+.test-split.book-deck .bp-peek .vlabel{writing-mode:vertical-rl;transform:rotate(180deg);
+  font-size:11.5px;font-weight:600;letter-spacing:.02em;white-space:nowrap;color:var(--t2);}
+@keyframes bpSoftPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,150,136,0)}50%{box-shadow:0 0 0 4px rgba(0,150,136,.16)}}
+.test-split.book-deck.bp-on .test-pane.bp-back.hasnew .bp-peek .pbadge{animation:bpSoftPulse 1.8s ease-in-out infinite;}
+
+/* inner-edge collapse chevron — only on the expanded page while bp-on */
+.test-split.book-deck .bp-collapse{position:absolute;top:50%;transform:translateY(-50%);z-index:6;
+  display:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:var(--s0);
+  box-shadow:var(--sh1);color:var(--t2);cursor:pointer;align-items:center;justify-content:center;transition:all .14s;}
+.test-split.book-deck.bp-on .test-pane.bp-front .bp-collapse{display:flex;}
+.test-split.book-deck .conv-page .bp-collapse{right:10px;}
+.test-split.book-deck .mov-page .bp-collapse{left:10px;}
+.test-split.book-deck .bp-collapse:hover{background:var(--s1);border-color:var(--border2);color:var(--t1);box-shadow:var(--sh2);}
+
+/* small collapse button on the extreme right of a card's title bar (title cards only) */
+.test-split.book-deck .bp-hdr-collapse{display:none;margin-left:auto;flex-shrink:0;
+  width:24px;height:24px;border-radius:6px;border:1px solid var(--border);background:var(--s0);
+  color:var(--t2);cursor:pointer;align-items:center;justify-content:center;transition:all .13s;}
+.test-split.book-deck.bp-on .test-pane.bp-front .bp-hdr-collapse{display:inline-flex;}
+.test-split.book-deck .bp-hdr-collapse:hover{background:var(--s1);border-color:var(--border2);color:var(--t1);box-shadow:var(--sh2);}
 
 </style>
 
