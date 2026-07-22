@@ -5698,80 +5698,415 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
     </div>
   </div>
 
+  <!-- Breadcrumb (shown only inside a query; names the latest product/category) -->
+  <div class="ai-crumb" id="aiCrumb" style="display:none;">
+    <button class="ai-crumb-link" onclick="refreshAI()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>Member Overview</button>
+    <span class="ai-crumb-sep">/</span>
+    <span class="ai-crumb-current" id="aiCrumbCurrent"></span>
+  </div>
+
   <!-- Home Screen -->
   <div class="ai-home" id="aiHome">
+<div class="msv-scroll">
 
-    <div class="ai-welcome">
-      <div class="ai-welcome-emoji">👋</div>
-      <div class="ai-welcome-text">
-        Help <span class="ai-member-name" id="welcomeName">Emily</span> with her request
+      <!-- ── ALERTS — All levels, one place ── -->
+      <div class="msv-box">
+        <div class="msv-box-hdr">
+          <div class="msv-box-title">Alerts (4)</div>
+        </div>
+
+        <div class="msv-membership-alert msv-ma-cond critical" id="alert-olb-ai" onclick="msvAskAlert('olb')">
+          <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskAlert('olb')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+          <span class="msv-ma-icon critical"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>
+          <div class="msv-ma-body">
+            <div class="msv-ma-top">
+              <span class="msv-ma-title critical">OLB Access Restricted</span>
+              <span class="msv-ma-code critical">OLB</span>
+            </div>
+            <div class="msv-ma-sub">Online banking locked — suspected fraud on linked card. Do not re-enable until FR-CARD on Visa •••• 7892 is resolved.</div>
+            <div class="msv-ma-foot">
+              <span class="msv-ma-who">System Auto · Jun 17</span>
+              <span class="msv-ma-tk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Jun 24</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="msv-membership-alert msv-ma-cond critical" id="alert-fraud-ai" onclick="msvAskAlert('fraud')">
+          <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskAlert('fraud')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+          <span class="msv-ma-icon critical"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>
+          <div class="msv-ma-body">
+            <div class="msv-ma-top">
+              <span class="msv-ma-title critical">Card Blocked — Visa •••• 7892</span>
+              <span class="msv-ma-code critical">FR-CARD</span>
+            </div>
+            <div class="msv-ma-sub">Unauthorized international charges. Contact Risk before unblocking — Paris travel claim pending verification.</div>
+            <div class="msv-ma-foot">
+              <span class="msv-ma-who">M. Thompson · Jun 17</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="msv-membership-alert msv-ma-cond warning" id="alert-courtesy-ai" onclick="msvAskAlert('courtesy')">
+          <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskAlert('courtesy')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+          <span class="msv-ma-icon warning"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+          <div class="msv-ma-body">
+            <div class="msv-ma-top">
+              <span class="msv-ma-title warning">Courtesy Pay — Family Vac •••• 7641</span>
+              <span class="msv-ma-code warning">064</span>
+            </div>
+            <div class="msv-ma-sub">Courtesy pay limit reached this billing cycle. Member notified via text Jun 15 — no escalation requested.</div>
+            <div class="msv-ma-foot">
+              <span class="msv-ma-who">A. Raynold · Jun 15</span>
+              <span class="msv-ma-tk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Jul 01</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="msv-membership-alert msv-ma-cond warning" id="alert-sb1-ai" onclick="msvAskAlert('sb1')">
+          <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskAlert('sb1')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+          <span class="msv-ma-icon warning"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+          <div class="msv-ma-body">
+            <div class="msv-ma-top">
+              <span class="msv-ma-title warning">No Sharing — Privacy Restriction</span>
+              <span class="msv-ma-code warning">080</span>
+            </div>
+            <div class="msv-ma-sub">Info cannot be shared via shared branching or third parties. Set after fraud incident.</div>
+            <div class="msv-ma-foot">
+              <span class="msv-ma-who">J. Fuqua · Jun 18</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="msv-view-all-bottom" onclick="msvViewAll('alerts')">View all alerts</button>
       </div>
-    </div>
 
-    <div class="ai-content">
-      <div class="ai-section-label">Suggested</div>
-
-      <!-- Card 1: Loans -->
-      <div class="ai-suggested-card" onclick="startCategory('loans')">
-        <div class="ai-card-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
-        </div>
-        <div class="ai-card-text">
-          <div class="ai-card-title">Loan situation?</div>
-          <div class="ai-card-description">Auto &amp; mortgage, both current</div>
+      <!-- ── LOANS — Collapsed (no alerts) ── -->
+      <div class="msv-box">
+        <div class="msv-section" id="sec-loans-ai">
+          <div class="msv-section-hdr" onclick="msvToggleSection('sec-loans-ai')">
+            <div class="msv-section-left">
+              <div class="msv-box-title">Loans (2)</div>
+              <span class="msv-section-badge ok">All current</span>
+            </div>
+            <span class="msv-section-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </div>
+          <div class="msv-section-body">
+            <div class="msv-item msv-item-click" id="b-loan-7712-ai" onclick="msvAskFromItem(this)">
+              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+              <div class="msv-item-row">
+                <span class="msv-item-name">2022 Tesla Model 3</span>
+                <div class="msv-item-right">
+                  <span class="msv-item-number">•••• 7712</span>
+                  <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </div>
+              </div>
+              <div class="msv-detail">
+                <div class="msv-bar-wrap">
+                  <div class="msv-bar-label"><span>Paid</span><span class="msv-bar-label-value">47% of $28,500</span></div>
+                  <div class="msv-bar"><div class="msv-bar-fill green" style="width:47%"></div></div>
+                  <div class="msv-bar-amounts"><span>$13,266 paid</span><span>$15,234 remaining</span></div>
+                </div>
+                <div class="msv-kv-grid">
+                  <span class="msv-kv-key">Next payment</span><span class="msv-kv-val">Aug 01, 2026</span>
+                  <span class="msv-kv-key">Payment amount</span><span class="msv-kv-val">$534.25</span>
+                  <span class="msv-kv-key">Skip payment</span><span class="msv-kv-val good">Eligible</span>
+                </div>
+                <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this loan</button>
+              </div>
+            </div>
+            <div class="msv-item msv-item-click" id="b-loan-4521-ai" onclick="msvAskFromItem(this)">
+              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+              <div class="msv-item-row">
+                <span class="msv-item-name">Primary Residence - Malibu</span>
+                <div class="msv-item-right">
+                  <span class="msv-item-number">•••• 4521</span>
+                  <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </div>
+              </div>
+              <div class="msv-detail">
+                <div class="msv-bar-wrap">
+                  <div class="msv-bar-label"><span>Paid</span><span class="msv-bar-label-value">29% of $400,000</span></div>
+                  <div class="msv-bar"><div class="msv-bar-fill green" style="width:29%"></div></div>
+                  <div class="msv-bar-amounts"><span>$115,000 paid</span><span>$285,000 remaining</span></div>
+                </div>
+                <div class="msv-kv-grid">
+                  <span class="msv-kv-key">Next payment</span><span class="msv-kv-val">Aug 01, 2026</span>
+                  <span class="msv-kv-key">Payment amount</span><span class="msv-kv-val">$2,950.00</span>
+                  <span class="msv-kv-key">Skip payment</span><span class="msv-kv-val warn">Used May 2026</span>
+                </div>
+                <div class="msv-owner-row"><span class="msv-owner-chip">Joint</span> Robert Chen (Primary) · Emily (Co-Borrower)</div>
+                <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this loan</button>
+              </div>
+            </div>
+            <button class="msv-view-all-bottom" onclick="msvViewAll('loans')">View all loans</button>
+          </div>
         </div>
       </div>
 
-      <!-- Card 2: Cards -->
-      <div class="ai-suggested-card" onclick="startCategory('cards')">
-        <div class="ai-card-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="1" y="4" width="22" height="16" rx="2"/>
-            <line x1="1" y1="10" x2="23" y2="10"/>
-          </svg>
-        </div>
-        <div class="ai-card-text">
-          <div class="ai-card-title">Card issues?</div>
-          <div class="ai-card-description">Visa Signature blocked — fraud</div>
+      <!-- ── DEPOSITS — Auto-expanded, only flagged item visible ── -->
+      <div class="msv-box">
+        <div class="msv-section" id="sec-deposits-ai">
+          <div class="msv-section-hdr" onclick="msvToggleSection('sec-deposits-ai')">
+            <div class="msv-section-left">
+              <div class="msv-box-title">Deposits (3)</div>
+              <span class="msv-section-badge warn">1 alert</span>
+            </div>
+            <span class="msv-section-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </div>
+          <div class="msv-section-body">
+            <!-- Flagged item visible -->
+            <div class="msv-item msv-item-click" id="b-dep-7641-ai" onclick="msvAskFromItem(this)">
+              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+              <div class="msv-item-row">
+                <span class="msv-alert-dot orange"></span>
+                <span class="msv-item-name">Family Vacation Account</span>
+                <div class="msv-item-right">
+                  <span class="msv-item-number">•••• 7641</span>
+                  <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </div>
+              </div>
+
+              <div class="msv-detail">
+                <div class="msv-kv-grid">
+                  <span class="msv-kv-key">Available</span><span class="msv-kv-val" style="font-size:11px;font-weight:600;color:var(--msv-text-primary)">$6,850.25</span>
+                  <span class="msv-kv-key">Type</span><span class="msv-kv-val">Money Market Savings</span>
+                </div>
+                <div class="msv-owner-row"><span class="msv-owner-chip">Joint</span> Robert Chen (Primary) · Emily (Joint Owner)</div>
+                <div class="msv-last-txn">
+                  <div class="msv-last-txn-label">Last transaction</div>
+                  <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Transfer from Checking</span><span class="msv-last-txn-amt credit">+$1,500.00</span></div>
+                  <div class="msv-last-txn-date">May 15</div>
+                </div>
+                <button class="msv-reason-btn orange" onclick="msvAskReason(event,'Why was Courtesy Pay limited?')">Why was Courtesy Pay limited?</button>
+              </div>
+            </div>
+            <!-- Healthy items hidden by default -->
+              <div class="msv-item msv-item-click" id="b-dep-2914-ai" onclick="msvAskFromItem(this)">
+              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+                <div class="msv-item-row">
+                  <span class="msv-item-name">Business Operations</span>
+                  <div class="msv-item-right">
+                    <span class="msv-item-number">•••• 2914</span>
+                    <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </div>
+                </div>
+                <div class="msv-detail">
+                  <div class="msv-kv-grid">
+                    <span class="msv-kv-key">Available</span><span class="msv-kv-val" style="font-size:11px;font-weight:600;color:var(--msv-text-primary)">$12,450.75</span>
+                    <span class="msv-kv-key">Type</span><span class="msv-kv-val">Business Checking</span>
+                  </div>
+                  <div class="msv-owner-row"><span class="msv-owner-chip">Auth Signer</span> David Martinez</div>
+                  <div class="msv-last-txn">
+                    <div class="msv-last-txn-label">Last transaction</div>
+                    <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Wire Transfer - Vendor Pmt</span><span class="msv-last-txn-amt debit">−$2,500.00</span></div>
+                    <div class="msv-last-txn-date">Jun 16</div>
+                  </div>
+                  <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this account</button>
+                </div>
+              </div>
+              <div class="msv-item msv-item-click" id="b-dep-5891-ai" onclick="msvAskFromItem(this)">
+              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+                <div class="msv-item-row">
+                  <span class="msv-item-name">Emergency Fund</span>
+                  <div class="msv-item-right">
+                    <span class="msv-item-number">•••• 5891</span>
+                    <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </div>
+                </div>
+                <div class="msv-detail">
+                  <div class="msv-kv-grid">
+                    <span class="msv-kv-key">Available</span><span class="msv-kv-val" style="font-size:11px;font-weight:600;color:var(--msv-text-primary)">$28,750.50</span>
+                    <span class="msv-kv-key">Type</span><span class="msv-kv-val">High-Yield Savings</span>
+                  </div>
+                  <div class="msv-owner-row"><span class="msv-owner-chip">Beneficiary</span> Michael Olivers (100%)</div>
+                  <div class="msv-last-txn">
+                    <div class="msv-last-txn-label">Last transaction</div>
+                    <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Interest Credit</span><span class="msv-last-txn-amt credit">+$11.54</span></div>
+                    <div class="msv-last-txn-date">Jun 01</div>
+                  </div>
+                  <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this account</button>
+                </div>
+              </div>
+            <button class="msv-view-all-bottom" onclick="msvViewAll('deposits')">View all deposits</button>
+          </div>
         </div>
       </div>
 
-      <!-- Card 3: Deposits -->
-      <div class="ai-suggested-card" onclick="startCategory('deposits')">
-        <div class="ai-card-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="1" x2="12" y2="23"/>
-            <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-          </svg>
-        </div>
-        <div class="ai-card-text">
-          <div class="ai-card-title">How are deposits?</div>
-          <div class="ai-card-description">3 accounts · $48,051.50 total</div>
+      <!-- ── CARDS — Auto-expanded, only flagged visible ── -->
+      <div class="msv-box">
+        <div class="msv-section" id="sec-cards-ai">
+          <div class="msv-section-hdr" onclick="msvToggleSection('sec-cards-ai')">
+            <div class="msv-section-left">
+              <div class="msv-box-title">Cards (3)</div>
+              <span class="msv-section-badge err">1 blocked</span>
+            </div>
+            <span class="msv-section-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </div>
+          <div class="msv-section-body">
+            <!-- Flagged item visible -->
+            <div class="msv-item msv-item-click" id="b-card-7892-ai" onclick="msvAskFromItem(this)">
+              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+              <div class="msv-item-row">
+                <span class="msv-alert-dot red"></span>
+                <span class="msv-item-name">Visa Signature Credit</span>
+                <div class="msv-item-right">
+                  <span class="msv-item-number">•••• 7892</span>
+                  <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </div>
+              </div>
+
+              <div class="msv-detail">
+                <div class="msv-bar-wrap">
+                  <div class="msv-bar-label"><span>Used</span><span class="msv-bar-label-value">$8,500 of $8,500</span></div>
+                  <div class="msv-bar"><div class="msv-bar-fill red" style="width:100%"></div></div>
+                  <div class="msv-bar-amounts"><span style="color:var(--tag-err-text)">$0 available</span><span>$8,500 used</span></div>
+                </div>
+                <div class="msv-kv-grid">
+                  <span class="msv-kv-key">Min payment</span><span class="msv-kv-val bad">$385.00</span>
+                  <span class="msv-kv-key">Due date</span><span class="msv-kv-val bad">Jun 28, 2026</span>
+                </div>
+                <div class="msv-last-txn">
+                  <div class="msv-last-txn-label">Last transaction</div>
+                  <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Paris, France - Luxury Boutique</span><span class="msv-last-txn-amt declined">DECLINED</span></div>
+                  <div class="msv-last-txn-date">Jun 17 · −$3,850.00</div>
+                </div>
+                <button class="msv-reason-btn red" onclick="msvAskReason(event,'Why was this card blocked?')">Why was this card blocked?</button>
+              </div>
+            </div>
+            <!-- Healthy cards hidden -->
+              <div class="msv-item msv-item-click" id="b-card-3456-ai" onclick="msvAskFromItem(this)">
+              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+                <div class="msv-item-row">
+                  <span class="msv-item-name">American Express Platinum</span>
+                  <div class="msv-item-right">
+                    <span class="msv-item-number">•••• 3456</span>
+                    <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </div>
+                </div>
+                <div class="msv-detail">
+                  <div class="msv-bar-wrap">
+                    <div class="msv-bar-label"><span>Used</span><span class="msv-bar-label-value">$6,500 of $25,000</span></div>
+                    <div class="msv-bar"><div class="msv-bar-fill teal" style="width:26%"></div></div>
+                    <div class="msv-bar-amounts"><span>$18,500 available</span><span>$6,500 used</span></div>
+                  </div>
+                  <div class="msv-owner-row"><span class="msv-owner-chip">Auth User</span> Robert Chen</div>
+                  <div class="msv-last-txn">
+                    <div class="msv-last-txn-label">Last transaction</div>
+                    <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Business Conference - Hotel</span><span class="msv-last-txn-amt debit">−$1,250.00</span></div>
+                    <div class="msv-last-txn-date">Jun 14</div>
+                  </div>
+                  <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this card</button>
+                </div>
+              </div>
+              <div class="msv-item msv-item-click" id="b-card-5123-ai" onclick="msvAskFromItem(this)">
+              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+                <div class="msv-item-row">
+                  <span class="msv-item-name">Discover Cashback</span>
+                  <div class="msv-item-right">
+                    <span class="msv-item-number">•••• 5123</span>
+                    <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+                  </div>
+                </div>
+                <div class="msv-detail">
+                  <div class="msv-bar-wrap">
+                    <div class="msv-bar-label"><span>Used</span><span class="msv-bar-label-value">$4,160 of $12,000</span></div>
+                    <div class="msv-bar"><div class="msv-bar-fill teal" style="width:35%"></div></div>
+                    <div class="msv-bar-amounts"><span>$7,840 available</span><span>$4,160 used</span></div>
+                  </div>
+                  <div class="msv-kv-grid">
+                    <span class="msv-kv-key">Min payment</span><span class="msv-kv-val">$287.50</span>
+                    <span class="msv-kv-key">Due date</span><span class="msv-kv-val">Jul 15, 2026</span>
+                  </div>
+                  <div class="msv-last-txn">
+                    <div class="msv-last-txn-label">Last transaction</div>
+                    <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Whole Foods Market</span><span class="msv-last-txn-amt debit">−$127.65</span></div>
+                    <div class="msv-last-txn-date">Jun 10</div>
+                  </div>
+                  <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this card</button>
+                </div>
+              </div>
+            <button class="msv-view-all-bottom" onclick="msvViewAll('cards')">View all cards</button>
+          </div>
         </div>
       </div>
 
-      <!-- Card 4: Alerts -->
-      <div class="ai-suggested-card" onclick="startCategory('alerts')">
-        <div class="ai-card-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13"/>
-            <line x1="12" y1="17" x2="12.01" y2="17"/>
-          </svg>
-        </div>
-        <div class="ai-card-text">
-          <div class="ai-card-title">Any alerts?</div>
-          <div class="ai-card-description">2 active — 1 critical, 1 warning</div>
+      <!-- ── LAST TRANSACTIONS — Show 3 of 6 ── -->
+      <div class="msv-box">
+        <div class="msv-section" id="sec-txns-ai">
+          <div class="msv-section-hdr" onclick="msvToggleSection('sec-txns-ai')">
+            <div class="msv-section-left">
+              <div class="msv-box-title">Last Transactions</div>
+              <span class="msv-section-badge err">1 declined</span>
+            </div>
+            <span class="msv-section-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </div>
+          <div class="msv-section-body">
+            <div class="msv-txn">
+              <div class="msv-txn-top"><span class="msv-txn-desc">Paris, France - Luxury Boutique</span><span class="msv-txn-amount declined">−$3,850.00</span></div>
+              <div class="msv-txn-meta"><span class="msv-txn-date">Jun 17</span><span class="msv-txn-dot">·</span><span class="msv-chip blocked" style="font-size:8px;padding:1px 5px;">⊖ Declined — Visa •••• 7892</span></div>
+            </div>
+            <div class="msv-txn">
+              <div class="msv-txn-top"><span class="msv-txn-desc">Wire Transfer - Vendor Pmt</span><span class="msv-txn-amount debit">−$2,500.00</span></div>
+              <div class="msv-txn-meta"><span class="msv-txn-date">Jun 16</span><span class="msv-txn-dot">·</span><span class="msv-txn-source">Checking •••• 2914</span></div>
+            </div>
+            <div class="msv-txn">
+              <div class="msv-txn-top"><span class="msv-txn-desc">Marriott Hotels - Conference</span><span class="msv-txn-amount debit">−$1,250.00</span></div>
+              <div class="msv-txn-meta"><span class="msv-txn-date">Jun 14</span><span class="msv-txn-dot">·</span><span class="msv-txn-source">Amex •••• 3456</span></div>
+            </div>
+            <!-- Hidden transactions -->
+              <div class="msv-txn">
+                <div class="msv-txn-top"><span class="msv-txn-desc">Whole Foods Market</span><span class="msv-txn-amount debit">−$127.65</span></div>
+                <div class="msv-txn-meta"><span class="msv-txn-date">Jun 10</span><span class="msv-txn-dot">·</span><span class="msv-txn-source">Discover •••• 5123</span></div>
+              </div>
+              <div class="msv-txn">
+                <div class="msv-txn-top"><span class="msv-txn-desc">Interest Credit</span><span class="msv-txn-amount credit">+$11.54</span></div>
+                <div class="msv-txn-meta"><span class="msv-txn-date">Jun 01</span><span class="msv-txn-dot">·</span><span class="msv-txn-source">Emergency •••• 5891</span></div>
+              </div>
+              <div class="msv-txn">
+                <div class="msv-txn-top"><span class="msv-txn-desc">Transfer from Checking</span><span class="msv-txn-amount credit">+$1,500.00</span></div>
+                <div class="msv-txn-meta"><span class="msv-txn-date">May 15</span><span class="msv-txn-dot">·</span><span class="msv-txn-source">Vacation •••• 7641</span></div>
+              </div>
+            <button class="msv-view-all-bottom" onclick="msvViewAll('transactions')">View all transactions</button>
+          </div>
         </div>
       </div>
 
-      <div class="ai-action-buttons">
-        <button class="ai-action-btn" onclick="setRightPanelView('snapshot')">👤 Member Overview</button>
+      <!-- ── RECENT INTERACTIONS — Show 2 of 5 ── -->
+      <div class="msv-box">
+        <div class="msv-section" id="sec-ints-ai">
+          <div class="msv-section-hdr" onclick="msvToggleSection('sec-ints-ai')">
+            <div class="msv-section-left">
+              <div class="msv-box-title">Recent Interactions (5)</div>
+            </div>
+            <span class="msv-section-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </div>
+          <div class="msv-section-body">
+            <div class="msv-int">
+              <div class="msv-int-row"><div class="msv-int-left"><span class="msv-int-icon">📞</span><span class="msv-topic-chip positive">Auto Loan</span></div><span class="msv-int-time">2h</span></div>
+              <div class="msv-int-dir">Inbound</div>
+            </div>
+            <div class="msv-int">
+              <div class="msv-int-row"><div class="msv-int-left"><span class="msv-int-icon">💬</span><span class="msv-topic-chip neutral">Fee Reversal</span></div><span class="msv-int-time">5h</span></div>
+              <div class="msv-int-dir">Inbound</div>
+            </div>
+            <!-- Hidden interactions -->
+              <div class="msv-int">
+                <div class="msv-int-row"><div class="msv-int-left"><span class="msv-int-icon">📹</span><span class="msv-topic-chip negative">Member Services</span></div><span class="msv-int-time">1d</span></div>
+                <div class="msv-int-dir">Outbound</div>
+              </div>
+              <div class="msv-int">
+                <div class="msv-int-row"><div class="msv-int-left"><span class="msv-int-icon">💬</span><span class="msv-topic-chip positive">Skip a Payment</span></div><span class="msv-int-time">2d</span></div>
+                <div class="msv-int-dir">Inbound</div>
+              </div>
+              <div class="msv-int">
+                <div class="msv-int-row"><div class="msv-int-left"><span class="msv-int-icon">📞</span><span class="msv-topic-chip neutral">Account Inquiry</span></div><span class="msv-int-time">3d</span></div>
+                <div class="msv-int-dir">Inbound</div>
+              </div>
+            <button class="msv-view-all-bottom" onclick="msvViewAll('interactions')">View all interactions</button>
+          </div>
+        </div>
       </div>
-    </div>
+    </div><!-- /msv-scroll -->
   </div>
 
   <!-- Conversation View -->
@@ -6235,13 +6570,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       </svg>
     </button>
     
-    <!-- Member Snapshot -->
-    <button class="rub-btn" id="rubSnapshot" title="Member Overview" onclick="openRightPanel('snapshot')">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="8" r="3.5"/>
-        <path d="M5 19.5C5 16.0147 8.13401 13.5 12 13.5C15.866 13.5 19 16.0147 19 19.5V20.5C19 21.0523 18.5523 21.5 18 21.5H6C5.44772 21.5 5 21.0523 5 20.5V19.5Z"/>
-      </svg>
-    </button>
     
     <!-- Book -->
     <button class="rub-btn" title="Documents">
@@ -6901,14 +7229,13 @@ function openRightPanel(view){
   const currentView = document.getElementById('rpViewSnapshot') &&
     document.getElementById('rpViewSnapshot').style.display !== 'none' ? 'snapshot' : 'ai';
 
-  // Member Overview is the resting state and always stays open.
-  // Clicking the AI icon while AI is showing → fall back to Member Overview (panel stays open).
+  // AI Assistant is the only right-panel view now.
+  // Clicking the AI icon while it's open → close the panel.
   if(isOpen && currentView === view){
     if(view === 'ai'){
-      setRightPanelView('snapshot');
+      closeRightPanel();
       return;
     }
-    // Snapshot icon while snapshot showing → no-op (it's always open)
     return;
   }
 
@@ -6925,15 +7252,16 @@ function openRightPanel(view){
   }
 }
 
-// "Closing" the AI panel returns to Member Overview (the panel never fully closes)
+// Closing the AI panel fully collapses the right panel — no view remains open.
 function closeRightPanel(){
   const panel = document.getElementById('rightPanelExpandable');
   const handle = document.getElementById('panelResizeHandle');
   if(!panel) return;
+  panel.classList.remove('open');
   panel.style.width = '';
-  panel.classList.add('open');
-  if(handle) handle.classList.add('visible');
-  setRightPanelView('snapshot');
+  if(handle) handle.classList.remove('visible');
+  const rubAI = document.getElementById('rubAI');
+  if(rubAI) rubAI.classList.remove('rub-active');
 }
 
 // Backwards-compatible: default toggle targets the AI view
@@ -8690,9 +9018,9 @@ function acceptCall(){
     s.classList.remove('right-collapsed');
   });
   
-  // Open right panel showing Member Snapshot by default
+  // Open right panel showing AI Assistant by default
   if(typeof msvResetSnapshot === 'function') msvResetSnapshot();
-  if(typeof openRightPanel === 'function') openRightPanel('snapshot');
+  if(typeof openRightPanel === 'function') openRightPanel('ai');
 
   toast('✅  Call accepted — ready for Emily Olivers…');
 }
@@ -14673,8 +15001,25 @@ function openConversation() {
   document.getElementById('aiConversation').classList.add('active');
   { var _hb=document.getElementById('homeBtn'); if(_hb) _hb.style.display='flex'; }
 }
+// Breadcrumb (Option 1): reflects the latest product/category being viewed.
+const CRUMB_CAT = { loan:'Loans', deposit:'Deposits', card:'Cards', loans:'Loans', deposits:'Deposits', cards:'Cards', alerts:'Alerts' };
+function setCrumb(kind, label){
+  const bar = document.getElementById('aiCrumb');
+  const cur = document.getElementById('aiCrumbCurrent');
+  if(!bar || !cur) return;
+  const cat = CRUMB_CAT[kind] || '';
+  cur.textContent = label ? (cat ? cat + ' · ' + label : label) : cat;
+  bar.style.display = 'flex';
+}
+function hideCrumb(){
+  const bar = document.getElementById('aiCrumb');
+  if(bar) bar.style.display = 'none';
+}
 let lastUserMsg = null;
+let suppressUser = false;
 function pushUser(text) {
+  // When a typed query has already been shown, skip a routed function's canned line.
+  if (suppressUser) { suppressUser = false; return; }
   const t = document.getElementById('messageThread');
   const el = document.createElement('div');
   el.className = 'ai-msg user';
@@ -14732,10 +15077,11 @@ function startCategory(cat) {
   if (cat === 'brief')        return showBrief();
 }
 
-function clarifyLoans() {
+function clarifyLoans(facet) {
+  setCrumb('loans', '');
   pushUser("Tell me about her loan situation");
   const opts = SHARED_DATA.loans.map(l => `
-    <div class="opt" onclick="showLoan('${l.id}')">
+    <div class="opt" onclick="${facet ? `showFacet('loan','${l.id}','${facet}')` : `showLoan('${l.id}')`}">
       <div class="opt-main">
         <div class="opt-name">${l.nickname}</div>
         <div class="opt-sub">${l.type} · ${l.description} · ${pct(l.percentPaid)} paid</div>
@@ -14749,10 +15095,11 @@ function clarifyLoans() {
     <div class="opt-list">${opts}</div>`);
 }
 
-function clarifyDeposits() {
+function clarifyDeposits(facet) {
+  setCrumb('deposits', '');
   pushUser("How are her deposits performing?");
   const opts = SHARED_DATA.deposits.map(d => `
-    <div class="opt" onclick="showDeposit('${d.id}')">
+    <div class="opt" onclick="${facet ? `showFacet('deposit','${d.id}','${facet}')` : `showDeposit('${d.id}')`}">
       <div class="opt-main">
         <div class="opt-name">${d.nickname}</div>
         <div class="opt-sub">${d.description} · ••••${d.id}</div>
@@ -14766,10 +15113,11 @@ function clarifyDeposits() {
     <div class="opt-list">${opts}</div>`);
 }
 
-function clarifyCards() {
+function clarifyCards(facet) {
+  setCrumb('cards', '');
   pushUser("What card issues is Emily experiencing?");
   const opts = SHARED_DATA.cards.map(c => `
-    <div class="opt" onclick="showCard('${c.id}')">
+    <div class="opt" onclick="${facet ? `showFacet('card','${c.id}','${facet}')` : `showCard('${c.id}')`}">
       <div class="opt-main">
         <div class="opt-name">${c.brand}</div>
         <div class="opt-sub">${c.masked} · exp ${c.expiration}</div>
@@ -14781,9 +15129,12 @@ function clarifyCards() {
 }
 
 // ── Detail renderers (quick overview + follow-up chips) ──
+let lastProduct = null; // most recently viewed {kind, id}, used to resolve context-free queries
 function showLoan(id) {
   activeFacet = null;
+  lastProduct = { kind: 'loan', id };
   const l = SHARED_DATA.loans.find(x => x.id === id);
+  setCrumb('loan', l.nickname);
   pushUser(`Show me ${l.nickname} (••••${l.id})`);
 
   const members = [l.primaryBorrower, ...l.coBorrowers].map(m => `
@@ -14838,7 +15189,9 @@ function showLoan(id) {
 
 function showDeposit(id) {
   activeFacet = null;
+  lastProduct = { kind: 'deposit', id };
   const d = SHARED_DATA.deposits.find(x => x.id === id);
+  setCrumb('deposit', d.nickname);
   pushUser(`Show me ${d.nickname} (••••${d.id})`);
 
   const members = [d.primaryMember, ...d.otherParties].map(m => `
@@ -14890,7 +15243,9 @@ function showDeposit(id) {
 
 function showCard(id) {
   activeFacet = null;
+  lastProduct = { kind: 'card', id };
   const c = SHARED_DATA.cards.find(x => x.id === id);
+  setCrumb('card', c.brand);
   pushUser(`Show me ${c.brand} (${c.masked})`);
 
   const members = [c.primaryOwner, ...c.authorizedUsers].map(m => `
@@ -15164,6 +15519,10 @@ function alertView(title, sub, alert, kind, id) {
 }
 
 function showFacet(kind, id, facet) {
+  lastProduct = { kind, id };
+  const _arr = kind === 'loan' ? SHARED_DATA.loans : kind === 'deposit' ? SHARED_DATA.deposits : SHARED_DATA.cards;
+  const _it = _arr.find(x => x.id === id);
+  if (_it) setCrumb(kind, kind === 'card' ? _it.brand : _it.nickname);
   if (kind === 'loan')    return loanFacet(id, facet);
   if (kind === 'deposit') return depositFacet(id, facet);
   if (kind === 'card')    return cardFacet(id, facet);
@@ -15309,6 +15668,7 @@ function cardFacet(id, facet) {
 
 // ── Cross-cutting prompts (synthesised only from profile facts) ──
 function showAlerts() {
+  setCrumb('alerts', '');
   pushUser("Any active alerts on her accounts?");
   const items = [];
   SHARED_DATA.deposits.forEach(d => { if (d.alert) items.push({ where: d.nickname, kind: 'deposit', id: d.id, a: d.alert }); });
@@ -15328,6 +15688,7 @@ function showAlerts() {
 }
 
 function showOpportunities() {
+  setCrumb('', 'Opportunities');
   pushUser("What opportunities does she have?");
   pushAssistant(`Based on Emily's current profile:
     <div class="opt-list">
@@ -15350,11 +15711,13 @@ function showOpportunities() {
 }
 
 function showCases() {
+  setCrumb('', 'Cases');
   pushUser("Show all cases for Emily");
   pushAssistant(`No case-management data is loaded in this profile yet. The closest open items are the <strong>blocked Visa Signature (fraud)</strong> and the <strong>courtesy-pay warning</strong> on Family Vacation — both shown under "Any alerts?".`);
 }
 
 function showBrief() {
+  setCrumb('', 'Member Brief');
   pushUser("Member Brief");
   const totalDep = SHARED_DATA.deposits.reduce((s, d) => s + d.availableBalance, 0);
   const totalLoan = SHARED_DATA.loans.reduce((s, l) => s + l.principalBalance, 0);
@@ -15368,21 +15731,132 @@ function showBrief() {
 }
 
 // ── Free-text input ──
+// ══════════════════════════════════════
+// "ASK ANYTHING" QUERY RESOLVER
+// Resolves free text → { account, category } and opens the answer.
+// ══════════════════════════════════════
+const VALID_FACETS = {
+  loan:    ['overview','status','balances','ownership','payments','interest','progress','membership','alerts'],
+  deposit: ['overview','balances','ownership','permissions','limits','earnings','routing','membership','txns','alerts'],
+  card:    ['overview','credit','payments','interest','ownership','membership','txns','alerts']
+};
+
+function matchEntity(m) {
+  // specific accounts by recognizable words / last-4
+  if (/(tesla|auto loan|auto\b|\bcar\b|model 3|7712)/.test(m)) return { kind:'loan', id:'7712' };
+  if (/(mortgage|home loan|malibu|residence|\bhouse\b|4521)/.test(m)) return { kind:'loan', id:'4521' };
+  if (/(business|operations|checking|2914)/.test(m)) return { kind:'deposit', id:'2914' };
+  if (/(emergency|high[- ]?yield|5891)/.test(m)) return { kind:'deposit', id:'5891' };
+  if (/(family|vacation|money market|7641)/.test(m)) return { kind:'deposit', id:'7641' };
+  if (/(amex|american express|platinum|3456)/.test(m)) return { kind:'card', id:'3456' };
+  if (/(visa|signature|7892)/.test(m)) return { kind:'card', id:'7892' };
+  if (/(discover|cashback|5123)/.test(m)) return { kind:'card', id:'5123' };
+  return null;
+}
+
+function matchKind(m) {
+  if (/(loan|mortgage|auto|tesla|borrow)/.test(m)) return 'loan';
+  if (/(card|visa|amex|discover|mastercard|debit)/.test(m)) return 'card';
+  if (/(deposit|checking|savings|account)/.test(m)) return 'deposit';
+  return null;
+}
+
+// Field-level rules: [pattern, facet, kindHint]. Ordered specific → general.
+const FACET_RULES = [
+  // ── Loan-specific fields ──
+  [/\bskip\b|defer/, 'progress', 'loan'],
+  [/per ?diem|daily interest/, 'progress', 'loan'],
+  [/percent|paid off|amount paid|remaining payment|payments? left|how much.*paid/, 'progress', 'loan'],
+  [/payoff|principal/, 'balances', 'loan'],
+  [/past due|days.*delinquent/, 'payments', 'loan'],
+  [/delinquen|standing/, 'status', 'loan'],
+  [/maturity|date opened|when.*opened|close date|\bterm\b/, 'overview', 'loan'],
+  [/warning flag/, 'status', 'loan'],
+  [/rate type/, 'interest', 'loan'],
+  [/co-?borrower|borrower|guarantor/, 'membership', 'loan'],
+  // ── Deposit-specific fields ──
+  [/dividend|interest earned|earning|yield|interest ytd/, 'earnings', 'deposit'],
+  [/overdraft tolerance|minimum balance|minimum deposit|minimum withdrawal|account limit|\blimit(s)?\b/, 'limits', 'deposit'],
+  [/permission|allowed|can she.*(withdraw|transfer|deposit)|withdrawal|funds movement/, 'permissions', 'deposit'],
+  [/routing|account number/, 'routing', 'deposit'],
+  // ── Card-specific fields ──
+  [/available credit|credit limit|credit line/, 'credit', 'card'],
+  [/expir|name on card|card number|blocked reason/, 'overview', 'card'],
+  [/authorized user/, 'membership', 'card'],
+  // ── Shared (kind inferred from account/context) ──
+  [/next payment|payment due|minimum payment|monthly payment|last payment|when.*pay/, 'payments', null],
+  [/\bapr\b|interest rate|interest charged|interest paid|\binterest\b/, 'interest', 'loan'],
+  [/who owns|owner|ownership|joint/, 'ownership', null],
+  [/signer|beneficiar/, 'membership', 'deposit'],
+  [/member|\brole\b/, 'membership', null],
+  [/transaction|recent|activity|history|charge|purchase|spending|declined|pending/, 'txns', null],
+  [/alert|restriction|blocked|\bblock\b|fraud|hold|warning|courtesy pay|why.*block/, 'alerts', null],
+  [/available balance|actual balance|\bbalance\b|how much.*(in|left)/, 'balances', 'deposit'],
+  [/\bstatus\b|active/, 'status', 'loan'],
+  [/\bcredit\b/, 'credit', 'card']
+];
+function matchRule(m) {
+  for (const [re, facet, kind] of FACET_RULES) if (re.test(m)) return { facet, kind };
+  return null;
+}
+function listFor(kind) {
+  return kind === 'loan' ? SHARED_DATA.loans : kind === 'deposit' ? SHARED_DATA.deposits : SHARED_DATA.cards;
+}
+function openOverview(kind, id) {
+  if (kind === 'loan')    return showLoan(id);
+  if (kind === 'deposit') return showDeposit(id);
+  return showCard(id);
+}
+function clarifyKind(kind, facet) {
+  if (kind === 'loan')    return clarifyLoans(facet);
+  if (kind === 'deposit') return clarifyDeposits(facet);
+  return clarifyCards(facet);
+}
+
+function handleQuery(msg) {
+  const m = msg.toLowerCase();
+  const ent = matchEntity(m);
+  const rule = matchRule(m);
+  let facet = rule ? rule.facet : null;
+
+  // Resolve product kind: named account > named product > field's product hint > last viewed
+  let kind = ent ? ent.kind : (matchKind(m) || (rule && rule.kind) || null);
+  if (!kind && facet && lastProduct && VALID_FACETS[lastProduct.kind].includes(facet)) kind = lastProduct.kind;
+
+  // Resolve specific account: named, else the last viewed one of the same kind
+  let id = ent ? ent.id : (kind && lastProduct && lastProduct.kind === kind ? lastProduct.id : null);
+
+  if (kind && facet && !VALID_FACETS[kind].includes(facet)) facet = null;
+
+  if (kind) {
+    if (facet) {
+      if (id) return showFacet(kind, id, facet);
+      const list = listFor(kind);
+      return list.length === 1 ? showFacet(kind, list[0].id, facet) : clarifyKind(kind, facet);
+    }
+    if (id) return openOverview(kind, id);
+    return clarifyKind(kind);
+  }
+
+  // No product could be inferred
+  if (facet === 'alerts') return showAlerts();
+  if (/opportunit/.test(m)) return showOpportunities();
+  if (/(brief|summary|profile|everything)/.test(m)) return showBrief();
+
+  return pushAssistant(`I can answer questions about Emily's <strong>loans</strong>, <strong>deposits</strong>, <strong>cards</strong>, <strong>transactions</strong>, and <strong>alerts</strong> — e.g. “skip payment on the auto loan”, “dividend rate on Emergency Fund”, or “available credit on the Amex”.`);
+}
+
 function sendMessage() {
   const input = document.getElementById('aiInput');
   const msg = input.value.trim();
   if (!msg) return;
   input.value = '';
   openConversation();
-  const m = msg.toLowerCase();
-  if (m.includes('loan') || m.includes('mortgage') || m.includes('auto')) return clarifyLoans();
-  if (m.includes('card') || m.includes('visa') || m.includes('amex') || m.includes('discover')) return clarifyCards();
-  if (m.includes('deposit') || m.includes('saving') || m.includes('checking') || m.includes('balance')) return clarifyDeposits();
-  if (m.includes('alert') || m.includes('fraud') || m.includes('block')) return showAlerts();
-  if (m.includes('opportunit')) return showOpportunities();
-  if (m.includes('brief')) return showBrief();
-  pushUser(msg);
-  pushAssistant(`I can pull up Emily's <strong>loans</strong>, <strong>deposits</strong>, <strong>cards</strong>, or <strong>active alerts</strong>. Which would you like?`);
+  setCrumb('', 'Conversation');   // neutral; product/category routes overwrite this
+  pushUser(msg);            // show the agent's real question
+  suppressUser = true;      // let the routed answer skip its canned user line
+  handleQuery(msg);
+  suppressUser = false;     // reset if the route didn't consume it
 }
 
 function refreshAI() {
@@ -15391,6 +15865,7 @@ function refreshAI() {
   document.getElementById('aiConversation').classList.remove('active');
   document.getElementById('messageThread').innerHTML = '';
   { var _hb=document.getElementById('homeBtn'); if(_hb) _hb.style.display='none'; }
+  hideCrumb();
 }
 function closeAI() { if(typeof closeRightPanel === 'function') closeRightPanel(); }
 
@@ -15479,7 +15954,7 @@ function msvToggleAlert(id){ const el=document.getElementById(id); if(el) el.cla
 function msvResolveProduct(target){
   const item = target.closest('.msv-item');
   if(!item || !item.id) return null;
-  const m = item.id.match(/^b-(loan|dep|card)-(\w+)$/);
+  const m = item.id.match(/^b-(loan|dep|card)-(\w+?)(?:-ai)?$/);
   if(!m) return null;
   const typeMap = { loan:'loan', dep:'deposit', card:'card' };
   return { type: typeMap[m[1]], id: m[2] };
@@ -17123,6 +17598,30 @@ body {
   transition: background 0.12s;
 }
 .ai-header-btn:hover { background: #f5f5f5; }
+
+/* ── Breadcrumb (Option 1: names the latest product/category) ── */
+.ai-crumb {
+  display: flex; align-items: center; gap: 6px;
+  height: 26px; padding: 0 12px;
+  border-bottom: 1px solid var(--ai-border);
+  background: #fff; font-size: 11px;
+  flex-shrink: 0; margin: 0;
+  overflow-x: auto; white-space: nowrap;
+}
+.ai-crumb::-webkit-scrollbar { display: none; }
+.ai-crumb-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  border: none; background: transparent; padding: 0;
+  color: #5b5fcf; font-weight: 600; font-size: 11px;
+  cursor: pointer; font-family: inherit; line-height: 1; flex-shrink: 0;
+}
+.ai-crumb-link svg { width: 11px; height: 11px; flex-shrink: 0; }
+.ai-crumb-link:hover { text-decoration: underline; }
+.ai-crumb-sep { color: #c8c7d8; font-size: 11px; flex-shrink: 0; }
+.ai-crumb-current {
+  color: #8a8a9e; font-weight: 500; font-size: 11px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 
 /* ── Home (fills panel so input stays pinned to bottom) ── */
 .ai-home {
