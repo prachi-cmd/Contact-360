@@ -5700,7 +5700,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
   <!-- Breadcrumb (shown only inside a query; names the latest product/category) -->
   <div class="ai-crumb" id="aiCrumb" style="display:none;">
-    <button class="ai-crumb-link" onclick="refreshAI()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>Member Overview</button>
+    <button class="ai-crumb-link" onclick="backToOverview()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>Member Overview</button>
     <span class="ai-crumb-sep">/</span>
     <span class="ai-crumb-current" id="aiCrumbCurrent"></span>
   </div>
@@ -6113,6 +6113,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   <div class="ai-conversation" id="aiConversation">
     <div id="messageThread"></div>
   </div>
+
+  <!-- Resume bar (shown on the overview only when a conversation exists) -->
+  <button class="ai-resume-bar" id="aiResumeBar" style="display:none;" onclick="openConversation()">
+    <svg class="ai-resume-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="ai-resume-label">Resume conversation</span>
+    <span class="ai-resume-count" id="aiResumeCount">›</span>
+  </button>
 
   <!-- Input Section -->
   <div class="ai-input-section">
@@ -15000,6 +15007,34 @@ function openConversation() {
   document.getElementById('aiHome').style.display = 'none';
   document.getElementById('aiConversation').classList.add('active');
   { var _hb=document.getElementById('homeBtn'); if(_hb) _hb.style.display='flex'; }
+  hideResumeBar();
+}
+// Count agent questions in the current thread
+function countThreadMessages(){
+  const t = document.getElementById('messageThread');
+  return t ? t.querySelectorAll('.ai-msg.user').length : 0;
+}
+function showResumeBar(){
+  const bar = document.getElementById('aiResumeBar');
+  const cnt = document.getElementById('aiResumeCount');
+  const n = countThreadMessages();
+  if(!bar) return;
+  if(n < 1){ bar.style.display = 'none'; return; }
+  if(cnt) cnt.textContent = n + (n === 1 ? ' message ›' : ' messages ›');
+  bar.style.display = 'flex';
+}
+function hideResumeBar(){
+  const bar = document.getElementById('aiResumeBar');
+  if(bar) bar.style.display = 'none';
+}
+// Back to overview WITHOUT clearing the thread (breadcrumb link). Thread is preserved.
+function backToOverview(){
+  clearTimeout(aiTimer);
+  document.getElementById('aiHome').style.display = 'flex';
+  document.getElementById('aiConversation').classList.remove('active');
+  { var _hb=document.getElementById('homeBtn'); if(_hb) _hb.style.display='none'; }
+  hideCrumb();
+  showResumeBar();
 }
 // Breadcrumb (Option 1): reflects the latest product/category being viewed.
 const CRUMB_CAT = { loan:'Loans', deposit:'Deposits', card:'Cards', loans:'Loans', deposits:'Deposits', cards:'Cards', alerts:'Alerts' };
@@ -15866,6 +15901,7 @@ function refreshAI() {
   document.getElementById('messageThread').innerHTML = '';
   { var _hb=document.getElementById('homeBtn'); if(_hb) _hb.style.display='none'; }
   hideCrumb();
+  hideResumeBar();
 }
 function closeAI() { if(typeof closeRightPanel === 'function') closeRightPanel(); }
 
@@ -17622,6 +17658,19 @@ body {
   color: #8a8a9e; font-weight: 500; font-size: 11px;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
+
+/* ── Resume bar (A2): full-bleed, one line, above the input ── */
+.ai-resume-bar {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  flex-shrink: 0; padding: 9px 14px;
+  border: none; border-top: 1px solid var(--ai-border);
+  background: rgba(91,95,207,.05); cursor: pointer;
+  font-family: inherit; text-align: left;
+}
+.ai-resume-bar:hover { background: rgba(91,95,207,.1); }
+.ai-resume-ico { width: 15px; height: 15px; color: #5b5fcf; flex-shrink: 0; }
+.ai-resume-label { font-size: 12px; font-weight: 600; color: #5b5fcf; white-space: nowrap; }
+.ai-resume-count { font-size: 11px; color: #5b5fcf; font-weight: 600; margin-left: auto; flex-shrink: 0; }
 
 /* ── Home (fills panel so input stays pinned to bottom) ── */
 .ai-home {
