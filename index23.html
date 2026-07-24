@@ -3946,13 +3946,25 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   border-top: 1px solid var(--msv-border-divider);
   position: relative;
 }
+.msv-section-body > .msv-item:first-child { border-top: none; }
+/* Inline alert badge (replaces the dot) */
+.msv-item-nameline { display: flex; align-items: center; min-width: 0; flex: 1; }
+.msv-item-nameline .msv-item-name { flex: 0 1 auto; }
+.msv-item-badge {
+  display: inline-flex; align-items: center;
+  font-size: 8.5px; font-weight: 700;
+  padding: 1px 7px; border-radius: 20px;
+  margin-left: 7px; vertical-align: middle; letter-spacing: .01em; flex-shrink: 0; white-space: nowrap;
+}
+.msv-item-badge.warn { background: rgba(201,123,28,.14); color: #92400e; }
+.msv-item-badge.red { background: rgba(211,47,47,.14); color: #c62828; }
 
 .msv-item-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 4px;
-  padding: 7px 0;
+  padding: 10px 0;
   cursor: pointer;
   transition: background .1s;
 }
@@ -4481,6 +4493,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   line-height: 1.35;
   margin-top: 2px;
 }
+/* Alert expand/collapse: detail hidden until the alert has .open */
+.msv-ma-top-r { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.msv-ma-chevron { display: flex; transition: transform .25s; color: var(--msv-text-tertiary); }
+.msv-membership-alert.open .msv-ma-chevron { transform: rotate(180deg); }
+.msv-ma-detail { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .28s ease, opacity .2s ease; }
+.msv-membership-alert.open .msv-ma-detail { max-height: 220px; opacity: 1; margin-top: 2px; }
+.msv-ma-detail .msv-ask-hint { position: static; display: inline-flex; margin-bottom: 4px; }
 .msv-ma-cond .msv-ma-foot {
   display: flex;
   align-items: center;
@@ -4522,6 +4541,21 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   z-index: 40;
   cursor: pointer;
   transition: opacity .15s ease, transform .15s ease;
+}
+/* Beside-number Ask AI tag (reveals on card hover) */
+.msv-askai-tag {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 9px; font-weight: 700; color: #fff;
+  background: linear-gradient(135deg, #5b5fcf, #7c5fcf);
+  border-radius: 10px; padding: 2px 8px; white-space: nowrap;
+  opacity: 0; transform: translateX(4px); pointer-events: none;
+  box-shadow: 0 2px 6px rgba(91,95,207,.25);
+  transition: opacity .15s ease, transform .15s ease;
+}
+.msv-askai-tag svg { width: 9px; height: 9px; flex-shrink: 0; }
+.msv-item-click:hover .msv-askai-tag,
+.msv-membership-alert:hover .msv-askai-tag {
+  opacity: 1; transform: translateX(0); pointer-events: auto;
 }
 .msv-membership-alert:hover > .msv-ask-hint,
 .msv-item:hover > .msv-ask-hint,
@@ -5730,7 +5764,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <!-- ── WELCOME ── -->
       <div class="msv-welcome">
         <div class="msv-welcome-title">Hi 👋 Ask anything about Emily Olivers</div>
-        <div class="msv-welcome-sub">Here's her overview to get you started.</div>
+        <div class="msv-welcome-sub">Tap any item to ask the assistant about it.</div>
       </div>
 
       <!-- ── MEMBER DETAILS — Expanded by default ── -->
@@ -5757,7 +5791,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
       <!-- ── ALERTS — Collapsible ── -->
       <div class="msv-box">
-        <div class="msv-section" id="sec-alerts-ai">
+        <div class="msv-section open" id="sec-alerts-ai">
           <div class="msv-section-hdr" onclick="msvToggleSection('sec-alerts-ai')">
             <div class="msv-section-left">
               <div class="msv-box-title">Alerts (4)</div>
@@ -5767,64 +5801,68 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           </div>
           <div class="msv-section-body">
 
-        <div class="msv-membership-alert msv-ma-cond critical" id="alert-olb-ai" onclick="msvAskAlert('olb')">
-          <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskAlert('olb')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+        <div class="msv-membership-alert msv-ma-cond critical" id="alert-olb-ai" onclick="this.classList.toggle('open')">
           <span class="msv-ma-icon critical"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>
           <div class="msv-ma-body">
             <div class="msv-ma-top">
               <span class="msv-ma-title critical">OLB Access Restricted</span>
-              <span class="msv-ma-code critical">OLB</span>
+              <div class="msv-ma-top-r"><span class="msv-askai-tag" onclick="event.stopPropagation();msvAskAlert('olb')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-ma-code critical">OLB</span><span class="msv-ma-chevron"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></div>
             </div>
-            <div class="msv-ma-sub">Online banking locked — suspected fraud on linked card. Do not re-enable until FR-CARD on Visa •••• 7892 is resolved.</div>
+            <div class="msv-ma-detail">
+              <div class="msv-ma-sub">Online banking locked — suspected fraud on linked card. Do not re-enable until FR-CARD on Visa •••• 7892 is resolved.</div>
             <div class="msv-ma-foot">
               <span class="msv-ma-who">System Auto · Jun 17</span>
               <span class="msv-ma-tk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Jun 24</span>
             </div>
+            </div>
           </div>
         </div>
 
-        <div class="msv-membership-alert msv-ma-cond critical" id="alert-fraud-ai" onclick="msvAskAlert('fraud')">
-          <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskAlert('fraud')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+        <div class="msv-membership-alert msv-ma-cond critical" id="alert-fraud-ai" onclick="this.classList.toggle('open')">
           <span class="msv-ma-icon critical"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span>
           <div class="msv-ma-body">
             <div class="msv-ma-top">
               <span class="msv-ma-title critical">Card Blocked — Visa •••• 7892</span>
-              <span class="msv-ma-code critical">FR-CARD</span>
+              <div class="msv-ma-top-r"><span class="msv-askai-tag" onclick="event.stopPropagation();msvAskAlert('fraud')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-ma-code critical">FR-CARD</span><span class="msv-ma-chevron"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></div>
             </div>
-            <div class="msv-ma-sub">Unauthorized international charges. Contact Risk before unblocking — Paris travel claim pending verification.</div>
+            <div class="msv-ma-detail">
+              <div class="msv-ma-sub">Unauthorized international charges. Contact Risk before unblocking — Paris travel claim pending verification.</div>
             <div class="msv-ma-foot">
               <span class="msv-ma-who">M. Thompson · Jun 17</span>
+            </div>
             </div>
           </div>
         </div>
 
-        <div class="msv-membership-alert msv-ma-cond warning" id="alert-courtesy-ai" onclick="msvAskAlert('courtesy')">
-          <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskAlert('courtesy')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+        <div class="msv-membership-alert msv-ma-cond warning" id="alert-courtesy-ai" onclick="this.classList.toggle('open')">
           <span class="msv-ma-icon warning"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
           <div class="msv-ma-body">
             <div class="msv-ma-top">
               <span class="msv-ma-title warning">Courtesy Pay — Family Vac •••• 7641</span>
-              <span class="msv-ma-code warning">064</span>
+              <div class="msv-ma-top-r"><span class="msv-askai-tag" onclick="event.stopPropagation();msvAskAlert('courtesy')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-ma-code warning">064</span><span class="msv-ma-chevron"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></div>
             </div>
-            <div class="msv-ma-sub">Courtesy pay limit reached this billing cycle. Member notified via text Jun 15 — no escalation requested.</div>
+            <div class="msv-ma-detail">
+              <div class="msv-ma-sub">Courtesy pay limit reached this billing cycle. Member notified via text Jun 15 — no escalation requested.</div>
             <div class="msv-ma-foot">
               <span class="msv-ma-who">A. Raynold · Jun 15</span>
               <span class="msv-ma-tk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Jul 01</span>
             </div>
+            </div>
           </div>
         </div>
 
-        <div class="msv-membership-alert msv-ma-cond warning" id="alert-sb1-ai" onclick="msvAskAlert('sb1')">
-          <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskAlert('sb1')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
+        <div class="msv-membership-alert msv-ma-cond warning" id="alert-sb1-ai" onclick="this.classList.toggle('open')">
           <span class="msv-ma-icon warning"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
           <div class="msv-ma-body">
             <div class="msv-ma-top">
               <span class="msv-ma-title warning">No Sharing — Privacy Restriction</span>
-              <span class="msv-ma-code warning">080</span>
+              <div class="msv-ma-top-r"><span class="msv-askai-tag" onclick="event.stopPropagation();msvAskAlert('sb1')"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-ma-code warning">080</span><span class="msv-ma-chevron"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span></div>
             </div>
-            <div class="msv-ma-sub">Info cannot be shared via shared branching or third parties. Set after fraud incident.</div>
+            <div class="msv-ma-detail">
+              <div class="msv-ma-sub">Info cannot be shared via shared branching or third parties. Set after fraud incident.</div>
             <div class="msv-ma-foot">
               <span class="msv-ma-who">J. Fuqua · Jun 18</span>
+            </div>
             </div>
           </div>
         </div>
@@ -5846,11 +5884,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           </div>
           <div class="msv-section-body">
             <div class="msv-item msv-item-click" id="b-loan-7712-ai" onclick="msvAskFromItem(this)">
-              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
               <div class="msv-item-row">
                 <span class="msv-item-name">2022 Tesla Model 3</span>
-                <div class="msv-item-right">
-                  <span class="msv-item-number">•••• 7712</span>
+                <div class="msv-item-right"><span class="msv-askai-tag"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-item-number">•••• 7712</span>
                   <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                 </div>
               </div>
@@ -5865,15 +5901,12 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <span class="msv-kv-key">Payment amount</span><span class="msv-kv-val">$534.25</span>
                   <span class="msv-kv-key">Skip payment</span><span class="msv-kv-val good">Eligible</span>
                 </div>
-                <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this loan</button>
               </div>
             </div>
             <div class="msv-item msv-item-click" id="b-loan-4521-ai" onclick="msvAskFromItem(this)">
-              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
               <div class="msv-item-row">
                 <span class="msv-item-name">Primary Residence - Malibu</span>
-                <div class="msv-item-right">
-                  <span class="msv-item-number">•••• 4521</span>
+                <div class="msv-item-right"><span class="msv-askai-tag"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-item-number">•••• 4521</span>
                   <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                 </div>
               </div>
@@ -5889,7 +5922,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <span class="msv-kv-key">Skip payment</span><span class="msv-kv-val warn">Used May 2026</span>
                 </div>
                 <div class="msv-owner-row"><span class="msv-owner-chip">Joint</span> Robert Chen (Primary) · Emily (Co-Borrower)</div>
-                <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this loan</button>
               </div>
             </div>
             <button class="msv-view-all-bottom" onclick="msvViewAll('loans')">View all loans</button>
@@ -5910,12 +5942,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <div class="msv-section-body">
             <!-- Flagged item visible -->
             <div class="msv-item msv-item-click" id="b-dep-7641-ai" onclick="msvAskFromItem(this)">
-              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
               <div class="msv-item-row">
-                <span class="msv-alert-dot orange"></span>
-                <span class="msv-item-name">Family Vacation Account</span>
-                <div class="msv-item-right">
-                  <span class="msv-item-number">•••• 7641</span>
+                <span class="msv-item-nameline"><span class="msv-item-name">Family Vacation Account</span><span class="msv-item-badge warn">Courtesy Pay limit</span></span>
+                <div class="msv-item-right"><span class="msv-askai-tag"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-item-number">•••• 7641</span>
                   <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                 </div>
               </div>
@@ -5931,16 +5960,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Transfer from Checking</span><span class="msv-last-txn-amt credit">+$1,500.00</span></div>
                   <div class="msv-last-txn-date">May 15</div>
                 </div>
-                <button class="msv-reason-btn orange" onclick="msvAskReason(event,'Why was Courtesy Pay limited?')">Why was Courtesy Pay limited?</button>
               </div>
             </div>
             <!-- Healthy items hidden by default -->
               <div class="msv-item msv-item-click" id="b-dep-2914-ai" onclick="msvAskFromItem(this)">
-              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
-                <div class="msv-item-row">
+              <div class="msv-item-row">
                   <span class="msv-item-name">Business Operations</span>
-                  <div class="msv-item-right">
-                    <span class="msv-item-number">•••• 2914</span>
+                  <div class="msv-item-right"><span class="msv-askai-tag"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-item-number">•••• 2914</span>
                     <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </div>
                 </div>
@@ -5955,15 +5981,12 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Wire Transfer - Vendor Pmt</span><span class="msv-last-txn-amt debit">−$2,500.00</span></div>
                     <div class="msv-last-txn-date">Jun 16</div>
                   </div>
-                  <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this account</button>
                 </div>
               </div>
               <div class="msv-item msv-item-click" id="b-dep-5891-ai" onclick="msvAskFromItem(this)">
-              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
-                <div class="msv-item-row">
+              <div class="msv-item-row">
                   <span class="msv-item-name">Emergency Fund</span>
-                  <div class="msv-item-right">
-                    <span class="msv-item-number">•••• 5891</span>
+                  <div class="msv-item-right"><span class="msv-askai-tag"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-item-number">•••• 5891</span>
                     <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </div>
                 </div>
@@ -5978,7 +6001,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Interest Credit</span><span class="msv-last-txn-amt credit">+$11.54</span></div>
                     <div class="msv-last-txn-date">Jun 01</div>
                   </div>
-                  <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this account</button>
                 </div>
               </div>
             <button class="msv-view-all-bottom" onclick="msvViewAll('deposits')">View all deposits</button>
@@ -5999,12 +6021,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <div class="msv-section-body">
             <!-- Flagged item visible -->
             <div class="msv-item msv-item-click" id="b-card-7892-ai" onclick="msvAskFromItem(this)">
-              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
               <div class="msv-item-row">
-                <span class="msv-alert-dot red"></span>
-                <span class="msv-item-name">Visa Signature Credit</span>
-                <div class="msv-item-right">
-                  <span class="msv-item-number">•••• 7892</span>
+                <span class="msv-item-nameline"><span class="msv-item-name">Visa Signature Credit</span><span class="msv-item-badge red">Card blocked</span></span>
+                <div class="msv-item-right"><span class="msv-askai-tag"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-item-number">•••• 7892</span>
                   <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                 </div>
               </div>
@@ -6024,16 +6043,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                   <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Paris, France - Luxury Boutique</span><span class="msv-last-txn-amt declined">DECLINED</span></div>
                   <div class="msv-last-txn-date">Jun 17 · −$3,850.00</div>
                 </div>
-                <button class="msv-reason-btn red" onclick="msvAskReason(event,'Why was this card blocked?')">Why was this card blocked?</button>
               </div>
             </div>
             <!-- Healthy cards hidden -->
               <div class="msv-item msv-item-click" id="b-card-3456-ai" onclick="msvAskFromItem(this)">
-              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
-                <div class="msv-item-row">
+              <div class="msv-item-row">
                   <span class="msv-item-name">American Express Platinum</span>
-                  <div class="msv-item-right">
-                    <span class="msv-item-number">•••• 3456</span>
+                  <div class="msv-item-right"><span class="msv-askai-tag"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-item-number">•••• 3456</span>
                     <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </div>
                 </div>
@@ -6049,15 +6065,12 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Business Conference - Hotel</span><span class="msv-last-txn-amt debit">−$1,250.00</span></div>
                     <div class="msv-last-txn-date">Jun 14</div>
                   </div>
-                  <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this card</button>
                 </div>
               </div>
               <div class="msv-item msv-item-click" id="b-card-5123-ai" onclick="msvAskFromItem(this)">
-              <span class="msv-ask-hint" onclick="event.stopPropagation();msvAskFromItem(this)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Click here to ask AI</span>
-                <div class="msv-item-row">
+              <div class="msv-item-row">
                   <span class="msv-item-name">Discover Cashback</span>
-                  <div class="msv-item-right">
-                    <span class="msv-item-number">•••• 5123</span>
+                  <div class="msv-item-right"><span class="msv-askai-tag"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span><span class="msv-item-number">•••• 5123</span>
                     <span class="msv-item-chevron"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></span>
                   </div>
                 </div>
@@ -6076,7 +6089,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <div class="msv-last-txn-row"><span class="msv-last-txn-desc">Whole Foods Market</span><span class="msv-last-txn-amt debit">−$127.65</span></div>
                     <div class="msv-last-txn-date">Jun 10</div>
                   </div>
-                  <button class="msv-ask-ai-link" onclick="msvAskProduct(event)">Ask more about this card</button>
                 </div>
               </div>
             <button class="msv-view-all-bottom" onclick="msvViewAll('cards')">View all cards</button>
