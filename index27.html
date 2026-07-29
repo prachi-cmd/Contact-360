@@ -4828,9 +4828,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <div class="iseg"><div class="st on">Inbox</div><div class="st">Departments</div></div>
       <div class="isec">Chats <span class="iscnt">23</span></div>
       <div class="ilist">
-        <div class="ii">
+        <div class="ii" id="ii-sarah" onclick="switchInteraction('sarah')" style="cursor:pointer">
           <div class="iava" style="background:#E07A5F">SJ</div>
           <div class="ibody"><div class="itop"><span class="iname" style="color:var(--t1);font-weight:600">Sarah Johnson</span><span class="itime">5m</span></div><div class="irow2"><span class="iprev">Reviewing loan application</span><span class="lpill">LIVE</span></div></div>
+        </div>
+        <div class="ii" id="ii-emily" onclick="switchInteraction('emily')" style="cursor:pointer">
+          <div class="iava" style="background:#4AADA8">EO</div>
+          <div class="ibody"><div class="itop"><span class="iname" style="color:var(--t1);font-weight:600">Emily Olivers</span><span class="itime">2m</span></div><div class="irow2"><span class="iprev">Missing salary deposit</span><span class="lpill">LIVE</span></div></div>
         </div>
         <div class="ii">
           <div class="iava" style="background:#E6A817;position:relative">DL<div class="ibadge">12</div></div>
@@ -4892,7 +4896,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
         <!-- ══ INCOMING VOICE CALL NOTIFICATION ══ -->
         <div class="voice-notif-overlay" id="voiceNotif">
-          <div class="vn-caller">
+          <div class="vn-caller" id="vnCallerEmily" onclick="switchInteraction('emily')" style="cursor:pointer">
             <div class="vn-phone-icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M17 8l5 4-5 4z"/></svg>
             </div>
@@ -5059,7 +5063,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                           </button>
                         </div>
                         <div class="ihs-summary-wrap">
-                          <p class="ihs-summary-text">Emily Olivers was transferred regarding a missing salary deposit inquiry. Recurring Tesla payroll activity was identified on Everyday Checking, but no current-cycle deposit was found.</p>
+                          <p class="ihs-summary-text" id="ihsSummaryText">Emily Olivers was transferred regarding a missing salary deposit inquiry. Recurring Tesla payroll activity was identified on Everyday Checking, but no current-cycle deposit was found.</p>
                           <div class="ihs-meta-row">
                             <div class="ihs-meta-left">
                               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
@@ -5079,7 +5083,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     </div>
 
                     <!-- Message Thread -->
-                    <div class="msgs lg">
+                    <div class="msgs lg" id="s1Thread">
                       <div class="sys"><span>Today, June 18th</span></div>
 
                       <div class="mb ag">
@@ -5790,23 +5794,16 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   <!-- Conversation tabs (one per open chat/text; active drives the panel) -->
   <div class="ai-tabs" id="aiTabs">
     <div class="ai-tabs-scroll" id="aiTabsScroll">
-      <button class="ai-tab active" data-ctx="emily" onclick="aiSwitchTab('emily')">Emily Olivers<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('emily')">&times;</span></button>
-      <button class="ai-tab" data-ctx="sarah" onclick="aiSwitchTab('sarah')">Sarah Johnson<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('sarah')">&times;</span></button>
-      <button class="ai-tab" data-ctx="feerev" onclick="aiSwitchTab('feerev')">Fee reversal policy<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('feerev')">&times;</span></button>
-      <button class="ai-tab" data-ctx="marcus" onclick="aiSwitchTab('marcus')">Marcus Lee<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('marcus')">&times;</span></button>
-      <button class="ai-tab" data-ctx="david" onclick="aiSwitchTab('david')">David Okafor<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('david')">&times;</span></button>
+      <button class="ai-tab active" data-ctx="emily" data-kind="member" onclick="aiSwitchTab('emily')">Overview<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('emily')">&times;</span></button>
+      <button class="ai-tab" data-ctx="sarah" data-kind="member" onclick="aiSwitchTab('sarah')">Overview<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('sarah')">&times;</span></button>
+      <button class="ai-tab" data-ctx="feerev" data-kind="topic" onclick="aiSwitchTab('feerev')">Skip-payment eligibility<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('feerev')">&times;</span></button>
+      <button class="ai-tab" data-ctx="marcus" data-kind="member" onclick="aiSwitchTab('marcus')">Overview<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('marcus')">&times;</span></button>
+      <button class="ai-tab" data-ctx="david" data-kind="member" onclick="aiSwitchTab('david')">Overview<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('david')">&times;</span></button>
     </div>
     <div class="ai-tab-more-wrap" id="aiTabMoreWrap" style="display:none;">
       <button class="ai-tab ai-tab-more" id="aiTabMoreBtn" onclick="aiToggleMoreMenu(event)"><span id="aiTabMoreCount">+2</span> &#9662;</button>
       <div class="ai-tab-menu" id="aiTabMenu" style="display:none;"></div>
     </div>
-  </div>
-
-  <!-- Breadcrumb (shown only inside a query; names the latest product/category) -->
-  <div class="ai-crumb" id="aiCrumb" style="display:none;">
-    <button class="ai-crumb-link" onclick="backToOverview()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>Member Overview</button>
-    <span class="ai-crumb-sep">/</span>
-    <span class="ai-crumb-current" id="aiCrumbCurrent"></span>
   </div>
 
   <!-- Home Screen -->
@@ -6294,13 +6291,13 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
         </div></div></div>
     </div><!-- /msv-scroll sarah -->
 <div class="msv-scroll" data-ctx-view="feerev" style="display:none;">
-      <div class="ai-msg user">What's our policy on reversing an NSF fee for a member?</div>
+      <div class="ai-msg user">What makes a member eligible to skip a loan payment?</div>
       <div class="ai-msg assistant"><div class="ai-msg-label">◆ AI Assistant</div>
-        <div style="font-size:12px;line-height:1.55;color:var(--msv-text-secondary)">NSF fees can be reversed once per rolling 12-month period as a courtesy, provided the member is in good standing and the account isn't chronically overdrawn. Reversals above $35 or a second request within 12 months require supervisor approval.</div>
+        <div style="font-size:12px;line-height:1.55;color:var(--msv-text-secondary)">A member can skip a payment once per rolling 12-month period if the loan is at least 6 months old, currently not past due, and not already in a deferment. A processing fee may apply, and interest continues to accrue during the skipped month.</div>
       </div>
-      <div class="ai-msg user">What counts as "good standing"?</div>
+      <div class="ai-msg user">Which loan types are excluded?</div>
       <div class="ai-msg assistant"><div class="ai-msg-label">◆ AI Assistant</div>
-        <div style="font-size:12px;line-height:1.55;color:var(--msv-text-secondary)">Good standing means: membership open 90+ days, no more than 2 NSF occurrences in the last 90 days, and no active restrictions or charge-offs. If the member fails any of these, route the request to a supervisor rather than reversing directly.</div>
+        <div style="font-size:12px;line-height:1.55;color:var(--msv-text-secondary)">Mortgages, home-equity lines, and any loan currently in collections or delinquency aren't eligible. Auto and personal loans in good standing generally qualify. If a member has already used a skip in the last 12 months, route the request to a supervisor.</div>
       </div>
     </div><!-- /msv-scroll feerev -->
 <div class="msv-scroll" data-ctx-view="marcus" style="display:none;">
@@ -15267,21 +15264,38 @@ const AI_MAX_VISIBLE = 3;
 
 function aiTabLabel(t){ return t.childNodes[0] ? t.childNodes[0].textContent.trim() : t.getAttribute('data-ctx'); }
 
+// The member whose context is in focus. Selecting a topic tab does NOT change this,
+// so the current member's pill stays visible while a topic thread is active.
+let aiActiveMember = 'emily';
+
+// Show only the active member's tab + all topic tabs; hide other members.
+function aiApplyTabVisibility(){
+  const tabs = Array.prototype.slice.call(document.querySelectorAll('#aiTabsScroll .ai-tab'));
+  tabs.forEach(function(t){
+    const kind = t.getAttribute('data-kind');
+    const isActiveMember = t.getAttribute('data-ctx') === aiActiveMember;
+    // Topics always show; member tabs show only if they are the active member.
+    const show = (kind === 'topic') || isActiveMember;
+    t.style.display = show ? '' : 'none';
+  });
+}
+
 function aiReflowTabs(){
   const wrap = document.getElementById('aiTabMoreWrap');
   const menu = document.getElementById('aiTabMenu');
   const cntEl = document.getElementById('aiTabMoreCount');
   const scroll = document.getElementById('aiTabsScroll');
-  const tabs = Array.prototype.slice.call(document.querySelectorAll('#aiTabsScroll .ai-tab'));
   if(!wrap || !menu || !scroll) return;
-  // All pills stay in the scroll row (with peek). Show +N when more than 3 are open.
+  // Only tabs currently visible (active member + topics) participate in overflow.
+  const tabs = Array.prototype.slice.call(document.querySelectorAll('#aiTabsScroll .ai-tab')).filter(function(t){
+    return t.style.display !== 'none';
+  });
   if(tabs.length <= AI_MAX_VISIBLE){
     wrap.style.display = 'none'; menu.style.display = 'none';
     return;
   }
   wrap.style.display = '';
   cntEl.textContent = '+' + (tabs.length - AI_MAX_VISIBLE);
-  // Menu lists every open conversation for quick jump/close, active marked.
   menu.innerHTML = tabs.map(function(t){
     const ctx = t.getAttribute('data-ctx');
     const act = t.classList.contains('active') ? ' active' : '';
@@ -15303,6 +15317,9 @@ document.addEventListener('click', function(e){
 
 function aiSwitchTab(ctx){
   aiActiveCtx = ctx;
+  // Track the active member; selecting a topic keeps the current member in focus.
+  var selTab = document.querySelector('#aiTabsScroll .ai-tab[data-ctx="'+ctx+'"]');
+  if(selTab && selTab.getAttribute('data-kind') === 'member') aiActiveMember = ctx;
   document.querySelectorAll('#aiTabsScroll .ai-tab').forEach(function(t){
     const on = t.getAttribute('data-ctx') === ctx;
     t.classList.toggle('active', on);
@@ -15314,15 +15331,19 @@ function aiSwitchTab(ctx){
   document.querySelectorAll('#aiHome [data-ctx-view]').forEach(function(v){
     v.style.display = (v.getAttribute('data-ctx-view') === ctx) ? '' : 'none';
   });
+  // Sticky thread routing: while a query tab is active, follow-up clicks
+  // (option selects, follow-up chips) render into that tab's own thread.
+  aiThreadTarget = document.getElementById('thread-'+ctx) ? ('thread-'+ctx) : 'messageThread';
   var inp = document.getElementById('aiInput');
   if(inp){
     var ph = ctx==='emily' ? 'Ask anything about Emily Olivers'
            : ctx==='sarah' ? 'Ask anything about Sarah Johnson'
            : ctx==='marcus' ? 'Ask anything about Marcus Lee'
            : ctx==='david' ? 'Ask anything about David Okafor'
-           : 'Ask a follow-up about fee reversals';
+           : 'Ask a follow-up about skip-payment eligibility';
     inp.setAttribute('placeholder', ph);
   }
+  aiApplyTabVisibility();
   aiReflowTabs();
 }
 
@@ -15340,27 +15361,16 @@ function aiCloseTab(ctx){
   }
 }
 // Initial reflow once DOM is ready
-document.addEventListener('DOMContentLoaded', aiReflowTabs);
-// Breadcrumb (Option 1): reflects the latest product/category being viewed.
-const CRUMB_CAT = { loan:'Loans', deposit:'Deposits', card:'Cards', loans:'Loans', deposits:'Deposits', cards:'Cards', alerts:'Alerts' };
-function setCrumb(kind, label){
-  const bar = document.getElementById('aiCrumb');
-  const cur = document.getElementById('aiCrumbCurrent');
-  if(!bar || !cur) return;
-  const cat = CRUMB_CAT[kind] || '';
-  cur.textContent = label ? (cat ? cat + ' · ' + label : label) : cat;
-  bar.style.display = 'flex';
-}
-function hideCrumb(){
-  const bar = document.getElementById('aiCrumb');
-  if(bar) bar.style.display = 'none';
-}
+document.addEventListener('DOMContentLoaded', function(){ aiApplyTabVisibility(); aiReflowTabs(); });
+// Breadcrumb removed — these are retained as no-ops so existing calls stay safe.
+function setCrumb(kind, label){ /* breadcrumb removed */ }
+function hideCrumb(){ /* breadcrumb removed */ }
 let lastUserMsg = null;
 let suppressUser = false;
 function pushUser(text) {
   // When a typed query has already been shown, skip a routed function's canned line.
   if (suppressUser) { suppressUser = false; return; }
-  const t = document.getElementById('messageThread');
+  const t = document.getElementById(aiThreadTarget);
   const el = document.createElement('div');
   el.className = 'ai-msg user';
   el.textContent = text;
@@ -15371,7 +15381,7 @@ function pushUser(text) {
 }
 let aiTimer = null;
 function pushAssistant(html) {
-  const t = document.getElementById('messageThread');
+  const t = document.getElementById(aiThreadTarget);
   // Clear any in-flight indicator/timer (e.g. agent clicked again quickly)
   clearTimeout(aiTimer);
   const stale = t.querySelector('.ai-loading');
@@ -16186,17 +16196,125 @@ function handleQuery(msg) {
   return pushAssistant(`I can answer questions about Emily's <strong>loans</strong>, <strong>deposits</strong>, <strong>cards</strong>, <strong>transactions</strong>, and <strong>alerts</strong> — e.g. “skip payment on the auto loan”, “dividend rate on Emergency Fund”, or “available credit on the Amex”.`);
 }
 
+// Derive a short tab label from the query's resolved kind/entity.
+function aiQueryLabel(msg){
+  const m = msg.toLowerCase();
+  const ent = matchEntity(m);
+  if(ent){
+    if(ent.kind==='loan') return 'Loans';
+    if(ent.kind==='deposit') return 'Deposits';
+    if(ent.kind==='card') return 'Cards';
+  }
+  const kind = matchKind(m) || (matchRule(m) && matchRule(m).kind);
+  if(kind==='loan') return 'Loans';
+  if(kind==='deposit') return 'Deposits';
+  if(kind==='card') return 'Cards';
+  const rule = matchRule(m);
+  if(rule && rule.facet==='alerts') return 'Alerts';
+  if(/opportunit/.test(m)) return 'Opportunities';
+  if(/(brief|summary|profile|everything)/.test(m)) return 'Member Brief';
+  // fallback: first few words of the query
+  const words = msg.trim().split(/\s+/).slice(0,3).join(' ');
+  return words.length ? words : 'New query';
+}
+
+let aiQuerySeq = 0;
+function aiCreateQueryTab(msg){
+  const label = aiQueryLabel(msg);
+  const ctx = 'q'+(++aiQuerySeq);
+  // Build the tab (topic kind, so it stays visible alongside the member)
+  const scroll = document.getElementById('aiTabsScroll');
+  const btn = document.createElement('button');
+  btn.className = 'ai-tab';
+  btn.setAttribute('data-ctx', ctx);
+  btn.setAttribute('data-kind', 'topic');
+  btn.setAttribute('onclick', "aiSwitchTab('"+ctx+"')");
+  btn.innerHTML = label + '<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab(\''+ctx+'\')">&times;</span>';
+  scroll.appendChild(btn);
+  // Build its conversation view inside aiHome
+  const home = document.getElementById('aiHome');
+  const view = document.createElement('div');
+  view.className = 'msv-scroll ai-query-view';
+  view.setAttribute('data-ctx-view', ctx);
+  view.style.display = 'none';
+  view.innerHTML = '<div id="thread-'+ctx+'" class="ai-query-thread"></div>';
+  home.appendChild(view);
+  return ctx;
+}
+
+let aiThreadTarget = 'messageThread';
+
+// ── Full interaction switch: header + middle + AI panel all change together ──
+const INTERACTION = {
+  emily: {
+    name:'Emily Olivers', sub:'+1 (310) 928 7361',
+    summary:'Emily Olivers was transferred regarding a missing salary deposit inquiry. Recurring Tesla payroll activity was identified on Everyday Checking, but no current-cycle deposit was found.',
+    initials:'EO', avatar:'#E07A5F',
+    thread:[
+      {who:'ag', n:'AR', c:'Hello Emily! Thank you for calling in. How can I assist you today?', t:'2:12 PM'},
+      {who:'mem', n:'EO', c:"Hi! I noticed my payroll deposit hasn't come through yet. It usually hits by Wednesday morning.", t:'2:13 PM'},
+      {who:'ag', n:'AR', c:'I can see your Everyday Checking account. Let me look into the recurring deposit pattern from Tesla.', t:'2:14 PM'},
+      {who:'mem', n:'EO', c:"Yes, it's my bi-weekly payroll. Usually around $3,200.", t:'2:14 PM'},
+      {who:'ag', n:'AR', c:'I can confirm the recurring Tesla ACH pattern. The current-cycle deposit hasn\u2019t posted yet — it may still be processing. Want me to check for a hold or pending item?', t:'2:15 PM'},
+      {who:'mem', n:'EO', c:'Yes please, that would be great.', t:'2:15 PM'}
+    ]
+  },
+  sarah: {
+    name:'Sarah Johnson', sub:'+1 (415) 662 0148',
+    summary:'Sarah Johnson reached out about the status of her personal loan application submitted two weeks ago. Identity verified; agent to confirm underwriting stage and expected decision date.',
+    initials:'SJ', avatar:'#E07A5F',
+    thread:[
+      {who:'ag', n:'AR', c:'Hello Sarah! How can I help you today?', t:'10:00 AM'},
+      {who:'mem', n:'SJ', c:"Hi! I'm trying to check on my loan application status. I submitted it two weeks ago.", t:'10:01 AM'},
+      {who:'ag', n:'AR', c:'Of course — let me pull that up. Could you confirm your date of birth?', t:'10:02 AM'},
+      {who:'mem', n:'SJ', c:'Sure — March 14, 1990.', t:'10:03 AM'},
+      {who:'ag', n:'AR', c:'Thank you, you\u2019re verified. Your personal loan application is in final underwriting review — a decision is expected within 2 business days.', t:'10:04 AM'},
+      {who:'mem', n:'SJ', c:'That\u2019s great, thank you! Will I get an email once it\u2019s decided?', t:'10:04 AM'}
+    ]
+  }
+};
+function renderThreadHTML(list){
+  return '<div class="sys"><span>Today</span></div>' + list.map(function(m){
+    const bg = m.who==='ag' ? '#7DA3F3' : '#E07A5F';
+    return '<div class="mb '+m.who+'"><div class="mav lg" style="background:'+bg+';border-radius:50%;">'+m.n+'</div>'
+      + '<div class="mbody"><div class="mt lg">'+m.c+'</div><div class="mm">'+m.t+'</div></div></div>';
+  }).join('');
+}
+function switchInteraction(who){
+  const d = INTERACTION[who];
+  if(!d) return;
+  // 1) Header name + sub
+  var nm = document.getElementById('mbName'); if(nm) nm.textContent = d.name;
+  var sb = document.getElementById('mbSub');  if(sb) sb.textContent = d.sub;
+  // 2) Inbox active highlight — both member rows
+  var sarahRow = document.getElementById('ii-sarah');
+  if(sarahRow) sarahRow.classList.toggle('active', who==='sarah');
+  var emilyRow = document.getElementById('ii-emily');
+  if(emilyRow) emilyRow.classList.toggle('active', who==='emily');
+  // 3) Emily's incoming video card shows only when Emily is active
+  var vn = document.getElementById('voiceNotif');
+  if(vn){ vn.style.display = (who==='emily') ? '' : 'none'; vn.style.opacity=''; }
+  // 4) Middle area: handoff summary + conversation thread swap
+  var sum = document.getElementById('ihsSummaryText'); if(sum) sum.textContent = d.summary;
+  var thread = document.getElementById('s1Thread'); if(thread) thread.innerHTML = renderThreadHTML(d.thread);
+  // 5) AI panel: switch to that member's tab (swaps overview + snapshot metadata)
+  if(typeof aiSwitchTab === 'function') aiSwitchTab(who);
+}
+
 function sendMessage() {
   const input = document.getElementById('aiInput');
   const msg = input.value.trim();
   if (!msg) return;
   input.value = '';
-  openConversation();
-  setCrumb('', 'Conversation');   // neutral; product/category routes overwrite this
-  pushUser(msg);            // show the agent's real question
-  suppressUser = true;      // let the routed answer skip its canned user line
+  // Each typed query becomes its own topic tab, labelled by what it resolves to.
+  const ctx = aiCreateQueryTab(msg);
+  aiSwitchTab(ctx);                 // shows the tab + sets aiThreadTarget to thread-<ctx>
+  pushUser(msg);
+  suppressUser = true;
   handleQuery(msg);
-  suppressUser = false;     // reset if the route didn't consume it
+  suppressUser = false;
+  // Do NOT reset aiThreadTarget here — it stays sticky to this tab so later
+  // option-selects / follow-up clicks render into the same tab's thread.
 }
 
 function refreshAI() {
@@ -17980,30 +18098,9 @@ body {
 .ai-tab-menu-item:hover { background: #f5f5f8; }
 .ai-tab-menu-item .ai-tab-x { color: #a3a3b8; }
 .ai-tab-menu-item.active { background: rgba(91,95,207,.1); color: #5b5fcf; }
-
-/* ── Breadcrumb (Option 1: names the latest product/category) ── */
-.ai-crumb {
-  display: flex; align-items: center; gap: 6px;
-  height: 26px; padding: 0 12px;
-  border-bottom: 1px solid var(--ai-border);
-  background: #fff; font-size: 11px;
-  flex-shrink: 0; margin: 0;
-  overflow-x: auto; white-space: nowrap;
-}
-.ai-crumb::-webkit-scrollbar { display: none; }
-.ai-crumb-link {
-  display: inline-flex; align-items: center; gap: 4px;
-  border: none; background: transparent; padding: 0;
-  color: #5b5fcf; font-weight: 600; font-size: 11px;
-  cursor: pointer; font-family: inherit; line-height: 1; flex-shrink: 0;
-}
-.ai-crumb-link svg { width: 11px; height: 11px; flex-shrink: 0; }
-.ai-crumb-link:hover { text-decoration: underline; }
-.ai-crumb-sep { color: #c8c7d8; font-size: 11px; flex-shrink: 0; }
-.ai-crumb-current {
-  color: #8a8a9e; font-weight: 500; font-size: 11px;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
+/* Query-tab conversation view */
+.ai-query-view { padding: 12px; }
+.ai-query-thread { display: flex; flex-direction: column; }
 
 /* ── Resume bar (A2): full-bleed, one line, above the input ── */
 .ai-resume-bar {
