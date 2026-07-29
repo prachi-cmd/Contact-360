@@ -16238,18 +16238,24 @@ function aiQueryLabel(msg){
 }
 
 let aiQuerySeq = 0;
-function aiCreateQueryTab(msg){
-  const label = aiQueryLabel(msg);
+function aiCreateQueryTab(msg, explicitLabel){
+  const label = explicitLabel || aiQueryLabel(msg);
   const ctx = 'q'+(++aiQuerySeq);
-  // Build the tab (topic kind, so it stays visible alongside the member)
+  // Build the tab (topic kind, owned by the active member so it travels with them)
   const scroll = document.getElementById('aiTabsScroll');
   const btn = document.createElement('button');
   btn.className = 'ai-tab';
   btn.setAttribute('data-ctx', ctx);
   btn.setAttribute('data-kind', 'topic');
+  btn.setAttribute('data-owner', aiActiveMember);
   btn.setAttribute('onclick', "aiSwitchTab('"+ctx+"')");
   btn.innerHTML = label + '<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab(\''+ctx+'\')">&times;</span>';
-  scroll.appendChild(btn);
+  // Insert right AFTER the active member's Overview pill, so Overview stays first
+  // and the newest query sits directly after it.
+  const memberPill = scroll.querySelector('.ai-tab[data-ctx="'+aiActiveMember+'"]');
+  if(memberPill && memberPill.nextSibling) scroll.insertBefore(btn, memberPill.nextSibling);
+  else if(memberPill) scroll.appendChild(btn);
+  else scroll.appendChild(btn);
   // Build its conversation view inside aiHome
   const home = document.getElementById('aiHome');
   const view = document.createElement('div');
@@ -16423,8 +16429,15 @@ function msvAskAlert(kind){
 }
 function msvAskFromItem(el){
   const p = msvResolveProduct(el);
-  if(p) snapshotProductClick(p.type, p.id);
-  else msvAskAIHome();
+  if(!p){ msvAskAIHome(); return; }
+  // Spawn a NEW conversation tab for this product, labelled by kind, pinned after member.
+  const labelMap = { loan:'Loans', deposit:'Deposits', card:'Cards' };
+  const ctx = aiCreateQueryTab('', labelMap[p.type] || 'Details');
+  aiSwitchTab(ctx);                 // shows the new tab; sets sticky aiThreadTarget
+  // Render the product detail into this tab's own thread
+  if(p.type === 'loan')    showLoan(p.id);
+  else if(p.type === 'deposit') showDeposit(p.id);
+  else if(p.type === 'card')    showCard(p.id);
 }
 function msvToggleAlert(id){ const el=document.getElementById(id); if(el) el.classList.toggle('open'); }
 
