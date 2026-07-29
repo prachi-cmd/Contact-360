@@ -4832,7 +4832,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <div class="iava" style="background:#E07A5F">SJ</div>
           <div class="ibody"><div class="itop"><span class="iname" style="color:var(--t1);font-weight:600">Sarah Johnson</span><span class="itime">5m</span></div><div class="irow2"><span class="iprev">Reviewing loan application</span><span class="lpill">LIVE</span></div></div>
         </div>
-        <div class="ii" id="ii-emily" onclick="switchInteraction('emily')" style="cursor:pointer">
+        <div class="ii sel" id="ii-emily" onclick="switchInteraction('emily')" style="cursor:pointer">
           <div class="iava" style="background:#4AADA8">EO</div>
           <div class="ibody"><div class="itop"><span class="iname" style="color:var(--t1);font-weight:600">Emily Olivers</span><span class="itime">2m</span></div><div class="irow2"><span class="iprev">Missing salary deposit</span><span class="lpill">LIVE</span></div></div>
         </div>
@@ -4844,7 +4844,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <div class="iava" style="background:#6C8EBF" id="rw-ava">RW</div>
           <div class="ibody"><div class="itop"><span class="iname" id="rw-n">Richard Walters</span><span class="itime" id="rw-t">5m</span></div><div class="irow2"><span class="iprev" id="rw-p">Okay, thanks!</span><span class="itag tl">LEND</span></div></div>
         </div>
-        <div class="ii live">
+        <div class="ii">
           <div class="iava" style="background:#9B6FCA;position:relative">TA<div class="ibadge">3</div></div>
           <div class="ibody"><div class="itop"><span class="iname">Thomas Anderson</span><span class="itime">2m</span></div><div class="irow2"><span class="iprev">Co-browse paused</span><span class="ppill">PAUSED</span></div></div>
         </div>
@@ -5796,7 +5796,8 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
     <div class="ai-tabs-scroll" id="aiTabsScroll">
       <button class="ai-tab active" data-ctx="emily" data-kind="member" onclick="aiSwitchTab('emily')">Overview<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('emily')">&times;</span></button>
       <button class="ai-tab" data-ctx="sarah" data-kind="member" onclick="aiSwitchTab('sarah')">Overview<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('sarah')">&times;</span></button>
-      <button class="ai-tab" data-ctx="feerev" data-kind="topic" onclick="aiSwitchTab('feerev')">Skip-payment eligibility<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('feerev')">&times;</span></button>
+      <button class="ai-tab" data-ctx="topic-emily" data-kind="topic" data-owner="emily" onclick="aiSwitchTab('topic-emily')">Fee reversal policy<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('topic-emily')">&times;</span></button>
+      <button class="ai-tab" data-ctx="topic-sarah" data-kind="topic" data-owner="sarah" onclick="aiSwitchTab('topic-sarah')">Skip-payment eligibility<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('topic-sarah')">&times;</span></button>
       <button class="ai-tab" data-ctx="marcus" data-kind="member" onclick="aiSwitchTab('marcus')">Overview<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('marcus')">&times;</span></button>
       <button class="ai-tab" data-ctx="david" data-kind="member" onclick="aiSwitchTab('david')">Overview<span class="ai-tab-x" onclick="event.stopPropagation();aiCloseTab('david')">&times;</span></button>
     </div>
@@ -6290,7 +6291,17 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           </div>
         </div></div></div>
     </div><!-- /msv-scroll sarah -->
-<div class="msv-scroll" data-ctx-view="feerev" style="display:none;">
+<div class="msv-scroll" data-ctx-view="topic-emily" style="display:none;">
+      <div class="ai-msg user">What's our policy on reversing an NSF fee for a member?</div>
+      <div class="ai-msg assistant"><div class="ai-msg-label">◆ AI Assistant</div>
+        <div style="font-size:12px;line-height:1.55;color:var(--msv-text-secondary)">NSF fees can be reversed once per rolling 12-month period as a courtesy, provided the member is in good standing and the account isn't chronically overdrawn. Reversals above $35 or a second request within 12 months require supervisor approval.</div>
+      </div>
+      <div class="ai-msg user">What counts as "good standing"?</div>
+      <div class="ai-msg assistant"><div class="ai-msg-label">◆ AI Assistant</div>
+        <div style="font-size:12px;line-height:1.55;color:var(--msv-text-secondary)">Good standing means: membership open 90+ days, no more than 2 NSF occurrences in the last 90 days, and no active restrictions or charge-offs. If the member fails any of these, route the request to a supervisor rather than reversing directly.</div>
+      </div>
+    </div><!-- /msv-scroll topic-emily -->
+<div class="msv-scroll" data-ctx-view="topic-sarah" style="display:none;">
       <div class="ai-msg user">What makes a member eligible to skip a loan payment?</div>
       <div class="ai-msg assistant"><div class="ai-msg-label">◆ AI Assistant</div>
         <div style="font-size:12px;line-height:1.55;color:var(--msv-text-secondary)">A member can skip a payment once per rolling 12-month period if the loan is at least 6 months old, currently not past due, and not already in a deferment. A processing fee may apply, and interest continues to accrue during the skipped month.</div>
@@ -6299,7 +6310,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <div class="ai-msg assistant"><div class="ai-msg-label">◆ AI Assistant</div>
         <div style="font-size:12px;line-height:1.55;color:var(--msv-text-secondary)">Mortgages, home-equity lines, and any loan currently in collections or delinquency aren't eligible. Auto and personal loans in good standing generally qualify. If a member has already used a skip in the last 12 months, route the request to a supervisor.</div>
       </div>
-    </div><!-- /msv-scroll feerev -->
+    </div><!-- /msv-scroll topic-sarah -->
 <div class="msv-scroll" data-ctx-view="marcus" style="display:none;">
       <div class="msv-welcome"><div class="msv-welcome-title">Hi 👋 Ask anything about Marcus Lee</div><div class="msv-welcome-sub">Tap any item to ask the assistant about it.</div></div>
       <div class="msv-box"><div class="msv-section open" id="sec-member-marcus">
@@ -15268,14 +15279,20 @@ function aiTabLabel(t){ return t.childNodes[0] ? t.childNodes[0].textContent.tri
 // so the current member's pill stays visible while a topic thread is active.
 let aiActiveMember = 'emily';
 
-// Show only the active member's tab + all topic tabs; hide other members.
+// Show only the active member's tab + topic tabs owned by that member.
 function aiApplyTabVisibility(){
   const tabs = Array.prototype.slice.call(document.querySelectorAll('#aiTabsScroll .ai-tab'));
   tabs.forEach(function(t){
     const kind = t.getAttribute('data-kind');
     const isActiveMember = t.getAttribute('data-ctx') === aiActiveMember;
-    // Topics always show; member tabs show only if they are the active member.
-    const show = (kind === 'topic') || isActiveMember;
+    let show;
+    if(kind === 'topic'){
+      const owner = t.getAttribute('data-owner');
+      // Owned topics show only for their member; unowned (query) topics always show.
+      show = owner ? (owner === aiActiveMember) : true;
+    } else {
+      show = isActiveMember;
+    }
     t.style.display = show ? '' : 'none';
   });
 }
@@ -15340,7 +15357,9 @@ function aiSwitchTab(ctx){
            : ctx==='sarah' ? 'Ask anything about Sarah Johnson'
            : ctx==='marcus' ? 'Ask anything about Marcus Lee'
            : ctx==='david' ? 'Ask anything about David Okafor'
-           : 'Ask a follow-up about skip-payment eligibility';
+           : ctx==='topic-emily' ? 'Ask a follow-up about fee reversals'
+           : ctx==='topic-sarah' ? 'Ask a follow-up about skip-payment eligibility'
+           : 'Ask a follow-up';
     inp.setAttribute('placeholder', ph);
   }
   aiApplyTabVisibility();
@@ -16286,11 +16305,11 @@ function switchInteraction(who){
   // 1) Header name + sub
   var nm = document.getElementById('mbName'); if(nm) nm.textContent = d.name;
   var sb = document.getElementById('mbSub');  if(sb) sb.textContent = d.sub;
-  // 2) Inbox active highlight — both member rows
+  // 2) Inbox active highlight — both member rows (uses .sel selected style)
   var sarahRow = document.getElementById('ii-sarah');
-  if(sarahRow) sarahRow.classList.toggle('active', who==='sarah');
+  if(sarahRow) sarahRow.classList.toggle('sel', who==='sarah');
   var emilyRow = document.getElementById('ii-emily');
-  if(emilyRow) emilyRow.classList.toggle('active', who==='emily');
+  if(emilyRow) emilyRow.classList.toggle('sel', who==='emily');
   // 3) Emily's incoming video card shows only when Emily is active
   var vn = document.getElementById('voiceNotif');
   if(vn){ vn.style.display = (who==='emily') ? '' : 'none'; vn.style.opacity=''; }
