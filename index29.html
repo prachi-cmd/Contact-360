@@ -1357,7 +1357,8 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   padding:7px 14px 9px;
   border-top:1px solid var(--border);
 }
-.rc-act-left{display:flex;align-items:center;gap:1px;flex-wrap:wrap;}
+.rc-act-left{display:flex;align-items:center;gap:1px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;min-width:0;}
+.rc-act-left::-webkit-scrollbar{display:none;}
 .rc-act{
   width:28px;height:28px;border-radius:5px;
   border:none;background:transparent;
@@ -1376,7 +1377,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
   background:var(--s0);
   color:var(--t2);font-size:11px;font-weight:500;
   cursor:pointer;font-family:var(--f);
-  transition:all .13s;white-space:nowrap;
+  transition:all .13s;white-space:nowrap;flex-shrink:0;
 }
 .rc-transfer:hover{border-color:var(--border2);background:var(--s1);}
 .rc-send{
@@ -1667,22 +1668,25 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
 /* DOCKED — full width of left-stack, square bottom strip, dark */
 .callbar.docked{
-  position:relative;width:100%;
-  padding:0 8px 0 10px;
+  position:relative;width:auto;
+  margin:8px 12px;
+  padding:0 14px 0 12px;
   background:rgba(20,20,22,.98);
-  border-top:1px solid rgba(255,255,255,.08);
-  box-shadow:0 -2px 12px rgba(0,0,0,.18);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  box-shadow:0 6px 20px rgba(0,0,0,.22);
 }
-/* docked at top: divider sits below the bar (separating it from the tabs) */
+/* docked at top: keep the same rounded, inset look */
 .callbar.docked.docked-top{
-  border-top:none;
-  border-bottom:1px solid var(--border);
-  box-shadow:0 2px 8px rgba(0,0,0,.12);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+  box-shadow:0 6px 20px rgba(0,0,0,.22);
 }
 /* FLOATING — rounded pill, fixed to viewport so it escapes overflow:hidden clipping */
 .callbar.floating{
   position:fixed;
-  padding:0 10px 0 12px;
+  width:400px;max-width:400px;
+  padding:0 18px 0 12px;
   background:rgba(20,20,22,.94);
   -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
   border-radius:20px;border:1px solid rgba(255,255,255,.08);
@@ -1723,20 +1727,38 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
 /* chevron */
 .cb-chev{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;cursor:pointer;flex-shrink:0;margin-left:2px;transition:background .15s;background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);border:none;}
+.cb-pcount{display:inline-flex;align-items:center;gap:4px;flex-shrink:0;margin-right:4px;padding:4px 9px;border-radius:20px;background:rgba(255,255,255,.10);color:rgba(255,255,255,.78);font-family:var(--m);font-size:10px;font-weight:500;}
+.cb-pcount svg{opacity:.85;}
 .cb-chev:hover{background:rgba(255,255,255,.2);}
 .cb-chev svg{transition:transform .26s ease;}
 .callbar.expanded .cb-chev svg{transform:rotate(180deg);}
 
 /* expanded participant row */
-.cb-parts{display:flex;align-items:center;gap:7px;max-height:0;opacity:0;overflow-x:auto;overflow-y:hidden;padding:0 2px;transition:max-height .26s ease, opacity .2s ease, padding .26s ease;scrollbar-width:none;}
+.cb-parts{display:flex;flex-wrap:nowrap;align-items:center;gap:7px;width:100%;min-width:0;max-height:0;opacity:0;overflow-x:auto;overflow-y:hidden;padding:0 2px;transition:max-height .26s ease, opacity .2s ease, padding .26s ease;scrollbar-width:none;}
 .cb-parts::-webkit-scrollbar{display:none;}
-.callbar.expanded .cb-parts{max-height:44px;opacity:1;padding:0 2px 9px;border-top:1px solid rgba(255,255,255,.1);padding-top:8px;}
+.cb-parts-arrow{
+  display:none; position:absolute; bottom:9px; width:22px; height:22px; border-radius:50%;
+  background:rgba(40,40,44,.95); border:1px solid rgba(255,255,255,.15); color:#fff;
+  align-items:center; justify-content:center; cursor:pointer; z-index:5; padding:0;
+  box-shadow:0 2px 6px rgba(0,0,0,.3);
+}
+.cb-parts-arrow.left{ left:6px; }
+.cb-parts-arrow.right{ right:6px; }
+.callbar.expanded .cb-parts-arrow{ display:flex; }
+.cb-parts-arrow:hover{ background:rgba(60,60,66,.98); }
+.callbar.expanded .cb-parts{max-height:44px;opacity:1;padding:8px 34px 9px;border-top:1px solid rgba(255,255,255,.1);}
 .cb-part{display:flex;align-items:center;gap:6px;padding:3px 5px 3px 3px;border-radius:20px;flex-shrink:0;background:rgba(255,255,255,.08);}
-.cb-part .cb-pav{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--m);font-size:8px;color:#fff;font-weight:500;flex-shrink:0;}
+.cb-part .cb-pav{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-family:var(--m);font-size:8px;color:rgba(255,255,255,.9);font-weight:500;flex-shrink:0;background:rgba(255,255,255,.16) !important;}
 .cb-part .cb-pn{font-size:10px;font-weight:600;white-space:nowrap;color:#fff;}
 .cb-pmute{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;margin-left:1px;color:rgba(255,255,255,.7);background:none;border:none;cursor:pointer;padding:0;}
 .cb-part.muted .cb-pmute{color:#fff;background:#ef5350;}
 .cb-part.muted .cb-pn{opacity:.6;}
+/* active speaker — subtle green highlight + pulsing ring on the avatar */
+.cb-part.speaking{background:rgba(46,160,120,.20);box-shadow:inset 0 0 0 1px rgba(46,200,140,.55);}
+.cb-part.speaking .cb-pn{color:#fff;}
+.cb-part.speaking .cb-pav{position:relative;background:rgba(46,200,140,.28) !important;}
+.cb-part.speaking .cb-pav::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:1.5px solid rgba(46,200,140,.7);animation:cbSpeak 1.4s ease-out infinite;}
+@keyframes cbSpeak{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.35);opacity:0}}
 
 
 /* ══ INTERACTION JOURNEY ══ */
@@ -4638,6 +4660,12 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 <style>
 /* ===== AI Assistant — follow-up 'ask more' badges (updated) ===== */
 .fu-lead {font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ai-text-tertiary); margin: 2px 2px 8px;}
+.fu-chips {display: flex; flex-wrap: wrap; gap: 7px;}
+.fu-chip {font-family: inherit; font-size: 12px; font-weight: 500; line-height: 1.3;
+  color: var(--ai-accent, #5b5fcf); background: rgba(91,95,207,.10);
+  border: 1px solid rgba(91,95,207,.18); border-radius: 20px; padding: 7px 13px;
+  cursor: pointer; text-align: left; transition: background .12s, border-color .12s;}
+.fu-chip:hover {background: rgba(91,95,207,.18); border-color: rgba(91,95,207,.32);}
 .chev {color: var(--ai-text-tertiary); flex-shrink: 0;}
 .A-list {display: flex; flex-direction: column;}
 .A-row {display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -4823,7 +4851,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <div class="callbar-topdock" id="callbarTopDock"></div>
       <!-- WORKFLOW TABS -->
       <div class="wf-tabs">
-        <button class="wft active" id="wft-test" onclick="switchWFTab('test')">💬 Conversations</button>
+        <button class="wft active" id="wft-test" onclick="switchWFTab('test')">💬 Conversations <span class="conv-badge" id="convBadge">2</span></button>
         <button class="wft" id="wft-cobrowse" onclick="switchWFTab('cobrowse')"><span class="wft-dot"></span>🖥 Co-browse</button>
         <button class="wft" id="wft-workflows" onclick="switchWFTab('workflows')">⚙ Workflows</button>
         <button class="wft" id="wft-sharing" onclick="switchWFTab('sharing')">📤 Content Sharing</button>
@@ -4948,22 +4976,18 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                     <button class="rc-act rc-act-highlight" title="Highlight / Canned">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.707 5.826l-3.535-3.533a1 1 0 00-1.414 0L3.415 14.630 2 20.97l6.337-1.412 12.370-12.319a1 1 0 000-1.413z"/></svg>
                     </button>
-                    <button class="rc-act" title="Canned message">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                    </button>
-                    <button class="rc-act" title="Favorite">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    </button>
-                    <button class="rc-act" title="Priority">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                    </button>
-                    <button class="rc-act" title="Contact">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    </button>
                     <div class="rc-act-sep"></div>
                     <button class="rc-transfer" onclick="">
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
                       Transfer
+                    </button>
+                    <button class="rc-transfer" title="Add participant" onclick="">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                      Add Participant
+                    </button>
+                    <button class="rc-transfer" title="Consult back office" onclick="">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                      Consult Back Office
                     </button>
                   </div>
                   <button class="rc-send" onclick="sendMsg('s1Msgs','s1Input')">
@@ -4989,6 +5013,18 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                         <div class="cvlog-main">Conversation created by Andrew Raynold</div>
                         <div class="cvlog-time">June 18, 2025 · 2:11 PM</div>
                       </div>
+
+                      <div class="sys"><span>📞 Voice call connected · transferred from Alex (AI Agent)</span></div>
+
+                      <div class="mb ag"><div class="mav lg" style="background:#7DA3F3;border-radius:50%;">AR</div><div class="mbody"><div class="mt lg">Hi Emily, thanks for holding — this is Andrew. I can see you were asking about a missing salary deposit. Let me help with that.</div><div class="mm">2:12 PM</div></div></div>
+
+                      <div class="mb mem"><div class="mav lg" style="background:#E07A5F;border-radius:50%;">EO</div><div class="mbody"><div class="mt lg">Yes! My paycheck from Tesla usually lands on the 15th but I don't see it in my checking account.</div><div class="mm">2:12 PM</div></div></div>
+
+                      <div class="mb ag"><div class="mav lg" style="background:#7DA3F3;border-radius:50%;">AR</div><div class="mbody"><div class="mt lg">Let me take a look at your Everyday Checking. I do see your recurring Tesla payroll, but the current-cycle deposit hasn't posted yet.</div><div class="mm">2:13 PM</div></div></div>
+
+                      <div class="mb mem"><div class="mav lg" style="background:#E07A5F;border-radius:50%;">EO</div><div class="mbody"><div class="mt lg">Oh no. Is there a hold on my account? I also noticed my card got declined earlier.</div><div class="mm">2:13 PM</div></div></div>
+
+                      <div class="mb ag"><div class="mav lg" style="background:#7DA3F3;border-radius:50%;">AR</div><div class="mbody"><div class="mt lg">Good question — let me check that too. One moment while I pull up your cards and recent activity.</div><div class="mm">2:14 PM</div></div></div>
                     </div>
 
                     <!-- Rich Composer -->
@@ -5048,13 +5084,32 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
                           <button class="rc-act" title="Signature">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                           </button>
-                        </div>
-                        <div style="display:flex;gap:8px;align-items:center;">
-                          <button class="rc-transfer">Transfer</button>
-                          <button class="rc-send">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                          <button class="rc-act" title="Download">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                          </button>
+                          <button class="rc-act" title="Attach">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+                          </button>
+                          <button class="rc-act rc-act-highlight" title="Highlight / Canned">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.707 5.826l-3.535-3.533a1 1 0 00-1.414 0L3.415 14.630 2 20.97l6.337-1.412 12.370-12.319a1 1 0 000-1.413z"/></svg>
+                          </button>
+                          <div class="rc-act-sep"></div>
+                          <button class="rc-transfer" onclick="">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+                            Transfer
+                          </button>
+                          <button class="rc-transfer" title="Add participant" onclick="">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                            Add Participant
+                          </button>
+                          <button class="rc-transfer" title="Consult back office" onclick="">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3H14z"/><path d="M7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>
+                            Consult Back Office
                           </button>
                         </div>
+                        <button class="rc-send">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -5595,11 +5650,12 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           <div class="cb-grip" id="cbGrip"><span></span><span></span><span></span></div>
           <div class="cb-ident">
             <div class="cb-meta">
-              <div class="cb-dur"><span class="cb-rd"></span><span id="cbTimer">00:00:00</span></div>
+              <div class="cb-dur"><span id="cbTimer">00:00:00</span></div>
               <div class="cb-ch" id="cbChannel">Voice · Lending</div>
             </div>
           </div>
           <div class="cb-controls">
+            <div class="cb-pcount" id="cbPCount" title="Participants in call"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span id="cbPCountNum">6</span></div>
             <button class="cb-cbtn rec" title="Record"><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="#EF5A51"/></svg></button>
             <button class="cb-cbtn std" id="cbMute" title="Mute" onclick="cbToggleSelfMute()"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path class="cb-nofill" d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button>
             <button class="cb-cbtn std" title="Hold"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
@@ -5609,9 +5665,14 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
         </div>
         <div class="cb-parts" id="cbParts">
           <div class="cb-part"><div class="cb-pav" style="background:#5C5685;">AR</div><span class="cb-pn">Andrew Raynold</span><button class="cb-pmute" title="Live"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
-          <div class="cb-part"><div class="cb-pav" style="background:#E07A5F;">EO</div><span class="cb-pn">Emily Olivers</span><button class="cb-pmute" title="Live"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="cb-part speaking"><div class="cb-pav" style="background:#E07A5F;">EO</div><span class="cb-pn">Emily Olivers</span><button class="cb-pmute" title="Live"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
           <div class="cb-part muted"><div class="cb-pav" style="background:#7DA3F3;">AW</div><span class="cb-pn">Amanda Wilson</span><button class="cb-pmute" title="Muted"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="cb-part"><div class="cb-pav" style="background:#4AADA8;">RC</div><span class="cb-pn">Robert Chen</span><button class="cb-pmute" title="Live"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="cb-part muted"><div class="cb-pav" style="background:#E6A817;">DM</div><span class="cb-pn">David Martinez</span><button class="cb-pmute" title="Muted"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+          <div class="cb-part"><div class="cb-pav" style="background:#9B6FCA;">JF</div><span class="cb-pn">Jeff Fuqua</span><button class="cb-pmute" title="Live"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
         </div>
+        <button class="cb-parts-arrow left" id="cbPartsLeft" onclick="cbScrollParts(-1)" title="Scroll left"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg></button>
+        <button class="cb-parts-arrow right" id="cbPartsRight" onclick="cbScrollParts(1)" title="Scroll right"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></button>
       </div>
     </div>
   </div><!-- /workspace -->
@@ -6813,6 +6874,10 @@ function cbToggleExpand(){
   const chev=document.getElementById('cbChev');
   if(chev) chev.title = on?'Hide participants':'Show participants';
 }
+function cbScrollParts(dir){
+  var parts=document.getElementById('cbParts');
+  if(parts) parts.scrollBy({ left: dir*130, behavior:'smooth' });
+}
 function cbToggleSelfMute(){
   const btn=document.getElementById('cbMute');
   if(btn) btn.classList.toggle('muted');
@@ -6922,7 +6987,7 @@ function cbToggleSelfMute(){
     if(b.parentElement!==document.body) document.body.appendChild(b);
     let x=Math.max(8,Math.min(vx,window.innerWidth-b.offsetWidth-8));
     let y=Math.max(8,vy-4);
-    b.style.left=x+'px';b.style.top=y+'px';b.style.right='auto';b.style.bottom='auto';b.style.width='auto';
+    b.style.left=x+'px';b.style.top=y+'px';b.style.right='auto';b.style.bottom='auto';b.style.width='';
   };
 
   window.cbDock=function(target){
@@ -9370,7 +9435,7 @@ function acceptCall(){
     // Max = half of the area the panel shares with the workspace beside it
     // (NOT half the full viewport — the sidebar/inbox sit outside this area).
     const combined = (ws ? ws.offsetWidth : 0) + panel.offsetWidth;
-    panel.style.width = Math.max(280, Math.floor(combined / 2)) + 'px';
+    panel.style.width = Math.max(280, Math.floor(combined * 0.4)) + 'px';
     requestAnimationFrame(()=>{ panel.style.transition = prev || ''; });
   }, 340);
 
@@ -15894,23 +15959,14 @@ function followups(kind, id) {
     .find(x => x.id === id);
   const keys = orderedFacets(kind, item);
 
-  const rowsHtml = keys.map((k, i) =>
-    `<div class="A-row${i >= TOP_N ? ' A-extra' : ''}" onclick="showFacet('${kind}','${id}','${k}')">${questionText(kind, item, k)}${CHEV}</div>`
-  ).join('');
-  const moreBtn = keys.length > TOP_N
-    ? `<button class="A-more" onclick="toggleMore(this)"><span class="more-label">Show more</span><svg class="more-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg></button>`
-    : '';
-
-  const cur = kind === 'loan' ? 'loans' : kind === 'deposit' ? 'deposits' : 'cards';
-  const chips = ['loans','cards','deposits'].map(c =>
-    `<button class="nav-chip${c === cur ? ' current' : ''}" onclick="startCategory('${c}')">${c[0].toUpperCase() + c.slice(1)}</button>`
+  // All follow-up questions as tappable chips (no list / show-more).
+  const chipsHtml = keys.map((k) =>
+    `<button class="fu-chip" onclick="showFacet('${kind}','${id}','${k}')">${questionText(kind, item, k)}</button>`
   ).join('');
 
   return `<div class="fwrap">
     <div class="fu-lead">Anything else? Tap to ask:</div>
-    <div class="A-list">${rowsHtml}${moreBtn}</div>
-    <div class="switch-label">Or open another product</div>
-    <div class="switch-chips">${chips}</div>
+    <div class="fu-chips">${chipsHtml}</div>
   </div>`;
 }
 function toggleMore(btn) {
@@ -16362,9 +16418,30 @@ function aiQueryLabel(msg){
 let aiQuerySeq = 0;
 function aiCreateQueryTab(msg, explicitLabel){
   const label = explicitLabel || aiQueryLabel(msg);
+  const scroll = document.getElementById('aiTabsScroll');
+  // Dedupe: if a topic tab for the active member already has this label, reuse it
+  // instead of spawning a duplicate chip. (Only exact label matches are merged;
+  // a genuinely new product or a new typed question still creates a new chip.)
+  const norm = s => (s||'').replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim().toLowerCase();
+  const want = norm(label);
+  const existing = Array.prototype.slice.call(scroll.querySelectorAll('.ai-tab[data-kind="topic"]'))
+    .find(function(t){
+      if(t.getAttribute('data-owner') !== aiActiveMember) return false;
+      var lbl = t.cloneNode(true);
+      var x = lbl.querySelector('.ai-tab-x'); if(x) x.remove();
+      return norm(lbl.textContent) === want;
+    });
+  if(existing){
+    var ectx = existing.getAttribute('data-ctx');
+    // Clear the existing thread so the caller's re-render refreshes it instead of
+    // stacking a duplicate answer.
+    var et = document.getElementById('thread-'+ectx);
+    if(et) et.innerHTML = '';
+    aiSwitchTab(ectx);
+    return ectx;
+  }
   const ctx = 'q'+(++aiQuerySeq);
   // Build the tab (topic kind, owned by the active member so it travels with them)
-  const scroll = document.getElementById('aiTabsScroll');
   const btn = document.createElement('button');
   btn.className = 'ai-tab';
   btn.setAttribute('data-ctx', ctx);
@@ -18727,9 +18804,14 @@ body {
     text-align:center; min-height:60vh; gap:6px; padding:24px;
   }
   .va-home-welcome .va-hw-title{ font-size:18px; font-weight:700; color:#2d2b45; letter-spacing:-.01em; }
-  .va-home-welcome .va-hw-sub{ font-size:12px; color:#8a8a9e; max-width:280px; }
+  .va-home-welcome .va-hw-sub{ font-size:12.5px; color:#8a8a9e; max-width:380px; line-height:1.55; }
+  .va-home-welcome .va-hw-sub b{ color:#00796B; font-weight:700; }
 
   #wft-overview .ovt-badge{
+    display:inline-block; margin-left:5px; background:var(--red,#d32f2f); color:#fff;
+    font-size:8px; font-weight:700; border-radius:9px; padding:1px 5px; vertical-align:middle;
+  }
+  #wft-test .conv-badge{
     display:inline-block; margin-left:5px; background:var(--red,#d32f2f); color:#fff;
     font-size:8px; font-weight:700; border-radius:9px; padding:1px 5px; vertical-align:middle;
   }
@@ -18739,11 +18821,14 @@ body {
     display:none; flex-direction:column; overflow:hidden; z-index:6;
   }
   #overviewTabHost.on{ display:flex; }
-  #overviewTabHost .oth-scroll{ flex:1; overflow-y:auto; }
+  #overviewTabHost .oth-scroll{ flex:1; overflow-y:auto; scroll-behavior:smooth; padding-bottom:60vh; }
   #overviewTabHost .oth-scroll::-webkit-scrollbar{ width:6px; }
   #overviewTabHost .oth-scroll::-webkit-scrollbar-thumb{ background:var(--border2,#d4d4d4); border-radius:3px; }
   /* Cloned overview keeps its native styling; give it a comfortable page frame */
-  #overviewTabHost .msv-scroll{ display:block !important; max-width:720px; margin:0 auto; padding:14px 16px; }
+  #overviewTabHost .msv-scroll{ display:block !important; max-width:none; margin:0; padding:0; overflow:visible; flex:none; }
+  /* IHS handoff card sits flush to the top and side dividers (full width, no margin) */
+  #overviewTabHost .ihs-root{ border-left-width:3px; border-right:0; border-top:0; border-radius:0; margin:0; width:100%;
+    position:sticky; top:0; z-index:20; background:var(--ihs-bg,#fdfcf7); box-shadow:0 2px 6px rgba(0,0,0,.06); }
   /* Hide the cloned welcome/handoff header duplicated context if present is fine — leave as-is */
 </style>
 <script>
@@ -18758,7 +18843,7 @@ body {
     var btn=document.createElement('button');
     btn.className='wft'; btn.id='wft-overview';
     btn.setAttribute('onclick','vaShowOverviewTab()');
-    btn.innerHTML='👤 Member Overview <span class="ovt-badge" id="ovtBadge">4</span>';
+    btn.innerHTML='👤 Overview';
     strip.insertBefore(btn, strip.firstChild);
   }
 
@@ -18819,15 +18904,24 @@ body {
     src.style.display='block';
     // In the tab we show handoff + overview, NOT the "Ask anything…" prompt.
     src.querySelectorAll('.msv-welcome').forEach(function(w){ w.style.display='none'; });
+    // Replace the old .msv-box widgets with the new two-column grid design.
+    // (Keep the IHS handoff summary block, which is not a .msv-box.)
+    if(!src.querySelector('.mo2-grid')){
+      var oldBoxes=src.querySelectorAll('.msv-box');
+      if(oldBoxes.length && typeof window.mo2BuildGrid==='function'){
+        var grid=window.mo2BuildGrid();
+        oldBoxes[0].parentNode.insertBefore(grid, oldBoxes[0]);
+        oldBoxes.forEach(function(b){ b.style.display='none'; });
+      }
+    }
     syncBadge(src);
   }
   function syncBadge(node){
     try{
-      var t=node.querySelector('.msv-box-title');
-      var mtxt=t && t.textContent.match(/\((\d+)\)/);
       var badge=el('ovtBadge');
-      if(badge && mtxt){ badge.textContent=mtxt[1]; badge.style.display=''; }
-      else if(badge){ badge.style.display='none'; }
+      if(!badge) return;
+      // New design surfaces 2 membership warnings in the Alerts widget.
+      badge.textContent='2'; badge.style.display='';
     }catch(e){}
   }
 
@@ -18835,6 +18929,7 @@ body {
   window.vaShowOverviewTab=function(){
     injectTab(); injectHost();
     syncOverview();
+    vaBindHandoffScroll();
     // deselect every other center tab so only Overview shows the green underline
     document.querySelectorAll('.wf-tabs .wft').forEach(function(b){ b.classList.remove('on'); });
     var ob=el('wft-overview'); if(ob) ob.classList.add('on');
@@ -18937,21 +19032,69 @@ body {
     w.id='aiHomeWelcome';
     w.className='va-home-welcome';
     w.innerHTML=
-      '<div class="va-hw-title" id="aiHomeWelcomeTitle">Hi 👋 Ask anything about Emily Olivers</div>'+
-      '<div class="va-hw-sub">Type a question below to get started.</div>';
+      '<div class="va-hw-title" id="aiHomeWelcomeTitle">Hi 👋 How can I help with Emily Olivers?</div>'+
+      '<div class="va-hw-sub" id="aiHomeWelcomeSub">Tap <b>Ask AI</b> on anything in Member Overview to dig into <span id="aiHomeWelcomeName">Emily</span>’s accounts — or type any question below, from account-specific to general.</div>';
     home.insertBefore(w, home.firstChild);
     updateHomeWelcome();
   }
   var VA_NAMES={emily:'Emily Olivers',sarah:'Sarah Johnson',marcus:'Marcus Lee',david:'David Okafor'};
+  var VA_FIRST={emily:'Emily',sarah:'Sarah',marcus:'Marcus',david:'David'};
   function updateHomeWelcome(){
-    var t=el('aiHomeWelcomeTitle'); if(!t) return;
-    t.textContent='Hi 👋 Ask anything about '+(VA_NAMES[activeMember()]||'this member');
+    var t=el('aiHomeWelcomeTitle');
+    var m=activeMember();
+    if(t) t.textContent='Hi 👋 How can I help with '+(VA_NAMES[m]||'this member')+'?';
+    var n=el('aiHomeWelcomeName');
+    if(n) n.textContent=(VA_FIRST[m]||'this member');
+  }
+
+  // Reflect AI panel open/closed state on .app-root so the Member Overview grid
+  // can switch between two columns (panel closed) and one column (panel open).
+  function vaSyncPanelFlag(){
+    var root=document.querySelector('.app-root');
+    var panel=document.getElementById('rightPanelExpandable');
+    if(!root||!panel) return;
+    root.classList.toggle('ai-open', panel.classList.contains('open'));
+  }
+  function wrapPanelToggles(){
+    ['openRightPanel','closeRightPanel'].forEach(function(fn){
+      if(typeof window[fn]!=='function' || window[fn].__vaWrapped) return;
+      var orig=window[fn];
+      window[fn]=function(){ var r=orig.apply(this, arguments); setTimeout(vaSyncPanelFlag,0); return r; };
+      window[fn].__vaWrapped=true;
+    });
+  }
+
+  // Auto-collapse the pinned Interaction Handoff once the agent scrolls into the
+  // widgets; re-expand when scrolled back to the top.
+  function vaBindHandoffScroll(){
+    var sc=el('othScroll');
+    if(!sc || sc.__vaScrollBound) return;
+    sc.__vaScrollBound=true;
+    sc.addEventListener('scroll', function(){
+      if(window.__vaIhsManual) return;   // user toggled manually — respect it
+      var ihs=sc.querySelector('.ihs-root'); if(!ihs) return;
+      // Once the agent scrolls into the widgets, collapse the handoff and leave it
+      // collapsed — it does not auto-expand when scrolling back up.
+      if(sc.scrollTop>8 && !ihs.classList.contains('collapsed')){
+        ihs.classList.add('collapsed');
+        var tt=ihs.querySelector('.ihs-toggle-text'); if(tt) tt.textContent='Show summary';
+      }
+    }, {passive:true});
+  }
+
+  // Once the agent manually toggles the handoff, scrolling no longer controls it.
+  function wrapToggleIHS(){
+    if(typeof window.toggleIHS!=='function' || window.toggleIHS.__vaWrapped) return;
+    var orig=window.toggleIHS;
+    window.toggleIHS=function(){ window.__vaIhsManual=true; return orig.apply(this, arguments); };
+    window.toggleIHS.__vaWrapped=true;
   }
 
   function boot(){
     injectTab(); injectHost(); injectHomeWelcome();
     vaTuneHome();
-    wrapSwitchWFTab(); wrapOpenConversation(); wrapAiSwitchTab(); wrapAcceptCall(); wrapRefreshAI();
+    wrapSwitchWFTab(); wrapOpenConversation(); wrapAiSwitchTab(); wrapAcceptCall(); wrapRefreshAI(); wrapPanelToggles(); wrapToggleIHS();
+    vaSyncPanelFlag();
     VA_READY=true;
   }
 
@@ -18967,7 +19110,335 @@ body {
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
   // Re-attempt wrapping after full load in case functions are defined late
-  window.addEventListener('load', function(){ wrapSwitchWFTab(); wrapOpenConversation(); wrapAiSwitchTab(); wrapAcceptCall(); wrapRefreshAI(); injectTab(); injectHost(); injectHomeWelcome(); });
+  window.addEventListener('load', function(){ wrapSwitchWFTab(); wrapOpenConversation(); wrapAiSwitchTab(); wrapAcceptCall(); wrapRefreshAI(); wrapPanelToggles(); wrapToggleIHS(); injectTab(); injectHost(); injectHomeWelcome(); vaSyncPanelFlag(); });
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MEMBER OVERVIEW — NEW TWO-COLUMN WIDGET LAYOUT (mo2)
+     Replaces the old .msv-box widgets inside the Overview tab with the
+     7-widget design from member-overview-widgets-spec.md, arranged:
+       Row1: Member Details | Alerts
+       Row2: Loans        | Deposits
+       Row3: Cards        | Last Transactions
+       Row4: Recent Interactions (full width)
+     Ask AI on any item/row creates a query pill (reuses aiCreateQueryTab).
+═══════════════════════════════════════════════════════════ -->
+<style>
+  /* Grid host injected into the Overview tab */
+  .mo2-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    max-width:960px; margin:0 auto; padding:14px 16px 28px;
+    align-items:start;
+  }
+  .mo2-grid .mo2-span2{ grid-column:1 / -1; }
+  /* Member Details + Alerts share one row, matching the single-column width above */
+  .mo2-row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; align-items:start; grid-column:1 / -1; }
+  /* When the AI Assistant panel is OPEN, collapse to a single column */
+  .app-root.ai-open .mo2-grid{ grid-template-columns:1fr; max-width:560px; align-items:start; }
+  .app-root.ai-open .mo2-row2{ grid-template-columns:1fr; }
+
+  /* glass card (ported from upload) */
+  .mo2-card{ background:rgba(255,255,255,.72); backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.9); border-radius:14px; padding:12px 13px;
+    box-shadow:0 2px 10px rgba(60,50,120,.06); align-self:start; }
+  .mo2-hdr{ display:flex; align-items:center; justify-content:space-between; cursor:pointer; gap:8px; }
+  .mo2-hdr-l{ display:flex; align-items:center; gap:8px; min-width:0; }
+  .mo2-title{ font-size:11px; font-weight:600; color:#7d7ba0; letter-spacing:.02em; text-transform:uppercase; white-space:nowrap; }
+  .mo2-badge{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500; color:#5a586e; }
+  .mo2-dot{ width:6px; height:6px; border-radius:50%; }
+  .mo2-dot.ok{ background:#0d7c52; } .mo2-dot.crit{ background:#d32f2f; } .mo2-dot.warn{ background:#c97b1c; }
+  .mo2-hdr-r{ display:flex; align-items:center; gap:9px; flex-shrink:0; }
+  .mo2-card.open > .mo2-hdr .mo2-hdr-r .mo2-badge{ display:none; }
+  .mo2-chev{ width:13px; height:13px; color:#9896b0; transition:transform .25s; flex-shrink:0; }
+  .mo2-card.open > .mo2-hdr .mo2-chev{ transform:rotate(180deg); }
+  .mo2-viewall{ display:block; text-align:center; font-size:12px; font-weight:600; color:#00796B;
+    white-space:nowrap; text-decoration:none; cursor:pointer; margin-top:10px; padding:9px; border-radius:8px; transition:background .12s; }
+  .mo2-viewall:hover{ background:rgba(0,121,107,.045); }
+
+  .mo2-mi{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px 16px; margin-top:12px; }
+  .mo2-mi-cell{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .mo2-mi-k{ font-size:10.5px; color:#8a8a9e; white-space:nowrap; } .mo2-mi-v{ font-size:12.5px; color:#2d2b45; font-weight:600; overflow-wrap:anywhere; }
+
+  .mo2-body{ overflow:hidden; transition:max-height .3s ease,opacity .2s ease; }
+  .mo2-card:not(.open) .mo2-body{ max-height:0; opacity:0; margin-top:0; }
+  .mo2-card.open .mo2-body{ opacity:1; margin-top:2px; }
+
+  .mo2-item{ border-top:1px solid rgba(0,0,0,.05); position:relative; transition:background .18s,box-shadow .18s; border-radius:10px; }
+  .mo2-item:first-child{ border-top:none; }
+  .mo2-item.open{ background:rgba(255,255,255,.55); box-shadow:inset 0 0 0 1px rgba(0,121,107,.15); border-top-color:transparent; margin:6px 0; padding:0 2px; }
+  .mo2-item.open + .mo2-item{ border-top-color:transparent; }
+  .mo2-irow{ display:flex; justify-content:space-between; align-items:center; gap:6px; padding:10px 8px; margin:0 -8px; border-radius:8px; cursor:pointer; transition:background .12s; }
+  .mo2-item.open .mo2-irow{ margin:0; padding:10px; }
+  .mo2-item:hover .mo2-irow{ background:rgba(0,121,107,.04); }
+  .mo2-item:hover{ background:rgba(0,121,107,.04); border-radius:10px; }
+  .mo2-item.open:hover{ background:rgba(0,121,107,.06); }
+  /* Alerts: no outer rectangle — just the orange pills stacked with small gaps */
+  .mo2-item.alert-item{ border-top:none; border-radius:0; }
+  .mo2-item.alert-item + .mo2-item.alert-item{ margin-top:8px; }
+  .mo2-item.alert-item .mo2-irow{ padding:0; margin:0; border-radius:0; cursor:default; }
+  .mo2-item.alert-item .mo2-irow:hover{ background:transparent; }
+  .mo2-item.alert-item:hover{ background:transparent; }
+  .mo2-iname-line{ display:flex; align-items:center; gap:7px; min-width:0; flex:1; }
+  .mo2-iname{ font-size:13px; font-weight:600; color:#2d2b45; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .mo2-ibadge{ font-size:9px; font-weight:600; padding:1px 7px; border-radius:20px; flex-shrink:0; background:rgba(0,0,0,.06); color:#6b6980; }
+  /* Bigger alert pill: fills the row, more presence inside the (unchanged) card */
+  .mo2-ibadge.alertbig{ flex:1; min-width:0; white-space:normal; font-size:12px; font-weight:600;
+    padding:9px 13px; border-radius:10px; background:rgba(201,123,28,.12); color:#92400e;
+    display:flex; align-items:center; gap:8px; }
+  .mo2-ibadge.alertbig .mo2-alert-txt{ flex:1; min-width:0; }
+  .mo2-ibadge.alertbig .mo2-alert-ai{ flex-shrink:0; display:inline-flex; }
+  /* Ask AI reveals on hover, sits inside the pill on its right edge */
+  .mo2-ibadge.alertbig .mo2-askai{ opacity:0; transform:translateX(4px); pointer-events:none; }
+  .mo2-item.alert-item:hover .mo2-ibadge.alertbig .mo2-askai{ opacity:1; transform:translateX(0); pointer-events:auto; }
+  .mo2-iright{ display:flex; align-items:center; gap:7px; flex-shrink:0; }
+  .mo2-inum{ font-size:12px; color:#a3a1b5; font-family:'DM Mono','SF Mono',monospace; }
+  .mo2-ichev{ width:12px; height:12px; color:#a3a1b5; transition:transform .25s; }
+  .mo2-item.open .mo2-ichev{ transform:rotate(180deg); }
+
+  .mo2-askai{ display:inline-flex; align-items:center; gap:3px; font-size:9.5px; font-weight:700; color:#00796B;
+    background:rgba(0,121,107,.1); padding:2px 7px; border-radius:20px; opacity:0; transform:translateX(4px);
+    transition:opacity .13s,transform .13s; pointer-events:none; white-space:nowrap; }
+  .mo2-item:hover .mo2-askai{ opacity:1; transform:translateX(0); pointer-events:auto; }
+  .mo2-askai svg{ width:9px; height:9px; }
+
+  .mo2-idet{ overflow:hidden; max-height:0; opacity:0; transition:max-height .3s ease,opacity .2s ease; }
+  .mo2-item.open .mo2-idet{ max-height:400px; opacity:1; padding:2px 10px 14px; }
+  .mo2-iprog{ font-size:11.5px; color:#5a586e; margin-top:4px; display:flex; justify-content:space-between; }
+  .mo2-iprog b{ color:#2d2b45; }
+  .mo2-bar{ height:5px; background:rgba(0,121,107,.12); border-radius:99px; overflow:hidden; margin-top:6px; }
+  .mo2-bfill{ height:100%; border-radius:99px; background:#0d7c52; } .mo2-bfill.red{ background:#d32f2f; }
+  .mo2-kv{ display:flex; gap:18px; margin-top:12px; }
+  .mo2-kv div{ display:flex; flex-direction:column; gap:3px; }
+  .mo2-kv-k{ font-size:11px; color:#a3a1b5; } .mo2-kv-v{ font-size:12.5px; color:#2d2b45; font-weight:500; }
+  .mo2-kv-v.good{ color:#0d7c52; } .mo2-kv-v.warn{ color:#92400e; } .mo2-kv-v.bad{ color:#c62828; }
+  .mo2-lasttxn{ margin-top:12px; padding-top:11px; border-top:1px dashed rgba(0,0,0,.08); }
+  .mo2-lasttxn-l{ font-size:10px; color:#a3a1b5; text-transform:uppercase; letter-spacing:.04em; }
+  .mo2-lasttxn-r{ display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-top:4px; }
+  .mo2-lasttxn-r b{ color:#2d2b45; font-weight:600; }
+  .mo2-lasttxn-r .dec{ color:#c62828; font-weight:700; }
+  /* Owner line: name first, small pill beside it */
+  .mo2-owner{ display:flex; align-items:center; gap:7px; font-size:12px; color:#2d2b45; margin-top:12px; }
+  .mo2-owner-name{ font-weight:500; }
+  .mo2-owner .chip{ display:inline-flex !important; width:auto !important; flex:0 0 auto;
+    font-family:var(--f); font-size:9px; font-weight:600; line-height:1;
+    background:rgba(91,95,207,.1); color:#5b5fcf; padding:3px 7px; border-radius:20px; margin:0; }
+
+  .mo2-txn{ padding:9px 8px; margin:0 -8px; border-radius:8px; border-top:1px solid rgba(0,0,0,.045); font-size:12px; position:relative; transition:background .12s; cursor:pointer; }
+  .mo2-txn:first-child{ border-top:none; }
+  .mo2-txn:hover{ background:rgba(0,121,107,.04); }
+  .mo2-txn-top{ display:flex; justify-content:space-between; gap:8px; align-items:center; }
+  .mo2-txn-d{ color:#2d2b45; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mo2-txn-a{ font-weight:600; color:#2d2b45; flex-shrink:0; } .mo2-txn-a.dec{ color:#c62828; }
+  .mo2-txn-m{ font-size:10.5px; color:#a3a1b5; margin-top:2px; }
+  .mo2-txn .mo2-askai{ position:static; max-width:0; overflow:hidden; flex-shrink:0; padding-left:0; padding-right:0; }
+  .mo2-txn:hover .mo2-askai{ opacity:1; transform:translateX(0); pointer-events:auto; max-width:70px; padding-left:7px; padding-right:7px; }
+</style>
+<script>
+(function(){
+  var AI='<span class="mo2-askai"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>Ask AI</span>';
+  function chev(){return '<svg class="mo2-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>';}
+  function ichev(){return '<svg class="mo2-ichev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>';}
+  function badge(t,c){return '<span class="mo2-badge"><span class="mo2-dot '+c+'"></span>'+t+'</span>';}
+
+  function item(name,num,detail,opts){
+    opts=opts||{};
+    var bdg=opts.badge?'<span class="mo2-ibadge '+opts.badge[0]+'">'+opts.badge[1]+'</span>':'';
+    var q=(opts.ask||name||'this item').replace(/"/g,'&quot;');
+    var hasDetail=detail && String(detail).trim().length>0;
+    var rowClick=hasDetail?' onclick="mo2ToggleItem(event,this)"':'';
+    var chevHTML=hasDetail?ichev():'';
+    var detHTML=hasDetail?('<div class="mo2-idet">'+detail+'</div>'):'';
+    var isAlert=opts.badge && opts.badge[0]==='alertbig';
+    if(isAlert){
+      // Ask AI lives INSIDE the orange pill, pushed to its right edge.
+      return '<div class="mo2-item alert-item"><div class="mo2-irow">'
+        +'<span class="mo2-ibadge alertbig"><span class="mo2-alert-txt">'+opts.badge[1]+'</span>'
+        +'<span class="mo2-alert-ai" onclick="mo2Ask(event,\''+q+'\')">'+AI+'</span></span>'
+        +'</div></div>';
+    }
+    return '<div class="mo2-item"><div class="mo2-irow"'+rowClick+'>'
+      +'<span class="mo2-iname-line"><span class="mo2-iname">'+name+'</span>'+bdg+'</span>'
+      +'<span class="mo2-iright"><span onclick="mo2Ask(event,\''+q+'\')">'+AI+'</span><span class="mo2-inum">'+num+'</span>'+chevHTML+'</span></div>'
+      +detHTML+'</div>';
+  }
+  function loanDet(pct,left,next,amt,skip){
+    var sc=skip==='Eligible'?'good':'warn';
+    return '<div class="mo2-iprog"><span>'+pct+'% paid</span><span><b>'+left+'</b> remaining</span></div>'
+      +'<div class="mo2-bar"><div class="mo2-bfill" style="width:'+pct+'%"></div></div>'
+      +'<div class="mo2-kv"><div><span class="mo2-kv-k">Next payment</span><span class="mo2-kv-v">'+next+'</span></div>'
+      +'<div><span class="mo2-kv-k">Amount</span><span class="mo2-kv-v">'+amt+'</span></div>'
+      +'<div><span class="mo2-kv-k">Skip payment</span><span class="mo2-kv-v '+sc+'">'+skip+'</span></div></div>';
+  }
+  function cardDet(pct,avail,min,due,txnd,txna,blocked){
+    return '<div class="mo2-iprog"><span>'+pct+'% used</span><span><b>'+avail+'</b> available</span></div>'
+      +'<div class="mo2-bar"><div class="mo2-bfill '+(blocked?'red':'')+'" style="width:'+pct+'%"></div></div>'
+      +'<div class="mo2-kv"><div><span class="mo2-kv-k">Min payment</span><span class="mo2-kv-v '+(blocked?'bad':'')+'">'+min+'</span></div>'
+      +'<div><span class="mo2-kv-k">Due date</span><span class="mo2-kv-v '+(blocked?'bad':'')+'">'+due+'</span></div></div>'
+      +'<div class="mo2-lasttxn"><div class="mo2-lasttxn-l">Last transaction</div><div class="mo2-lasttxn-r"><span>'+txnd+'</span><span class="'+(txna==='DECLINED'?'dec':'')+'">'+(txna==='DECLINED'?'DECLINED':('<b>'+txna+'</b>'))+'</span></div></div>';
+  }
+  function depDet(bal,type,owner,txnd,txna){
+    return '<div class="mo2-kv"><div><span class="mo2-kv-k">Available</span><span class="mo2-kv-v"><b>'+bal+'</b></span></div>'
+      +'<div><span class="mo2-kv-k">Type</span><span class="mo2-kv-v">'+type+'</span></div></div>'
+      +'<div class="mo2-owner"><span class="mo2-owner-name">'+owner[1]+'</span><span class="chip">'+owner[0]+'</span></div>'
+      +'<div class="mo2-lasttxn"><div class="mo2-lasttxn-l">Last transaction</div><div class="mo2-lasttxn-r"><span>'+txnd+'</span><b>'+txna+'</b></div></div>';
+  }
+
+  function memberCard(){
+    return '<div class="mo2-card open" data-w="member"><div class="mo2-hdr" onclick="mo2ToggleCard(event,this)"><div class="mo2-hdr-l"><span class="mo2-title">Member Details</span></div><div class="mo2-hdr-r">'+badge('Active','ok')+chev()+'</div></div>'
+      +'<div class="mo2-body"><div class="mo2-mi">'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Full SSN</span><span class="mo2-mi-v">•••-••-4821</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Date of Birth</span><span class="mo2-mi-v">March 14, 1985</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Email</span><span class="mo2-mi-v">emily.olivers@gmail.com</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Mobile</span><span class="mo2-mi-v">+1 (310) 928-7361</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Work</span><span class="mo2-mi-v">+1 (310) 555-0142</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Home</span><span class="mo2-mi-v">+1 (310) 771-2093</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Address</span><span class="mo2-mi-v">2841 Ocean View Blvd, Malibu, CA 90265</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Since</span><span class="mo2-mi-v">March 2019</span></div>'
+      +'</div></div></div>';
+  }
+  function sectionCard(t,b,bodyHTML,va,openDefault){
+    return '<div class="mo2-card'+(openDefault?' open':'')+'"><div class="mo2-hdr" onclick="mo2ToggleCard(event,this)"><div class="mo2-hdr-l"><span class="mo2-title">'+t+'</span></div><div class="mo2-hdr-r">'+badge(b[0],b[1])+chev()+'</div></div>'
+      +'<div class="mo2-body">'+bodyHTML+'<a class="mo2-viewall" onclick="event.stopPropagation()">'+va+' ›</a></div></div>';
+  }
+
+  function alertsBody(){
+    return item('','','',{badge:['alertbig','Warning 080 - No Sharing of Member Information'],ask:'Explain warning 080 - No Sharing of Member Information'})
+      +item('','','',{badge:['alertbig','Warning 019 - OD Agreement'],ask:'Explain warning 019 - OD Agreement'});
+  }
+  function loansBody(){
+    return item('2022 Tesla Model 3','••7712',loanDet(47,'$15,234','Aug 01','$534.25','Eligible'))
+      +item('Primary Residence - Malibu','••4521',loanDet(29,'$285,000','Aug 01','$2,950.00','Used May'));
+  }
+  function depositsBody(){
+    return item('Family Vacation','••7641',depDet('$6,850.25','Money Market',['Joint','Robert Chen · Emily'],'Transfer from Checking','+$1,500.00'),{badge:['warn','Warning 064 - Courtesy Pay']})
+      +item('Business Operations','••2914',depDet('$12,450.75','Business Checking',['Auth Signer','David Martinez'],'Wire — Vendor Pmt','−$2,500.00'))
+      +item('Emergency Fund','••5891',depDet('$28,750.50','High-Yield Savings',['Beneficiary','Michael Olivers'],'Interest Credit','+$11.54'));
+  }
+  function cardsBody(){
+    return item('Visa Signature','••7892',cardDet(100,'$0','$385.00','Jun 28','Paris — Luxury Boutique','DECLINED',true),{badge:['red','Warning 031 - Card Blocked']})
+      +item('Amex Platinum','••3456',cardDet(26,'$18,500','$0','—','Marriott — Conference','−$1,250.00',false))
+      +item('Discover Cashback','••5123',cardDet(12,'$4,400','$45.00','Jul 05','Whole Foods','−$127.65',false));
+  }
+  function txnRows(){
+    var rows=[
+      ['Paris, France — Luxury Boutique','−$3,850.00','dec','Jun 17 · Declined · Visa ••7892'],
+      ['Wire Transfer — Vendor Pmt','−$2,500.00','','Jun 16 · Checking ••2914'],
+      ['Marriott Hotels — Conference','−$1,250.00','','Jun 14 · Amex ••3456'],
+      ['Whole Foods Market','−$127.65','','Jun 10 · Discover ••5123'],
+      ['Interest Credit','+$11.54','','Jun 01 · Emergency ••5891']
+    ];
+    return rows.map(function(t){var q=('Tell me about the transaction: '+t[0]).replace(/"/g,'&quot;');
+      return '<div class="mo2-txn" onclick="mo2Ask(event,\''+q+'\')"><div class="mo2-txn-top"><span class="mo2-txn-d">'+t[0]+'</span><span class="mo2-txn-a '+t[2]+'">'+t[1]+'</span>'+AI+'</div><div class="mo2-txn-m">'+t[3]+'</div></div>';}).join('');
+  }
+  function intRows(){
+    var rows=[['📞','Auto Loan','2h','Inbound'],['💬','Fee Reversal','5h','Inbound'],['📹','Member Services','1d','Outbound'],['💬','Skip a Payment','2d','Inbound'],['📞','Account Inquiry','3d','Inbound']];
+    return rows.map(function(i){var q=('Summarize the '+i[1]+' interaction').replace(/"/g,'&quot;');
+      return '<div class="mo2-txn" onclick="mo2Ask(event,\''+q+'\')"><div class="mo2-txn-top"><span class="mo2-txn-d">'+i[0]+' '+i[1]+'</span><span class="mo2-inum">'+i[2]+'</span>'+AI+'</div><div class="mo2-txn-m">'+i[3]+'</div></div>';}).join('');
+  }
+
+  // Build the two-column grid in the confirmed order.
+  window.mo2BuildGrid=function(){
+    var g=document.createElement('div');
+    g.className='mo2-grid';
+    g.innerHTML=
+        '<div class="mo2-row2">'+ memberCard()
+      + sectionCard('Alerts',['2 membership warnings','ok'],alertsBody(),'View all alerts',false) +'</div>'
+      + sectionCard('Loans',['All current','ok'],loansBody(),'View all loans',false)
+      + sectionCard('Deposits',['All active','ok'],depositsBody(),'View all deposits',false)
+      + sectionCard('Cards',['1 blocked','crit'],cardsBody(),'View all cards',false)
+      + sectionCard('Last Transactions',['1 declined','crit'],txnRows(),'View all transactions',false)
+      + '<div class="mo2-span2">'+sectionCard('Recent Interactions',['5','ok'],intRows(),'View all interactions',false)+'</div>';
+    // Sections open by default (product lists visible); individual products stay
+    // collapsed until the agent clicks a product to see its details.
+    return g;
+  };
+
+  // Interactions
+  window.mo2ToggleCard=function(e,hdr){
+    e.stopPropagation();
+    var card=hdr.parentElement;
+    var grid=card.closest('.mo2-grid');
+    var wasOpen=card.classList.contains('open');
+    if(grid){
+      // Accordion: close every card, then open just this one (if it was closed).
+      grid.querySelectorAll('.mo2-card.open').forEach(function(c){
+        c.classList.remove('open');
+        // collapse its products so a later reopen re-expands cleanly
+        c.querySelectorAll('.mo2-item.open').forEach(function(it){ it.classList.remove('open'); });
+      });
+    }
+    if(!wasOpen){
+      card.classList.add('open');
+      // Products inside the opened section default to expanded.
+      card.querySelectorAll('.mo2-item').forEach(function(it){ it.classList.add('open'); });
+      // Anchor: bring the opened card to the top of the scroller so its full
+      // content is visible without manual scrolling.
+      var sc=document.getElementById('othScroll');
+      if(sc){
+        setTimeout(function(){
+          // offset by the sticky handoff height so the card isn't hidden behind it
+          var ihs=sc.querySelector('.ihs-root');
+          var off=ihs?ihs.offsetHeight:0;
+          var anchor=card.closest('.mo2-row2') || card;
+          var top=anchor.offsetTop - off - 6;
+          sc.scrollTo({ top: Math.max(0, top), behavior:'smooth' });
+        }, 300);
+      }
+    }
+  };
+  window.mo2ToggleItem=function(e,row){ e.stopPropagation(); row.parentElement.classList.toggle('open'); };
+  window.mo2Ask=function(e,q){
+    e.stopPropagation();
+    try{
+      if(typeof aiCreateQueryTab!=='function') return;
+      var ctx=aiCreateQueryTab('', q.length>28?(q.slice(0,26)+'…'):q);
+      if(typeof aiSwitchTab==='function') aiSwitchTab(ctx);
+      setTimeout(function(){
+        if(typeof pushUser==='function') pushUser(q);
+        if(typeof pushAssistant!=='function') return;
+        var ans=(typeof window.mo2Answer==='function' && window.mo2Answer(q)) || null;
+        var fb='';
+        try{ fb=(typeof followups==='function')?followups('loan','7712'):''; }catch(e){}
+        // pushAssistant adds the "◆ AI Assistant" label itself — pass answer HTML only.
+        pushAssistant(ans || ('<div class="pd"><div class="pd-sec"><div class="pd-v" style="font-weight:500">'+q+'</div></div></div>'+fb));
+      },60);
+    }catch(err){}
+  };
+
+  // Produce a realistic, specific answer for a given Ask-AI query.
+  window.mo2Answer=function(q){
+    var pill=(typeof statusPill==='function')?statusPill:function(){return '';};
+    // Real drill-down pills ("Anything else? Tap to ask") for a mapped product.
+    function fu(kind,id){ try{ return (typeof followups==='function')?followups(kind,id):''; }catch(e){ return ''; } }
+    function pd(name,sub,status,secs){
+      var body='<div class="pd"><div class="pd-head"><div class="pd-head-l"><div class="pd-name">'+name+'</div><div class="pd-sub">'+sub+'</div></div>'+pill(status)+'</div><div class="pd-divider"></div>';
+      secs.forEach(function(s){ body+='<div class="pd-sec"><div class="pd-sec-label">'+s[0]+'</div><div class="pd-v" style="font-weight:500">'+s[1]+'</div></div>'; });
+      return body+'</div>';
+    }
+    var map={
+      '2022 Tesla Model 3': pd('2022 Tesla Model 3','Auto Loan · ••7712','Active',[['Repayment Progress','47% paid — $15,234 of $28,900 remaining.'],['Next Payment','$534.25 due Aug 01.'],['Skip Payment','Eligible — no skip used in the last 12 months.']])+fu('loan','7712'),
+      'Primary Residence - Malibu': pd('Primary Residence — Malibu','15-Year Fixed Mortgage · ••4521','Active',[['Repayment Progress','29% paid — $285,000 remaining.'],['Next Payment','$2,950.00 due Aug 01.'],['Skip Payment','Not eligible — skip already used in May.']])+fu('loan','4521'),
+      'Family Vacation': pd('Family Vacation','Money Market · ••7641','Warning',[['Available','$6,850.25.'],['Ownership','Joint — Robert Chen · Emily.'],['Alert','Courtesy Pay (064) — limit reached this billing cycle.'],['Last Transaction','Transfer from Checking +$1,500.00.']])+fu('deposit','7641'),
+      'Business Operations': pd('Business Operations','Business Checking · ••2914','Active',[['Available','$12,450.75.'],['Ownership','Auth Signer — David Martinez.'],['Last Transaction','Wire — Vendor Pmt −$2,500.00.']])+fu('deposit','2914'),
+      'Emergency Fund': pd('Emergency Fund','High-Yield Savings · ••5891','Active',[['Available','$28,750.50.'],['Ownership','Beneficiary — Michael Olivers.'],['Last Transaction','Interest Credit +$11.54.']])+fu('deposit','5891'),
+      'Visa Signature': pd('Visa Signature — ••7892','Credit Card · Blocked','Critical',[['Status','Blocked — Warning 031, 100% utilized, $0 available.'],['Min Payment','$385.00 due Jun 28.'],['Last Transaction','Paris — Luxury Boutique — DECLINED.']])+fu('card','7892'),
+      'Amex Platinum': pd('Amex Platinum — ••3456','Credit Card','Active',[['Utilization','26% used — $18,500 available.'],['Min Payment','$0 — paid in full.'],['Last Transaction','Marriott — Conference −$1,250.00.']])+fu('card','3456'),
+      'Discover Cashback': pd('Discover Cashback — ••5123','Credit Card','Active',[['Utilization','12% used — $4,400 available.'],['Min Payment','$45.00 due Jul 05.'],['Last Transaction','Whole Foods −$127.65.']])+fu('card','5123')
+    };
+    for(var k in map){ if(q.indexOf(k)>=0) return map[k]; }
+    if(/080|No Sharing/i.test(q)) return pd('No Sharing — Privacy Restriction','Membership-level · Code 080 · Warning','Warning',[['What\u2019s happening','Member info cannot be shared via shared branching or third parties.'],['Note','Requested after a fraud incident. Do not disclose account details via the shared-branch network. (J. Fuqua · Jun 18)']])+fu('card','7892');
+    if(/019|OD Agreement/i.test(q)) return pd('OD Agreement','Membership-level · Code 019 · Warning','Warning',[['What\u2019s happening','Member has an active overdraft protection agreement on file.'],['Note','Review terms before adjusting courtesy pay. (System · Jun 17)']])+fu('deposit','7641');
+    if(/transaction:/i.test(q)){
+      var d=q.replace(/^.*transaction:\s*/i,'');
+      return pd(d,'Transaction detail','Active',[['Details','Posted transaction. Tap "View all transactions" for the full ledger.']])+fu('card','7892');
+    }
+    if(/interaction/i.test(q)){
+      var t=q.replace(/^Summarize the\s*/i,'').replace(/\s*interaction$/i,'');
+      return pd(t+' — Interaction','Recent contact','Active',[['Summary','Prior '+t.toLowerCase()+' interaction with the member. Full transcript available under Recent Interactions.']])+fu('loan','7712');
+    }
+    return null;
+  };
 })();
 </script>
 
