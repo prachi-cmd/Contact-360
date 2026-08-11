@@ -1685,8 +1685,8 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 /* FLOATING — rounded pill, fixed to viewport so it escapes overflow:hidden clipping */
 .callbar.floating{
   position:fixed;
-  width:400px;max-width:400px;
-  padding:0 18px 0 12px;
+  width:-moz-fit-content;width:fit-content;min-width:0;max-width:440px;
+  padding:0 14px 0 10px;
   background:rgba(20,20,22,.94);
   -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
   border-radius:20px;border:1px solid rgba(255,255,255,.08);
@@ -1704,15 +1704,15 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 .cb-grip span{display:block;width:14px;height:1.6px;background:rgba(255,255,255,.35);border-radius:2px;}
 .cb-grip:active{cursor:grabbing;}
 
-/* identity (left) */
-.cb-ident{display:flex;align-items:center;gap:9px;min-width:0;flex-shrink:0;}
+/* identity (left) — allowed to shrink so the controls + chevron always fit */
+.cb-ident{display:flex;align-items:center;gap:9px;min-width:0;flex-shrink:1;overflow:hidden;}
 .cb-ident .cb-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#E07A5F,#c8613f);display:grid;place-items:center;font-family:var(--m);font-size:11px;color:#fff;flex-shrink:0;position:relative;}
 .cb-ident .cb-av::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:1.5px solid rgba(224,122,95,.4);animation:cbPulse 2.4s ease-out infinite;}
 @keyframes cbPulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.32);opacity:0}}
-.cb-ident .cb-meta{display:flex;align-items:center;gap:7px;}
+.cb-ident .cb-meta{display:flex;align-items:center;gap:7px;min-width:0;overflow:hidden;}
 .cb-ident .cb-dur{font-family:var(--m);font-size:11px;display:flex;align-items:center;gap:5px;color:rgba(255,255,255,.82);}
 .cb-ident .cb-dur .cb-rd{width:6px;height:6px;border-radius:50%;background:#ff5f57;}
-.cb-ident .cb-ch{font-family:var(--f);font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;color:#7fd4c8;background:rgba(127,212,200,.12);white-space:nowrap;}
+.cb-ident .cb-ch{font-family:var(--f);font-size:9px;font-weight:600;padding:2px 8px;border-radius:20px;color:#7fd4c8;background:rgba(127,212,200,.12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
 
 /* controls (right) */
 .cb-controls{display:flex;align-items:center;gap:10px;flex-shrink:0;margin-left:auto;}
@@ -5789,6 +5789,11 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           </div>
           <div class="ihs-summary-wrap">
             <p class="ihs-summary-text" id="ihsSummaryText">Emily Olivers was transferred regarding a missing salary deposit inquiry. Recurring Tesla payroll activity was identified on Everyday Checking, but no current-cycle deposit was found.</p>
+            <div class="ihs-sit-divider"></div>
+            <div class="ihs-sit">
+              <div class="ihs-sit-label">Account situation</div>
+              <div class="ihs-sit-body"><span class="ihs-sit-flag" onclick="mo2SitJump(event,'Cards')">Visa card blocked</span>, a <span class="ihs-sit-flag" onclick="mo2SitJump(event,'Last Transactions')">declined transaction</span>, and <span class="ihs-sit-flag" onclick="mo2SitJump(event,'Alerts')">online banking locked</span>. <span class="ihs-sit-ok">Loans, deposits, and all other cards are current.</span></div>
+            </div>
             <div class="ihs-meta-row">
               <div class="ihs-meta-left">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
@@ -5810,7 +5815,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
       <!-- ── MEMBER DETAILS — Expanded by default ── -->
       <div class="msv-box">
         <div class="msv-section open" id="sec-member-ai">
-          <div class="msv-section-hdr" onclick="msvToggleSection('sec-member-ai')">
+          <div class="msv-section-hdr" id="coachDensityAnchor" onclick="msvToggleSection('sec-member-ai')">
             <div class="msv-section-left">
               <div class="msv-box-title">Member Details</div>
               <span class="msv-section-badge ok">Active Member</span>
@@ -9440,6 +9445,13 @@ function acceptCall(){
   }, 340);
 
   toast('✅  Call accepted — ready for Emily Olivers…');
+
+  // First-run coachmarks: start only AFTER the request is accepted and the
+  // workspace/AI panel have settled, so anchors exist and nothing shows on the
+  // incoming-call screen. Flag-gated inside — no-op for returning agents.
+  if(typeof window.coachMaybeStartAfterAccept === 'function'){
+    setTimeout(window.coachMaybeStartAfterAccept, 700);
+  }
 }
 function rejectCall(){
   document.getElementById('voiceNotif').classList.remove('show');
@@ -18753,6 +18765,52 @@ body {
 }
 .ihs-feedback:hover { color: #5b5fcf; }
 
+/* ══════════════════════════════════════
+   FIRST-RUN COACHMARKS (ported from mock)
+   Highlights only what's new for trained CRM users.
+══════════════════════════════════════ */
+.coach-scrim{position:fixed;inset:0;background:rgba(20,18,35,.32);z-index:5000;opacity:0;pointer-events:none;transition:opacity .25s;}
+.coach-scrim.on{opacity:1;pointer-events:auto;}
+.coach-ring{position:fixed;z-index:5001;border-radius:12px;box-shadow:0 0 0 3px #5b5fcf,0 0 0 9999px rgba(20,18,35,.32);pointer-events:none;opacity:0;transition:opacity .2s,top .25s,left .25s,width .25s,height .25s;}
+.coach-ring.on{opacity:1;}
+.coach-bubble{position:fixed;z-index:5003;background:#fff;border-radius:12px;box-shadow:var(--sh3);width:280px;padding:14px 16px 12px;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s,top .25s,left .25s;pointer-events:none;}
+.coach-bubble.on{opacity:1;transform:translateY(0);pointer-events:auto;}
+.coach-step{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:#5b5fcf;margin-bottom:5px;}
+.coach-title{font-size:13px;font-weight:700;color:#2d2b45;margin-bottom:5px;letter-spacing:-.01em;}
+.coach-text{font-size:11.5px;color:#6b6a80;line-height:1.5;}
+.coach-text b{color:#5b5fcf;}
+.coach-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;}
+.coach-dots{display:flex;gap:5px;}
+.coach-dot{width:6px;height:6px;border-radius:50%;background:var(--s3);}
+.coach-dot.active{background:#5b5fcf;}
+.coach-actions{display:flex;gap:4px;align-items:center;}
+.coach-skip{font-size:10.5px;color:var(--t3);background:none;border:none;cursor:pointer;padding:5px 8px;}
+.coach-skip:hover{color:var(--t2);}
+.coach-next{font-size:11px;font-weight:600;color:#fff;background:#5b5fcf;border:none;border-radius:8px;padding:6px 14px;cursor:pointer;}
+.coach-next:hover{background:#4a4eb8;}
+.coach-bubble::after{content:'';position:absolute;width:12px;height:12px;background:#fff;transform:rotate(45deg);}
+.coach-bubble[data-arrow="bottom"]::after{bottom:-6px;left:var(--tail-x,calc(50% - 6px));margin-left:-6px;}
+.coach-bubble[data-arrow="top"]::after{top:-6px;left:var(--tail-x,calc(50% - 6px));margin-left:-6px;}
+.coach-bubble[data-arrow="left"]::after{left:-6px;top:var(--tail-y,calc(50% - 6px));margin-top:-6px;}
+.coach-bubble[data-arrow="right"]::after{right:-6px;top:var(--tail-y,calc(50% - 6px));margin-top:-6px;}
+@keyframes coachpulse{0%,100%{box-shadow:0 2px 6px rgba(91,95,207,.25);}50%{box-shadow:0 0 0 5px rgba(91,95,207,.28),0 2px 6px rgba(91,95,207,.4);}}
+.msv-askai-tag.coach-pulse{animation:coachpulse 1.3s infinite;}
+/* coachmark step 2 targets the rendered mo2 Ask AI (hover-gated). Force it
+   visible, put its row in hover state, and pulse it. */
+#coachAskTagLive{ opacity:1 !important; transform:none !important; pointer-events:auto !important; }
+#coachAskTagLive .mo2-askai{ opacity:1 !important; transform:none !important; pointer-events:auto !important; }
+.mo2-item.coach-hover{ background:rgba(0,121,107,.04); border-radius:10px; }
+.mo2-item.coach-hover > .mo2-irow{ background:rgba(0,121,107,.04); }
+.mo2-item.coach-hover .mo2-askai{ opacity:1; transform:translateX(0); pointer-events:auto; }
+#coachAskTagLive.coach-pulse .mo2-askai, #coachAskTagLive.coach-pulse{ animation:coachpulse 1.3s infinite; border-radius:20px; }
+.coach-toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(10px);background:#1f1d2b;color:#fff;font-size:12px;font-weight:600;padding:11px 18px;border-radius:11px;box-shadow:var(--sh3);z-index:5200;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;display:flex;align-items:center;gap:8px;}
+.coach-toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+.coach-replay{position:fixed;bottom:14px;left:14px;z-index:4900;display:flex;align-items:center;gap:6px;font-family:var(--f);font-size:11px;font-weight:600;color:#5b5fcf;background:#fff;border:1px solid rgba(91,95,207,.28);border-radius:20px;padding:7px 13px 7px 11px;cursor:pointer;box-shadow:var(--sh2);transition:background .13s,box-shadow .13s;}
+.coach-replay:hover{background:rgba(91,95,207,.06);box-shadow:var(--sh3);}
+.coach-replay svg{width:13px;height:13px;flex-shrink:0;}
+/* hide the replay button while the tour itself is running */
+.coach-scrim.on ~ .coach-replay{opacity:0;pointer-events:none;}
+
 </style>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -18825,7 +18883,7 @@ body {
   #overviewTabHost .oth-scroll::-webkit-scrollbar{ width:6px; }
   #overviewTabHost .oth-scroll::-webkit-scrollbar-thumb{ background:var(--border2,#d4d4d4); border-radius:3px; }
   /* Cloned overview keeps its native styling; give it a comfortable page frame */
-  #overviewTabHost .msv-scroll{ display:block !important; max-width:none; margin:0; padding:0; overflow:visible; flex:none; }
+  #overviewTabHost .msv-scroll{ display:block !important; max-width:none; margin:0; padding:0; overflow:visible !important; overflow-x:visible !important; overflow-y:visible !important; flex:none; }
   /* IHS handoff card sits flush to the top and side dividers (full width, no margin) */
   #overviewTabHost .ihs-root{ border-left-width:3px; border-right:0; border-top:0; border-radius:0; margin:0; width:100%;
     position:sticky; top:0; z-index:20; background:var(--ihs-bg,#fdfcf7); box-shadow:0 2px 6px rgba(0,0,0,.06); }
@@ -19072,12 +19130,20 @@ body {
     sc.__vaScrollBound=true;
     sc.addEventListener('scroll', function(){
       if(window.__vaIhsManual) return;   // user toggled manually — respect it
+      if(window.__vaCoachScroll) return; // coachmark-driven scroll — don't touch
       var ihs=sc.querySelector('.ihs-root'); if(!ihs) return;
-      // Once the agent scrolls into the widgets, collapse the handoff and leave it
-      // collapsed — it does not auto-expand when scrolling back up.
-      if(sc.scrollTop>8 && !ihs.classList.contains('collapsed')){
-        ihs.classList.add('collapsed');
-        var tt=ihs.querySelector('.ihs-toggle-text'); if(tt) tt.textContent='Show summary';
+      var tt=ihs.querySelector('.ihs-toggle-text');
+      // Scroll DOWN into the widgets → collapse. Scroll back to the TOP → re-expand.
+      if(sc.scrollTop>24){
+        if(!ihs.classList.contains('collapsed')){
+          ihs.classList.add('collapsed');
+          if(tt) tt.textContent='Show summary';
+        }
+      } else {
+        if(ihs.classList.contains('collapsed')){
+          ihs.classList.remove('collapsed');
+          if(tt) tt.textContent='Hide summary';
+        }
       }
     }, {passive:true});
   }
@@ -19148,6 +19214,14 @@ body {
   .mo2-badge{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500; color:#5a586e; }
   .mo2-dot{ width:6px; height:6px; border-radius:50%; }
   .mo2-dot.ok{ background:#0d7c52; } .mo2-dot.crit{ background:#d32f2f; } .mo2-dot.warn{ background:#c97b1c; }
+  /* AI situation summary — lives inside the Interaction Handoff Summary, below
+     the handoff text, separated by a divider. Strict one-liner, no guessed cause. */
+  .ihs-sit-divider{ height:1px; background:var(--ihs-border-divider,rgba(0,0,0,.08)); margin:9px 0 10px; }
+  .ihs-sit-label{ font-size:8.5px; font-weight:800; text-transform:uppercase; letter-spacing:.09em; color:#9896b0; margin-bottom:5px; }
+  .ihs-sit-body{ font-size:12px; line-height:1.6; color:#2d2b45; font-weight:500; }
+  .ihs-sit-flag{ color:#b3261e; font-weight:600; cursor:pointer; text-decoration:underline; text-decoration-color:rgba(179,38,30,.3); text-underline-offset:2px; }
+  .ihs-sit-flag:hover{ text-decoration-color:#b3261e; }
+  .ihs-sit-ok{ color:#6b6980; font-weight:400; }
   .mo2-hdr-r{ display:flex; align-items:center; gap:9px; flex-shrink:0; }
   .mo2-card.open > .mo2-hdr .mo2-hdr-r .mo2-badge{ display:none; }
   .mo2-chev{ width:13px; height:13px; color:#9896b0; transition:transform .25s; flex-shrink:0; }
@@ -19179,7 +19253,7 @@ body {
   .mo2-item.alert-item .mo2-irow{ padding:0; margin:0; border-radius:0; cursor:default; }
   .mo2-item.alert-item .mo2-irow:hover{ background:transparent; }
   .mo2-item.alert-item:hover{ background:transparent; }
-  .mo2-iname-line{ display:flex; align-items:center; gap:7px; min-width:0; flex:1; }
+  .mo2-iname-line{ display:flex; align-items:center; gap:7px; min-width:0; flex:0 1 auto; }
   .mo2-iname{ font-size:13px; font-weight:600; color:#2d2b45; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .mo2-ibadge{ font-size:9px; font-weight:600; padding:1px 7px; border-radius:20px; flex-shrink:0; background:rgba(0,0,0,.06); color:#6b6980; }
   /* Bigger alert pill: fills the row, more presence inside the (unchanged) card */
@@ -19201,6 +19275,76 @@ body {
     transition:opacity .13s,transform .13s; pointer-events:none; white-space:nowrap; }
   .mo2-item:hover .mo2-askai{ opacity:1; transform:translateX(0); pointer-events:auto; }
   .mo2-askai svg{ width:9px; height:9px; }
+  /* Skip-payment pill — a deliberate CTA for a top request, so always visible
+     (not hover-gated like Ask AI). Purple = direct workflow, arrow = "starts an action". */
+  .mo2-skip{ display:inline-flex; align-items:center; gap:4px; font-size:9.5px; font-weight:700; color:#5b5fcf;
+    background:rgba(91,95,207,.08); border:1px solid rgba(91,95,207,.28); padding:2px 8px; border-radius:20px;
+    cursor:pointer; white-space:nowrap; flex-shrink:0; transition:background .13s,color .13s; }
+  .mo2-skip:hover{ background:#5b5fcf; color:#fff; }
+  .mo2-skip svg{ width:10px; height:10px; }
+  .mo2-skip .go{ width:9px; height:9px; opacity:.55; margin-left:-1px; transition:transform .13s,opacity .13s; }
+  .mo2-skip:hover .go{ opacity:1; transform:translateX(2px); }
+  /* ── skip-a-payment flow card (rendered inside AI thread) ── */
+  .sk{ border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--sh1); margin-top:4px; }
+  .sk-hd{ padding:10px 13px; display:flex; align-items:center; gap:9px; font-weight:700; font-size:12.5px; }
+  .sk-hd.sk-ok{ background:rgba(46,125,50,.07); color:#1b5e20; border-bottom:1px solid rgba(46,125,50,.16); }
+  .sk-hd.sk-no{ background:rgba(211,47,47,.07); color:#b3261e; border-bottom:1px solid rgba(211,47,47,.16); }
+  .sk-badge.no{ background:#d32f2f; }
+  /* loan picker (disambiguation) */
+  .sk-pick{ border:1px solid var(--border); border-radius:12px; overflow:hidden; box-shadow:var(--sh1); animation:skFade .35s ease both; }
+  .sk-pick-lead{ padding:11px 13px; font-size:12px; color:var(--t2); background:var(--s1); border-bottom:1px solid var(--border); }
+  .sk-pick-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; text-align:left;
+    padding:11px 13px; background:#fff; border:none; border-bottom:1px solid var(--border); cursor:pointer; font-family:var(--f); transition:background .12s; }
+  .sk-pick-row:last-child{ border-bottom:none; }
+  .sk-pick-row:hover{ background:rgba(91,95,207,.05); }
+  .sk-pick-l{ display:flex; flex-direction:column; gap:2px; }
+  .sk-pick-name{ font-size:12.5px; font-weight:600; color:#2d2b45; }
+  .sk-pick-num{ font-size:10.5px; color:var(--t3); }
+  .sk-pick-status{ font-size:10px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+  .sk-pick-status.ok{ color:#0d7c52; background:rgba(13,124,82,.09); border:1px solid rgba(13,124,82,.24); }
+  .sk-pick-status.warn{ color:#92400e; background:rgba(230,81,0,.08); border:1px solid rgba(230,81,0,.22); }
+  .sk-badge{ width:19px; height:19px; border-radius:50%; display:grid; place-items:center; }
+  .sk-badge.ok{ background:#2e7d32; }
+  .sk-body{ padding:10px 13px; background:#fff; }
+  .sk-note{ font-size:10.5px; color:var(--t3); margin-bottom:8px; }
+  .sk-crit{ display:flex; align-items:center; gap:8px; font-size:11.5px; color:var(--t2); padding:5px 0; border-bottom:1px solid var(--border); }
+  .sk-crit:last-child{ border-bottom:none; }
+  .sk-crit span{ flex:1; }
+  .sk-crit b{ color:var(--t1); font-weight:600; }
+  .sk-mut{ color:var(--t3); font-weight:400; }
+  .sk-terms{ padding:11px 13px; background:var(--s1); border-top:1px solid var(--border); }
+  .sk-terms-hd{ font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; color:var(--t3); margin-bottom:8px; }
+  .sk-kv{ display:flex; justify-content:space-between; font-size:11.5px; padding:4px 0; color:var(--t2); }
+  .sk-kv b{ color:var(--t1); font-weight:600; }
+  .sk-hold{ background:#f6f4ff; border:1px solid #e0dcf5; border-radius:8px; padding:7px 10px; margin-top:8px; font-size:10px; color:#5b4fa0; line-height:1.45; }
+  .sk-actions{ display:flex; gap:8px; padding:11px 13px; background:#fff; border-top:1px solid var(--border); }
+  .sk-btn{ flex:1; padding:9px; border-radius:8px; font-size:11.5px; font-weight:600; cursor:pointer; border:1px solid var(--border2); background:#fff; color:var(--t2); font-family:var(--f); transition:all .13s; }
+  .sk-btn:hover{ background:var(--s1); }
+  .sk-btn.primary{ background:var(--accent); color:#fff; border-color:var(--accent); }
+  .sk-btn.primary:hover{ background:#00695C; }
+  .sk-routed{ display:flex; gap:10px; align-items:flex-start; padding:12px 13px; background:rgba(46,125,50,.07); border-top:1px solid rgba(46,125,50,.16); }
+  .sk-routed-ic{ width:28px; height:28px; border-radius:50%; background:#2e7d32; display:grid; place-items:center; flex-shrink:0; }
+  .sk-routed-t{ font-size:12px; font-weight:700; color:#1b5e20; }
+  .sk-routed-s{ font-size:10.5px; color:#3a6b3d; margin-top:3px; line-height:1.5; }
+  .sk-cancelled{ padding:11px 13px; background:#fff; border-top:1px solid var(--border); font-size:11px; color:var(--t3); }
+  /* processing state while the skip applies */
+  .sk-processing{ display:flex; align-items:center; gap:9px; padding:12px 13px; background:#fff; border-top:1px solid var(--border); font-size:11.5px; font-weight:600; color:var(--t2); }
+  .sk-spin{ width:14px; height:14px; border:2px solid var(--border2); border-top-color:var(--accent); border-radius:50%; animation:skSpin .7s linear infinite; flex-shrink:0; }
+  @keyframes skSpin{ to{ transform:rotate(360deg); } }
+  /* gentle fade/slide-in for the card and the confirmed result */
+  .sk{ animation:skFade .35s ease both; }
+  .sk-routed{ animation:skFade .3s ease both; }
+  @keyframes skFade{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+  .sk-spin-sm{ width:11px; height:11px; border-width:1.6px; }
+  /* "sending confirmation" sub-step under the confirmed result */
+  .sk-notify{ display:flex; align-items:center; gap:7px; margin-top:8px; font-size:10.5px; color:var(--t3); }
+  .sk-sent{ margin-top:8px; display:flex; flex-direction:column; gap:5px; animation:skFade .3s ease both; }
+  .sk-sent-row{ display:flex; align-items:center; gap:7px; font-size:10.5px; color:#3a6b3d; }
+  .sk-sent-row svg{ flex-shrink:0; opacity:.75; }
+  /* quiet closing marker that ends the flow */
+  .sk-end{ display:flex; align-items:center; gap:9px; padding:10px 13px 2px; font-size:9.5px; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--t3); animation:skFade .3s ease both; }
+  .sk-end-line{ flex:1; height:1px; background:var(--border); }
+  .sk-next{ animation:skFade .35s ease both; margin-top:2px; }
 
   .mo2-idet{ overflow:hidden; max-height:0; opacity:0; transition:max-height .3s ease,opacity .2s ease; }
   .mo2-item.open .mo2-idet{ max-height:400px; opacity:1; padding:2px 10px 14px; }
@@ -19212,6 +19356,12 @@ body {
   .mo2-kv div{ display:flex; flex-direction:column; gap:3px; }
   .mo2-kv-k{ font-size:11px; color:#a3a1b5; } .mo2-kv-v{ font-size:12.5px; color:#2d2b45; font-weight:500; }
   .mo2-kv-v.good{ color:#0d7c52; } .mo2-kv-v.warn{ color:#92400e; } .mo2-kv-v.bad{ color:#c62828; }
+  /* Skip payment: plain "Eligible" value + a separate button beside it */
+  .mo2-kv-vrow{ display:inline-flex; align-items:center; gap:8px; }
+  .mo2-skip-btn{ display:inline-flex; align-items:center; font-size:10.5px; font-weight:600; color:#0d7c52;
+    background:transparent; border:1px solid rgba(13,124,82,.5); padding:4px 11px; border-radius:7px; cursor:pointer; font-family:var(--f);
+    transition:background .13s,color .13s; white-space:nowrap; }
+  .mo2-skip-btn:hover{ background:#0d7c52; color:#fff; border-color:#0d7c52; }
   .mo2-lasttxn{ margin-top:12px; padding-top:11px; border-top:1px dashed rgba(0,0,0,.08); }
   .mo2-lasttxn-l{ font-size:10px; color:#a3a1b5; text-transform:uppercase; letter-spacing:.04em; }
   .mo2-lasttxn-r{ display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-top:4px; }
@@ -19257,18 +19407,23 @@ body {
         +'<span class="mo2-alert-ai" onclick="mo2Ask(event,\''+q+'\')">'+AI+'</span></span>'
         +'</div></div>';
     }
+    var coachIdAttr=opts.coachId?(' id="'+opts.coachId+'"'):'';
     return '<div class="mo2-item"><div class="mo2-irow"'+rowClick+'>'
       +'<span class="mo2-iname-line"><span class="mo2-iname">'+name+'</span>'+bdg+'</span>'
-      +'<span class="mo2-iright"><span onclick="mo2Ask(event,\''+q+'\')">'+AI+'</span><span class="mo2-inum">'+num+'</span>'+chevHTML+'</span></div>'
+      +'<span class="mo2-iright"><span'+coachIdAttr+' onclick="mo2Ask(event,\''+q+'\')">'+AI+'</span><span class="mo2-inum">'+num+'</span>'+chevHTML+'</span></div>'
       +detHTML+'</div>';
   }
   function loanDet(pct,left,next,amt,skip){
-    var sc=skip==='Eligible'?'good':'warn';
+    // "Eligible" stays plain (same look as Next payment / Amount). When eligible,
+    // a separate Skip payment button sits beside it.
+    var skipCell = skip==='Eligible'
+      ? '<span class="mo2-kv-v">'+skip+'</span> <button class="mo2-skip-btn" onclick="mo2SkipFlow(event)">Skip payment</button>'
+      : '<span class="mo2-kv-v warn">'+skip+'</span>';
     return '<div class="mo2-iprog"><span>'+pct+'% paid</span><span><b>'+left+'</b> remaining</span></div>'
       +'<div class="mo2-bar"><div class="mo2-bfill" style="width:'+pct+'%"></div></div>'
       +'<div class="mo2-kv"><div><span class="mo2-kv-k">Next payment</span><span class="mo2-kv-v">'+next+'</span></div>'
       +'<div><span class="mo2-kv-k">Amount</span><span class="mo2-kv-v">'+amt+'</span></div>'
-      +'<div><span class="mo2-kv-k">Skip payment</span><span class="mo2-kv-v '+sc+'">'+skip+'</span></div></div>';
+      +'<div><span class="mo2-kv-k">Skip payment</span><span class="mo2-kv-vrow">'+skipCell+'</span></div></div>';
   }
   function cardDet(pct,avail,min,due,txnd,txna,blocked){
     return '<div class="mo2-iprog"><span>'+pct+'% used</span><span><b>'+avail+'</b> available</span></div>'
@@ -19307,7 +19462,7 @@ body {
       +item('','','',{badge:['alertbig','Warning 019 - OD Agreement'],ask:'Explain warning 019 - OD Agreement'});
   }
   function loansBody(){
-    return item('2022 Tesla Model 3','••7712',loanDet(47,'$15,234','Aug 01','$534.25','Eligible'))
+    return item('2022 Tesla Model 3','••7712',loanDet(47,'$15,234','Aug 01','$534.25','Eligible'),{coachId:'coachAskTagLive'})
       +item('Primary Residence - Malibu','••4521',loanDet(29,'$285,000','Aug 01','$2,950.00','Used May'));
   }
   function depositsBody(){
@@ -19343,18 +19498,50 @@ body {
     g.className='mo2-grid';
     g.innerHTML=
         '<div class="mo2-row2">'+ memberCard()
-      + sectionCard('Alerts',['2 membership warnings','ok'],alertsBody(),'View all alerts',false) +'</div>'
-      + sectionCard('Loans',['All current','ok'],loansBody(),'View all loans',false)
-      + sectionCard('Deposits',['All active','ok'],depositsBody(),'View all deposits',false)
-      + sectionCard('Cards',['1 blocked','crit'],cardsBody(),'View all cards',false)
-      + sectionCard('Last Transactions',['1 declined','crit'],txnRows(),'View all transactions',false)
-      + '<div class="mo2-span2">'+sectionCard('Recent Interactions',['5','ok'],intRows(),'View all interactions',false)+'</div>';
+      + sectionCard('Alerts',['2 membership warnings','crit'],alertsBody(),'View all alerts',false) +'</div>'
+      + sectionCard('Loans',['2 loans, all current','ok'],loansBody(),'View all loans',false)
+      + sectionCard('Deposits',['3 accounts active','ok'],depositsBody(),'View all deposits',false)
+      + sectionCard('Cards',['1 of 3 blocked','crit'],cardsBody(),'View all cards',false)
+      + sectionCard('Last Transactions',['1 declined','warn'],txnRows(),'View all transactions',false)
+      + '<div class="mo2-span2">'+sectionCard('Recent Interactions',['2 in last 7 days','ok'],intRows(),'View all interactions',false)+'</div>';
     // Sections open by default (product lists visible); individual products stay
     // collapsed until the agent clicks a product to see its details.
     return g;
   };
 
   // Interactions
+  /* Deep-link from the situation summary: open the flagged section (by title)
+     and scroll it into view. */
+  window.mo2SitJump=function(e,title){
+    if(e&&e.stopPropagation)e.stopPropagation();
+    var scroller=document.getElementById('othScroll');
+    var host=scroller||document;
+    var card=null;
+    host.querySelectorAll('.mo2-card').forEach(function(c){
+      var t=c.querySelector('.mo2-title');
+      if(t && t.textContent.trim().toLowerCase()===String(title).toLowerCase()) card=c;
+    });
+    if(!card) return;
+    var wasClosed=!card.classList.contains('open');
+    if(wasClosed){
+      var hdr=card.querySelector('.mo2-hdr');
+      if(hdr && typeof window.mo2ToggleCard==='function') window.mo2ToggleCard({stopPropagation:function(){}}, hdr);
+    }
+    // Scroll so the card's top sits BELOW the sticky Interaction Handoff header,
+    // not behind it. Offset = IHS height + a little breathing room.
+    function doScroll(){
+      if(!scroller || !scroller.getBoundingClientRect){ card.scrollIntoView({block:'center',behavior:'smooth'}); return; }
+      var ihs=(document.getElementById('overviewTabHost')||document).querySelector('.ihs-root');
+      var offset=(ihs?ihs.getBoundingClientRect().height:0)+14;
+      var cardTop=card.getBoundingClientRect().top;
+      var scTop=scroller.getBoundingClientRect().top;
+      var target=scroller.scrollTop + (cardTop - scTop) - offset;
+      scroller.scrollTo({top:Math.max(0,target),behavior:'smooth'});
+    }
+    // If we just expanded it, wait for the 0.3s open animation before measuring.
+    if(wasClosed){ setTimeout(doScroll,340); } else { doScroll(); }
+  };
+
   window.mo2ToggleCard=function(e,hdr){
     e.stopPropagation();
     var card=hdr.parentElement;
@@ -19400,13 +19587,124 @@ body {
         var ans=(typeof window.mo2Answer==='function' && window.mo2Answer(q)) || null;
         var fb='';
         try{ fb=(typeof followups==='function')?followups('loan','7712'):''; }catch(e){}
-        // pushAssistant adds the "◆ AI Assistant" label itself — pass answer HTML only.
         pushAssistant(ans || ('<div class="pd"><div class="pd-sec"><div class="pd-v" style="font-weight:500">'+q+'</div></div></div>'+fb));
       },60);
     }catch(err){}
   };
 
+  /* Skip-a-payment agentic flow launcher.
+     Same entry plumbing as mo2Ask (query tab + pushUser/pushAssistant), but
+     pushes the structured skip flow. Also reachable via the query path:
+     typing "skip" for the Tesla loan routes here through mo2Answer. */
+  window.mo2SkipFlow=function(e){
+    if(e && e.stopPropagation) e.stopPropagation();
+    try{
+      if(typeof aiCreateQueryTab!=='function') return;
+      var ctx=aiCreateQueryTab('', 'Skip payment · Tesla');
+      if(typeof aiSwitchTab==='function') aiSwitchTab(ctx);
+      setTimeout(function(){
+        if(typeof pushUser==='function') pushUser('Can Emily skip her Tesla loan payment this month?');
+        if(typeof pushAssistant!=='function') return;
+        // small extra pause after the query lands, before the assistant starts
+        // its own "generating…" indicator (built into pushAssistant).
+        setTimeout(function(){ pushAssistant(window.mo2SkipAssess()); }, 450);
+      },320);
+    }catch(err){}
+  };
+
   // Produce a realistic, specific answer for a given Ask-AI query.
+  /* ── Skip flow stages (rendered as assistant messages) ── */
+  window.mo2SkipAssess=function(){
+    return '<div class="sk">'
+      +'<div class="sk-hd sk-ok"><span class="sk-badge ok"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:12px;height:12px"><polyline points="20 6 9 17 4 12"/></svg></span>Eligible to skip — 2022 Tesla Model 3</div>'
+      +'<div class="sk-terms"><div class="sk-terms-hd">Skip terms</div>'
+      +'<div class="sk-kv"><span>Payment skipped</span><b>Aug 01, 2026 · $534.25</b></div>'
+      +'<div class="sk-kv"><span>Skip fee</span><b>$35.00</b></div>'
+      +'<div class="sk-kv"><span>New next due</span><b>Sep 01, 2026</b></div>'
+      +'<div class="sk-hold">🛈 Interest continues to accrue during the skipped month.</div>'
+      +'</div>'
+      +'<div class="sk-actions"><button class="sk-btn" onclick="mo2SkipCancel(event)">Not now</button>'
+      +'<button class="sk-btn primary" onclick="mo2SkipRoute(event)">Skip this payment</button></div>'
+      +'</div>';
+  };
+  window.mo2SkipRoute=function(e){
+    if(e&&e.stopPropagation)e.stopPropagation();
+    var card=e&&e.target?e.target.closest('.sk'):null;
+    if(!card) return;
+    var actions=card.querySelector('.sk-actions');
+    if(!actions) return;
+    // 1) processing state — the skip takes a beat to apply
+    actions.outerHTML='<div class="sk-processing"><span class="sk-spin"></span>Skipping payment…</div>';
+    var proc=card.querySelector('.sk-processing');
+    // 2) skip applied → confirmed result, with a "sending confirmation" sub-step
+    setTimeout(function(){
+      var done='<div class="sk-routed"><span class="sk-routed-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:13px;height:13px"><polyline points="20 6 9 17 4 12"/></svg></span>'
+        +'<div style="flex:1"><div class="sk-routed-t">Payment skipped</div>'
+        +'<div class="sk-routed-s">Aug 01 payment skipped — next payment now due Sep 01, 2026.</div>'
+        +'<div class="sk-notify" id="skNotify"><span class="sk-spin sk-spin-sm"></span>Sending confirmation to Emily…</div>'
+        +'</div></div>';
+      if(proc) proc.outerHTML=done;
+      // 3) after the send completes, show email + text confirmation and end the flow
+      setTimeout(function(){
+        var n=card.querySelector('#skNotify');
+        if(n) n.outerHTML='<div class="sk-sent">'
+          +'<div class="sk-sent-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>Confirmation emailed to emily.olivers@gmail.com</div>'
+          +'<div class="sk-sent-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Text sent to (310) 928-7361</div>'
+          +'</div>';
+        // 4) end the flow — a quiet closing marker
+        var wrap=document.createElement('div');
+        wrap.className='sk-end';
+        wrap.innerHTML='<span class="sk-end-line"></span><span>Skip complete</span><span class="sk-end-line"></span>';
+        card.appendChild(wrap);
+        // 5) after the divider settles, offer contextual next steps (reuses the
+        //    existing follow-up chip pattern so it reads as native).
+        setTimeout(function(){
+          var fu=document.createElement('div');
+          fu.className='fwrap sk-next';
+          fu.innerHTML='<div class="fu-lead">What’s next?</div><div class="fu-chips">'
+            +'<button class="fu-chip" onclick="showLoan(\'7712\')">View updated loan</button>'
+            +'<button class="fu-chip" onclick="mo2SkipFlow(event)">Skip another payment</button>'
+            +'<button class="fu-chip" onclick="(function(){var i=document.getElementById(\'aiInput\');if(i){i.focus();}})()">Something else for Emily</button>'
+            +'</div>';
+          card.appendChild(fu);
+          if(typeof scrollQueryToTop==='function'){ try{ scrollQueryToTop(false); }catch(err){} }
+        }, 500);
+      }, 1200);
+    }, 1400);
+  };
+  window.mo2SkipCancel=function(e){
+    if(e&&e.stopPropagation)e.stopPropagation();
+    var card=e&&e.target?e.target.closest('.sk'):null;
+    if(card){ card.querySelector('.sk-actions').outerHTML='<div class="sk-cancelled">No changes made. You can skip this payment any time.</div>'; }
+  };
+
+  /* Query path disambiguation: when the agent types "skip payment" without
+     naming a loan, show both loans with eligibility and let them pick. */
+  window.mo2SkipPicker=function(){
+    return '<div class="sk-pick">'
+      +'<div class="sk-pick-lead">Emily has two loans. Which payment should we skip?</div>'
+      +'<button class="sk-pick-row" onclick="mo2SkipPick(event,\'7712\')">'
+        +'<span class="sk-pick-l"><span class="sk-pick-name">2022 Tesla Model 3</span><span class="sk-pick-num">Auto Loan · ••7712</span></span>'
+        +'<span class="sk-pick-status ok">Eligible</span>'
+      +'</button>'
+      +'<button class="sk-pick-row" onclick="mo2SkipPick(event,\'4521\')">'
+        +'<span class="sk-pick-l"><span class="sk-pick-name">Primary Residence — Malibu</span><span class="sk-pick-num">Mortgage · ••4521</span></span>'
+        +'<span class="sk-pick-status warn">Skip used May</span>'
+      +'</button>'
+      +'</div>';
+  };
+  window.mo2SkipPick=function(e,id){
+    if(e&&e.stopPropagation)e.stopPropagation();
+    if(typeof pushUser==='function') pushUser(id==='7712'?'Skip the Tesla loan payment':'Skip the Malibu mortgage payment');
+    if(typeof pushAssistant!=='function') return;
+    if(id==='7712'){
+      setTimeout(function(){ pushAssistant(window.mo2SkipAssess()); }, 300);
+    } else {
+      // ineligible loan — explain, don't run the flow
+      setTimeout(function(){ pushAssistant('<div class="sk"><div class="sk-hd sk-no"><span class="sk-badge no"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:12px;height:12px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Not eligible — Primary Residence Malibu</div><div class="sk-terms"><div class="sk-kv"><span>Reason</span><b>A skip was already used in May.</b></div></div></div>'); }, 300);
+    }
+  };
+
   window.mo2Answer=function(q){
     var pill=(typeof statusPill==='function')?statusPill:function(){return '';};
     // Real drill-down pills ("Anything else? Tap to ask") for a mapped product.
@@ -19427,6 +19725,15 @@ body {
       'Discover Cashback': pd('Discover Cashback — ••5123','Credit Card','Active',[['Utilization','12% used — $4,400 available.'],['Min Payment','$45.00 due Jul 05.'],['Last Transaction','Whole Foods −$127.65.']])+fu('card','5123')
     };
     for(var k in map){ if(q.indexOf(k)>=0) return map[k]; }
+    // Query path → skip flow: typed/spoken "skip" (or defer) resolves to the
+    // same agentic flow the loan pill launches.
+    // Query path → skip. If a specific loan is named, go straight to it;
+    // otherwise disambiguate with the loan picker.
+    if(/skip|defer/i.test(q) && typeof window.mo2SkipPicker==='function'){
+      if(/tesla|7712|auto/i.test(q)) return window.mo2SkipAssess();
+      if(/malibu|4521|mortgage|residence/i.test(q)) return '<div class="sk"><div class="sk-hd sk-no"><span class="sk-badge no"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:12px;height:12px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>Not eligible — Primary Residence Malibu</div><div class="sk-terms"><div class="sk-kv"><span>Reason</span><b>A skip was already used in May.</b></div></div></div>';
+      return window.mo2SkipPicker();
+    }
     if(/080|No Sharing/i.test(q)) return pd('No Sharing — Privacy Restriction','Membership-level · Code 080 · Warning','Warning',[['What\u2019s happening','Member info cannot be shared via shared branching or third parties.'],['Note','Requested after a fraud incident. Do not disclose account details via the shared-branch network. (J. Fuqua · Jun 18)']])+fu('card','7892');
     if(/019|OD Agreement/i.test(q)) return pd('OD Agreement','Membership-level · Code 019 · Warning','Warning',[['What\u2019s happening','Member has an active overdraft protection agreement on file.'],['Note','Review terms before adjusting courtesy pay. (System · Jun 17)']])+fu('deposit','7641');
     if(/transaction:/i.test(q)){
@@ -19438,6 +19745,231 @@ body {
       return pd(t+' — Interaction','Recent contact','Active',[['Summary','Prior '+t.toLowerCase()+' interaction with the member. Full transcript available under Recent Interactions.']])+fu('loan','7712');
     }
     return null;
+  };
+})();
+</script>
+
+<!-- ══ FIRST-RUN COACHMARK OVERLAYS ══ -->
+<div class="coach-scrim" id="coachScrim"></div>
+<div class="coach-ring" id="coachRing"></div>
+<div class="coach-bubble" id="coachBubble">
+  <div class="coach-step" id="cStep">Step 1 of 4</div>
+  <div class="coach-title" id="cTitle"></div>
+  <div class="coach-text" id="cText"></div>
+  <div class="coach-foot">
+    <div class="coach-dots" id="cDots"></div>
+    <div class="coach-actions">
+      <button class="coach-skip" onclick="coachFinish()">Skip</button>
+      <button class="coach-next" id="cNext" onclick="coachNext()">Next</button>
+    </div>
+  </div>
+</div>
+<div class="coach-toast" id="coachToast"><span id="coachToastMsg"></span></div>
+
+<!-- persistent replay button — restarts the first-run tour on demand -->
+<button class="coach-replay" id="coachReplay" onclick="coachStart()" title="Replay the intro tour">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+  <span>Replay tour</span>
+</button>
+
+<script>
+/* ══════════════════════════════════════
+   FIRST-RUN COACHMARKS — Version A
+   Anchors verified against real prototype DOM.
+   Namespaced with coach-prefix helpers to avoid collisions.
+══════════════════════════════════════ */
+(function(){
+  var COACH_STEPS = [
+    { anchor:'#cbGrip', arrow:'bottom', step:'Step 1 of 4', title:'Your call controls',
+      text:'Call lives here and floats free — <b>drag</b> to dock it anywhere, or leave it be.' },
+    { anchor:'#coachAskTagLive', arrow:'bottom', step:'Step 2 of 4', title:'Ask AI on anything',
+      text:'<b>Hover</b> any account or alert and an <b>Ask AI</b> button appears — tap it for instant answers, no switching to another system.',
+      pulse:'#coachAskTagLive', activate:true,
+      prep:function(){ coachEnsureVisible('Loans','#coachAskTagLive'); } },
+    { anchor:'#aiInput', arrow:'top', step:'Step 3 of 4', title:'Or just ask here',
+      text:'Type any question in the assistant — from account-specific to general. Great for fees, blocks, eligibility.' },
+    { anchor:'#wft-test', arrow:'top', step:'Step 4 of 4', title:'Jump to the conversation',
+      text:'Open <b>Conversations</b> to read and reply to messages. Your <b>Overview</b> tab stays one click away — switch back anytime without losing your place.',
+      pulse:'#wft-test' }
+  ];
+
+  /* Expand a collapsed accordion section and scroll its target into view
+     BEFORE the coachmark measures/positions itself. Fixes the case where the
+     Alerts section is collapsed on accept, hiding the Ask AI tag. */
+  function coachEnsureVisible(sectionTitle, targetSel){
+    // The rendered overview is the mo2-grid, not the source .msv-section.
+    // Find the card by its header title, open it, then force the hover-gated
+    // Ask AI tag visible so the ring lands on a real on-screen element.
+    var host=document.getElementById('othScroll')||document;
+    var card=null;
+    host.querySelectorAll('.mo2-card').forEach(function(c){
+      var t=c.querySelector('.mo2-title');
+      if(t && t.textContent.trim().toLowerCase()===String(sectionTitle).toLowerCase()) card=c;
+    });
+    if(card && !card.classList.contains('open')){
+      var hdr=card.querySelector('.mo2-hdr');
+      if(hdr && typeof window.mo2ToggleCard==='function') window.mo2ToggleCard({stopPropagation:function(){}}, hdr);
+    }
+    var t=cq(targetSel);
+    if(t){
+      var row=t.closest('.mo2-item');
+      if(row) row.classList.add('coach-hover');   // reveal the hover-gated Ask AI
+      // suppress the scroll-driven IHS auto-collapse for this coach scroll, so the
+      // account situation stays visible while the coachmark points at Loans.
+      window.__vaCoachScroll=true;
+      if(t.scrollIntoView){ try{ t.scrollIntoView({block:'center',behavior:'auto'}); }catch(e){} }
+      setTimeout(function(){ window.__vaCoachScroll=false; }, 700);
+    }
+  }
+
+  var cci = -1;
+  function cq(s){ return document.querySelector(s); }
+  var cScrim, cRing, cBubble;
+
+  function coachInit(){
+    cScrim=cq('#coachScrim'); cRing=cq('#coachRing'); cBubble=cq('#coachBubble');
+    cq('#cDots').innerHTML = COACH_STEPS.map(function(){return '<span class="coach-dot"></span>';}).join('');
+    // activation short-circuit: clicking the highlighted Ask AI tag ends the tour.
+    // The live tag is built with the mo2 grid (after accept), so delegate.
+    document.addEventListener('click', function(ev){
+      var t=ev.target && ev.target.closest ? ev.target.closest('#coachAskTagLive') : null;
+      if(t && cScrim && cScrim.classList.contains('on')){
+        coachToast("That's the idea — no system-switch needed ✨"); coachFinish();
+      }
+    }, true);
+  }
+
+  function coachPosition(sel, arrow){
+    var el=cq(sel); if(!el) return;
+    var r=el.getBoundingClientRect(), pad=6;
+    cRing.style.top=(r.top-pad)+'px'; cRing.style.left=(r.left-pad)+'px';
+    cRing.style.width=(r.width+pad*2)+'px'; cRing.style.height=(r.height+pad*2)+'px';
+    // measure the real bubble (it's already shown, so offset* are valid)
+    var bw=cBubble.offsetWidth||280, bh=cBubble.offsetHeight||150, gap=12, bt, bl;
+    var acx=r.left+r.width/2, acy=r.top+r.height/2;
+    if(arrow==='bottom'){ bt=r.top-gap-bh; bl=acx-bw/2; }        // bubble above, tail down
+    else if(arrow==='top'){ bt=r.bottom+gap; bl=acx-bw/2; }       // bubble below, tail up
+    else if(arrow==='right'){ bt=acy-bh/2; bl=r.left-gap-bw; }    // bubble left, tail right
+    else { bt=acy-bh/2; bl=r.right+gap; }                          // bubble right, tail left
+    // clamp to viewport
+    bt=Math.max(12,Math.min(bt,window.innerHeight-bh-12));
+    bl=Math.max(12,Math.min(bl,window.innerWidth-bw-12));
+    cBubble.style.top=bt+'px'; cBubble.style.left=bl+'px';
+    cBubble.setAttribute('data-arrow',arrow);
+    // re-point the tail at the anchor after clamping (horizontal for top/bottom, vertical for left/right)
+    var tail;
+    if(arrow==='bottom'||arrow==='top'){
+      tail=Math.max(14,Math.min(bw-14, acx-bl));
+      cBubble.style.setProperty('--tail-x', tail+'px');
+      cBubble.style.setProperty('--tail-y','');
+    } else {
+      tail=Math.max(14,Math.min(bh-14, acy-bt));
+      cBubble.style.setProperty('--tail-y', tail+'px');
+      cBubble.style.setProperty('--tail-x','');
+    }
+  }
+
+  function coachShow(i){
+    document.querySelectorAll('.coach-pulse').forEach(function(e){e.classList.remove('coach-pulse');});
+    document.querySelectorAll('.mo2-item.coach-hover').forEach(function(e){e.classList.remove('coach-hover');});
+    cci=i;
+    var s=COACH_STEPS[i];
+    // run step prep (expand accordions, scroll target into view) BEFORE measuring
+    if(typeof s.prep==='function'){ try{ s.prep(); }catch(e){} }
+    var target=cq(s.anchor);
+    if(!target){ // anchor missing (e.g., panel closed) — skip gracefully
+      if(i>=COACH_STEPS.length-1){ coachFinish(); return; }
+      coachShow(i+1); return;
+    }
+    cq('#cStep').textContent=s.step;
+    cq('#cTitle').textContent=s.title;
+    cq('#cText').innerHTML=s.text;
+    cq('#cNext').textContent = i===COACH_STEPS.length-1 ? 'Done' : 'Next';
+    document.querySelectorAll('.coach-dot').forEach(function(d,di){d.classList.toggle('active',di===i);});
+    if(s.pulse){ var p=cq(s.pulse); if(p) p.classList.add('coach-pulse'); }
+    cScrim.classList.add('on'); cRing.classList.add('on'); cBubble.classList.add('on');
+    // defer positioning so any expand/scroll reflow settles first. Prep steps
+    // open the mo2 card (~300ms animation), so wait longer for those.
+    if(typeof s.prep==='function'){
+      setTimeout(function(){ coachPosition(s.anchor,s.arrow); }, 380);
+    } else {
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){ coachPosition(s.anchor,s.arrow); });
+      });
+    }
+  }
+
+  window.coachNext=function(){
+    if(cci>=COACH_STEPS.length-1){ coachFinish(); return; }
+    coachShow(cci+1);
+  };
+  window.coachFinish=function(){
+    document.querySelectorAll('.coach-pulse').forEach(function(e){e.classList.remove('coach-pulse');});
+    document.querySelectorAll('.mo2-item.coach-hover').forEach(function(e){e.classList.remove('coach-hover');});
+    if(cScrim) cScrim.classList.remove('on');
+    if(cRing) cRing.classList.remove('on');
+    if(cBubble) cBubble.classList.remove('on');
+    cci=-1;
+    window.__vaCoachScroll=false;
+    // Final overview state after the tour: Interaction Handoff expanded,
+    // Member Details expanded, every other section collapsed.
+    try{
+      var host=document.getElementById('othScroll')||document;
+      var ihs=host.querySelector('.ihs-root');
+      if(ihs){ ihs.classList.remove('collapsed');
+        var tt=ihs.querySelector('.ihs-toggle-text'); if(tt) tt.textContent='Hide summary'; }
+      host.querySelectorAll('.mo2-card').forEach(function(c){
+        var t=c.querySelector('.mo2-title');
+        var keepOpen = t && t.textContent.trim().toLowerCase()==='member details';
+        if(keepOpen){ c.classList.add('open'); }
+        else {
+          c.classList.remove('open');
+          c.querySelectorAll('.mo2-item.open').forEach(function(it){ it.classList.remove('open'); });
+        }
+      });
+    }catch(e){}
+    try{ localStorage.setItem('c360_va_firstrun_done','1'); }catch(e){}
+    // PROD: persist per-agent firstRun=false server-side here
+  };
+  window.coachStart=function(){
+    // ensure overlay refs exist (in case start is invoked very early)
+    if(!cScrim){ coachInit(); }
+    // clear any prior run, then start fresh from step 0
+    document.querySelectorAll('.coach-pulse').forEach(function(e){e.classList.remove('coach-pulse');});
+    document.querySelectorAll('.mo2-item.coach-hover').forEach(function(e){e.classList.remove('coach-hover');});
+    cci=-1;
+    coachShow(0);
+  };
+
+  var coachToastT;
+  function coachToast(msg){
+    clearTimeout(coachToastT);
+    var m=cq('#coachToastMsg'); if(m) m.textContent=msg;
+    var t=cq('#coachToast'); if(!t) return;
+    t.classList.add('on');
+    coachToastT=setTimeout(function(){t.classList.remove('on');},2200);
+  }
+
+  window.addEventListener('resize',function(){ if(cci>=0){ var s=COACH_STEPS[cci]; coachPosition(s.anchor,s.arrow); }});
+
+  /* kick off: coachmarks are triggered by acceptCall(), NOT on page load.
+     They must never appear before the agent accepts the incoming request. */
+  window.addEventListener('load',function(){
+    coachInit();
+    // Prototype behavior: reset first-run each launch so the coachmarks always
+    // auto-appear once after the agent accepts the request. (In production this
+    // flag would be a persistent per-agent value instead.)
+    try{ localStorage.removeItem('c360_va_firstrun_done'); }catch(e){}
+  });
+
+  /* Called from acceptCall() once the workspace has settled.
+     Fires only on genuine first run (flag-gated). Mock override: #coach in URL. */
+  window.coachMaybeStartAfterAccept=function(){
+    var force = location.hash.indexOf('coach')>-1;
+    var done = false;
+    try{ done = !!localStorage.getItem('c360_va_firstrun_done'); }catch(e){}
+    if(force){ try{localStorage.removeItem('c360_va_firstrun_done');}catch(e){} done=false; }
+    if(force || !done){ setTimeout(function(){ coachStart(); }, 500); }
   };
 })();
 </script>
