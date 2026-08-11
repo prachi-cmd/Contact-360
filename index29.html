@@ -1727,7 +1727,9 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
 
 /* chevron */
 .cb-chev{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;cursor:pointer;flex-shrink:0;margin-left:2px;transition:background .15s;background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);border:none;}
-.cb-pcount{display:inline-flex;align-items:center;gap:4px;flex-shrink:0;margin-right:4px;padding:4px 9px;border-radius:20px;background:rgba(255,255,255,.10);color:rgba(255,255,255,.78);font-family:var(--m);font-size:10px;font-weight:500;}
+.cb-pcount{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;margin-right:4px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.10);color:rgba(255,255,255,.78);font-family:var(--m);font-size:10px;font-weight:500;white-space:nowrap;}
+.cb-pnames{font-family:var(--f);font-size:10.5px;color:rgba(255,255,255,.62);padding-left:6px;margin-left:2px;border-left:1px solid rgba(255,255,255,.16);}
+.cb-pmore{color:rgba(255,255,255,.45);}
 .cb-pcount svg{opacity:.85;}
 .cb-chev:hover{background:rgba(255,255,255,.2);}
 .cb-chev svg{transition:transform .26s ease;}
@@ -5655,7 +5657,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
             </div>
           </div>
           <div class="cb-controls">
-            <div class="cb-pcount" id="cbPCount" title="Participants in call"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span id="cbPCountNum">6</span></div>
+            <div class="cb-pcount" id="cbPCount" title="Andrew Raynold, Emily Olivers, Amanda Wilson, Robert Chen, David Martinez, Jeff Fuqua"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><span id="cbPCountNum">6</span><span class="cb-pnames">Andrew, Emily <span class="cb-pmore">+4</span></span></div>
             <button class="cb-cbtn rec" title="Record"><svg width="16" height="16" viewBox="0 0 24 24"><circle cx="12" cy="12" r="6" fill="#EF5A51"/></svg></button>
             <button class="cb-cbtn std" id="cbMute" title="Mute" onclick="cbToggleSelfMute()"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path class="cb-nofill" d="M19 10v2a7 7 0 0 1-14 0v-2" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><line x1="12" y1="19" x2="12" y2="22" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></button>
             <button class="cb-cbtn std" title="Hold"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></button>
@@ -6858,9 +6860,10 @@ function cbShow(){
   const bar=document.getElementById('callBar');
   if(!bar) return;
   bar.classList.add('show');
-  bar.classList.add('expanded');
+  // Default state: collapsed. Agent expands manually via the chevron.
+  bar.classList.remove('expanded');
   const chev=document.getElementById('cbChev');
-  if(chev) chev.title='Hide participants';
+  if(chev) chev.title='Show participants';
   cbDock('bottom');
 }
 function cbHide(){
