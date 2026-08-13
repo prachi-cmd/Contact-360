@@ -5791,11 +5791,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--t1);display:flex;flex
           </div>
           <div class="ihs-summary-wrap">
             <p class="ihs-summary-text" id="ihsSummaryText">Emily Olivers was transferred regarding a missing salary deposit inquiry. Recurring Tesla payroll activity was identified on Everyday Checking, but no current-cycle deposit was found.</p>
-            <div class="ihs-sit-divider"></div>
-            <div class="ihs-sit">
-              <div class="ihs-sit-label">Account situation</div>
-              <div class="ihs-sit-body"><span class="ihs-sit-flag" onclick="mo2SitJump(event,'Cards')">Visa card blocked</span>, a <span class="ihs-sit-flag" onclick="mo2SitJump(event,'Last Transactions')">declined transaction</span>, and <span class="ihs-sit-flag" onclick="mo2SitJump(event,'Alerts')">online banking locked</span>. <span class="ihs-sit-ok">Loans, deposits, and all other cards are current.</span></div>
-            </div>
             <div class="ihs-meta-row">
               <div class="ihs-meta-left">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>
@@ -9449,12 +9444,9 @@ function acceptCall(){
 
   toast('✅  Call accepted — ready for Emily Olivers…');
 
-  // First-run coachmarks: start only AFTER the request is accepted and the
-  // workspace/AI panel have settled, so anchors exist and nothing shows on the
-  // incoming-call screen. Flag-gated inside — no-op for returning agents.
-  if(typeof window.coachMaybeStartAfterAccept === 'function'){
-    setTimeout(window.coachMaybeStartAfterAccept, 700);
-  }
+  // Coachmarks are intentionally NOT auto-started on a live call — an onboarding
+  // tour firing mid-interaction distracts the agent and increases AHT. Any tour
+  // belongs in a training mode / on-demand help, not over a live caller.
 }
 function rejectCall(){
   document.getElementById('voiceNotif').classList.remove('show');
@@ -16650,9 +16642,16 @@ function msvAskAlert(kind){
 function msvAskFromItem(el){
   const p = msvResolveProduct(el);
   if(!p){ msvAskAIHome(); return; }
-  // Spawn a NEW conversation tab for this product, labelled by kind, pinned after member.
-  const labelMap = { loan:'Loans', deposit:'Deposits', card:'Cards' };
-  const ctx = aiCreateQueryTab('', labelMap[p.type] || 'Details');
+  // Spawn a NEW conversation tab for this product, labelled contextually by the
+  // specific loan/account/card name (not a generic "Loans"/"Cards"), so an agent
+  // can tell many product tabs apart.
+  const labelMap = { loan:'Loan', deposit:'Deposit', card:'Card' };
+  const nameMap = {
+    '7712':'Auto Loan ••7712', '4521':'Home Loan ••4521',
+    '7641':'Family Vacation ••7641', '2914':'Business Ops ••2914', '5891':'Emergency Fund ••5891',
+    '7892':'Visa Signature ••7892', '3456':'Amex Platinum ••3456', '5123':'Visa Debit ••5123'
+  };
+  const ctx = aiCreateQueryTab('', nameMap[p.id] || labelMap[p.type] || 'Details');
   aiSwitchTab(ctx);                 // shows the new tab; sets sticky aiThreadTarget
   // Render the product detail into this tab's own thread
   if(p.type === 'loan')    showLoan(p.id);
@@ -18973,10 +18972,89 @@ body {
         var grid=window.mo2BuildGrid();
         oldBoxes[0].parentNode.insertBefore(grid, oldBoxes[0]);
         oldBoxes.forEach(function(b){ b.style.display='none'; });
+        // Person-selection gate: this inbound number maps to multiple people, so
+        // the agent must pick the consumer BEFORE the product widgets render.
+        var gate=psBuildGate();
+        grid.parentNode.insertBefore(gate, grid);
+        grid.setAttribute('data-ps-grid','1');
+        grid.style.display='none';
       }
     }
     syncBadge(src);
   }
+  // ── Person selection (multiple people share the inbound phone number) ──
+  // Candidate identities behind the shared inbound number.
+  var PS_PEOPLE={
+    emily:{name:'Emily Olivers',ssn:'482-10-9034',rel:'Primary member',dob:'March 14, 1985',
+      mobile:'+1 (310) 928-7361',home:'+1 (310) 771-2093',work:'+1 (310) 555-0142',
+      addr:'2841 Ocean View Blvd, Malibu, CA 90265',since:'March 2019',ver:'Voice biometric',verDate:'Jun 17, 2026'},
+    emilia:{name:'Emilia Clark',ssn:'987-65-4321',rel:'Joint owner',dob:'July 2, 1990',
+      mobile:'+1 (310) 445-9982',home:'—',work:'+1 (310) 555-0177',
+      addr:'118 Pier Ave, Santa Monica, CA 90405',since:'August 2022',ver:'Identity questions',verDate:'May 3, 2026'}
+  };
+  function psInitials(n){ return n.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase(); }
+  function psCandRow(key){
+    var p=PS_PEOPLE[key];
+    return '<button class="ps-cand" data-key="'+key+'" onclick="psSelectCandidate(event,\''+key+'\')">'
+      +'<span class="ps-cav">'+psInitials(p.name)+'</span>'
+      +'<span class="ps-cinfo"><span class="ps-cname">'+p.name+'</span>'
+      +'<span class="ps-cmeta">'+p.rel+' · SSN '+p.ssn+'</span></span>'
+      +'<span class="ps-cradio"></span></button>';
+  }
+  function psDetailHTML(p){
+    return '<div class="ps-panel"><div class="ps-phead"><span class="mo2-title">Member Details</span></div>'
+      +'<div class="mo2-mi">'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Full SSN</span><span class="mo2-mi-v">'+p.ssn+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Date of Birth</span><span class="mo2-mi-v">'+p.dob+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Relationship</span><span class="mo2-mi-v">'+p.rel+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Mobile Phone</span><span class="mo2-mi-v">'+p.mobile+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Home Phone</span><span class="mo2-mi-v">'+p.home+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Work Phone</span><span class="mo2-mi-v">'+p.work+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Address</span><span class="mo2-mi-v">'+p.addr+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Since</span><span class="mo2-mi-v">'+p.since+'</span></div>'
+      +'</div></div>'
+      +'<div class="ps-panel"><div class="ps-phead"><span class="mo2-title">Verification</span><span class="ps-vpill">Verified</span></div>'
+      +'<div class="ps-vsum"><span class="ps-vic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg></span>'
+      +'<span>Previously verified via <b>'+p.ver+'</b> · '+p.verDate+'</span></div></div>'
+      +'<button class="ps-proceed" onclick="psProceed(event)">View accounts &amp; activity'
+      +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></button>';
+  }
+  function psBuildGate(){
+    var g=document.createElement('div'); g.className='ps-gate';
+    g.innerHTML=
+      '<div class="ps-select">'
+      +'<div class="ps-hd"><span class="ps-title">Identify &amp; Verify</span>'
+      +'<span class="ps-caller"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Caller ID <b>+1 (999) 331-7647</b></span></div>'
+      +'<div class="ps-banner">This inbound number is linked to more than one person. Select who you’re speaking with.</div>'
+      +'<div class="ps-cands">'+psCandRow('emily')+psCandRow('emilia')+'</div>'
+      +'</div>'
+      +'<div class="ps-detail"></div>';
+    return g;
+  }
+  // Pick a candidate → reveal their Member Details + prior verification (no default selection).
+  window.psSelectCandidate=function(e,key){
+    var host=document.getElementById('othScroll')||document;
+    var gate=host.querySelector('.ps-gate'); if(!gate) return;
+    gate.querySelectorAll('.ps-cand').forEach(function(c){ c.classList.toggle('active', c.getAttribute('data-key')===key); });
+    var det=gate.querySelector('.ps-detail');
+    det.innerHTML=psDetailHTML(PS_PEOPLE[key]);
+    det.style.display='block';
+  };
+  // Continue from the identify/verify screen to the account widgets.
+  window.psProceed=function(e){
+    var host=document.getElementById('othScroll')||document;
+    var gate=host.querySelector('.ps-gate'); if(!gate) return;
+    gate.style.display='none';
+    var grid=host.querySelector('[data-ps-grid]'); if(grid) grid.style.display='';
+  };
+  // Return to Identify & Verify (from the Member Details header "Change consumer").
+  window.psChange=function(e){
+    if(e&&e.stopPropagation)e.stopPropagation();
+    var host=document.getElementById('othScroll')||document;
+    var gate=host.querySelector('.ps-gate'); if(!gate) return;
+    gate.style.display='';
+    var grid=host.querySelector('[data-ps-grid]'); if(grid) grid.style.display='none';
+  };
   function syncBadge(node){
     try{
       var badge=el('ovtBadge');
@@ -19216,7 +19294,7 @@ body {
   .mo2-title{ font-size:11px; font-weight:600; color:#7d7ba0; letter-spacing:.02em; text-transform:uppercase; white-space:nowrap; }
   .mo2-badge{ display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500; color:#5a586e; }
   .mo2-dot{ width:6px; height:6px; border-radius:50%; }
-  .mo2-dot.ok{ background:#0d7c52; } .mo2-dot.crit{ background:#d32f2f; } .mo2-dot.warn{ background:#c97b1c; }
+  .mo2-dot.ok{ background:#0d7c52; } .mo2-dot.crit{ background:#d32f2f; } .mo2-dot.warn{ background:#c97b1c; } .mo2-dot.neutral{ background:#9896b0; }
   /* AI situation summary — lives inside the Interaction Handoff Summary, below
      the handoff text, separated by a divider. Strict one-liner, no guessed cause. */
   .ihs-sit-divider{ height:1px; background:var(--ihs-border-divider,rgba(0,0,0,.08)); margin:9px 0 10px; }
@@ -19259,9 +19337,13 @@ body {
   .mo2-iname-line{ display:flex; align-items:center; gap:7px; min-width:0; flex:0 1 auto; }
   .mo2-iname{ font-size:13px; font-weight:600; color:#2d2b45; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .mo2-ibadge{ font-size:9px; font-weight:600; padding:1px 7px; border-radius:20px; flex-shrink:0; background:rgba(0,0,0,.06); color:#6b6980; }
+  .mo2-ibadge.st-active{ background:rgba(13,124,82,.12); color:#0d7c52; }
+  .mo2-ibadge.st-closed{ background:rgba(0,0,0,.06); color:#6b6980; }
+  .mo2-ibadge.st-blocked{ background:rgba(211,47,47,.12); color:#c62828; }
+  .mo2-ibadge.st-inactive{ background:rgba(201,123,28,.14); color:#92400e; }
   /* Bigger alert pill: fills the row, more presence inside the (unchanged) card */
   .mo2-ibadge.alertbig{ flex:1; min-width:0; white-space:normal; font-size:12px; font-weight:600;
-    padding:9px 13px; border-radius:10px; background:rgba(201,123,28,.12); color:#92400e;
+    padding:9px 13px; border-radius:10px; background:rgba(45,43,69,.06); color:#3a3852;
     display:flex; align-items:center; gap:8px; }
   .mo2-ibadge.alertbig .mo2-alert-txt{ flex:1; min-width:0; }
   .mo2-ibadge.alertbig .mo2-alert-ai{ flex-shrink:0; display:inline-flex; }
@@ -19386,6 +19468,111 @@ body {
   .mo2-txn-m{ font-size:10.5px; color:#a3a1b5; margin-top:2px; }
   .mo2-txn .mo2-askai{ position:static; max-width:0; overflow:hidden; flex-shrink:0; padding-left:0; padding-right:0; }
   .mo2-txn:hover .mo2-askai{ opacity:1; transform:translateX(0); pointer-events:auto; max-width:70px; padding-left:7px; padding-right:7px; }
+  /* product header line: product name + description */
+  .mo2-prod{ margin-top:2px; }
+  .mo2-prod-name{ font-size:12.5px; font-weight:600; color:#2d2b45; }
+  .mo2-prod-desc{ font-size:11px; color:#8a8a9e; margin-top:2px; }
+  /* meta chips row: relationship, full account number, status */
+  .mo2-meta{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .mo2-mchip{ display:inline-flex; align-items:center; font-size:10px; font-weight:600; line-height:1;
+    background:rgba(91,95,207,.1); color:#5b5fcf; padding:4px 8px; border-radius:20px; }
+  .mo2-mchip.acct{ background:rgba(0,0,0,.05); color:#5a586e; font-family:'DM Mono','SF Mono',monospace; font-weight:500; }
+  .mo2-mchip.st-active{ background:rgba(13,124,82,.1); color:#0d7c52; }
+  .mo2-mchip.st-closed{ background:rgba(0,0,0,.06); color:#6b6980; }
+  .mo2-mchip.st-blocked{ background:rgba(211,47,47,.1); color:#c62828; }
+  .mo2-mchip.st-inactive{ background:rgba(201,123,28,.12); color:#92400e; }
+  /* per-product warning codes: collapsed, expand on demand */
+  .mo2-wc{ margin-top:12px; border-top:1px dashed rgba(0,0,0,.08); padding-top:10px; }
+  .mo2-wc-sum{ cursor:pointer; list-style:none; font-size:11px; font-weight:600; color:#7d7ba0;
+    text-transform:uppercase; letter-spacing:.03em; display:flex; align-items:center; gap:6px; }
+  .mo2-wc-sum::-webkit-details-marker{ display:none; }
+  .mo2-wc-sum::before{ content:'▸'; font-size:10px; color:#a3a1b5; transition:transform .18s; }
+  .mo2-wc[open] .mo2-wc-sum::before{ transform:rotate(90deg); }
+  .mo2-wc-list{ margin-top:8px; display:flex; flex-direction:column; gap:6px; }
+  .mo2-wc-row{ display:flex; gap:8px; align-items:baseline; font-size:11.5px; color:#2d2b45; }
+  .mo2-wc-code{ font-weight:700; white-space:nowrap; }
+  /* ── Person selection gate (sits below the handoff, before the widgets) ──
+     Aligned to the same centered column + side padding as .mo2-grid, and styled
+     as one glass card so it reads as part of the widget language. */
+  .ps-gate{ max-width:960px; margin:0 auto; padding:14px 16px 0; }
+  .app-root.ai-open .ps-gate{ max-width:560px; }
+  .ps-select{ background:rgba(255,255,255,.72); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,.9);
+    border-radius:14px; padding:12px 13px 14px; box-shadow:0 2px 10px rgba(60,50,120,.06); }
+  .ps-hd{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:9px; }
+  .ps-title{ font-size:11px; font-weight:600; color:#7d7ba0; letter-spacing:.02em; text-transform:uppercase; white-space:nowrap; }
+  .ps-caller{ display:inline-flex; align-items:center; gap:5px; font-size:10.5px; color:#8a8a9e; }
+  .ps-caller b{ color:#5a586e; font-weight:500; font-family:'DM Mono','SF Mono',monospace; }
+  .ps-banner{ font-size:11.5px; line-height:1.5; color:#8a8a9e; margin-bottom:11px; }
+  /* candidate rows — no default selection (empty radio until picked) */
+  .ps-cands{ display:flex; flex-direction:column; gap:8px; }
+  .ps-cand{ display:flex; align-items:center; gap:11px; width:100%; text-align:left; background:#fff;
+    border:1px solid var(--border,#e5e5e5); border-radius:10px; padding:10px 11px; cursor:pointer; font-family:var(--f);
+    transition:border-color .12s,box-shadow .12s; }
+  .ps-cand:hover{ border-color:#00897B; box-shadow:0 0 0 3px rgba(0,137,123,.08); }
+  .ps-cand.active{ border-color:#00897B; box-shadow:0 0 0 3px rgba(0,137,123,.08); }
+  .ps-cav{ width:32px; height:32px; border-radius:50%; background:#efe9ff; color:#5b5fcf; font-size:11px; font-weight:700;
+    display:grid; place-items:center; flex-shrink:0; }
+  .ps-cand.active .ps-cav{ background:#e3f2ef; color:#00897B; }
+  .ps-cinfo{ flex:1; min-width:0; }
+  .ps-cname{ display:block; font-size:12.5px; font-weight:600; color:#2d2b45; }
+  .ps-cmeta{ display:block; font-size:10.5px; color:#8a8a9e; margin-top:2px; font-family:'DM Mono','SF Mono',monospace; }
+  .ps-cradio{ width:16px; height:16px; border-radius:50%; border:2px solid #d4d4d4; flex-shrink:0; }
+  .ps-cand.active .ps-cradio{ border-color:#00897B; background:radial-gradient(circle,#00897B 42%,transparent 46%); }
+  /* detail panels revealed after a candidate is chosen — same glass language as widgets */
+  .ps-detail{ display:none; }
+  .ps-panel{ background:rgba(255,255,255,.72); backdrop-filter:blur(6px); border:1px solid rgba(255,255,255,.9);
+    border-radius:14px; padding:12px 13px; box-shadow:0 2px 10px rgba(60,50,120,.06); margin-top:10px; }
+  .ps-phead{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .ps-vpill{ font-size:10px; font-weight:700; color:#0d7c52; background:rgba(13,124,82,.1); padding:3px 9px; border-radius:20px; }
+  .ps-vsum{ display:flex; align-items:center; gap:9px; font-size:12px; color:#5a586e; margin-top:9px; line-height:1.5; }
+  .ps-vsum b{ color:#2d2b45; font-weight:600; }
+  .ps-vic{ width:24px; height:24px; border-radius:7px; display:grid; place-items:center; flex-shrink:0; background:rgba(13,124,82,.1); color:#0d7c52; }
+  .ps-vic svg{ width:13px; height:13px; }
+  .ps-proceed{ width:100%; display:flex; align-items:center; justify-content:center; gap:8px; background:#00897B; color:#fff;
+    border:none; border-radius:12px; padding:12px; font-size:13px; font-weight:600; font-family:var(--f); cursor:pointer;
+    margin-top:10px; box-shadow:0 2px 12px rgba(0,137,123,.22); transition:background .13s; }
+  .ps-proceed:hover{ background:#00695C; }
+  .ps-proceed svg{ width:15px; height:15px; }
+  .ps-change{ display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:600; color:#00897B; background:transparent;
+    border:1px solid rgba(0,137,123,.4); padding:4px 10px; border-radius:20px; cursor:pointer; font-family:var(--f); white-space:nowrap; transition:background .13s,color .13s; }
+  .ps-change svg{ width:11px; height:11px; }
+  .ps-change:hover{ background:#00897B; color:#fff; }
+  /* Change-consumer control living in the Member Details header */
+  .ps-change-hdr{ margin-left:8px; padding:2px 9px; font-size:10px; }
+  /* Attention-first triage panel — spans full width at top of the accounts screen */
+  .mo2-att{ grid-column:1 / -1; background:#fff; border:1px solid rgba(211,47,47,.18); border-radius:14px;
+    padding:11px 13px; box-shadow:0 2px 12px rgba(211,47,47,.06); }
+  .mo2-att.ok{ border-color:rgba(13,124,82,.22); box-shadow:0 2px 12px rgba(13,124,82,.06); }
+  .mo2-att-h{ display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700; color:#c62828;
+    text-transform:uppercase; letter-spacing:.03em; margin-bottom:8px; }
+  .mo2-att-h.ok{ color:#0d7c52; margin-bottom:0; }
+  .mo2-att-h.ok svg{ width:15px; height:15px; }
+  .mo2-att-cnt{ background:#d32f2f; color:#fff; font-size:10px; width:17px; height:17px; border-radius:50%; display:grid; place-items:center; }
+  .mo2-att-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid rgba(0,0,0,.05); cursor:pointer; transition:background .12s; margin:0 -6px; padding-left:6px; padding-right:6px; border-radius:8px; }
+  .mo2-att-row:first-of-type{ border-top:none; }
+  .mo2-att-row:hover{ background:rgba(0,0,0,.03); }
+  .mo2-att-ic{ width:28px; height:28px; border-radius:8px; display:grid; place-items:center; flex-shrink:0; }
+  .mo2-att-ic svg{ width:15px; height:15px; }
+  .mo2-att-ic.r{ background:rgba(211,47,47,.1); color:#c62828; }
+  .mo2-att-ic.a{ background:rgba(201,123,28,.12); color:#92400e; }
+  .mo2-att-ic.n{ background:rgba(0,0,0,.05); color:#7d7ba0; }
+  .mo2-att-info{ flex:1; min-width:0; }
+  .mo2-att-nm{ display:block; font-size:12.5px; font-weight:600; color:#2d2b45; }
+  .mo2-att-sub{ display:block; font-size:10.5px; color:#8a8a9e; margin-top:1px; }
+  .mo2-att-go{ color:#b0afc8; flex-shrink:0; display:flex; }
+  .mo2-att-go svg{ width:15px; height:15px; }
+  .mo2-att-row:hover .mo2-att-go{ color:#00897B; }
+  /* "All accounts" divider label */
+  .mo2-ehead{ grid-column:1 / -1; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+    color:#a3a1b5; margin:6px 2px 0; }
+  /* Minimal back-to-selection control at the top of the accounts screen */
+  .mo2-backrow{ grid-column:1 / -1; margin-bottom:2px; }
+  .ps-back{ display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; color:#5a586e;
+    background:transparent; border:1px solid rgba(0,0,0,.1); padding:5px 11px 5px 9px; border-radius:20px; cursor:pointer;
+    font-family:var(--f); transition:background .12s,color .12s,border-color .12s; }
+  .ps-back svg{ width:12px; height:12px; color:#8a8a9e; transition:color .12s; }
+  .ps-back:hover{ color:#00897B; border-color:rgba(0,137,123,.4); background:rgba(0,137,123,.05); }
+  .ps-back:hover svg{ color:#00897B; }
 </style>
 <script>
 (function(){
@@ -19416,41 +19603,49 @@ body {
       +'<span class="mo2-iright"><span'+coachIdAttr+' onclick="mo2Ask(event,\''+q+'\')">'+AI+'</span><span class="mo2-inum">'+num+'</span>'+chevHTML+'</span></div>'
       +detHTML+'</div>';
   }
-  function loanDet(pct,left,next,amt,skip){
-    // "Eligible" stays plain (same look as Next payment / Amount). When eligible,
-    // a separate Skip payment button sits beside it.
-    var skipCell = skip==='Eligible'
-      ? '<span class="mo2-kv-v">'+skip+'</span> <button class="mo2-skip-btn" onclick="mo2SkipFlow(event)">Skip payment</button>'
-      : '<span class="mo2-kv-v warn">'+skip+'</span>';
-    return '<div class="mo2-iprog"><span>'+pct+'% paid</span><span><b>'+left+'</b> remaining</span></div>'
-      +'<div class="mo2-bar"><div class="mo2-bfill" style="width:'+pct+'%"></div></div>'
-      +'<div class="mo2-kv"><div><span class="mo2-kv-k">Next payment</span><span class="mo2-kv-v">'+next+'</span></div>'
-      +'<div><span class="mo2-kv-k">Amount</span><span class="mo2-kv-v">'+amt+'</span></div>'
-      +'<div><span class="mo2-kv-k">Skip payment</span><span class="mo2-kv-vrow">'+skipCell+'</span></div></div>';
+  // Per-product warning codes — collapsed by default, expand on demand.
+  function wcodes(list){
+    if(!list||!list.length) return '';
+    var rows=list.map(function(w){return '<div class="mo2-wc-row"><span class="mo2-wc-code">'+w[0]+'</span><span class="mo2-wc-desc">'+w[1]+'</span></div>';}).join('');
+    return '<details class="mo2-wc"><summary class="mo2-wc-sum">Warning codes ('+list.length+')</summary><div class="mo2-wc-list">'+rows+'</div></details>';
   }
-  function cardDet(pct,avail,min,due,txnd,txna,blocked){
-    return '<div class="mo2-iprog"><span>'+pct+'% used</span><span><b>'+avail+'</b> available</span></div>'
-      +'<div class="mo2-bar"><div class="mo2-bfill '+(blocked?'red':'')+'" style="width:'+pct+'%"></div></div>'
-      +'<div class="mo2-kv"><div><span class="mo2-kv-k">Min payment</span><span class="mo2-kv-v '+(blocked?'bad':'')+'">'+min+'</span></div>'
-      +'<div><span class="mo2-kv-k">Due date</span><span class="mo2-kv-v '+(blocked?'bad':'')+'">'+due+'</span></div></div>'
-      +'<div class="mo2-lasttxn"><div class="mo2-lasttxn-l">Last transaction</div><div class="mo2-lasttxn-r"><span>'+txnd+'</span><span class="'+(txna==='DECLINED'?'dec':'')+'">'+(txna==='DECLINED'?'DECLINED':('<b>'+txna+'</b>'))+'</span></div></div>';
+  function relRow(rel){ return rel?'<div class="mo2-meta"><span class="mo2-mchip">'+rel+'</span></div>':''; }
+  function loanDet(o){
+    return '<div class="mo2-prod"><div class="mo2-prod-name">'+o.product+'</div><div class="mo2-prod-desc">'+o.desc+'</div></div>'
+      +relRow(o.rel)
+      +'<div class="mo2-iprog" style="margin-top:12px"><span>'+o.pct+'% paid</span><span><b>'+o.left+'</b> remaining</span></div>'
+      +'<div class="mo2-bar"><div class="mo2-bfill" style="width:'+o.pct+'%"></div></div>'
+      +'<div class="mo2-kv"><div><span class="mo2-kv-k">Next payment</span><span class="mo2-kv-v">'+o.next+'</span></div>'
+      +'<div><span class="mo2-kv-k">Due Amount</span><span class="mo2-kv-v">'+o.due+'</span></div>'
+      +'<div><span class="mo2-kv-k">Days delinquent</span><span class="mo2-kv-v'+(o.delinq&&o.delinq!=='0'?' bad':'')+'">'+o.delinq+'</span></div></div>'
+      +wcodes(o.warnings);
   }
-  function depDet(bal,type,owner,txnd,txna){
-    return '<div class="mo2-kv"><div><span class="mo2-kv-k">Available</span><span class="mo2-kv-v"><b>'+bal+'</b></span></div>'
-      +'<div><span class="mo2-kv-k">Type</span><span class="mo2-kv-v">'+type+'</span></div></div>'
-      +'<div class="mo2-owner"><span class="mo2-owner-name">'+owner[1]+'</span><span class="chip">'+owner[0]+'</span></div>'
-      +'<div class="mo2-lasttxn"><div class="mo2-lasttxn-l">Last transaction</div><div class="mo2-lasttxn-r"><span>'+txnd+'</span><b>'+txna+'</b></div></div>';
+  function cardDet(o){
+    return '<div class="mo2-iprog"><span>'+o.pct+'% used</span><span><b>'+o.avail+'</b> available</span></div>'
+      +'<div class="mo2-bar"><div class="mo2-bfill '+(o.blocked?'red':'')+'" style="width:'+o.pct+'%"></div></div>'
+      +'<div class="mo2-kv"><div><span class="mo2-kv-k">Linked account</span><span class="mo2-kv-v">'+o.linkedName+'</span></div>'
+      +'<div><span class="mo2-kv-k">Account number</span><span class="mo2-kv-v">'+o.linkedNum+'</span></div></div>'
+      +'<div class="mo2-lasttxn"><div class="mo2-lasttxn-l">Last transaction</div><div class="mo2-lasttxn-r"><span>'+o.txnd+'</span><span class="'+(o.txna==='DECLINED'?'dec':'')+'">'+(o.txna==='DECLINED'?'DECLINED':('<b>'+o.txna+'</b>'))+'</span></div></div>'
+      +wcodes(o.warnings);
+  }
+  function depDet(o){
+    return '<div class="mo2-prod"><div class="mo2-prod-name">'+o.product+'</div><div class="mo2-prod-desc">'+o.desc+'</div></div>'
+      +relRow(o.rel)
+      +'<div class="mo2-kv" style="margin-top:12px"><div><span class="mo2-kv-k">Available balance</span><span class="mo2-kv-v"><b>'+o.avail+'</b></span></div>'
+      +'<div><span class="mo2-kv-k">Actual balance</span><span class="mo2-kv-v">'+o.actual+'</span></div></div>'
+      +'<div class="mo2-lasttxn"><div class="mo2-lasttxn-l">Last transaction</div><div class="mo2-lasttxn-r"><span>'+o.txnd+'</span><b>'+o.txna+'</b></div></div>'
+      +wcodes(o.warnings);
   }
 
   function memberCard(){
-    return '<div class="mo2-card open" data-w="member"><div class="mo2-hdr" onclick="mo2ToggleCard(event,this)"><div class="mo2-hdr-l"><span class="mo2-title">Member Details</span></div><div class="mo2-hdr-r">'+badge('Active','ok')+chev()+'</div></div>'
+    return '<div class="mo2-card open" data-w="member"><div class="mo2-hdr" onclick="mo2ToggleCard(event,this)"><div class="mo2-hdr-l"><span class="mo2-title">Member Details</span><button class="ps-change ps-change-hdr" onclick="psChange(event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>Change consumer</button></div><div class="mo2-hdr-r">'+badge('Active','ok')+chev()+'</div></div>'
       +'<div class="mo2-body"><div class="mo2-mi">'
-      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Full SSN</span><span class="mo2-mi-v">•••-••-4821</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Full SSN</span><span class="mo2-mi-v">482-10-9034</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Date of Birth</span><span class="mo2-mi-v">March 14, 1985</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Email</span><span class="mo2-mi-v">emily.olivers@gmail.com</span></div>'
-      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Mobile</span><span class="mo2-mi-v">+1 (310) 928-7361</span></div>'
-      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Work</span><span class="mo2-mi-v">+1 (310) 555-0142</span></div>'
-      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Home</span><span class="mo2-mi-v">+1 (310) 771-2093</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Mobile Phone</span><span class="mo2-mi-v">+1 (310) 928-7361</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Home Phone</span><span class="mo2-mi-v">+1 (310) 771-2093</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Work Phone</span><span class="mo2-mi-v">+1 (310) 555-0142</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Address</span><span class="mo2-mi-v">2841 Ocean View Blvd, Malibu, CA 90265</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Since</span><span class="mo2-mi-v">March 2019</span></div>'
       +'</div></div></div>';
@@ -19461,22 +19656,24 @@ body {
   }
 
   function alertsBody(){
-    return item('','','',{badge:['alertbig','Warning 080 - No Sharing of Member Information'],ask:'Explain warning 080 - No Sharing of Member Information'})
-      +item('','','',{badge:['alertbig','Warning 019 - OD Agreement'],ask:'Explain warning 019 - OD Agreement'});
+    // Person-level warning codes only: code prefix + description, no criticality colour.
+    return item('','','',{badge:['alertbig','Warning 084 - Courtesy Pay'],ask:'Explain warning 084 - Courtesy Pay'})
+      +item('','','',{badge:['alertbig','Warning 019 - OD Agreement'],ask:'Explain warning 019 - OD Agreement'})
+      +item('','','',{badge:['alertbig','Warning 080 - No Sharing of Member Information SB1'],ask:'Explain warning 080 - No Sharing of Member Information'});
   }
   function loansBody(){
-    return item('2022 Tesla Model 3','••7712',loanDet(47,'$15,234','Aug 01','$534.25','Eligible'),{coachId:'coachAskTagLive'})
-      +item('Primary Residence - Malibu','••4521',loanDet(29,'$285,000','Aug 01','$2,950.00','Used May'));
+    return item('2022 Tesla Model 3','7712-004821',loanDet({product:'72-Month New Auto Loan',desc:'Secured vehicle financing',rel:'Primary Borrower',pct:47,left:'$15,234',next:'Aug 01',due:'$534.25',delinq:'0',warnings:[['Warning 019','OD Agreement']]}),{badge:['st-active','Active']})
+      +item('Primary Residence - Malibu','1124-004521',loanDet({product:'15-Year Fixed Rate Mortgage',desc:'Real-estate secured mortgage',rel:'Joint Borrower',pct:29,left:'$285,000',next:'Aug 01',due:'$2,950.00',delinq:'18',warnings:[['Warning 084','Courtesy Pay'],['Warning 080','No Sharing of Member Information SB1']]}),{badge:['st-active','Active']});
   }
   function depositsBody(){
-    return item('Family Vacation','••7641',depDet('$6,850.25','Money Market',['Joint','Robert Chen · Emily'],'Transfer from Checking','+$1,500.00'),{badge:['warn','Warning 064 - Courtesy Pay']})
-      +item('Business Operations','••2914',depDet('$12,450.75','Business Checking',['Auth Signer','David Martinez'],'Wire — Vendor Pmt','−$2,500.00'))
-      +item('Emergency Fund','••5891',depDet('$28,750.50','High-Yield Savings',['Beneficiary','Michael Olivers'],'Interest Credit','+$11.54'));
+    return item('Family Vacation','000000007641',depDet({product:'Money Market',desc:'Tiered-rate money market savings',rel:'Joint Owner',avail:'$6,850.25',actual:'$7,100.25',txnd:'Transfer from Checking',txna:'+$1,500.00',warnings:[['Warning 064','Courtesy Pay']]}),{badge:['st-active','Active']})
+      +item('Business Operations','000000002914',depDet({product:'Business Checking',desc:'Interest-bearing business checking',rel:'Authorized Signer',avail:'$12,450.75',actual:'$12,950.75',txnd:'Wire — Vendor Pmt',txna:'−$2,500.00'}),{badge:['st-active','Active']})
+      +item('Emergency Fund','000000005891',depDet({product:'High-Yield Savings',desc:'High-yield savings account',rel:'Beneficiary',avail:'$28,750.50',actual:'$28,750.50',txnd:'Interest Credit',txna:'+$11.54'}),{badge:['st-active','Active']});
   }
   function cardsBody(){
-    return item('Visa Signature','••7892',cardDet(100,'$0','$385.00','Jun 28','Paris — Luxury Boutique','DECLINED',true),{badge:['red','Warning 031 - Card Blocked']})
-      +item('Amex Platinum','••3456',cardDet(26,'$18,500','$0','—','Marriott — Conference','−$1,250.00',false))
-      +item('Discover Cashback','••5123',cardDet(12,'$4,400','$45.00','Jul 05','Whole Foods','−$127.65',false));
+    return item('Visa Signature Credit','4147 88•• •••• 7892',cardDet({pct:100,avail:'$0',linkedName:'Signature Rewards Line',linkedNum:'5574-003344',txnd:'Paris — Luxury Boutique',txna:'DECLINED',blocked:true,warnings:[['Warning 031','Card Blocked — suspected fraud on linked card']]}),{badge:['st-blocked','Blocked']})
+      +item('Amex Platinum','3782 8•••• •3456',cardDet({pct:26,avail:'$18,500',linkedName:'Platinum Charge Line',linkedNum:'5574-003345',txnd:'Marriott — Conference',txna:'−$1,250.00',blocked:false}),{badge:['st-active','Active']})
+      +item('Visa Debit','4021 76•• •••• 5123',cardDet({pct:12,avail:'$4,400',linkedName:'Business Operations',linkedNum:'000000002914',txnd:'Whole Foods',txna:'−$127.65',blocked:false}),{badge:['st-active','Active']});
   }
   function txnRows(){
     var rows=[
@@ -19496,13 +19693,38 @@ body {
   }
 
   // Build the two-column grid in the confirmed order.
+  // Attention-first triage: pull the specific problem items across every product
+  // to the top, pre-expanded with the reason. Each row jumps to its product section.
+  function attRow(sev,iconKey,name,sub,jumpTitle){
+    var icons={
+      card:'<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>',
+      loan:'<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+      alert:'<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>'};
+    return '<div class="mo2-att-row" onclick="mo2SitJump(event,\''+jumpTitle+'\')">'
+      +'<span class="mo2-att-ic '+sev+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">'+icons[iconKey]+'</svg></span>'
+      +'<span class="mo2-att-info"><span class="mo2-att-nm">'+name+'</span><span class="mo2-att-sub">'+sub+'</span></span>'
+      +'<span class="mo2-att-go"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 18 15 12 9 6"/></svg></span></div>';
+  }
+  function attentionPanel(){
+    var rows=[
+      attRow('r','card','Visa Signature Credit — blocked','Card · suspected fraud on linked card','Cards'),
+      attRow('a','loan','Home Loan — 18 days delinquent','Loan · $2,950.00 due','Loans'),
+      attRow('n','alert','3 person-level warning codes','Alerts · 084, 019, 080','Alerts')
+    ];
+    if(!rows.length){
+      return '<div class="mo2-att ok"><div class="mo2-att-h ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>All accounts in good standing</div></div>';
+    }
+    return '<div class="mo2-att"><div class="mo2-att-h"><span class="mo2-att-cnt">'+rows.length+'</span>Needs attention</div>'+rows.join('')+'</div>';
+  }
   window.mo2BuildGrid=function(){
     var g=document.createElement('div');
     g.className='mo2-grid';
     g.innerHTML=
-        '<div class="mo2-row2">'+ memberCard()
-      + sectionCard('Alerts',['2 membership warnings','crit'],alertsBody(),'View all alerts',false) +'</div>'
-      + sectionCard('Loans',['2 loans, all current','ok'],loansBody(),'View all loans',false)
+        '<div class="mo2-backrow"><button class="ps-back" onclick="psChange(event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>Consumer selection</button></div>'
+      + attentionPanel()
+      + '<div class="mo2-ehead">All accounts</div>'
+      + sectionCard('Alerts',['3 warning codes','neutral'],alertsBody(),'View all alerts',false)
+      + sectionCard('Loans',['2 loans · 1 delinquent','warn'],loansBody(),'View all loans',false)
       + sectionCard('Deposits',['3 accounts active','ok'],depositsBody(),'View all deposits',false)
       + sectionCard('Cards',['1 of 3 blocked','crit'],cardsBody(),'View all cards',false)
       + sectionCard('Last Transactions',['1 declined','warn'],txnRows(),'View all transactions',false)
@@ -19769,8 +19991,8 @@ body {
 </div>
 <div class="coach-toast" id="coachToast"><span id="coachToastMsg"></span></div>
 
-<!-- persistent replay button — restarts the first-run tour on demand -->
-<button class="coach-replay" id="coachReplay" onclick="coachStart()" title="Replay the intro tour">
+<!-- Replay button removed from the live console — tour is not surfaced during a call. -->
+<button class="coach-replay" id="coachReplay" onclick="coachStart()" title="Replay the intro tour" style="display:none !important;">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
   <span>Replay tour</span>
 </button>
