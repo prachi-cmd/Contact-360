@@ -17446,7 +17446,10 @@ body {
       btn.className='wft'; btn.id='wft-overview';
       btn.setAttribute('onclick','vaShowOverviewTab()');
       btn.innerHTML='👤 Overview';
-      strip.insertBefore(btn, strip.firstChild);
+      // Order: Conversations first, Overview second, Interaction Journey third.
+      var conv=el('wft-test');
+      if(conv) strip.insertBefore(btn, conv.nextSibling);
+      else strip.insertBefore(btn, strip.firstChild);
     }
     if(!el('wft-journey')){
       var jb=document.createElement('button');
