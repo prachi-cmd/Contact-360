@@ -17588,11 +17588,13 @@ body {
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Full SSN</span><span class="mo2-mi-v">'+p.ssn+'</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Date of Birth</span><span class="mo2-mi-v">'+p.dob+'</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Relationship</span><span class="mo2-mi-v">'+p.rel+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Department</span><span class="mo2-mi-v">'+(p.dept||'Member Services')+'</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Mobile Phone</span><span class="mo2-mi-v">'+p.mobile+'</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Home Phone</span><span class="mo2-mi-v">'+p.home+'</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Work Phone</span><span class="mo2-mi-v">'+p.work+'</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Address</span><span class="mo2-mi-v">'+p.addr+'</span></div>'
       +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Since</span><span class="mo2-mi-v">'+p.since+'</span></div>'
+      +'<div class="mo2-mi-cell"><span class="mo2-mi-k">Last Seen</span><span class="mo2-mi-v">'+(p.lastSeen||'May-05-2026, 3:35 PM')+'</span></div>'
       +'</div></div>'
       +'<div class="ps-panel"><div class="ps-phead"><span class="mo2-title">Verification</span><span class="ps-vpill">Verified</span></div>'
       +'<div class="ps-vsum"><span class="ps-vic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg></span>'
@@ -18374,13 +18376,11 @@ body {
     g.className='mo2-grid';
     g.innerHTML=
         '<div class="mo2-backrow"><button class="ps-back" onclick="psChange(event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>Consumer selection</button></div>'
-      + attentionPanel()
+      + sectionCard('Needs Attention',['3 warning codes','neutral'],alertsBody(),'View all alerts',true)
       + '<div class="mo2-ehead">All accounts</div>'
-      + sectionCard('Alerts',['3 warning codes','neutral'],alertsBody(),'View all alerts',false)
       + sectionCard('Loans',['2 loans · 1 delinquent','warn'],loansBody(),'View all loans',false)
       + sectionCard('Deposits',['3 accounts active','ok'],depositsBody(),'View all deposits',false)
       + sectionCard('Cards',['1 of 3 blocked','crit'],cardsBody(),'View all cards',false)
-      + sectionCard('Last Transactions',['1 declined','warn'],txnRows(),'View all transactions',false)
       + '<div class="mo2-span2">'+sectionCard('Recent Interactions',['2 in last 7 days','ok'],intRows(),'View all interactions',false)+'</div>';
     // Sections open by default (product lists visible); individual products stay
     // collapsed until the agent clicks a product to see its details.
